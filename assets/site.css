@@ -453,16 +453,11 @@ html:not(.js) .enlarge{display:none}
   --brass:#9C7A3C;       /* from the logo mark — decoration only */
 }
 
-/* ---------- brand: mark + wordmark ---------- */
-.brand{gap:10px}
-.brand img{width:auto!important;height:26px}
-.brand .word{font:500 1.18rem/1 var(--serif);color:var(--ink);letter-spacing:-.005em;white-space:nowrap}
-.brand .word b{font-weight:600;letter-spacing:.04em}
-@media (min-width:1060px){.brand img{height:30px}.brand .word{font-size:1.28rem}}
-.foot-brand .brand-foot{display:flex;align-items:center;gap:10px;margin-bottom:6px}
-.foot-brand .brand-foot img{width:auto;height:28px;margin:0}
-.foot-brand .brand-foot span{font:500 1.25rem/1 var(--serif);color:var(--ink)}
-.foot-brand .brand-foot b{font-weight:600;letter-spacing:.04em}
+/* ---------- brand: the full Our Wellness Optimization lockup ---------- */
+.brand img{width:clamp(140px,38vw,176px)}
+@media (min-width:1060px){.brand img{width:190px}.header-row{padding-block:8px}}
+@media (min-width:1360px){.brand img{width:206px}}
+.foot-brand > img{width:190px;height:auto;margin-bottom:14px}
 .foot-brand .foot-tag{font:600 .7rem/1.5 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--gold-sm);margin:0 0 12px}
 
 /* ---------- nav: short labels on desktop, full labels in the menu ---------- */

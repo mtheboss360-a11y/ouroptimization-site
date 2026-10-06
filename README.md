@@ -1,6 +1,6 @@
 # ouroptimization.com: 2026 repositioning
 
-OUR Optimization as **Demographic & Community-Targeted Marketing**: we study your market, find where your customers are, and build the campaign to reach them.
+Our Wellness Optimization (a brand of OUR Optimization LLC) as **Demographic & Community-Targeted Marketing**: we study your market, find where your customers are, and build the campaign to reach them.
 
 This folder is the complete Netlify site, built on the uploaded `our-wellness-optimization-site.zip` source. Static HTML/CSS/JS, no build step.
 

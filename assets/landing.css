@@ -39,7 +39,3 @@
   .lp-area{margin-top:18px}
   .lp h1{font-size:clamp(2.3rem,1.6rem + 2.4vw,3.4rem)}
 }
-.lp-brand-oo{display:flex;align-items:center;gap:10px}
-.lp-brand-oo img{width:auto!important;height:30px}
-.lp-brand-oo span{font:500 1.3rem/1 var(--serif);color:var(--ink)}
-.lp-brand-oo b{font-weight:600;letter-spacing:.04em}
