@@ -1,10 +1,9 @@
-# OUR Optimization — static site plus one function.
-# The function runs server-side on every verified Netlify Forms submission and sends
-# the notification through the Netlify Emails integration. NETLIFY_EMAILS_SECRET is
-# read from the environment inside the function and is never sent to the browser.
+# OUR Optimization — static site, no build step.
+# The campaign-estimate form is handled by Netlify Forms (data-netlify="true" in
+# estimate.html): submissions appear under Forms in the Netlify UI, and email
+# alerts are set in Site configuration > Notifications > Form submission notifications.
 [build]
   publish = "."
-  functions = "netlify/functions"
 
 [[headers]]
   for = "/*"

@@ -2,15 +2,17 @@
 
 OUR Optimization as **Demographic & Community-Targeted Marketing**: we study your market, find where your customers are, and build the campaign to reach them.
 
-This folder is the complete Netlify site, built on the uploaded `our-wellness-optimization-site.zip` source. Same stack as before: static HTML/CSS/JS, no build step, plus one function.
+This folder is the complete Netlify site, built on the uploaded `our-wellness-optimization-site.zip` source. Static HTML/CSS/JS, no build step.
 
 ## Deploy
 
-Deploy **this whole folder** as the Netlify site root (`netlify.toml` sets `publish = "."` and `functions = "netlify/functions"`).
+Netlify site linked to this repo, branch `main`. No build command; publish directory `.` (set in `netlify.toml`).
 
-- Keep `netlify/functions/estimate.js` and `emails/campaign-estimate/`. The estimate form posts to the function, and the function sends the email. A drag-and-drop deploy of only the HTML would break the form.
-- Environment variables are unchanged: `NETLIFY_EMAILS_SECRET` (required), plus optional `ESTIMATE_TO_EMAIL` and `ESTIMATE_FROM_EMAIL`.
-- `/who-its-for` now 301-redirects to `/industries` (see `netlify.toml`).
+The campaign-estimate form uses **Netlify Forms** (no function, no secrets):
+- **Site configuration → Forms → Enable form detection** must be on. After turning it on the first time, redeploy.
+- Email alerts: **Site configuration → Notifications → Form submission notifications → Add notification → Email notification**, form `campaign-estimate`, to mustafa@ouroptimization.com.
+- Submissions are also listed under **Forms** in the Netlify UI.
+- `/who-its-for` 301-redirects to `/industries` (see `netlify.toml`).
 
 ## Pages
 

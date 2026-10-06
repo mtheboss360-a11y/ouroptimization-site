@@ -124,7 +124,7 @@
       <div class="form-wrap">
         <div class="form-alert" id="alert" role="alert" aria-live="assertive"></div>
 
-        <form name="campaign-estimate" id="estimate-form" method="POST" action="/.netlify/functions/estimate" data-netlify="true" netlify-honeypot="bot-field" novalidate>
+        <form name="campaign-estimate" id="estimate-form" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate>
           <input type="hidden" name="form-name" value="campaign-estimate">
           <p class="hp" aria-hidden="true"><label>Don&rsquo;t fill this out if you&rsquo;re human: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
 
@@ -230,15 +230,15 @@
           <fieldset class="field">
             <legend>Channels you&rsquo;re interested in <span class="help" style="display:inline;margin:0">(optional)</span></legend>
             <div class="checks">
-              <label><input type="checkbox" name="channels" value="Direct mail">Direct mail</label>
-              <label><input type="checkbox" name="channels" value="Flyers">Flyers</label>
-              <label><input type="checkbox" name="channels" value="Community events">Community events</label>
-              <label><input type="checkbox" name="channels" value="Branded materials &amp; kits">Branded kits</label>
-              <label><input type="checkbox" name="channels" value="Google Ads">Google Ads</label>
-              <label><input type="checkbox" name="channels" value="SEO">SEO</label>
-              <label><input type="checkbox" name="channels" value="Facebook / Instagram">Social ads</label>
-              <label><input type="checkbox" name="channels" value="Promotional offers">Offers</label>
-              <label><input type="checkbox" name="channels" value="Not sure — recommend">Not sure</label>
+              <label><input type="checkbox" name="channels[]" value="Direct mail">Direct mail</label>
+              <label><input type="checkbox" name="channels[]" value="Flyers">Flyers</label>
+              <label><input type="checkbox" name="channels[]" value="Community events">Community events</label>
+              <label><input type="checkbox" name="channels[]" value="Branded materials &amp; kits">Branded kits</label>
+              <label><input type="checkbox" name="channels[]" value="Google Ads">Google Ads</label>
+              <label><input type="checkbox" name="channels[]" value="SEO">SEO</label>
+              <label><input type="checkbox" name="channels[]" value="Facebook / Instagram">Social ads</label>
+              <label><input type="checkbox" name="channels[]" value="Promotional offers">Offers</label>
+              <label><input type="checkbox" name="channels[]" value="Not sure — recommend">Not sure</label>
             </div>
           </fieldset>
 
@@ -462,7 +462,7 @@
     var origLabel = submit.textContent;
     submit.textContent = 'Sending your request…';
 
-    fetch('/.netlify/functions/estimate', {
+    fetch('/', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: new URLSearchParams(new FormData(form)).toString()
