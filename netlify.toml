@@ -1,0 +1,28 @@
+# OUR Optimization — static site plus one function.
+# The function runs server-side on every verified Netlify Forms submission and sends
+# the notification through the Netlify Emails integration. NETLIFY_EMAILS_SECRET is
+# read from the environment inside the function and is never sent to the browser.
+[build]
+  publish = "."
+  functions = "netlify/functions"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "SAMEORIGIN"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Content-Security-Policy = "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; font-src 'self'; form-action 'self'; frame-ancestors 'self'; base-uri 'self'"
+
+# "Who it's for" became "Industries" in the 2026 repositioning; keep old links working.
+[[redirects]]
+  from = "/who-its-for"
+  to = "/industries"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/who-its-for.html"
+  to = "/industries"
+  status = 301
+  force = true

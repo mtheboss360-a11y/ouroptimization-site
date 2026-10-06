@@ -1,0 +1,45 @@
+/* Our Optimization — standalone landing page (landing.html).
+   Loads after site.css and only holds the landing-only rules, so the main
+   site keeps using site.css untouched. No build step, no requests. */
+
+.lp{position:relative;overflow:hidden;min-height:100svh;display:grid;align-items:center;padding:clamp(30px,5vw,56px) 0 clamp(44px,7vw,72px)}
+.lp::after{content:"";position:absolute;left:-18%;right:-18%;bottom:-40%;height:72%;background:radial-gradient(ellipse at 50% 100%,rgba(140,154,126,.16),rgba(140,154,126,0) 68%);pointer-events:none;z-index:0}
+.lp-grid{position:relative;z-index:1;display:grid;gap:clamp(36px,4.5vw,52px);align-items:center}
+.lp-copy{position:relative;z-index:1;max-width:640px}
+
+.lp-brand{margin-bottom:clamp(26px,4vw,40px)}
+.lp-brand img{width:clamp(180px,34vw,232px);height:auto}
+
+.lp h1 em{font-style:italic;color:var(--gold-lg)}
+.lp-note{margin-top:22px;font-size:.95rem;color:var(--ink-3)}
+.lp-note a{display:inline-block;padding:13px 0;margin:-13px 0;text-decoration:none;font-weight:600;color:var(--ink);white-space:nowrap}
+.lp-note .dot{margin:0 .5em;color:var(--gold)}
+.lp-email{margin-top:12px;font-size:.95rem;color:var(--ink-3)}
+.lp-email a{font-weight:600;color:var(--ink);text-underline-offset:4px;word-break:break-all}
+
+/* the four steps — labels only, no claims */
+.lp-channels{list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 24px;margin-top:clamp(32px,4.5vw,44px);padding-top:clamp(22px,3vw,28px);border-top:1px solid var(--line)}
+.lp-channels li{display:flex;align-items:center;gap:12px;font:500 .92rem/1.35 var(--sans);color:var(--ink);text-wrap:balance}
+.lp-channels svg{width:24px;height:24px;flex:none;color:var(--slate-soft)}
+.lp-area{margin-top:clamp(22px,3vw,28px);font-size:.84rem;letter-spacing:.02em;color:var(--ink-3)}
+
+@media (max-width:479.98px){
+  .lp{min-height:0}
+  .lp-channels{grid-template-columns:1fr;gap:14px}
+}
+@media (min-width:960px){
+  .lp-grid{grid-template-columns:1.02fr .98fr}
+  .lp-art{max-width:420px;margin-inline:auto;margin-right:0}
+}
+/* laptops with a short viewport: pull the page back onto one screen */
+@media (min-width:960px) and (max-height:980px){
+  .lp{padding-block:clamp(22px,3vw,34px)}
+  .lp-brand{margin-bottom:22px}
+  .lp-channels{margin-top:28px;padding-top:20px}
+  .lp-area{margin-top:18px}
+  .lp h1{font-size:clamp(2.3rem,1.6rem + 2.4vw,3.4rem)}
+}
+.lp-brand-oo{display:flex;align-items:center;gap:10px}
+.lp-brand-oo img{width:auto!important;height:30px}
+.lp-brand-oo span{font:500 1.3rem/1 var(--serif);color:var(--ink)}
+.lp-brand-oo b{font-weight:600;letter-spacing:.04em}
