@@ -727,3 +727,9 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
   .btn-head .long{display:none}
   .btn-head .short{display:inline}
 }
+
+/* ---------- promotional-channel listing screenshot ---------- */
+.deal-shot{margin:0}
+.deal-shot .shot{border:1px solid var(--line);background:#fff}
+.deal-shot .card-cap{margin-top:12px}
+.note a{color:var(--ink);text-underline-offset:3px}
