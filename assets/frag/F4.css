@@ -1,1 +1,12 @@
 /* F4 fragment (temporary; merged into site.css) */
+
+/* gift cards: the offer chain under the intro. The connector trails each step
+   (same pattern as .ind-chain), so a wrapped line never starts with a dash and
+   no step breaks across two lines. */
+.hiw-chain{gap:8px 0}
+.hiw-chain li{white-space:nowrap}
+.hiw-chain li+li::before{display:none}
+.hiw-chain li:not(:last-child)::after{content:"";width:16px;height:1px;margin:0 10px;background:var(--gold)}
+
+/* responsive mailer images: the <picture> wrapper behaves like the block <img> it holds */
+.card-shot picture{display:block}

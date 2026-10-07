@@ -1,1 +1,13 @@
 /* F3 fragment (temporary; merged into site.css) */
+
+/* Community marketing: the fair-table photo matches its 450px srcset candidate */
+.cm-art{max-width:450px}
+/* Localized flyers: native language names keep their own script shaping.
+   Letter-spacing splits joined Arabic letters, so it is turned off for the Arabic and Chinese names. */
+.flyer-mini .lname [lang="ar"],.flyer-mini .lname [lang="zh-Hans"]{letter-spacing:0}
+/* the space and dot after the Arabic name inherit its script, so they get no letter-spacing; a small margin evens the gap */
+.flyer-mini .lname [lang="ar"]{font-family:"Geeza Pro","Noto Naskh Arabic","Segoe UI",Tahoma,sans-serif;font-size:.72rem;margin-right:.1em}
+.flyer-mini .lname [lang="zh-Hans"]{font-family:"PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif;font-size:.68rem}
+
+/* Facebook & Instagram, "Who sees the ads": three cards; at two columns the third takes the full row */
+@media (min-width:640px) and (max-width:1039.98px){.dg-who>li:last-child:nth-child(odd){grid-column:1/-1}}

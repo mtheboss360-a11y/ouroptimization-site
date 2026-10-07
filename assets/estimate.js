@@ -10,7 +10,6 @@
   var BUSINESS_TYPES = [
     'Med spa',
     'Dental office',
-    'Pediatric office',
     'Chiropractor',
     'Physical therapy clinic',
     'Beauty or wellness business',

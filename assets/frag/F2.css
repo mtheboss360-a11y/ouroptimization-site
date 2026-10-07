@@ -1,1 +1,4 @@
 /* F2 fragment (temporary; merged into site.css) */
+/* Legal pages: "Last updated" line under the h1 (terms, privacy) */
+.lg-updated{margin-top:12px;font-size:.86rem;line-height:1.5;color:var(--ink-3)}
+.page-head .lg-updated+.intro{margin-top:14px}
