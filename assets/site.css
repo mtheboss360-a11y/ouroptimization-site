@@ -860,7 +860,7 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
   .tp:not(.tp-key){display:none}
   .tp-list{display:grid;grid-template-columns:1fr 1fr;gap:8px;list-style:none;margin-top:10px}
   .tp-list li{padding:10px 12px;border-radius:12px;background:var(--paper);border:1px solid var(--line)}
-  .tp-list li:last-child{grid-column:1/-1}
+  .tp-list li:last-child{grid-column:auto}
   .tp-list b{display:block;font:600 .58rem/1.3 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
   .tp-list span{display:block;margin-top:3px;font:600 .82rem/1.25 var(--sans);color:var(--ink)}
 }
@@ -878,3 +878,66 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 .town-img{filter:none}
 .town::before{content:"";position:absolute;left:12%;right:12%;bottom:2%;height:14%;border-radius:50%;background:radial-gradient(closest-side,rgba(28,58,44,.20),rgba(28,58,44,0));filter:blur(6px);z-index:-1}
 .town{isolation:isolate}
+
+/* =====================================================================
+   Shared site-wide components (cohesion pass). Use these instead of
+   one-off styles so every page speaks the same visual language.
+   ===================================================================== */
+
+/* Community -> Channel rows: "touchpoint  ->  channel" */
+.cc{list-style:none;display:grid;gap:10px;grid-template-columns:1fr}
+@media (min-width:640px){.cc{grid-template-columns:1fr 1fr}}
+@media (min-width:1040px){.cc.c3{grid-template-columns:repeat(3,1fr)}}
+.cc>li>a,.cc>li>div{position:relative;display:grid;grid-template-columns:minmax(0,1fr) 34px minmax(0,1fr);align-items:center;gap:8px;min-height:72px;padding:14px 16px;border-radius:14px;background:var(--paper);border:1px solid var(--line);text-decoration:none;color:inherit;transition:border-color .25s ease,box-shadow .25s ease,transform .25s ease}
+.bg-paper .cc>li>a,.bg-paper .cc>li>div{background:var(--ground)}
+.cc>li>a:hover{border-color:var(--gold);box-shadow:0 14px 26px -20px rgba(28,58,44,.5);transform:translateY(-1px)}
+.cc-from{display:flex;align-items:center;gap:10px;font:600 .66rem/1.35 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.cc-from svg{width:22px;height:22px;flex:none;color:var(--slate-soft)}
+.cc-arrow{position:relative;height:1px;background:var(--gold)}
+.cc-arrow::after{content:"";position:absolute;right:-1px;top:-3px;width:7px;height:7px;border-top:1px solid var(--gold);border-right:1px solid var(--gold);transform:rotate(45deg)}
+.cc-to{font:600 .98rem/1.3 var(--sans);color:var(--ink)}
+.cc-to small{display:block;margin-top:2px;font:400 .82rem/1.4 var(--sans);color:var(--ink-3)}
+
+/* "Illustrative" badge for example/fictional visuals. Inline, or pinned in a positioned .shot */
+.badge-illus{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;background:var(--blush);border:1px solid #E7CFD7;font:600 .62rem/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--gold-sm);white-space:nowrap}
+.badge-illus::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--gold)}
+.shot{position:relative}
+.shot>.badge-illus,.mock>.badge-illus,.excase-media>.badge-illus{position:absolute;top:12px;left:12px;z-index:2}
+
+/* Journey / flow line: Business -> Market -> ... (wraps to a vertical list on phones) */
+.journey{list-style:none;display:grid;gap:10px;counter-reset:j}
+.journey>li{position:relative;padding:16px 16px 16px 52px;border-radius:14px;background:var(--paper);border:1px solid var(--line)}
+.bg-paper .journey>li{background:var(--ground)}
+.journey>li::before{counter-increment:j;content:counter(j,decimal-leading-zero);position:absolute;left:14px;top:15px;font:400 .8rem/1 var(--serif);color:var(--gold-sm)}
+.journey b{display:block;font:600 .72rem/1.3 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--ink)}
+.journey span{display:block;margin-top:4px;font-size:.88rem;line-height:1.5;color:var(--ink-3)}
+@media (min-width:960px){
+  .journey{grid-auto-flow:column;grid-auto-columns:1fr;gap:26px}
+  .journey>li{padding:18px 16px 18px}
+  .journey>li::before{position:static;display:block;margin-bottom:10px}
+  .journey>li+li::after{content:"";position:absolute;left:-22px;top:50%;width:18px;height:1px;background:var(--gold)}
+}
+
+/* Industry card metadata */
+.ind-meta{margin:14px 0 0;display:grid;gap:10px}
+.ind-meta div{padding-top:10px;border-top:1px solid var(--line)}
+.ind-meta dt{font:600 .62rem/1.3 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--gold-sm)}
+.ind-meta dd{margin:4px 0 0;font-size:.92rem;line-height:1.5;color:var(--ink)}
+
+/* Example campaign: a visual stage flow instead of paragraphs */
+.excase{border:1px solid var(--line);border-radius:18px;background:var(--paper);padding:clamp(22px,3.2vw,40px)}
+.bg-paper .excase{background:var(--ground)}
+.excase+.excase{margin-top:22px}
+.excase-head{display:grid;gap:10px;max-width:68ch}
+.excase-head h2,.excase-head h3{font-size:clamp(1.35rem,1.15rem + .8vw,1.75rem);line-height:1.2}
+.ex-flow{list-style:none;display:grid;gap:10px;margin-top:22px}
+@media (min-width:720px){.ex-flow{grid-template-columns:repeat(2,1fr)}}
+@media (min-width:1100px){.ex-flow{grid-template-columns:repeat(3,1fr)}}
+.ex-flow>li{position:relative;padding:16px 16px 18px;border-radius:14px;background:var(--ground);border:1px solid var(--line)}
+.bg-paper .ex-flow>li{background:var(--paper)}
+.ex-k{display:flex;align-items:center;gap:8px;font:600 .64rem/1.3 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--gold-sm)}
+.ex-k svg{width:18px;height:18px;color:var(--slate-soft)}
+.ex-flow p{margin-top:8px;font-size:.93rem;line-height:1.55;color:var(--ink)}
+.ex-chips{list-style:none;display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.ex-chips li{padding:5px 10px;border-radius:999px;border:1px solid var(--line);background:var(--paper);font:500 .8rem/1.2 var(--sans);color:var(--ink)}
+.bg-paper .ex-chips li{background:var(--ground)}

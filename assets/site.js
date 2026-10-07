@@ -34,7 +34,12 @@
     menuBtn.addEventListener('click', function () {
       setMenu(menuBtn.getAttribute('aria-expanded') !== 'true');
     });
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setMenu(false); });
+    /* Escape closes an open menu and returns focus to the button that opened it. */
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape' || menuBtn.getAttribute('aria-expanded') !== 'true') return;
+      setMenu(false);
+      menuBtn.focus();
+    });
     /* In-page links (e.g. #anchors) should not leave the menu open over the target. */
     nav.addEventListener('click', function (e) { if (e.target.closest('a')) setMenu(false); });
   }
