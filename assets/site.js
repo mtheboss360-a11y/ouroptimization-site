@@ -2,6 +2,9 @@
    Loaded with defer on every page. No dependencies, no third-party requests. */
 (function () {
   var root = document.documentElement;
+  /* Tells the inline head script that behaviour loaded, so it keeps the .js styles. */
+  window.__owoReady = true;
+  root.classList.add('js'); /* restore it if a slow load made the head script drop it */
 
   /* Contact email — read from data-contact-email on <html>.
      Empty means: no email line and no mailto link, anywhere. */
@@ -40,6 +43,12 @@
       setMenu(false);
       menuBtn.focus();
     });
+    /* Tabbing out of the header closes the menu, so focus is never hidden under the panel. */
+    if (header) {
+      header.addEventListener('focusout', function (e) {
+        if (menuBtn.getAttribute('aria-expanded') === 'true' && !header.contains(e.relatedTarget)) setMenu(false);
+      });
+    }
     /* In-page links (e.g. #anchors) should not leave the menu open over the target. */
     nav.addEventListener('click', function (e) { if (e.target.closest('a')) setMenu(false); });
   }
@@ -74,7 +83,7 @@
   };
   var closeZoom = function () {
     zoom.hidden = true;
-    zoomImg.src = '';
+    zoomImg.removeAttribute('src');
     document.body.style.overflow = '';
     setInert(false);
     if (opener) { opener.focus(); opener = null; }
