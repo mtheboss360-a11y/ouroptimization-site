@@ -823,3 +823,53 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
   .ch-row li{padding:6px 11px;border-radius:999px;background:var(--paper);border:1px solid var(--line);font:600 .72rem/1 var(--sans);color:var(--ink)}
 }
 .ch-mail img{object-position:40% center}
+
+/* ---------- hero v5: community marketing network ---------- */
+.town{margin:0}
+.net{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
+.net-line{fill:none;stroke:var(--ink);stroke-opacity:.42;stroke-width:1.6;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.net-dot{fill:var(--gold);stroke:#fff;stroke-width:2;vector-effect:non-scaling-stroke}
+.net-hub{fill:var(--ink);stroke:#fff;stroke-width:3;vector-effect:non-scaling-stroke}
+.mail-route{fill:none;stroke:var(--gold-sm);stroke-opacity:.7;stroke-width:2;stroke-dasharray:2 7;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.tps{list-style:none;position:absolute;inset:0;pointer-events:none}
+.tp{position:absolute;transform:translate(-50%,-100%);display:flex;flex-direction:column;align-items:flex-start;gap:3px;padding:7px 11px 8px;border-radius:12px;background:rgba(249,251,248,.96);border:1px solid var(--line);box-shadow:0 10px 22px -14px rgba(28,58,44,.55);white-space:nowrap;margin-top:-6px}
+.tp::after{content:"";position:absolute;left:50%;bottom:-5px;width:9px;height:9px;background:inherit;border-right:1px solid var(--line);border-bottom:1px solid var(--line);transform:translateX(-50%) rotate(45deg)}
+.tp-place{font:600 .58rem/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3)}
+.tp-ch{display:flex;align-items:center;gap:6px;font:600 .8rem/1.1 var(--sans);color:var(--ink)}
+.tp-ch svg{width:15px;height:15px;color:var(--gold-sm);flex:none}
+.tp-hub{background:var(--ink);border-color:var(--ink)}
+.tp-hub .tp-place{color:var(--gold-bright)}.tp-hub .tp-ch{color:var(--ground)}.tp-hub .tp-ch svg{color:var(--gold-bright)}
+.tp-list{display:none}
+@media (prefers-reduced-motion:no-preference){
+  .js .net-line{stroke-dasharray:1;stroke-dashoffset:1;animation:drawLine 1.4s cubic-bezier(.4,0,.2,1) forwards;animation-delay:calc(.3s + var(--d))}
+  .js .net-dot{opacity:0;animation:fadeIn .5s ease forwards;animation-delay:calc(1.2s + var(--d))}
+  .js .tp{opacity:0;animation:tpIn .7s cubic-bezier(.2,.7,.2,1) forwards;animation-delay:calc(.6s + var(--d))}
+  .mail-route{animation:route 3.6s linear infinite}
+  .net-hub{animation:hubGlow 4s ease-in-out infinite}
+}
+@keyframes drawLine{to{stroke-dashoffset:0}}
+@keyframes fadeIn{to{opacity:1}}
+@keyframes tpIn{from{opacity:0;transform:translate(-50%,-80%)}to{opacity:1;transform:translate(-50%,-100%)}}
+@keyframes hubGlow{0%,100%{stroke-width:3}50%{stroke-width:7}}
+@media (min-width:960px){.hero-town .hero-art{max-width:620px}}
+/* phones: keep the hub + three priority touchpoints on the map, list the rest below */
+@media (max-width:767.98px){
+  .tp{padding:5px 8px 6px;border-radius:10px}
+  .tp-place{font-size:.5rem;letter-spacing:.12em}
+  .tp-ch{font-size:.66rem;gap:4px}.tp-ch svg{width:12px;height:12px}
+  .tp:not(.tp-key){display:none}
+  .tp-list{display:grid;grid-template-columns:1fr 1fr;gap:8px;list-style:none;margin-top:10px}
+  .tp-list li{padding:10px 12px;border-radius:12px;background:var(--paper);border:1px solid var(--line)}
+  .tp-list li:last-child{grid-column:1/-1}
+  .tp-list b{display:block;font:600 .58rem/1.3 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+  .tp-list span{display:block;margin-top:3px;font:600 .82rem/1.25 var(--sans);color:var(--ink)}
+}
+.net-line{stroke-opacity:.55;stroke-width:1.9}
+.mail-route{stroke-width:2.6;stroke-opacity:.85;stroke-dasharray:3 8}
+.tp-left{transform:translate(-100%,-50%);margin:0 0 0 -10px}
+.tp-left::after{left:auto;right:-5px;top:50%;bottom:auto;transform:translateY(-50%) rotate(-45deg)}
+@media (prefers-reduced-motion:no-preference){
+  .js .tp-left{animation-name:tpInLeft}
+}
+@keyframes tpInLeft{from{opacity:0;transform:translate(-90%,-50%)}to{opacity:1;transform:translate(-100%,-50%)}}
+@media (max-width:767.98px){.tp-homes{left:20%!important;top:53%!important}}
