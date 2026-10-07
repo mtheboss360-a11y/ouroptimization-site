@@ -25,3 +25,175 @@
   to = "/industries"
   status = 301
   force = true
+
+# --- URL standardization (generated) ---
+# Extensionless URLs are canonical; old .html links 301 to the clean URL.
+[[redirects]]
+  from = "/index.html"
+  to = "/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/how-it-works.html"
+  to = "/how-it-works"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/services.html"
+  to = "/services"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/community-marketing.html"
+  to = "/community-marketing"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/custom-marketing.html"
+  to = "/custom-marketing"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/digital-marketing.html"
+  to = "/digital-marketing"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/industries.html"
+  to = "/industries"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/examples.html"
+  to = "/examples"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/estimate.html"
+  to = "/estimate"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/market-research.html"
+  to = "/market-research"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/direct-mail.html"
+  to = "/direct-mail"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/events.html"
+  to = "/events"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/flyers.html"
+  to = "/flyers"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/marketing-kits.html"
+  to = "/marketing-kits"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/seo.html"
+  to = "/seo"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/google-ads.html"
+  to = "/google-ads"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/social-media.html"
+  to = "/social-media"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/groupon.html"
+  to = "/groupon"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/gift-cards.html"
+  to = "/gift-cards"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/tracking.html"
+  to = "/tracking"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/sample-advertisements.html"
+  to = "/sample-advertisements"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/faq.html"
+  to = "/faq"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/privacy.html"
+  to = "/privacy"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/terms.html"
+  to = "/terms"
+  status = 301
+  force = true
+
+# The old direct-mail ad landing page was retired in the 2026 cohesion pass.
+[[redirects]]
+  from = "/landing"
+  to = "/direct-mail"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/landing.html"
+  to = "/direct-mail"
+  status = 301
+  force = true
+
+# Repository-only files are not part of the public site.
+[[redirects]]
+  from = "/tests/*"
+  to = "/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/README.md"
+  to = "/404.html"
+  status = 404
+  force = true

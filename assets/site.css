@@ -941,3 +941,504 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 .ex-chips{list-style:none;display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
 .ex-chips li{padding:5px 10px;border-radius:999px;border:1px solid var(--line);background:var(--paper);font:500 .8rem/1.2 var(--sans);color:var(--ink)}
 .bg-paper .ex-chips li{background:var(--ground)}
+
+/* .cc rows that end up narrow (phones, two-column tablets, three-up desktops) stack the
+   touchpoint above the arrow + channel so long labels never run into the arrow. */
+.cc>li{container-type:inline-size}
+@container (max-width:419.98px){
+  .cc>li>a,.cc>li>div{grid-template-columns:22px minmax(0,1fr);column-gap:10px;row-gap:8px;align-content:center}
+  .cc .cc-from{grid-column:1/-1}
+  .cc .cc-arrow{grid-column:1}
+  .cc .cc-to{grid-column:2}
+}
+.foot-legal-h{margin-top:26px}
+
+/* ===== Page styles (cohesion pass, A1) ===== */
+/* ---------- estimate page (.est-) ---------- */
+
+/* Author display rules (.form-layout is a grid) must not beat the hidden attribute. */
+.est-page [hidden]{display:none!important}
+
+/* Form + "what happens next" card. Below 1000px the card follows the form. */
+@media (min-width:1000px){.est-layout{grid-template-columns:minmax(0,1fr) 340px}}
+.est-layout .form-wrap{min-width:0}
+
+/* Two groups: what we need, then optional details. Floated legends behave like
+   ordinary blocks, so the group divider can sit above them. */
+.est-group{border:0;margin:0;padding:0;min-width:0}
+.est-group>legend{float:left;width:100%;padding:0;margin-bottom:6px;font:400 clamp(1.3rem,1.16rem + .55vw,1.6rem)/1.25 var(--serif);color:var(--ink)}
+.est-group>legend+*{clear:both}
+.est-group>legend+.field{margin-top:0;padding-top:16px}
+.est-optional{margin-top:clamp(40px,5vw,54px);padding-top:clamp(30px,4vw,38px);border-top:1px solid var(--line)}
+.est-hint{padding-top:2px;font-size:.9rem;line-height:1.55;color:var(--ink-3)}
+.est-req{font:500 .8rem/1.4 var(--sans);color:var(--ink-3)}
+.est-row{margin-top:24px}
+.est-other{margin-top:14px;padding-left:16px;border-left:2px solid var(--gold)}
+
+/* Error summary: listed problems link to their fields. */
+.est-summary{margin-bottom:28px;padding:18px 20px;border:1px solid #E2BDB8;border-left:4px solid #A3342B;border-radius:10px;background:#FCF4F3;color:#7E2A22}
+.est-summary:focus-within{box-shadow:0 0 0 3px rgba(163,52,43,.16)}
+.est-summary h2{font:600 1rem/1.35 var(--sans);color:#7E2A22}
+.est-summary h2:focus{outline:none}
+.est-summary ul{list-style:none;margin-top:10px;display:grid;gap:6px}
+.est-summary a{color:#7E2A22;font-weight:600;font-size:.92rem;line-height:1.45;text-underline-offset:3px}
+
+/* Submit block: send failure, button, privacy line, patient-information warning. */
+.est-submit .est-fail{margin:0 0 20px}
+.est-fail p+p{margin-top:6px}
+.est-fail strong{color:#7E2A22}
+.est-fail a[href^="tel:"]{white-space:nowrap}
+.est-privacy{margin-top:16px;font-size:.88rem;line-height:1.55;color:var(--ink-2)}
+.est-privacy a{color:var(--ink);font-weight:600;text-underline-offset:3px}
+.est-submit .form-foot{margin-top:6px}
+@media (max-width:479.98px){.est-submit .btn{width:100%}}
+
+/* "What happens next": the shared journey list, kept vertical in the narrow card. */
+.est-aside{max-width:720px}
+.est-aside .journey{grid-auto-flow:row;grid-auto-columns:auto;gap:10px;margin-top:18px}
+.est-aside .journey>li{padding:14px 14px 14px 48px;background:var(--ground)}
+.est-aside .journey>li::before{position:absolute;left:14px;top:15px;display:inline;margin:0}
+.est-aside .journey>li+li::after{display:none}
+.est-aside .est-call{margin-top:18px}
+.est-call a{white-space:nowrap}
+
+/* Success panel */
+.est-sent{padding:clamp(24px,3.4vw,38px);border:1px solid var(--line);border-radius:18px;background:var(--paper)}
+.est-sent-mark{display:inline-flex;align-items:center;justify-content:center;width:46px;height:46px;margin-bottom:18px;border-radius:50%;background:var(--ink);color:var(--ground)}
+.est-sent-mark svg{width:22px;height:22px}
+.est-sent h2{font-size:clamp(1.6rem,1.3rem + 1.2vw,2.1rem);line-height:1.2}
+.est-sent h2:focus{outline:none}
+.est-sent p{margin-top:14px}
+.est-sent p a{color:var(--ink);font-weight:600;text-underline-offset:3px;overflow-wrap:anywhere}
+.est-sent a[href^="tel:"]{white-space:nowrap}
+.est-sent .actions{margin-top:26px}
+
+/* ===== Page styles (cohesion pass, A2) ===== */
+
+/* ---------- home: community -> channel rows ----------
+   Where a row is narrow (phones, and two columns on tablets) the touchpoint label sits
+   on its own line and the arrow leads into the channel, so long labels never run into the arrow. */
+@media (max-width:519.98px),(min-width:640px) and (max-width:959.98px){
+  .hm-cc>li>a,.hm-cc>li>div{grid-template-columns:22px minmax(0,1fr);column-gap:10px;row-gap:8px;align-content:center}
+  .hm-cc .cc-from{grid-column:1/-1}
+  .hm-cc .cc-arrow{grid-column:1}
+  .hm-cc .cc-to{grid-column:2}
+}
+
+/* ---------- home: seven-step journey ---------- */
+@media (min-width:960px){.hm-journey{grid-auto-columns:minmax(0,1fr)}}
+/* small desktops: seven columns are too narrow to read, so wrap into rows of four */
+@media (min-width:960px) and (max-width:1199.98px){
+  .hm-journey{grid-auto-flow:row;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+  .hm-journey>li+li::after{display:none}
+}
+
+/* ---------- home: physical + digital image ---------- */
+.hm-pd-art{margin:0 auto;width:100%;max-width:440px}
+@media (min-width:900px){.hm-pd-art{margin:0 0 0 auto}}
+
+/* ---------- home: industries teaser (chips beside the heading) ---------- */
+.hm-ind{grid-template-columns:1fr 1fr}
+@media (min-width:640px){.hm-ind{grid-template-columns:repeat(3,1fr)}}
+@media (min-width:960px){
+  .hm-ind-wrap{align-items:center}
+  .hm-ind{grid-template-columns:1fr 1fr}
+}
+
+/* ---------- home: illustrative campaign, four stages in one row on wide screens ---------- */
+@media (min-width:1100px){.ex-flow.hm-flow{grid-template-columns:repeat(4,1fr)}}
+
+/* ===== Page styles (cohesion pass, A3) ===== */
+
+/* ---------- services: the eight pillar cards ---------- */
+.svc-pillars>li{display:flex;flex-direction:column}
+.svc-pillars .top{margin-bottom:14px}
+.svc-pillars .kicker{margin-bottom:6px}
+.svc-inc,.cardgrid .svc-inc{margin-top:18px;font:600 .62rem/1.3 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3)}
+.svc-inc+.ex-chips{margin-top:8px}
+.svc-links{margin-top:auto;padding-top:22px;display:flex;flex-wrap:wrap;gap:14px 22px}
+.cardgrid .svc-links a.textlink{margin-top:0}
+.svc-pillars>li:target{box-shadow:inset 0 0 0 1px var(--gold)}
+
+/* ---------- services: how the pillars work together ---------- */
+.svc-jtag{display:inline-block;margin-top:10px;padding:4px 9px;border-radius:999px;border:1px solid var(--line);font:600 .6rem/1.2 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--gold-sm);white-space:nowrap}
+.svc-note{margin-top:clamp(24px,3vw,32px)}
+/* the stages carry pillar numbers, so the journey's own step counter is dropped here */
+.svc-journey>li{padding-left:18px}
+.svc-journey>li::before{content:none}
+
+/* ---------- market research: three-layer diagram ---------- */
+.svc-mr-head{margin-bottom:0}
+.svc-rings{margin:0 auto;width:100%;max-width:460px}
+@media (min-width:900px){.svc-rings{margin:0 0 0 auto}}
+.svc-rings-map{position:relative;border-radius:18px;background:var(--paper);border:1px solid var(--line);padding:clamp(14px,3vw,24px);box-shadow:0 1px 2px rgba(28,58,44,.08),0 30px 60px -38px rgba(28,58,44,.45)}
+.svc-rings-map>.badge-illus{position:absolute;top:12px;left:12px;z-index:2}
+.svc-rings svg{display:block;width:100%;height:auto;overflow:visible}
+.svc-rings .b3{fill:#EEF3EC}
+.svc-rings .b2{fill:#E6EDE5}
+.svc-rings .b1{fill:#DCE6DB}
+.svc-rings .st{fill:none;stroke:#fff;stroke-width:8;stroke-linecap:round;opacity:.7}
+.svc-rings .st.minor{stroke-width:4}
+.svc-rings .ln{fill:none;stroke:var(--slate-soft);stroke-opacity:.55;stroke-width:1.2;stroke-dasharray:3 5}
+.svc-rings .nd circle{fill:var(--paper);stroke:var(--ink);stroke-opacity:.45;stroke-width:1.2}
+.svc-rings .nd use{color:var(--ink)}
+.svc-rings .nd.n1 circle{stroke:var(--gold);stroke-opacity:1}
+.svc-rings .nd.n3 circle{stroke:var(--slate-soft);stroke-opacity:.9}
+.svc-rings .bd circle{fill:var(--gold-sm)}
+.svc-rings .bd text{fill:#fff;font:600 11px/1 var(--sans);text-anchor:middle;dominant-baseline:central}
+.svc-rings .halo{fill:var(--gold);opacity:.2}
+.svc-rings .core{fill:var(--ink)}
+.svc-rings .core-ic{color:var(--ground)}
+@media (prefers-reduced-motion:no-preference){
+  .svc-rings .halo{animation:halo 4s ease-in-out infinite;transform-origin:center;transform-box:fill-box}
+}
+.svc-rings-key ol{list-style:none;display:flex;flex-direction:column;gap:8px;margin-top:14px}
+@media (min-width:480px){.svc-rings-key ol{flex-direction:row;flex-wrap:wrap;gap:8px 20px}}
+.svc-rings-key li{display:flex;align-items:center;gap:9px;font:500 .84rem/1.3 var(--sans);color:var(--ink)}
+.svc-rings-key b{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;flex:none;border-radius:50%;background:var(--gold-sm);color:#fff;font:600 .68rem/1 var(--sans)}
+
+/* ---------- market research: layers, deliverables, links ---------- */
+.svc-layers>li .ex-chips{margin-top:14px}
+.svc-get .spec{margin-top:16px}
+.svc-get .spec li{font-size:.94rem}
+.svc-inline{color:var(--ink);text-underline-offset:3px;font-weight:500}
+/* narrow rows: the finding sits on its own line and the arrow leads into the pillar */
+@media (max-width:519.98px),(min-width:640px) and (max-width:1039.98px){
+  .svc-cc>li>a{grid-template-columns:22px minmax(0,1fr);column-gap:10px;row-gap:8px;align-content:center}
+  .svc-cc .cc-from{grid-column:1/-1}
+  .svc-cc .cc-arrow{grid-column:1}
+  .svc-cc .cc-to{grid-column:2}
+}
+
+/* ---------- tracking: methods and refinement ---------- */
+.svc-methods>li{display:flex;flex-direction:column}
+.cardgrid.svc-methods .svc-inc{margin-top:auto;padding-top:18px}
+.svc-adjust{margin-top:clamp(28px,3.6vw,40px)}
+.svc-adjust h3{font:600 .72rem/1.4 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--gold-sm)}
+.svc-adjust .ex-chips{margin-top:12px}
+@media (min-width:960px){.svc-loop{grid-auto-columns:minmax(0,1fr)}}
+.svc-cc>li>a{height:100%}
+.svc-flow{margin-top:0}
+.svc-flow .arrow{background:none;border:0;padding:0}
+
+/* ===== Page styles (cohesion pass, A4) ===== */
+
+/* ---------- caption row: label + "Illustrative" badge under a visual ---------- */
+.hiw-cap{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px;margin-top:16px}
+.hiw-cap .card-cap{margin-top:0}
+.gift-row .hiw-cap{margin-top:13px}
+.hiw-tags{display:flex;flex-wrap:wrap;align-items:center;gap:10px 12px;margin-bottom:6px}
+.hiw-tags .tag{margin-bottom:0}
+.hiw-illus-note{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin-top:20px;font-size:.92rem;line-height:1.5;color:var(--ink-3)}
+
+/* ---------- how it works: seven-step overview ---------- */
+.hiw-journey{margin-top:clamp(8px,1.5vw,16px)}
+.hiw-journey>li{transition:border-color .25s ease,box-shadow .25s ease}
+.hiw-journey>li:hover{border-color:var(--gold);box-shadow:0 14px 26px -22px rgba(28,58,44,.5)}
+.hiw-journey .card-link{color:var(--ink)}
+@media (min-width:960px){.hiw-journey{grid-auto-columns:minmax(0,1fr);gap:22px}.hiw-journey>li+li::after{left:-19px;width:16px}}
+/* small desktops: seven columns are too narrow to read, so wrap into rows of four */
+@media (min-width:960px) and (max-width:1199.98px){
+  .hiw-journey{grid-auto-flow:row;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+  .hiw-journey>li+li::after{display:none}
+}
+
+/* ---------- how it works: one block per step ---------- */
+.hiw-steps{list-style:none;counter-reset:hs;border-top:1px solid var(--line)}
+.hiw-step{display:grid;gap:18px 40px;padding-block:clamp(28px,3.6vw,44px);border-bottom:1px solid var(--line)}
+.hiw-head{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;align-content:start;gap:12px 14px}
+.hiw-head::before{counter-increment:hs;content:"Step " counter(hs,decimal-leading-zero);grid-column:1/-1;font:600 .66rem/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--gold-sm)}
+.hiw-head svg{width:30px;height:30px;color:var(--slate-soft)}
+.hiw-head h3{font-size:clamp(1.3rem,1.15rem + .6vw,1.6rem);line-height:1.2}
+.hiw-label{font:600 .64rem/1.3 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);margin-bottom:8px}
+.hiw-body>p:not(.hiw-label){font-size:.98rem;line-height:1.66;max-width:60ch}
+.hiw-body .textlink{margin-top:18px}
+.hiw-out{margin:0;padding:4px 20px;background:var(--ground);border:1px solid var(--line);border-radius:14px}
+.hiw-out div{padding:14px 0}
+.hiw-out div+div{border-top:1px solid var(--line)}
+.hiw-out dt{font:600 .64rem/1.3 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--gold-sm)}
+.hiw-out dd{margin:6px 0 0;font-size:.94rem;line-height:1.55;color:var(--ink)}
+@media (min-width:700px){
+  .hiw-step{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)}
+  .hiw-head{grid-column:1/-1}
+}
+@media (min-width:1040px){
+  .hiw-step{grid-template-columns:minmax(0,.78fr) minmax(0,1.3fr) minmax(0,1fr);align-items:start}
+  .hiw-head{grid-column:auto}
+}
+
+/* ---------- how it works: touchpoint -> channel rows ----------
+   Rows in the same grid line share a height; narrow rows put the touchpoint on its
+   own line so long labels never meet the arrow. */
+.hiw-cc>li>a{height:100%}
+@media (max-width:519.98px),(min-width:640px) and (max-width:959.98px){
+  .hiw-cc>li>a,.hiw-cc>li>div{grid-template-columns:22px minmax(0,1fr);column-gap:10px;row-gap:8px;align-content:center}
+  .hiw-cc .cc-from{grid-column:1/-1}
+  .hiw-cc .cc-arrow{grid-column:1}
+  .hiw-cc .cc-to{grid-column:2}
+}
+
+/* ---------- direct mail: illustrative carrier-route map ---------- */
+.hiw-routes{margin:0}
+.hiw-routes-map{position:relative;border-radius:18px;overflow:hidden;background:var(--map-land);border:1px solid var(--line);box-shadow:0 1px 2px rgba(28,58,44,.08),0 30px 60px -36px rgba(28,58,44,.45)}
+.hiw-routes-map>.badge-illus{position:absolute;top:12px;left:12px;z-index:2}
+.hiw-routes-map svg{display:block;width:100%;height:auto}
+.hiw-routes .rt{fill:rgba(28,58,44,.035);stroke:#B9C8BC;stroke-width:1.2;stroke-linejoin:round}
+.hiw-routes .rt.on{fill:rgba(189,113,137,.17);stroke:var(--gold);stroke-width:1.6}
+.hiw-routes .st{fill:none;stroke:#fff;stroke-width:8;stroke-linecap:round;opacity:.85}
+.hiw-routes .st.minor{stroke-width:4;opacity:.75}
+.hiw-routes .zip{fill:none;stroke:var(--ink);stroke-opacity:.4;stroke-width:1.4;stroke-dasharray:6 6;stroke-linejoin:round}
+.hiw-routes .hm{color:var(--gold-sm)}
+.hiw-routes .biz .core{fill:var(--ink)}
+.hiw-routes .biz .halo{fill:var(--gold);opacity:.22}
+.hiw-legend{list-style:none;display:grid;gap:8px;margin-top:16px}
+.hiw-legend li{display:flex;align-items:center;gap:10px;font:500 .84rem/1.35 var(--sans);color:var(--ink)}
+.hiw-sw{width:20px;height:13px;flex:none;border-radius:3px;background:rgba(28,58,44,.035);border:1px solid #B9C8BC}
+.hiw-sw.on{background:rgba(189,113,137,.17);border-color:var(--gold)}
+.hiw-sw.biz{width:13px;height:13px;margin-inline:3.5px;border-radius:50%;background:var(--ink);border-color:var(--ink);box-shadow:0 0 0 4px rgba(189,113,137,.22)}
+@media (min-width:900px){.hiw-routes{max-width:520px;width:100%;margin-left:auto}}
+
+/* ---------- direct mail: five-step drop line ---------- */
+.hiw-drop+.note{margin-top:22px}
+
+/* ---------- gift cards: where the offer sits ---------- */
+.hiw-chain{justify-content:flex-start;margin-top:26px;color:var(--ink-3)}
+.hiw-chain li:nth-child(4n+1){color:var(--ink-3)}
+.hiw-chain .lead{color:var(--gold-sm)}
+
+/* ---------- sample mailers: anatomy lists ---------- */
+.hiw-spec{margin-top:6px}
+.hiw-spec li{font-size:.95rem}
+.target-card .hiw-spec svg{width:19px;height:19px;margin:3px 0 0;display:block}
+.hiw-more{margin-top:22px}
+.target-card .hiw-more .textlink svg{width:14px;height:14px;margin:0;display:inline-block}
+
+/* ===== Page styles (cohesion pass, A5) ===== */
+
+/* ---------- community marketing (.cm-) ---------- */
+/* "Also on the map" chips under the touchpoint -> channel grid */
+.cm-also{margin-top:clamp(26px,3.4vw,36px)}
+.cm-also .uses{margin-top:10px}
+.cm-k{font:600 .68rem/1.4 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3)}
+.cm-cc>li>a{height:100%}
+.cm-note{margin-top:clamp(20px,2.6vw,26px);font-size:.95rem;line-height:1.6;max-width:66ch}
+.cm-note a{color:var(--ink);font-weight:600;text-underline-offset:3px}
+
+/* what the business brings: inline links in the spec list, square photo kept to a sensible size */
+.cm-spec a{color:var(--ink);text-underline-offset:3px}
+.cm-art{margin:0;width:100%;max-width:460px;margin-inline:auto}
+.cm-art .card-cap{margin-top:12px}
+
+/* language: illustrative label above the localized flyers */
+.cm-illus{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin-bottom:16px;font-size:.9rem;color:var(--ink-3)}
+.cm-lang-cards{margin-top:clamp(30px,4vw,44px)}
+
+/* our approach: the one canonical statement */
+.cm-statement p{font:400 clamp(1.18rem,1.02rem + .6vw,1.45rem)/1.45 var(--serif);color:var(--ink);max-width:none}
+
+/* ---------- FAQ (.cm-faq-) ---------- */
+.cm-faq-head{max-width:820px;margin-inline:auto}
+.cm-faq-group{max-width:820px;margin-inline:auto;scroll-margin-top:24px}
+.cm-faq-group+.cm-faq-group{margin-top:clamp(48px,6vw,72px)}
+.cm-faq-group>h2{font-size:clamp(1.45rem,1.2rem + 1vw,1.9rem);line-height:1.2;margin-bottom:clamp(12px,1.8vw,18px)}
+.cm-faq-group .answer p+p,.cm-faq-group .answer p+ol,.cm-faq-group .answer ol+p{margin-top:12px}
+.cm-faq-group .answer a{color:var(--ink);text-underline-offset:3px}
+.cm-pillars,.cm-steps-list{list-style:none;display:grid;gap:8px}
+.cm-pillars{counter-reset:pl;column-gap:28px}
+@media (min-width:560px){.cm-pillars{grid-template-columns:1fr 1fr;grid-template-rows:repeat(4,auto);grid-auto-flow:column}}
+.cm-steps-list{counter-reset:sl;gap:10px}
+.cm-pillars li,.cm-steps-list li{position:relative;padding-left:32px}
+.cm-pillars li::before,.cm-steps-list li::before{position:absolute;left:0;top:.2em;font:400 .8rem/1.6 var(--serif);letter-spacing:.06em;color:var(--gold-sm)}
+.cm-pillars li::before{counter-increment:pl;content:counter(pl,decimal-leading-zero)}
+.cm-steps-list li::before{counter-increment:sl;content:counter(sl,decimal-leading-zero)}
+.cm-steps-list b{color:var(--ink);font-weight:600}
+/* narrow columns: stack the icon over the touchpoint name so "Neighborhoods" clears the arrow */
+@media (max-width:899.98px){
+  .cm-cc>li>a{grid-template-columns:minmax(0,1fr) 24px minmax(0,1.15fr);padding:14px}
+  .cm-cc .cc-from{flex-direction:column;align-items:flex-start;gap:6px;letter-spacing:.1em}
+}
+
+/* ===== Page styles (cohesion pass, A6) ===== */
+/* ---------- custom marketing, kits, flyers, events (.cu-) ---------- */
+
+/* page-head h1 accent, matching .svc-hero */
+.cu-top h1 em{font-style:italic;color:var(--gold-lg)}
+
+/* custom marketing: materials grouped by where they are used */
+.cu-where{list-style:none;display:grid;gap:18px}
+.cu-where>li{display:grid;gap:24px;align-items:center;padding:clamp(20px,2.8vw,34px);border:1px solid var(--line);border-radius:18px;background:var(--paper);scroll-margin-top:100px}
+.bg-paper .cu-where>li{background:var(--ground)}
+@media (min-width:600px){.cu-where>li{grid-template-columns:minmax(0,1fr) minmax(0,.6fr);gap:28px}}
+@media (min-width:820px){.cu-where>li{grid-template-columns:minmax(0,1.35fr) minmax(0,.65fr);gap:clamp(28px,4vw,52px)}}
+.cu-k{display:flex;align-items:center;gap:10px;margin-bottom:12px;font:400 .82rem/1 var(--serif);letter-spacing:.14em;color:var(--gold-sm)}
+.cu-k svg{width:26px;height:26px;flex:none;color:var(--slate-soft)}
+.cu-where h3{font-size:clamp(1.3rem,1.15rem + .6vw,1.6rem);line-height:1.25}
+.cu-where h3+p{margin-top:10px;font-size:.98rem;line-height:1.65;max-width:54ch}
+.cu-where .ex-chips{margin-top:16px}
+.cu-links{display:flex;flex-wrap:wrap;gap:14px 26px;margin-top:22px}
+.cu-links .textlink{white-space:nowrap}
+
+/* the picture beside each group: a soft surface with the printed piece sitting on it */
+.cu-art{position:relative;margin:0;aspect-ratio:4/3;border-radius:14px;overflow:hidden;background:linear-gradient(160deg,#FBFCFA,#E6EDE5);border:1px solid var(--line-soft);display:flex;align-items:center;justify-content:center;padding:46px 10% 26px}
+.cu-art picture{display:contents}
+.cu-art img{width:auto;height:auto;max-width:100%;max-height:100%;border-radius:4px;box-shadow:0 1px 2px rgba(28,58,44,.10),0 16px 28px -16px rgba(28,58,44,.4)}
+.cu-art.cu-photo{padding:0;background:var(--stone)}
+.cu-art.cu-photo img{width:100%;height:100%;max-width:none;max-height:none;object-fit:cover;border-radius:0;box-shadow:none}
+.cu-art>.badge-illus{position:absolute;top:12px;left:12px;z-index:2}
+@media (max-width:599.98px){.cu-art{max-width:460px}}
+
+/* kits: badges sit on the product photos */
+.cu-grid .mock{position:relative}
+
+/* flyers: badge on the rendered flyer */
+.cu-flyer{position:relative}
+.cu-flyer>.badge-illus{position:absolute;top:12px;left:12px;z-index:2}
+
+/* short journeys (4–5 steps) */
+@media (min-width:960px){.cu-journey{grid-auto-columns:minmax(0,1fr)}}
+
+/* events: the three community -> channel rows. The touchpoint sits above the channel so the
+   detail line has room; only a wide single column (520-639px) keeps the side-by-side row */
+.cu-cc>li{display:flex}
+.cu-cc>li>div{flex:1}
+@media (max-width:519.98px),(min-width:640px){
+  .cu-cc>li>div{grid-template-columns:22px minmax(0,1fr);column-gap:10px;row-gap:8px;align-content:start}
+  .cu-cc .cc-from{grid-column:1/-1}
+  .cu-cc .cc-arrow{grid-column:1}
+  .cu-cc .cc-to{grid-column:2}
+}
+
+/* smaller badges on the two-up product grid */
+@media (max-width:859.98px){.cu-grid .mock>.badge-illus{top:8px;left:8px;padding:4px 8px;font-size:.56rem;letter-spacing:.12em}}
+@media (min-width:640px) and (max-width:1039.98px){.cu-cc>li:last-child:nth-child(odd){grid-column:1/-1}}
+
+/* ===== Page styles (cohesion pass, A7) ===== */
+
+/* ---------- digital & promotional pages (.dg-) ---------- */
+
+/* "On the community map": a single touchpoint -> channel row tying a channel back to the map */
+.dg-map{margin-top:24px;max-width:520px}
+.dg-k{font:600 .66rem/1.4 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3);margin-bottom:10px}
+.cc.dg-cc{grid-template-columns:1fr}
+/* phones: the touchpoint sits on its own line and the arrow leads into the channel */
+@media (max-width:519.98px){
+  .dg-cc>li>div{grid-template-columns:22px minmax(0,1fr);column-gap:10px;row-gap:8px}
+  .dg-cc .cc-from{grid-column:1/-1}
+  .dg-cc .cc-arrow{grid-column:1}
+  .dg-cc .cc-to{grid-column:2}
+}
+.dg-map+.intro{margin-top:22px}
+/* keep the italic half of a headline on one line */
+.dg-h1 em{display:inline-block}
+
+/* figures: plain margins, two sizes, and a caption row that can carry the Illustrative badge */
+.dg-art{margin:0;width:100%}
+/* the badge sits top-right on these screenshots, clear of the listing or post header */
+.dg-art .shot>.badge-illus{left:auto;right:12px}
+.dg-art-md{max-width:520px;margin-inline:auto}
+.dg-art-sm{max-width:360px;margin-inline:auto}
+.dg-cap{margin-top:12px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;font-size:.84rem;line-height:1.5;color:var(--ink-3)}
+.dg-p{margin-top:14px;max-width:42em}
+
+/* Google Ads: illustrative sketch of one ad group (searches to show for / to exclude) */
+.dg-panel{padding:clamp(22px,3vw,30px);background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 1px 2px rgba(28,58,44,.08),0 24px 44px -26px rgba(28,58,44,.34)}
+.dg-panel>.badge-illus{margin-bottom:16px}
+.dg-panel-t{font:400 1.25rem/1.3 var(--serif);color:var(--ink)}
+.dg-panel .dg-k{margin:20px 0 0}
+.dg-panel .ex-chips li{background:var(--ground)}
+.dg-neg li{color:var(--ink-3);text-decoration:line-through;text-decoration-color:rgba(158,79,104,.55)}
+.dg-panel .dg-cap{margin-top:22px;padding-top:14px;border-top:1px solid var(--line-soft)}
+
+/* Facebook & Instagram: the same offer on a mailer and in the feed */
+.dg-pair{max-width:540px;margin-inline:auto}
+.dg-pair-art{position:relative;margin-top:14px;padding-bottom:16%}
+.dg-pair-mail{width:80%;transform:rotate(-2deg)}
+.dg-pair-mail img{width:100%}
+.dg-pair-feed{position:absolute;right:0;bottom:0;width:42%;border:1px solid var(--line);background:#fff;box-shadow:0 1px 2px rgba(28,58,44,.10),0 26px 44px -20px rgba(28,58,44,.45)}
+.dg-pair .dg-cap{margin-top:16px}
+
+/* Promotional platforms: phone listing with its badge in the caption */
+.dg-phone{max-width:320px;margin-inline:auto}
+.dg-phone picture{display:block;filter:drop-shadow(0 22px 30px rgba(28,58,44,.22))}
+/* the PNG carries its own soft shadow, cut off square at the image edge; clip to the phone frame instead */
+.dg-phone img{display:block;width:100%;height:auto;clip-path:inset(1.6% 3.26% 1.6% 3.26% round 10.9% / 5.2%)}
+.dg-phone .dg-cap{justify-content:center;text-align:center}
+
+/* Promotional platforms: when a deal can fit, and when it usually doesn't */
+.dg-fit{display:grid;gap:16px}
+@media (min-width:760px){.dg-fit{grid-template-columns:1.1fr .9fr;gap:20px;align-items:start}}
+.dg-fit-col{background:var(--ground);border:1px solid var(--line);border-radius:16px;padding:clamp(22px,2.8vw,32px)}
+.dg-fit-no{background:transparent;border-style:dashed;border-color:#B9C8BC}
+.dg-fit-col h3{display:flex;align-items:center;gap:10px;font-size:1.2rem;line-height:1.3;margin-bottom:14px}
+.dg-fit-col h3 svg{width:22px;height:22px;flex:none;color:var(--slate-soft)}
+.dg-fit-no h3 svg{color:var(--gold-sm)}
+.dg-fit-col ul{list-style:none}
+.dg-fit-col li{position:relative;padding:12px 0 12px 18px;border-top:1px solid var(--line);font-size:.96rem;line-height:1.5;color:var(--ink)}
+.dg-fit-col li::before{content:"";position:absolute;left:2px;top:1.3em;width:6px;height:6px;border-radius:50%;background:var(--gold)}
+.dg-fit-no li{color:var(--ink-2)}
+.dg-fit-no li::before{background:#B9C8BC}
+
+/* ===== Page styles (cohesion pass, A8) ===== */
+
+/* =========================== industries =========================== */
+
+/* market-first chain under the intro: the shared .chain, left-aligned */
+.ind-chain{justify-content:flex-start;margin-top:26px;gap:8px 0}
+.ind-chain li{white-space:nowrap}
+.ind-chain li.lead{color:var(--gold-sm)}
+/* the connector trails each step, so a wrapped line never starts with a dash */
+.ind-chain li+li::before{display:none}
+.ind-chain li:not(:last-child)::after{content:"";width:16px;height:1px;margin:0 10px;background:var(--gold)}
+
+/* industry cards */
+.ind-grid{list-style:none;display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
+@media (min-width:680px){.ind-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}}
+@media (min-width:1040px){.ind-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}}
+.ind-card{position:relative;display:flex;flex-direction:column;padding:clamp(24px,2.8vw,32px);background:var(--paper);border:1px solid var(--line);border-radius:18px;box-shadow:0 1px 2px rgba(28,58,44,.05),0 24px 42px -34px rgba(28,58,44,.5);scroll-margin-top:110px;transition:border-color .25s ease,box-shadow .25s ease}
+.ind-card::before{content:"";position:absolute;top:-1px;left:clamp(24px,2.8vw,32px);width:44px;height:2px;border-radius:0 0 2px 2px;background:var(--gold)}
+.ind-card:hover{border-color:#C6D4C7;box-shadow:0 1px 2px rgba(28,58,44,.06),0 28px 46px -32px rgba(28,58,44,.55)}
+.ind-card:target{border-color:var(--gold)}
+.ind-ic{display:flex;align-items:center;justify-content:center;width:54px;height:54px;margin-bottom:18px;border-radius:50%;background:var(--slate-wash);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line)}
+.ind-ic svg{width:27px;height:27px}
+.ind-card h2{font-size:clamp(1.3rem,1.16rem + .5vw,1.5rem);line-height:1.2}
+.ind-who{margin-top:8px;font-size:.95rem;line-height:1.55;color:var(--ink-2)}
+.ind-card .ind-meta{margin-top:20px;gap:12px}
+.ind-card .ind-meta div{padding-top:12px}
+.ind-chips{list-style:none;display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.ind-chips li{padding:6px 11px;border-radius:999px;border:1px solid var(--line);background:var(--ground);font:500 .8rem/1.2 var(--sans);color:var(--ink)}
+.ind-link{margin-top:auto;padding-top:24px}
+.ind-link .textlink{line-height:1.35}
+
+/* closing line under the cards */
+.ind-close{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px 28px;margin-top:clamp(30px,4vw,44px);padding-top:26px;border-top:1px solid var(--line)}
+.ind-close p{max-width:56ch;font:400 clamp(1.1rem,1rem + .4vw,1.3rem)/1.4 var(--serif);color:var(--ink)}
+.ind-close .textlink{flex:none}
+
+/* =========================== examples =========================== */
+
+.exs-list{display:grid;gap:clamp(22px,3vw,32px)}
+.exs-list>.excase+.excase{margin-top:0}
+.exs-case{scroll-margin-top:110px}
+.exs-top{display:grid;gap:clamp(22px,3vw,40px);align-items:center}
+@media (min-width:900px){.exs-top{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+.exs-case .excase-head{align-content:center}
+.exs-case .excase-head .eyebrow{margin:0}
+.exs-brief{margin-top:4px;font-size:1.02rem;line-height:1.65;color:var(--ink-2);max-width:48ch}
+.exs-media{margin:0}
+.exs-media .card-cap{margin-top:12px}
+
+/* six stages, numbered in order */
+.exs-flow{counter-reset:exs;margin-top:clamp(24px,3vw,34px)}
+.exs-flow>li{display:flex;flex-direction:column}
+.exs-flow>li::after{counter-increment:exs;content:counter(exs,decimal-leading-zero);position:absolute;top:17px;right:16px;font:400 .78rem/1 var(--serif);color:var(--gold-sm)}
+.exs-flow .ex-k{padding-right:30px}
+.exs-flow .ex-chips{padding-top:2px}
+/* channel chips read as the channels the map points to */
+.exs-ch li{background:var(--slate-wash);border-color:#C6D4C7}
+/* tracking is a plan, not a report: dashed to read as "to be measured" */
+.exs-flow>li.exs-measure{border-style:dashed;border-color:var(--gold)}
+
+/* closing line under the two campaigns */
+.exs-close{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px 28px;padding-top:26px;border-top:1px solid var(--line)}
+.exs-close p{max-width:58ch;font:400 clamp(1.1rem,1rem + .4vw,1.3rem)/1.4 var(--serif);color:var(--ink)}
+.exs-close .textlink{flex:none}
