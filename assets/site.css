@@ -872,4 +872,9 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
   .js .tp-left{animation-name:tpInLeft}
 }
 @keyframes tpInLeft{from{opacity:0;transform:translate(-90%,-50%)}to{opacity:1;transform:translate(-100%,-50%)}}
-@media (max-width:767.98px){.tp-homes{left:20%!important;top:53%!important}}
+@media (max-width:767.98px){.tp-homes{left:13%!important;top:49%!important}}
+/* the CSS drop-shadow filter on the transparent town image clipped into a visible box in Chromium;
+   a soft ground shadow under the tile gives the same lift without the artifact */
+.town-img{filter:none}
+.town::before{content:"";position:absolute;left:12%;right:12%;bottom:2%;height:14%;border-radius:50%;background:radial-gradient(closest-side,rgba(28,58,44,.20),rgba(28,58,44,0));filter:blur(6px);z-index:-1}
+.town{isolation:isolate}
