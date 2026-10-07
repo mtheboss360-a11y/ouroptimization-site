@@ -25,7 +25,9 @@ The campaign-estimate form uses **Netlify Forms** (no function, no secrets):
 | `custom-marketing.html` | Branded materials, marketing kits (real photo), targeted direct mail |
 | `digital-marketing.html` | Local SEO, Google Ads, Facebook/Instagram, physical + digital |
 | `industries.html` | Med spas, dental, pediatric, chiropractic, PT, beauty and wellness |
-| `examples.html` | Two illustrative sample campaigns, clearly labelled, with no performance figures |
+| `market-research.html`, `direct-mail.html`, `flyers.html`, `marketing-kits.html`, `events.html` | Physical and community service pages, each with a "what success looks like" section |
+| `google-ads.html`, `seo.html`, `social-media.html`, `groupon.html` | Digital and promotional service pages |
+| `examples.html` | Two illustrative Example Spa campaigns, clearly labelled as fictional |
 | `estimate.html` | Campaign estimate form (new fields: primary goal, target service, monthly budget, channels) |
 | `sample-advertisements.html`, `gift-cards.html`, `tracking.html`, `faq.html`, `privacy.html`, `terms.html` | Kept and updated for the broader scope |
 | `landing.html` | Unchanged noindex direct-mail ad landing page (brand updated only) |
