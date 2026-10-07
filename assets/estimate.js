@@ -274,7 +274,13 @@
       if (!on) setError('business_type_other', '');
     };
 
+    /* Rebuild the list only when its content changes, so a link that is being
+       pressed or focused is never replaced underneath the user. */
+    var lastSummary = null;
     var renderSummary = function (problems) {
+      var sig = JSON.stringify(problems);
+      if (sig === lastSummary) { summary.hidden = problems.length === 0; return; }
+      lastSummary = sig;
       summaryList.textContent = '';
       problems.forEach(function (p) {
         var el = field(p.name);
@@ -328,8 +334,15 @@
       if (!name || !v.rules[name] || el.type === 'checkbox') return;
       if (trim(el.value) || isFlagged(el)) {
         check(name);
-        refreshSummary();
+        // Moving into the summary itself must not rebuild it under the focus.
+        if (!(e.relatedTarget && summary.contains(e.relatedTarget))) refreshSummary();
       }
+    });
+
+    // Pressing a summary link keeps focus on the current field until the click
+    // handler moves it, so the list is not rebuilt mid-click (mouse and touch).
+    summaryList.addEventListener('mousedown', function (e) {
+      if (e.target.closest && e.target.closest('a')) e.preventDefault();
     });
 
     summaryList.addEventListener('click', function (e) {

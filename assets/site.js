@@ -14,7 +14,9 @@
       var link = document.createElement('a');
       link.href = 'mailto:' + EMAIL;
       link.textContent = EMAIL;
-      slot.append('Email · ', link);
+      /* The footer lists contact lines without labels, like the phone number. */
+      if (slot.classList.contains('foot-email')) slot.append(link);
+      else slot.append('Email · ', link);
       slot.hidden = false;
     });
   }
@@ -81,7 +83,20 @@
       else { el.inert = false; el.removeAttribute('aria-hidden'); }
     });
   };
+  /* Phones open the image fitted to the screen; a tap toggles a larger view to pan. */
+  var small = window.matchMedia('(max-width:899.98px)');
+  var hint = document.createElement('p');
+  hint.className = 'zoom-hint';
+  hint.setAttribute('aria-hidden', 'true');
+  zoom.appendChild(hint);
+  var setBig = function (on) {
+    zoom.classList.toggle('big', on);
+    hint.textContent = on ? 'Drag to look around · tap to fit' : 'Tap the image to zoom in';
+  };
+  setBig(false);
+  zoomImg.addEventListener('click', function () { if (small.matches) setBig(!zoom.classList.contains('big')); });
   var closeZoom = function () {
+    setBig(false);
     zoom.hidden = true;
     zoomImg.removeAttribute('src');
     document.body.style.overflow = '';

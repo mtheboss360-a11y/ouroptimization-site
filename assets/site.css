@@ -83,12 +83,9 @@ strong{font-weight:600;color:var(--ink)}
 .site-nav a{display:flex;align-items:center;min-height:44px;padding:0 9px;white-space:nowrap;text-decoration:none;font-weight:500;font-size:.86rem;letter-spacing:.02em;color:var(--ink);border-radius:999px;transition:color .25s ease}
 .site-nav a:hover{color:var(--gold-sm)}
 .btn-head{min-height:44px;padding:0 18px;font-size:.84rem;order:2;white-space:nowrap}
-.btn-head .long{display:inline}
-.btn-head .short{display:none}
+
 @media (max-width:1059.98px){
   .btn-head{padding:0 15px;gap:8px}
-  .btn-head .long{display:none}
-  .btn-head .short{display:inline}
 }
 /* phones: the header carries the brand and Menu only; the CTA moves into the menu */
 .nav-cta{display:none}
@@ -179,7 +176,7 @@ h3{font-size:1.28rem;line-height:1.3}
 .bg-ink .flow svg{color:var(--gold-bright)}
 .flow b{display:block;font:600 .74rem/1.4 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--ink)}
 .bg-ink .flow b{color:var(--ground)}
-.flow span{font-size:.92rem;line-height:1.5}
+.flow span{display:block;font-size:.92rem;line-height:1.5}
 .flow .arrow{display:flex;justify-content:center;color:var(--gold);padding:0}
 .flow .arrow svg{width:16px;height:16px;color:var(--gold)}
 @media (min-width:760px){
@@ -306,7 +303,7 @@ html:not(.js) .enlarge{display:none}
 .field textarea{resize:vertical;min-height:112px}
 .field select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath fill='none' stroke='%234F6657' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round' d='M1 1.5 6 6.5l5-5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 15px center;background-size:12px;padding-right:40px}
 .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--gold-sm);box-shadow:0 0 0 3px rgba(158,79,104,.16)}
-.field input[aria-invalid="true"],.field select[aria-invalid="true"],.field textarea[aria-invalid="true"]{border-color:#A3342B;background:#FCF6F5}
+.field input[aria-invalid="true"],.field select[aria-invalid="true"],.field textarea[aria-invalid="true"]{border-color:#A3342B;background-color:#FCF6F5}
 .err{display:none;margin-top:7px;font:500 .84rem/1.45 var(--sans);color:#8E2D25}
 .err.on{display:block}
 
@@ -422,7 +419,7 @@ html:not(.js) .enlarge{display:none}
 }
 
 /* ---------- brand: the full Our Wellness Optimization lockup ---------- */
-.brand img{width:clamp(140px,38vw,176px)}
+.brand img{width:clamp(140px,38vw,160px)}
 @media (min-width:1060px){.brand img{width:190px}.header-row{padding-block:8px}}
 @media (min-width:1360px){.brand img{width:206px}}
 .foot-brand > img{width:190px;height:auto;margin-bottom:14px}
@@ -441,7 +438,6 @@ html:not(.js) .enlarge{display:none}
 @media (min-width:1360px){.header-row{max-width:1400px}}
 
 /* ---------- hero: market map ---------- */
-
 
 @keyframes halo{0%,100%{transform:scale(1);opacity:.22}50%{transform:scale(1.35);opacity:.08}}
 
@@ -571,10 +567,10 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 .spec svg{color:var(--slate-soft)}
 .form-aside a{color:var(--ink);font-weight:600;text-underline-offset:3px}
 .callout a.textlink{display:inline}
-/* mid-width desktops: the full nav fits only with the short CTA label */
-@media (min-width:1060px) and (max-width:1299.98px){
-  .btn-head .long{display:none}
-  .btn-head .short{display:inline}
+/* small desktops: tighten nav and CTA spacing so the full CTA label fits */
+@media (min-width:1060px) and (max-width:1139.98px){
+  .btn-head{padding:0 14px;font-size:.8rem}
+  .site-nav a{padding:0 6px}
 }
 
 /* ---------- promotional-channel listing screenshot ---------- */
@@ -615,9 +611,6 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 .town{position:relative}
 .town-img{display:block;width:100%;height:auto;filter:drop-shadow(0 30px 40px rgba(28,58,44,.16))}
 
-
-
-
 /* ---------- hero v5: community marketing network ---------- */
 .town{margin:0}
 .net{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
@@ -627,7 +620,7 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 .tps{list-style:none;position:absolute;inset:0;pointer-events:none}
 .tp{position:absolute;transform:translate(-50%,-100%);display:flex;flex-direction:column;align-items:flex-start;gap:3px;padding:7px 11px 8px;border-radius:12px;background:rgba(249,251,248,.96);border:1px solid var(--line);box-shadow:0 10px 22px -14px rgba(28,58,44,.55);white-space:nowrap;margin-top:-6px}
 .tp::after{content:"";position:absolute;left:50%;bottom:-5px;width:9px;height:9px;background:inherit;border-right:1px solid var(--line);border-bottom:1px solid var(--line);transform:translateX(-50%) rotate(45deg)}
-.tp-place{font:600 .58rem/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3)}
+.tp-place{font:600 .62rem/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
 .tp-ch{display:flex;align-items:center;gap:6px;font:600 .8rem/1.1 var(--sans);color:var(--ink)}
 .tp-ch svg{width:15px;height:15px;color:var(--gold-sm);flex:none}
 .tp-hub{background:var(--ink);border-color:var(--ink);padding:9px 13px}
@@ -647,7 +640,7 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 /* phones: keep the hub + three priority touchpoints on the map, list the rest below */
 @media (max-width:767.98px){
   .tp{padding:5px 8px 6px;border-radius:10px}
-  .tp-place{font-size:.6rem;letter-spacing:.1em}
+  .tp-place{font-size:.62rem;letter-spacing:.08em}
   .tp-ch{font-size:.66rem;gap:4px}.tp-ch svg{width:12px;height:12px}
   .tp:not(.tp-key){display:none}
   .tp-list{display:grid;grid-template-columns:1fr 1fr;gap:8px;list-style:none;margin-top:10px}
@@ -658,8 +651,7 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 }
 .net-line{stroke-opacity:.55;stroke-width:1.9}
 
-
-@media (max-width:767.98px){.tp-homes{left:13%!important;top:49%!important}}
+@media (max-width:767.98px){.tp-homes{left:max(13%,54px)!important;top:49%!important}}
 /* the CSS drop-shadow filter on the transparent town image clipped into a visible box in Chromium;
    a soft ground shadow under the tile gives the same lift without the artifact */
 .town-img{filter:none}
@@ -1041,7 +1033,8 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 .cm-steps-list b{color:var(--ink);font-weight:600}
 /* narrow columns: stack the icon over the touchpoint name so "Neighborhoods" clears the arrow */
 @media (max-width:899.98px){
-  .cm-cc>li>a{grid-template-columns:minmax(0,1fr) 24px minmax(0,1.15fr);padding:14px}
+  .cm-cc>li>a{padding:14px}
+  @container (min-width:420px){.cm-cc>li>a{grid-template-columns:minmax(0,1fr) 24px minmax(0,1.15fr)}}
   .cm-cc .cc-from{flex-direction:column;align-items:flex-start;gap:6px;letter-spacing:.1em}
 }
 
@@ -1240,13 +1233,15 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 /* Zoom dialog on small screens: show the image larger and let it pan, close button stays put. */
 @media (max-width:899.98px){
   .zoom{overflow:auto;align-items:flex-start;justify-content:flex-start}
-  .zoom img{max-width:none;max-height:none;width:min(1800px,190vw);margin:auto}
+  .zoom img{max-width:none;max-height:none;width:100%;margin:auto;cursor:zoom-in}
+  .zoom.big img{width:min(1800px,190vw);cursor:zoom-out}
+  .zoom-hint{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);padding:7px 13px;border-radius:999px;background:rgba(28,58,44,.88);color:var(--ground);font:600 .72rem/1 var(--sans);white-space:nowrap;pointer-events:none}
   .zoom-close{position:fixed;z-index:2;background:rgba(28,58,44,.85)}
 }
 
 /* Local-search mock: the image carries its own label, so the page badge sits above it, not on the search bar. */
-.shot.shot-ls>.badge-illus{position:static;display:inline-flex;margin:0 0 10px}
-.shot.shot-ls{display:flex;flex-direction:column;align-items:flex-start}
+.shot.shot-ls>.badge-illus{position:static;display:inline-flex;margin:12px 0 0 12px}
+.shot.shot-ls{display:flex;flex-direction:column;align-items:flex-start;background:#fff}
 .shot.shot-ls>picture{width:100%}
 
 /* ===== Page styles (audit fixes, F1) ===== */
@@ -1335,3 +1330,20 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
   .ind-grid>.ind-card:nth-child(4):nth-last-child(2),
   .ind-grid>.ind-card:nth-child(5):last-child{grid-column:span 3}
 }
+
+/* ===== Final audit fixes ===== */
+/* 3-card grids: the last card spans the row when the grid is two columns wide (no blank cell). */
+@media (min-width:640px) and (max-width:1039.98px){.cardgrid.c3>li:last-child:nth-child(odd){grid-column:1/-1}}
+/* Localized flyer grid: 3 + 2 on tablets instead of 2 + 2 + 1. */
+@media (min-width:768px) and (max-width:1039.98px){.lang-grid{grid-template-columns:repeat(6,1fr)}.lang-grid>li{grid-column:span 2}.lang-grid>li:nth-child(n+4){grid-column:span 3}}
+/* Footer on tablets: brand on its own row, three link columns share the width. */
+@media (min-width:720px) and (max-width:1099.98px){.foot-top{grid-template-columns:repeat(3,1fr)}.foot-brand{grid-column:1/-1}}
+/* Stacked hero buttons on small desktops line up at equal width. */
+@media (min-width:900px) and (max-width:1119.98px){.hero .actions .btn,.page-top .actions .btn{min-width:262px}}
+.zoom-hint{display:none}
+@media (max-width:899.98px){.zoom .zoom-hint{display:block}}
+/* Enlarge buttons sit in the caption row, not on the artwork. */
+.card-capbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:10px}
+.card-capbar .card-cap{margin:0}
+.card-capbar .enlarge{position:static}
+.hiw-cap .enlarge{position:static;margin-left:auto}
