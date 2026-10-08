@@ -568,10 +568,11 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 .spec svg{color:var(--slate-soft)}
 .form-aside a{color:var(--ink);font-weight:600;text-underline-offset:3px}
 .callout a.textlink{display:inline}
-/* small desktops: tighten nav and CTA spacing so the full CTA label fits */
-@media (min-width:1060px) and (max-width:1139.98px){
-  .btn-head{padding:0 14px;font-size:.8rem}
-  .site-nav a{padding:0 6px}
+/* small desktops: tighten nav and CTA spacing so "Set Up a Strategy Meeting" always fits
+   (Figtree is narrower than the old face, so the label keeps its full size here) */
+@media (min-width:1060px) and (max-width:1199.98px){
+  .btn-head{padding:0 16px}
+  .site-nav a{padding:0 7px}
 }
 
 /* ---------- promotional-channel listing screenshot ---------- */
