@@ -2,6 +2,9 @@
    Loaded with defer on every page. No dependencies, no third-party requests. */
 (function () {
   var root = document.documentElement;
+  /* Tells the inline head script that behaviour loaded, so it keeps the .js styles. */
+  window.__owoReady = true;
+  root.classList.add('js'); /* restore it if a slow load made the head script drop it */
 
   /* Contact email — read from data-contact-email on <html>.
      Empty means: no email line and no mailto link, anywhere. */
@@ -11,7 +14,9 @@
       var link = document.createElement('a');
       link.href = 'mailto:' + EMAIL;
       link.textContent = EMAIL;
-      slot.append('Email · ', link);
+      /* The footer lists contact lines without labels, like the phone number. */
+      if (slot.classList.contains('foot-email')) slot.append(link);
+      else slot.append('Email · ', link);
       slot.hidden = false;
     });
   }
@@ -34,7 +39,18 @@
     menuBtn.addEventListener('click', function () {
       setMenu(menuBtn.getAttribute('aria-expanded') !== 'true');
     });
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setMenu(false); });
+    /* Escape closes an open menu and returns focus to the button that opened it. */
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape' || menuBtn.getAttribute('aria-expanded') !== 'true') return;
+      setMenu(false);
+      menuBtn.focus();
+    });
+    /* Tabbing out of the header closes the menu, so focus is never hidden under the panel. */
+    if (header) {
+      header.addEventListener('focusout', function (e) {
+        if (menuBtn.getAttribute('aria-expanded') === 'true' && !header.contains(e.relatedTarget)) setMenu(false);
+      });
+    }
     /* In-page links (e.g. #anchors) should not leave the menu open over the target. */
     nav.addEventListener('click', function (e) { if (e.target.closest('a')) setMenu(false); });
   }
@@ -67,9 +83,22 @@
       else { el.inert = false; el.removeAttribute('aria-hidden'); }
     });
   };
+  /* Phones open the image fitted to the screen; a tap toggles a larger view to pan. */
+  var small = window.matchMedia('(max-width:899.98px)');
+  var hint = document.createElement('p');
+  hint.className = 'zoom-hint';
+  hint.setAttribute('aria-hidden', 'true');
+  zoom.appendChild(hint);
+  var setBig = function (on) {
+    zoom.classList.toggle('big', on);
+    hint.textContent = on ? 'Drag to look around · tap to fit' : 'Tap the image to zoom in';
+  };
+  setBig(false);
+  zoomImg.addEventListener('click', function () { if (small.matches) setBig(!zoom.classList.contains('big')); });
   var closeZoom = function () {
+    setBig(false);
     zoom.hidden = true;
-    zoomImg.src = '';
+    zoomImg.removeAttribute('src');
     document.body.style.overflow = '';
     setInert(false);
     if (opener) { opener.focus(); opener = null; }
