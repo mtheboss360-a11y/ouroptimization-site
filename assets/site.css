@@ -1347,3 +1347,19 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 .card-capbar .card-cap{margin:0}
 .card-capbar .enlarge{position:static}
 .hiw-cap .enlarge{position:static;margin-left:auto}
+
+/* ===== Estimate form: optional phone ===== */
+/* "(optional)" marker, styled like the "(required)" markers. */
+.est-opt{font:500 .8rem/1.4 var(--sans);color:var(--ink-3)}
+/* Email and phone share a row and only phone has a help line: line up the label, help,
+   input and error rows of both fields so the two inputs stay level. */
+@media (min-width:640px){
+  @supports (grid-template-rows:subgrid){
+    .est-row{grid-template-rows:repeat(4,auto)}
+    .est-row>.field{display:grid;grid-row:span 4;grid-template-rows:subgrid}
+    .est-row>.field>label{grid-row:1}
+    .est-row>.field>.help{grid-row:2}
+    .est-row>.field>input{grid-row:3}
+    .est-row>.field>.err{grid-row:4}
+  }
+}

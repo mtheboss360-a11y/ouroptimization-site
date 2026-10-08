@@ -105,7 +105,7 @@
       <div class="rule" aria-hidden="true"></div>
       <p class="eyebrow">Your community is your marketing platform</p>
       <h1 id="est-h">Get a Campaign Estimate</h1>
-      <p class="intro" id="est-intro">Tell us about your business and where it is. We&rsquo;ll study your market, find where your customers live, shop and gather, and put together an estimate for a campaign that reaches them in print, in person and online. Only the first section is required.</p>
+      <p class="intro" id="est-intro">Tell us about your business and where it is. We&rsquo;ll study your market, find where your customers live, shop and gather, and put together an estimate for a campaign that reaches them in print, in person and online. Only the first section is required, and phone is optional.</p>
     </div>
 
     <!-- ===== success: shown by assets/estimate.js once the request is accepted ===== -->
@@ -183,8 +183,9 @@
                 <p class="err" id="email-err"></p>
               </div>
               <div class="field">
-                <label for="phone">Phone <span class="est-req" aria-hidden="true">(required)</span></label>
-                <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="30" required>
+                <label for="phone">Phone <span class="est-opt">(optional)</span></label>
+                <p class="help" id="phone-help">Add it if you&rsquo;d like a call.</p>
+                <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="30" aria-describedby="phone-help">
                 <p class="err" id="phone-err"></p>
               </div>
             </div>

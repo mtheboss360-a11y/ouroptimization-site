@@ -109,6 +109,22 @@ await scenario('static HTML keeps the Netlify Forms contract', async () => {
   assert.match(html, /name="business_type_other"/, 'the "Something else" field is in the static HTML');
   assert.match(html, /<script src="assets\/estimate\.js" defer><\/script>/);
   assert.doesNotMatch(html, /Build My Campaign/);
+
+  // Phone is optional (email stays required); the field keeps its name and input hints.
+  const phone = await page.$eval('#phone', (el) => ({
+    name: el.name, type: el.type, autocomplete: el.getAttribute('autocomplete'), inputmode: el.getAttribute('inputmode'),
+    required: el.required, ariaRequired: el.getAttribute('aria-required'),
+    describedby: el.getAttribute('aria-describedby') || '',
+    label: document.querySelector('label[for="phone"]').textContent.replace(/\s+/g, ' ').trim()
+  }));
+  assert.deepEqual(phone, {
+    name: 'phone', type: 'tel', autocomplete: 'tel', inputmode: 'tel', required: false, ariaRequired: null,
+    describedby: 'phone-help', label: 'Phone (optional)'
+  });
+  assert.match(await page.textContent('#phone-help'), /optional|call/i);
+  assert.equal(await page.$eval('#email', (el) => el.required), true, 'email is still required');
+  assert.equal(await page.locator('.est-row #email').count(), 1, 'email and phone share the contact row');
+  assert.equal(await page.locator('.est-row #phone').count(), 1, 'email and phone share the contact row');
   await close();
 });
 
@@ -170,12 +186,52 @@ await scenario('error summary links move focus to the field', async () => {
   const { page, close } = await open();
   await page.click('#submit');
   const links = await page.$$eval('#est-summary-list a', (as) => as.map((a) => a.getAttribute('href')));
-  assert.deepEqual(links, ['#clinic', '#type', '#address', '#contact', '#email', '#phone']);
+  assert.deepEqual(links, ['#clinic', '#type', '#address', '#contact', '#email']);
+  assert.equal(await page.textContent('#est-summary-h'), 'Check 5 fields before sending');
+  assert.doesNotMatch(await page.textContent('#est-summary'), /phone/i, 'an empty phone is not listed');
   await page.click('#est-summary-list a[href="#email"]');
   assert.equal(await page.evaluate(() => document.activeElement.id), 'email');
-  for (const sel of ['#clinic', '#type', '#address', '#contact', '#email', '#phone']) {
+  for (const sel of ['#clinic', '#type', '#address', '#contact', '#email']) {
     assert.equal((await state(page, sel)).invalid, true, `${sel} flagged`);
   }
+  assert.deepEqual(await state(page, '#phone'), { invalid: false, describedby: 'phone-help', error: '' }, 'empty phone is not flagged');
+  await close();
+});
+
+await scenario('phone left empty: the request still sends and shows #sent', async () => {
+  const { page, posts, close, consoleErrors } = await open();
+  await fillValid(page, { '#phone': '' });
+  await page.click('#submit');
+  await page.waitForSelector('#sent', { state: 'visible' });
+  assert.equal(posts.length, 1, `expected 1 POST, got ${posts.length}`);
+  const body = new URLSearchParams(posts[0].body);
+  assert.equal(body.get('form-name'), 'campaign-estimate');
+  assert.equal(body.get('email'), 'jordan@example.com');
+  assert.ok(!body.get('phone'), 'phone is posted empty (or not at all)');
+  assert.equal(await page.isHidden('#form-area'), true);
+  assert.equal(await page.evaluate(() => document.activeElement.id), 'sent-h');
+  assert.deepEqual(consoleErrors, []);
+  await close();
+});
+
+await scenario('a phone number that is filled in is still checked', async () => {
+  const { page, posts, close } = await open();
+  await fillValid(page, { '#phone': '555-0142' });
+  await page.click('#submit');
+  assert.equal(posts.length, 0, 'nothing is sent with an invalid phone number');
+  const bad = await state(page, '#phone');
+  assert.equal(bad.invalid, true);
+  assert.match(bad.error, /10-digit US phone number/);
+  assert.deepEqual(bad.describedby.split(' '), ['phone-err', 'phone-help'], 'error first, then the help line');
+  assert.deepEqual(await page.$$eval('#est-summary-list a', (as) => as.map((a) => a.getAttribute('href'))), ['#phone']);
+
+  // Clearing the number is a valid fix, as is correcting it.
+  await page.fill('#phone', '');
+  assert.deepEqual(await state(page, '#phone'), { invalid: false, describedby: 'phone-help', error: '' });
+  assert.equal(await page.isHidden('#est-summary'), true, 'summary goes away once nothing is left to fix');
+  await page.click('#submit');
+  await page.waitForSelector('#sent', { state: 'visible' });
+  assert.equal(posts.length, 1);
   await close();
 });
 
@@ -203,6 +259,7 @@ await scenario('double-click sends exactly one POST; success shows #sent and mov
   assert.equal(body.get('clinic_type'), 'Dental office');
   assert.equal(body.get('business_type_other'), '');
   assert.equal(body.get('address'), 'Naperville, IL');
+  assert.equal(body.get('phone'), '(630) 555-0142');
   assert.equal(body.get('website'), 'example.com/about?x=1#y');
   assert.deepEqual(body.getAll('channels[]'), ['Direct mail', 'Local SEO']);
 

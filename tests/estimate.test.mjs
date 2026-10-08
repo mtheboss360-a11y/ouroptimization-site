@@ -129,7 +129,7 @@ describe('email (required)', () => {
   });
 });
 
-describe('phone (required, US)', () => {
+describe('phone (optional, US)', () => {
   const accept = [
     '(630) 555-0142', '630-555-0142', '630.555.0142', '630 555 0142', '6305550142',
     '+1 630 555 0142', '+1 (630) 555-0142', '1-630-555-0142', '16305550142', '+16305550142'
@@ -151,13 +151,20 @@ describe('phone (required, US)', () => {
       assert.notEqual(errorFor('phone', { phone: value }), '');
     });
   }
-  test('empty is an error', () => {
-    assert.match(errorFor('phone', { phone: '' }), /phone/i);
+  test('empty is fine because the field is optional', () => {
+    assert.equal(errorFor('phone', { phone: '' }), '');
+    assert.equal(errorFor('phone', { phone: '   ' }), '');
+    assert.equal(errorFor('phone', { phone: undefined }), '');
+    assert.deepEqual(v.validateAll(withValues({ phone: '' })), []);
+  });
+  test('a number that is filled in must still be valid', () => {
+    assert.match(errorFor('phone', { phone: '555-0142' }), /phone number/i);
+    assert.deepEqual(v.validateAll(withValues({ phone: '555-0142' })).map((p) => p.name), ['phone']);
   });
 });
 
 describe('required fields', () => {
-  for (const name of ['clinic', 'clinic_type', 'address', 'contact', 'email', 'phone']) {
+  for (const name of ['clinic', 'clinic_type', 'address', 'contact', 'email']) {
     test(`${name} is required`, () => {
       assert.notEqual(errorFor(name, { [name]: '' }), '');
       assert.notEqual(errorFor(name, { [name]: '   ' }), '', 'whitespace only does not count');
@@ -169,7 +176,7 @@ describe('required fields', () => {
   test('an empty form lists every required field, in form order', () => {
     const empty = Object.fromEntries(v.order.map((n) => [n, '']));
     assert.deepEqual(v.validateAll(empty).map((p) => p.name),
-      ['clinic', 'clinic_type', 'address', 'contact', 'email', 'phone']);
+      ['clinic', 'clinic_type', 'address', 'contact', 'email']);
   });
 
   test('business type must be one of the listed options', () => {
@@ -227,7 +234,7 @@ describe('"Something else" business type', () => {
 });
 
 describe('optional fields', () => {
-  for (const name of ['website', 'promote', 'target_service', 'budget', 'target_area', 'notes']) {
+  for (const name of ['phone', 'website', 'promote', 'target_service', 'budget', 'target_area', 'notes']) {
     test(`${name} accepts empty`, () => {
       assert.equal(errorFor(name, { [name]: '' }), '');
       assert.equal(errorFor(name, { [name]: undefined }), '');

@@ -142,8 +142,8 @@
       return isEmail(v) ? '' : 'Enter an email address like name@yourbusiness.com.';
     },
     phone: function (v) {
-      if (!trim(v)) return 'Enter a phone number.';
-      return isPhone(v) ? '' : 'Enter a 10-digit US phone number with the area code, like (630) 555-0142.';
+      if (!trim(v)) return ''; // optional; a number that is entered must be a valid US number
+      return isPhone(v) ? '' : 'Enter a 10-digit US phone number with the area code, like (630) 555-0142, or leave this blank.';
     },
     website: function (v) {
       if (!trim(v)) return '';
