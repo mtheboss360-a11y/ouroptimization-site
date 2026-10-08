@@ -2,7 +2,7 @@
    Static site: no build step, no framework, no external requests.
    Fonts are self-hosted variable fonts (SIL Open Font License 1.1 — licences in assets/fonts/):
    Bricolage Grotesque for display and headings, Figtree for text. Neither ships an italic,
-   so emphasis inside headings is carried by colour, never by a synthesized slant. */
+   so emphasis inside headings is carried by color, never by a synthesized slant. */
 
 @font-face{font-family:"Bricolage Grotesque";font-style:normal;font-weight:200 800;font-display:swap;src:url("fonts/bricolage-grotesque-latin-wght-normal.woff2") format("woff2")}
 @font-face{font-family:"Figtree";font-style:normal;font-weight:300 900;font-display:swap;src:url("fonts/figtree-latin-wght-normal.woff2") format("woff2")}
@@ -482,7 +482,9 @@ html:not(.js) .enlarge{display:none}
 .uses li{padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:var(--paper);font:500 .86rem/1.2 var(--sans);color:var(--ink)}
 .bg-ink .uses li{background:rgba(243,246,242,.06);border-color:rgba(243,246,242,.2);color:var(--ground)}
 .split{display:grid;gap:clamp(30px,4vw,52px)}
-@media (min-width:960px){.split{grid-template-columns:.9fr 1.1fr;align-items:start}}
+@media (min-width:960px){.split{grid-template-columns:.9fr 1.1fr;align-items:start}
+  /* the heading shares the row, so it scales with its narrower column */
+  .split h2{font-size:clamp(1.95rem,1rem + 2.4vw,2.95rem)}}
 
 /* ---------- language & localization ---------- */
 .lang-grid{list-style:none;display:grid;gap:14px;grid-template-columns:1fr}
@@ -607,6 +609,8 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 /* ---------- hero v4: illustrated community town ---------- */
 .hero-town{padding-top:clamp(28px,5vw,64px)}
 .hero-town h1{font-size:clamp(2.3rem,1.3rem + 3.8vw,3.9rem)}
+/* two-column hero: size the headline to its column so "targeted to your" holds one line on small desktops */
+@media (min-width:960px){.hero-town h1{font-size:clamp(2.9rem,5.9vw - .25rem,3.9rem)}}
 .hero-town h1 em{font-style:normal;color:var(--gold-lg)}
 .hero-town .eyebrow{margin-bottom:18px}
 @media (min-width:960px){.hero-town .hero-grid{grid-template-columns:.95fr 1.05fr}.hero-town .hero-art{max-width:600px;width:100%;margin-right:0}}
@@ -679,11 +683,7 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 .cc-to{font:600 .98rem/1.3 var(--sans);color:var(--ink)}
 .cc-to small{display:block;margin-top:2px;font:400 .82rem/1.4 var(--sans);color:var(--ink-3)}
 
-/* "Illustrative" badge for example/fictional visuals. Inline, or pinned in a positioned .shot */
-.badge-illus{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;background:var(--blush);border:1px solid #E7CFD7;font:600 .62rem/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--gold-sm);white-space:nowrap}
-.badge-illus::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--gold)}
 .shot{position:relative}
-.shot>.badge-illus,.mock>.badge-illus,.excase-media>.badge-illus{position:absolute;top:12px;left:12px;z-index:2}
 
 /* Journey / flow line: Business -> Market -> ... (wraps to a vertical list on phones) */
 .journey{list-style:none;display:grid;gap:10px;counter-reset:j}
@@ -808,8 +808,8 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 
 /* ---------- home: seven-step journey ---------- */
 @media (min-width:960px){.hm-journey{grid-auto-columns:minmax(0,1fr)}}
-/* small desktops: seven columns are too narrow to read, so wrap into rows of four */
-@media (min-width:960px) and (max-width:1199.98px){
+/* desktops: seven columns are too narrow for the step names, so wrap into rows of four */
+@media (min-width:960px){
   .hm-journey{grid-auto-flow:row;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
   .hm-journey>li+li::after{display:none}
 }
@@ -826,7 +826,7 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
   .hm-ind{grid-template-columns:1fr 1fr}
 }
 
-/* ---------- home: illustrative campaign, four stages in one row on wide screens ---------- */
+/* ---------- home: example campaign, four stages in one row on wide screens ---------- */
 @media (min-width:1100px){.ex-flow.hm-flow{grid-template-columns:repeat(4,1fr)}}
 
 /* ===== Page styles (cohesion pass, A3) ===== */
@@ -853,7 +853,6 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 .svc-rings{margin:0 auto;width:100%;max-width:460px}
 @media (min-width:900px){.svc-rings{margin:0 0 0 auto}}
 .svc-rings-map{position:relative;border-radius:18px;background:var(--paper);border:1px solid var(--line);padding:clamp(14px,3vw,24px);box-shadow:0 1px 2px rgba(28,58,44,.08),0 30px 60px -38px rgba(28,58,44,.45)}
-.svc-rings-map>.badge-illus{position:absolute;top:12px;left:12px;z-index:2}
 .svc-rings svg{display:block;width:100%;height:auto;overflow:visible}
 .svc-rings .b3{fill:#EEF3EC}
 .svc-rings .b2{fill:#E6EDE5}
@@ -904,13 +903,12 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 
 /* ===== Page styles (cohesion pass, A4) ===== */
 
-/* ---------- caption row: label + "Illustrative" badge under a visual ---------- */
+/* ---------- caption row: label (and enlarge button) under a visual ---------- */
 .hiw-cap{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px;margin-top:16px}
 .hiw-cap .card-cap{margin-top:0}
 .gift-row .hiw-cap{margin-top:13px}
 .hiw-tags{display:flex;flex-wrap:wrap;align-items:center;gap:10px 12px;margin-bottom:6px}
 .hiw-tags .tag{margin-bottom:0}
-.hiw-illus-note{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin-top:20px;font-size:.92rem;line-height:1.5;color:var(--ink-3)}
 
 /* ---------- how it works: seven-step overview ---------- */
 .hiw-journey{margin-top:clamp(8px,1.5vw,16px)}
@@ -918,8 +916,8 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 .hiw-journey>li:hover{border-color:var(--gold);box-shadow:0 14px 26px -22px rgba(28,58,44,.5)}
 .hiw-journey .card-link{color:var(--ink)}
 @media (min-width:960px){.hiw-journey{grid-auto-columns:minmax(0,1fr);gap:22px}.hiw-journey>li+li::after{left:-19px;width:16px}}
-/* small desktops: seven columns are too narrow to read, so wrap into rows of four */
-@media (min-width:960px) and (max-width:1199.98px){
+/* desktops: seven columns are too narrow for the step names, so wrap into rows of four */
+@media (min-width:960px){
   .hiw-journey{grid-auto-flow:row;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
   .hiw-journey>li+li::after{display:none}
 }
@@ -959,10 +957,9 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
   .hiw-cc .cc-to{grid-column:2}
 }
 
-/* ---------- direct mail: illustrative carrier-route map ---------- */
+/* ---------- direct mail: sample carrier-route map ---------- */
 .hiw-routes{margin:0}
 .hiw-routes-map{position:relative;border-radius:18px;overflow:hidden;background:var(--map-land);border:1px solid var(--line);box-shadow:0 1px 2px rgba(28,58,44,.08),0 30px 60px -36px rgba(28,58,44,.45)}
-.hiw-routes-map>.badge-illus{position:absolute;top:12px;left:12px;z-index:2}
 .hiw-routes-map svg{display:block;width:100%;height:auto}
 .hiw-routes .rt{fill:rgba(28,58,44,.035);stroke:#B9C8BC;stroke-width:1.2;stroke-linejoin:round}
 .hiw-routes .rt.on{fill:rgba(189,113,137,.17);stroke:var(--gold);stroke-width:1.6}
@@ -1010,7 +1007,7 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 .cm-art{margin:0;width:100%;max-width:460px;margin-inline:auto}
 .cm-art .card-cap{margin-top:12px}
 
-/* language: illustrative label above the localized flyers */
+/* language: label above the localized flyers */
 .cm-illus{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin-bottom:16px;font-size:.9rem;color:var(--ink-3)}
 .cm-lang-cards{margin-top:clamp(30px,4vw,44px)}
 
@@ -1066,15 +1063,10 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 .cu-art img{width:auto;height:auto;max-width:100%;max-height:100%;border-radius:4px;box-shadow:0 1px 2px rgba(28,58,44,.10),0 16px 28px -16px rgba(28,58,44,.4)}
 .cu-art.cu-photo{padding:0;background:var(--stone)}
 .cu-art.cu-photo img{width:100%;height:100%;max-width:none;max-height:none;object-fit:cover;border-radius:0;box-shadow:none}
-.cu-art>.badge-illus{position:absolute;top:12px;left:12px;z-index:2}
 @media (max-width:599.98px){.cu-art{max-width:460px}}
 
-/* kits: badges sit on the product photos */
 .cu-grid .mock{position:relative}
-
-/* flyers: badge on the rendered flyer */
 .cu-flyer{position:relative}
-.cu-flyer>.badge-illus{position:absolute;top:12px;left:12px;z-index:2}
 
 /* short journeys (4–5 steps) */
 @media (min-width:960px){.cu-journey{grid-auto-columns:minmax(0,1fr)}}
@@ -1090,8 +1082,6 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
   .cu-cc .cc-to{grid-column:2}
 }
 
-/* smaller badges on the two-up product grid */
-@media (max-width:859.98px){.cu-grid .mock>.badge-illus{top:8px;left:8px;padding:4px 8px;font-size:.56rem;letter-spacing:.12em}}
 @media (min-width:640px) and (max-width:1039.98px){.cu-cc>li:last-child:nth-child(odd){grid-column:1/-1}}
 
 /* ===== Page styles (cohesion pass, A7) ===== */
@@ -1113,18 +1103,15 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 /* keep the italic half of a headline on one line */
 .dg-h1 em{display:inline-block}
 
-/* figures: plain margins, two sizes, and a caption row that can carry the Illustrative badge */
+/* figures: plain margins, two sizes, and a caption row */
 .dg-art{margin:0;width:100%}
-/* the badge sits top-right on these screenshots, clear of the listing or post header */
-.dg-art .shot>.badge-illus{left:auto;right:12px}
 .dg-art-md{max-width:520px;margin-inline:auto}
 .dg-art-sm{max-width:360px;margin-inline:auto}
 .dg-cap{margin-top:12px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;font-size:.84rem;line-height:1.5;color:var(--ink-3)}
 .dg-p{margin-top:14px;max-width:42em}
 
-/* Google Ads: illustrative sketch of one ad group (searches to show for / to exclude) */
+/* Google Ads: sample sketch of one ad group (searches to show for / to exclude) */
 .dg-panel{padding:clamp(22px,3vw,30px);background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 1px 2px rgba(28,58,44,.08),0 24px 44px -26px rgba(28,58,44,.34)}
-.dg-panel>.badge-illus{margin-bottom:16px}
 .dg-panel-t{font:600 1.25rem/1.28 var(--display);letter-spacing:-.015em;color:var(--ink)}
 .dg-panel .dg-k{margin:20px 0 0}
 .dg-panel .ex-chips li{background:var(--ground)}
@@ -1133,13 +1120,13 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 
 /* Facebook & Instagram: the same offer on a mailer and in the feed */
 .dg-pair{max-width:540px;margin-inline:auto}
-.dg-pair-art{position:relative;margin-top:14px;padding-bottom:16%}
+.dg-pair-art{position:relative;margin-top:0;padding-bottom:16%}
 .dg-pair-mail{width:80%;transform:rotate(-2deg)}
 .dg-pair-mail img{width:100%}
 .dg-pair-feed{position:absolute;right:0;bottom:0;width:42%;border:1px solid var(--line);background:#fff;box-shadow:0 1px 2px rgba(28,58,44,.10),0 26px 44px -20px rgba(28,58,44,.45)}
 .dg-pair .dg-cap{margin-top:16px}
 
-/* Promotional platforms: phone listing with its badge in the caption */
+/* Promotional platforms: phone listing with a caption below */
 .dg-phone{max-width:320px;margin-inline:auto}
 .dg-phone picture{display:block;filter:drop-shadow(0 22px 30px rgba(28,58,44,.22))}
 /* the PNG carries its own soft shadow, cut off square at the image edge; clip to the phone frame instead */
@@ -1241,8 +1228,7 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
   .zoom-close{position:fixed;z-index:2;background:rgba(28,58,44,.85)}
 }
 
-/* Local-search mock: the image carries its own label, so the page badge sits above it, not on the search bar. */
-.shot.shot-ls>.badge-illus{position:static;display:inline-flex;margin:12px 0 0 12px}
+/* Local-search mock */
 .shot.shot-ls{display:flex;flex-direction:column;align-items:flex-start;background:#fff}
 .shot.shot-ls>picture{width:100%}
 
@@ -1261,7 +1247,7 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
   .hm-ind>li:last-child:nth-child(3n+1){grid-column:1/-1}
 }
 
-/* ---------- home: illustrative campaign, five stages ---------- */
+/* ---------- home: example campaign, five stages ---------- */
 .hm-ex-brief{margin-top:4px;font-size:1.02rem;line-height:1.65;color:var(--ink-2);max-width:48ch}
 /* Two columns: the fifth stage (tracking) takes the full row. */
 @media (min-width:720px) and (max-width:1099.98px){
@@ -1365,3 +1351,43 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
     .est-row>.field>.err{grid-row:4}
   }
 }
+
+/* Final polish (round 3) */
+a[href^="tel:"],.nowrap{white-space:nowrap}
+.intro,.est-aside li span{text-wrap:pretty}
+@media (max-width:420px){h1{letter-spacing:-.04em}h2{letter-spacing:-.03em}}
+
+/* ===== Page styles (round 3, A) ===== */
+
+/* ---------- estimate (meeting request): photo at the top of "What happens next" ---------- */
+.est-photo{display:block;margin:0 0 22px;border-radius:12px;overflow:hidden;background:var(--stone);aspect-ratio:3/2}
+.est-photo img{width:100%;height:100%;object-fit:cover;object-position:50% 30%}
+@media (min-width:1000px){
+  .est-photo{aspect-ratio:3/2}
+  /* the card is taller with the photo: only keep it pinned when the whole card fits on screen */
+  .est-aside{position:static}
+}
+@media (min-width:1000px) and (min-height:940px){.est-aside{position:sticky;top:110px}}
+
+/* ---------- home: "Invested in your growth" (heading + photo, four points below) ---------- */
+.hm-growth{display:grid;gap:clamp(28px,4vw,44px)}
+.hm-growth-art{margin:0}
+.hm-growth-list{list-style:none;display:grid;gap:12px}
+.hm-growth-list>li{padding:20px 20px 22px;border-radius:14px;background:var(--paper);border:1px solid var(--line)}
+.hm-growth-list svg{display:block;width:26px;height:26px;margin-bottom:14px;color:var(--slate-soft)}
+.hm-growth-list h3{font-size:1.1rem;line-height:1.3;letter-spacing:-.012em}
+.hm-growth-list p{margin-top:8px;font-size:.95rem;line-height:1.6}
+@media (min-width:640px){.hm-growth-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (min-width:720px){
+  .hm-growth{grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);align-items:center;column-gap:clamp(32px,5vw,72px)}
+  .hm-growth-list{grid-column:1/-1}
+}
+@media (min-width:1100px){.hm-growth-list{grid-template-columns:repeat(4,minmax(0,1fr))}}
+
+/* ===== Page styles (round 3, B1) ===== */
+/* custom-marketing: the extra top padding held the old "Illustrative" badge; center the art now that it is gone */
+.cu-art{padding:36px 10%}
+
+/* ===== Page styles (round 3, B2) ===== */
+/* Rewritten intros: avoid a one-word last line */
+.b2-pretty{text-wrap:pretty}
