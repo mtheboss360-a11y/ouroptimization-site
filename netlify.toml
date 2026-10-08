@@ -202,3 +202,9 @@
   to = "/404.html"
   status = 404
   force = true
+# Short link for sharing: /meeting opens the strategy-meeting request form.
+[[redirects]]
+  from = "/meeting"
+  to = "/estimate"
+  status = 301
+  force = true

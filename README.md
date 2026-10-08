@@ -25,19 +25,19 @@ Clean, extensionless URLs are canonical (`/how-it-works`, not `/how-it-works.htm
 
 | Page | Purpose |
 |---|---|
-| `index.html` | Community map hero; community → channel map; 7-step model; 8 strategy pillars; physical + digital; industries; an illustrative campaign; pricing approach |
+| `index.html` | Community map hero; community → channel map; 7-step model; 8 strategy pillars; physical + digital; industries; an example campaign; pricing approach |
 | `how-it-works.html` | The 7-step operating model in detail |
 | `services.html` | The 8 strategy pillars and how they work together |
 | `community-marketing.html` | The core differentiator: touchpoints, sponsorships and partnerships, events, language, and **Our approach** (`#our-approach`), the one place the demographic-information statement lives (with one FAQ answer) |
 | `custom-marketing.html` | Materials organized by where they are used |
 | `digital-marketing.html` | Digital as a layer on the local strategy |
-| `industries.html`, `examples.html` | Industry cards (challenge + channels); illustrative Example Spa campaigns |
-| `estimate.html` + `assets/estimate.js` | Campaign estimate form (validation and submission script) |
+| `industries.html`, `examples.html` | Industry cards (challenge + channels); example Example Spa campaigns |
+| `estimate.html` + `assets/estimate.js` | Strategy-meeting request form (Netlify form `campaign-estimate`; validation and submission script). `/meeting` redirects here. |
 | `market-research`, `direct-mail`, `flyers`, `marketing-kits`, `events`, `seo`, `google-ads`, `social-media`, `groupon` (Promotional Platforms), `gift-cards` (offer strategy), `tracking`, `sample-advertisements`, `faq`, `privacy`, `terms` | Pillar detail and supporting pages |
 
-Shared UI lives in `assets/site.css` (`.cc` community → channel rows, `.journey`, `.ind-meta`, `.excase`/`.ex-flow`, `.badge-illus`).
+Shared UI lives in `assets/site.css` (`.cc` community → channel rows, `.journey`, `.ind-meta`, `.excase`/`.ex-flow`).
 
-Example Spa is a fictional business. Every example visual carries an "Illustrative" label, and the examples contain no results or performance figures.
+Example Spa is a fictional business. That is disclosed in the footer and in one sentence in the /examples and /sample-advertisements intros; example visuals carry no per-image labels, and the examples contain no results or performance figures. Type: Bricolage Grotesque (display) and Figtree (text), self-hosted, OFL.
 
 ## Tests
 

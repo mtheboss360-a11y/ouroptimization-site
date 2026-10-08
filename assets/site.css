@@ -1,14 +1,11 @@
 /* OUR Optimization — demographic & community-targeted marketing.
    Static site: no build step, no framework, no external requests.
-   Fonts are self-hosted (SIL Open Font License 1.1 — licences in assets/fonts/). */
+   Fonts are self-hosted variable fonts (SIL Open Font License 1.1 — licences in assets/fonts/):
+   Bricolage Grotesque for display and headings, Figtree for text. Neither ships an italic,
+   so emphasis inside headings is carried by color, never by a synthesized slant. */
 
-@font-face{font-family:"Playfair Display";font-style:normal;font-weight:400;font-display:swap;src:url("fonts/playfair-display-latin-400-normal.woff2") format("woff2")}
-@font-face{font-family:"Playfair Display";font-style:italic;font-weight:400;font-display:swap;src:url("fonts/playfair-display-latin-400-italic.woff2") format("woff2")}
-@font-face{font-family:"Playfair Display";font-style:normal;font-weight:500;font-display:swap;src:url("fonts/playfair-display-latin-500-normal.woff2") format("woff2")}
-@font-face{font-family:"Playfair Display";font-style:normal;font-weight:600;font-display:swap;src:url("fonts/playfair-display-latin-600-normal.woff2") format("woff2")}
-@font-face{font-family:"Montserrat";font-style:normal;font-weight:400;font-display:swap;src:url("fonts/montserrat-latin-400-normal.woff2") format("woff2")}
-@font-face{font-family:"Montserrat";font-style:normal;font-weight:500;font-display:swap;src:url("fonts/montserrat-latin-500-normal.woff2") format("woff2")}
-@font-face{font-family:"Montserrat";font-style:normal;font-weight:600;font-display:swap;src:url("fonts/montserrat-latin-600-normal.woff2") format("woff2")}
+@font-face{font-family:"Bricolage Grotesque";font-style:normal;font-weight:200 800;font-display:swap;src:url("fonts/bricolage-grotesque-latin-wght-normal.woff2") format("woff2")}
+@font-face{font-family:"Figtree";font-style:normal;font-weight:300 900;font-display:swap;src:url("fonts/figtree-latin-wght-normal.woff2") format("woff2")}
 
 :root{
   /* Deep green with peony-pink accents. Every ratio below is measured against every
@@ -30,8 +27,8 @@
   --stone:#E6EDE5;
   --line:#D5E0D5;
   --line-soft:#E2EAE1;
-  --serif:"Playfair Display",Georgia,"Times New Roman",serif;
-  --sans:"Montserrat","Helvetica Neue",Arial,system-ui,sans-serif;
+  --display:"Bricolage Grotesque",system-ui,sans-serif;
+  --sans:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
   --wrap:1180px;
   --gutter:20px;
   color-scheme:light;
@@ -41,11 +38,13 @@
 *,*::before,*::after{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%;text-size-adjust:100%;scroll-padding-top:84px}
 @media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
-body{margin:0;background:var(--ground);color:var(--ink-2);font:400 1rem/1.7 var(--sans);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;overflow-x:hidden}
+body{margin:0;background:var(--ground);color:var(--ink-2);font:400 1.03rem/1.65 var(--sans);font-kerning:normal;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;overflow-x:hidden}
 @media (min-width:768px){body{font-size:1.0625rem}}
 img{max-width:100%;height:auto;display:block}
 a{color:inherit}
-h1,h2,h3{font-family:var(--serif);color:var(--ink);font-weight:400;margin:0;text-wrap:balance}
+h1,h2,h3{font-family:var(--display);color:var(--ink);font-weight:650;margin:0;text-wrap:balance}
+/* the accent half of a headline is set in peony, upright (the display face has no italic) */
+h1 em,h2 em,h3 em{font-style:normal}
 p{margin:0}
 ul,ol{margin:0;padding:0}
 strong{font-weight:600;color:var(--ink)}
@@ -59,7 +58,7 @@ strong{font-weight:600;color:var(--ink)}
 .wrap{width:100%;max-width:var(--wrap);margin-inline:auto;padding-inline:var(--gutter)}
 
 /* ---------- buttons ---------- */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:50px;padding:0 26px;border-radius:999px;border:1px solid var(--ink);font:600 .95rem/1.1 var(--sans);letter-spacing:.02em;text-decoration:none;text-align:center;cursor:pointer;transition:background-color .3s ease,color .3s ease,border-color .3s ease}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:50px;padding:0 26px;border-radius:999px;border:1px solid var(--ink);font:600 .97rem/1.1 var(--sans);letter-spacing:.005em;text-decoration:none;text-align:center;cursor:pointer;transition:background-color .3s ease,color .3s ease,border-color .3s ease}
 .btn svg{width:18px;height:18px;flex:none}
 .btn-primary{background:var(--ink);color:var(--ground)}
 .btn-primary:hover{background:#2A5240;border-color:#2A5240}
@@ -129,12 +128,14 @@ strong{font-weight:600;color:var(--ink)}
 .bg-ink strong{color:var(--ground)}
 .section-head{max-width:760px;margin-bottom:clamp(34px,4.6vw,54px)}
 .section-head.center{margin-inline:auto;text-align:center}
-.eyebrow{font:600 .72rem/1.5 var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--gold-sm);margin-bottom:14px}
+.eyebrow{font:700 .74rem/1.5 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--gold-sm);margin-bottom:14px}
 .rule{width:52px;height:1px;background:var(--gold);margin-bottom:22px}
 .center .rule{margin-inline:auto}
-h1{font-size:clamp(2.3rem,1.25rem + 4.2vw,4.1rem);line-height:1.07;letter-spacing:-.015em}
-h2{font-size:clamp(1.95rem,1.35rem + 2.4vw,2.95rem);line-height:1.13;letter-spacing:-.01em}
-h3{font-size:1.28rem;line-height:1.3}
+h1{font-size:clamp(2.3rem,1.25rem + 4.2vw,4.1rem);line-height:1.03;letter-spacing:-.035em}
+h2{font-size:clamp(1.95rem,1.35rem + 2.4vw,2.95rem);line-height:1.08;letter-spacing:-.025em}
+h3{font-size:1.28rem;line-height:1.25;font-weight:600;letter-spacing:-.012em}
+/* h2s set at card size take the h3 weight and tracking, so tight display tracking stays on big type */
+.steps h2,.doc h2,.callout h2,.cardgrid h2,.form-aside h2,.ind-card h2{font-weight:600;letter-spacing:-.014em}
 .intro{margin-top:16px;font-size:1.05rem;max-width:42em}
 .center .intro{margin-inline:auto}
 .lede{margin-top:22px;font-size:clamp(1.05rem,.98rem + .35vw,1.18rem);line-height:1.66;max-width:36em}
@@ -158,7 +159,7 @@ h3{font-size:1.28rem;line-height:1.3}
 .hero::after{content:"";position:absolute;left:-15%;right:-15%;bottom:-40%;height:72%;background:radial-gradient(ellipse at 50% 100%,rgba(92,124,107,.20),rgba(92,124,107,0) 68%);pointer-events:none;z-index:0}
 .hero-grid{position:relative;z-index:1;display:grid;gap:clamp(38px,5vw,56px);align-items:center}
 .hero-copy{max-width:620px}
-.hero h1 em{font-style:italic;color:var(--gold-lg)}
+.hero h1 em{font-style:normal;color:var(--gold-lg)}
 
 @media (min-width:960px){
   .hero-grid{grid-template-columns:1.02fr .98fr}
@@ -205,7 +206,7 @@ h3{font-size:1.28rem;line-height:1.3}
 .steps{list-style:none;display:grid;gap:1px;background:var(--line);border-block:1px solid var(--line)}
 .steps li{background:var(--ground);padding:clamp(24px,3vw,32px) clamp(20px,2.4vw,28px)}
 .bg-paper .steps li{background:var(--paper)}
-.steps .num{font:400 .82rem/1 var(--serif);letter-spacing:.14em;color:var(--gold-sm);display:block;margin-bottom:16px}
+.steps .num{font:650 .84rem/1 var(--display);letter-spacing:.06em;color:var(--gold-sm);display:block;margin-bottom:16px}
 .steps h2,.steps h3{font-size:1.18rem;line-height:1.3;margin-bottom:10px}
 .steps p{font-size:.95rem;line-height:1.6}
 @media (min-width:700px){.steps{grid-template-columns:1fr 1fr}}
@@ -224,7 +225,7 @@ h3{font-size:1.28rem;line-height:1.3}
 /* ---------- faq ---------- */
 .faq{max-width:820px;margin-inline:auto;border-top:1px solid var(--line)}
 .faq details{border-bottom:1px solid var(--line)}
-.faq summary{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:22px 2px;cursor:pointer;list-style:none;font:400 clamp(1.08rem,1rem + .4vw,1.3rem)/1.35 var(--serif);color:var(--ink)}
+.faq summary{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:22px 2px;cursor:pointer;list-style:none;font:600 clamp(1.08rem,1rem + .4vw,1.28rem)/1.32 var(--display);letter-spacing:-.012em;color:var(--ink)}
 .faq summary::-webkit-details-marker{display:none}
 .faq summary .sign{position:relative;width:20px;height:20px;flex:none;color:var(--gold-sm)}
 .faq summary .sign::before,.faq summary .sign::after{content:"";position:absolute;background:currentColor;border-radius:2px;transition:transform .3s ease,opacity .3s ease}
@@ -236,7 +237,7 @@ h3{font-size:1.28rem;line-height:1.3}
 /* ---------- closing cta ---------- */
 .cta-inner{max-width:720px;margin-inline:auto;text-align:center}
 .cta-inner .actions{justify-content:center}
-.contact-name{margin-top:26px;font:400 clamp(1.5rem,1.2rem + 1.2vw,2rem)/1.2 var(--serif);color:var(--ground)}
+.contact-name{margin-top:26px;font:600 clamp(1.5rem,1.2rem + 1.2vw,2rem)/1.2 var(--display);letter-spacing:-.02em;color:var(--ground)}
 .contact-name a{text-decoration:none;color:var(--ground);white-space:nowrap;display:inline-block;padding:8px 0;margin:-8px 0}
 .contact-name .dot{margin:0 .5em;color:var(--gold-bright)}
 .contact-email{margin-top:16px;font-size:.98rem;color:#C3D2C6}
@@ -338,7 +339,7 @@ html:not(.js) .enlarge{display:none}
 /* ---------- page tops ---------- */
 .page-top{padding-block:clamp(44px,6vw,80px) clamp(28px,3.5vw,40px)}
 .pt-0{padding-top:0}
-.page-head h1{font-size:clamp(2.1rem,1.45rem + 2.6vw,3.3rem);line-height:1.08;letter-spacing:-.015em}
+.page-head h1{font-size:clamp(2.1rem,1.45rem + 2.6vw,3.3rem);line-height:1.04;letter-spacing:-.035em}
 .page-head .intro{margin-top:18px;font-size:1.06rem}
 
 /* ---------- photography ---------- */
@@ -394,7 +395,7 @@ html:not(.js) .enlarge{display:none}
 @media (min-width:720px){.reasons{grid-template-columns:1fr 1fr}}
 @media (min-width:1080px){.reasons{grid-template-columns:repeat(3,1fr)}}
 .reasons li{background:var(--paper);padding:clamp(24px,3vw,32px) clamp(20px,2.4vw,28px)}
-.reasons .rn{display:block;font:400 .8rem/1 var(--serif);letter-spacing:.14em;color:var(--gold-sm);margin-bottom:14px}
+.reasons .rn{display:block;font:650 .82rem/1 var(--display);letter-spacing:.06em;color:var(--gold-sm);margin-bottom:14px}
 .reasons h3{font-size:1.14rem;line-height:1.3;margin-bottom:10px}
 .reasons p{font-size:.94rem;line-height:1.62}
 .reasons p a{color:var(--ink);text-underline-offset:3px}
@@ -457,7 +458,7 @@ html:not(.js) .enlarge{display:none}
 .cardgrid .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
 .cardgrid .top svg,.cardgrid>li>svg{width:28px;height:28px;color:var(--slate-soft);flex:none}
 .cardgrid>li>svg{display:block;margin-bottom:16px}
-.cardgrid .n{font:400 .82rem/1 var(--serif);letter-spacing:.14em;color:var(--gold-sm)}
+.cardgrid .n{font:650 .84rem/1 var(--display);letter-spacing:.06em;color:var(--gold-sm)}
 .cardgrid h3{font-size:1.16rem;line-height:1.3;margin-bottom:10px}
 .cardgrid p{font-size:.94rem;line-height:1.62}
 .cardgrid p+p{margin-top:10px}
@@ -481,7 +482,9 @@ html:not(.js) .enlarge{display:none}
 .uses li{padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:var(--paper);font:500 .86rem/1.2 var(--sans);color:var(--ink)}
 .bg-ink .uses li{background:rgba(243,246,242,.06);border-color:rgba(243,246,242,.2);color:var(--ground)}
 .split{display:grid;gap:clamp(30px,4vw,52px)}
-@media (min-width:960px){.split{grid-template-columns:.9fr 1.1fr;align-items:start}}
+@media (min-width:960px){.split{grid-template-columns:.9fr 1.1fr;align-items:start}
+  /* the heading shares the row, so it scales with its narrower column */
+  .split h2{font-size:clamp(1.95rem,1rem + 2.4vw,2.95rem)}}
 
 /* ---------- language & localization ---------- */
 .lang-grid{list-style:none;display:grid;gap:14px;grid-template-columns:1fr}
@@ -490,7 +493,7 @@ html:not(.js) .enlarge{display:none}
 .flyer-mini{position:relative;background:#fff;border-radius:6px;padding:18px 16px 16px;min-height:178px;display:flex;flex-direction:column;box-shadow:0 1px 2px rgba(28,58,44,.08),0 18px 30px -22px rgba(28,58,44,.4);overflow:hidden}
 .flyer-mini::before{content:"";position:absolute;left:0;right:0;top:0;height:4px;background:var(--gold)}
 .flyer-mini .lname{font:600 .6rem/1.3 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3)}
-.flyer-mini .clinic{margin-top:12px;font:500 .9rem/1 var(--serif);color:var(--ink)}
+.flyer-mini .clinic{margin-top:12px;font:650 .9rem/1 var(--display);letter-spacing:-.01em;color:var(--ink)}
 .flyer-mini .hl{margin-top:10px;font:600 1.12rem/1.3 var(--sans);color:var(--ink)}
 .flyer-mini .hl[lang="ar"]{font-family:"Geeza Pro","Noto Naskh Arabic","Segoe UI",Tahoma,sans-serif;font-size:1.25rem;text-align:right}
 .flyer-mini .hl[lang="zh-Hans"]{font-family:"PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif}
@@ -507,8 +510,8 @@ html:not(.js) .enlarge{display:none}
 .mock{aspect-ratio:1/1;border-radius:16px;background:linear-gradient(160deg,#FBFCFA,#E9EFE8);border:1px solid var(--line-soft);display:flex;align-items:center;justify-content:center;overflow:hidden}
 .mock svg{width:82%;height:82%}
 .mock-grid .card-cap{margin-top:12px}
-.tagline-strip{margin-top:clamp(26px,3.4vw,38px);display:flex;flex-wrap:wrap;gap:6px 22px;font:400 clamp(1.25rem,1rem + 1vw,1.7rem)/1.3 var(--serif);color:var(--ink)}
-.tagline-strip em{font-style:italic;color:var(--gold-sm)}
+.tagline-strip{margin-top:clamp(26px,3.4vw,38px);display:flex;flex-wrap:wrap;gap:6px 22px;font:600 clamp(1.25rem,1rem + 1vw,1.7rem)/1.3 var(--display);letter-spacing:-.02em;color:var(--ink)}
+.tagline-strip em{font-style:normal;color:var(--gold-sm)}
 
 /* ---------- worked examples ---------- */
 .example{border:1px solid var(--line);border-radius:18px;background:var(--paper);padding:clamp(24px,3.4vw,44px)}
@@ -567,10 +570,11 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 .spec svg{color:var(--slate-soft)}
 .form-aside a{color:var(--ink);font-weight:600;text-underline-offset:3px}
 .callout a.textlink{display:inline}
-/* small desktops: tighten nav and CTA spacing so the full CTA label fits */
-@media (min-width:1060px) and (max-width:1139.98px){
-  .btn-head{padding:0 14px;font-size:.8rem}
-  .site-nav a{padding:0 6px}
+/* small desktops: tighten nav and CTA spacing so "Set Up a Strategy Meeting" always fits
+   (Figtree is narrower than the old face, so the label keeps its full size here) */
+@media (min-width:1060px) and (max-width:1199.98px){
+  .btn-head{padding:0 16px}
+  .site-nav a{padding:0 7px}
 }
 
 /* ---------- promotional-channel listing screenshot ---------- */
@@ -586,7 +590,7 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 .flyer-shot img{display:block;width:100%;height:auto}
 
 /* ---------- service pages ---------- */
-.svc-hero h1 em{font-style:italic;color:var(--gold-lg)}
+.svc-hero h1 em{font-style:normal;color:var(--gold-lg)}
 .svc-hero .media{align-items:center}
 .svc-hero-art .shot img{width:100%}
 
@@ -605,7 +609,9 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 /* ---------- hero v4: illustrated community town ---------- */
 .hero-town{padding-top:clamp(28px,5vw,64px)}
 .hero-town h1{font-size:clamp(2.3rem,1.3rem + 3.8vw,3.9rem)}
-.hero-town h1 em{font-style:italic;color:var(--gold-lg)}
+/* two-column hero: size the headline to its column so "targeted to your" holds one line on small desktops */
+@media (min-width:960px){.hero-town h1{font-size:clamp(2.9rem,5.9vw - .25rem,3.9rem)}}
+.hero-town h1 em{font-style:normal;color:var(--gold-lg)}
 .hero-town .eyebrow{margin-bottom:18px}
 @media (min-width:960px){.hero-town .hero-grid{grid-template-columns:.95fr 1.05fr}.hero-town .hero-art{max-width:600px;width:100%;margin-right:0}}
 .town{position:relative}
@@ -677,17 +683,13 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 .cc-to{font:600 .98rem/1.3 var(--sans);color:var(--ink)}
 .cc-to small{display:block;margin-top:2px;font:400 .82rem/1.4 var(--sans);color:var(--ink-3)}
 
-/* "Illustrative" badge for example/fictional visuals. Inline, or pinned in a positioned .shot */
-.badge-illus{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;background:var(--blush);border:1px solid #E7CFD7;font:600 .62rem/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--gold-sm);white-space:nowrap}
-.badge-illus::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--gold)}
 .shot{position:relative}
-.shot>.badge-illus,.mock>.badge-illus,.excase-media>.badge-illus{position:absolute;top:12px;left:12px;z-index:2}
 
 /* Journey / flow line: Business -> Market -> ... (wraps to a vertical list on phones) */
 .journey{list-style:none;display:grid;gap:10px;counter-reset:j}
 .journey>li{position:relative;padding:16px 16px 16px 52px;border-radius:14px;background:var(--paper);border:1px solid var(--line)}
 .bg-paper .journey>li{background:var(--ground)}
-.journey>li::before{counter-increment:j;content:counter(j,decimal-leading-zero);position:absolute;left:14px;top:15px;font:400 .8rem/1 var(--serif);color:var(--gold-sm)}
+.journey>li::before{counter-increment:j;content:counter(j,decimal-leading-zero);position:absolute;left:14px;top:15px;font:650 .82rem/1 var(--display);letter-spacing:.02em;color:var(--gold-sm)}
 .journey b{display:block;font:600 .72rem/1.3 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--ink)}
 .journey span{display:block;margin-top:4px;font-size:.88rem;line-height:1.5;color:var(--ink-3)}
 @media (min-width:960px){
@@ -745,7 +747,7 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 /* Two groups: what we need, then optional details. Floated legends behave like
    ordinary blocks, so the group divider can sit above them. */
 .est-group{border:0;margin:0;padding:0;min-width:0}
-.est-group>legend{float:left;width:100%;padding:0;margin-bottom:6px;font:400 clamp(1.3rem,1.16rem + .55vw,1.6rem)/1.25 var(--serif);color:var(--ink)}
+.est-group>legend{float:left;width:100%;padding:0;margin-bottom:6px;font:600 clamp(1.3rem,1.16rem + .55vw,1.6rem)/1.22 var(--display);letter-spacing:-.018em;color:var(--ink)}
 .est-group>legend+*{clear:both}
 .est-group>legend+.field{margin-top:0;padding-top:16px}
 .est-optional{margin-top:clamp(40px,5vw,54px);padding-top:clamp(30px,4vw,38px);border-top:1px solid var(--line)}
@@ -806,8 +808,8 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 
 /* ---------- home: seven-step journey ---------- */
 @media (min-width:960px){.hm-journey{grid-auto-columns:minmax(0,1fr)}}
-/* small desktops: seven columns are too narrow to read, so wrap into rows of four */
-@media (min-width:960px) and (max-width:1199.98px){
+/* desktops: seven columns are too narrow for the step names, so wrap into rows of four */
+@media (min-width:960px){
   .hm-journey{grid-auto-flow:row;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
   .hm-journey>li+li::after{display:none}
 }
@@ -824,7 +826,7 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
   .hm-ind{grid-template-columns:1fr 1fr}
 }
 
-/* ---------- home: illustrative campaign, four stages in one row on wide screens ---------- */
+/* ---------- home: example campaign, four stages in one row on wide screens ---------- */
 @media (min-width:1100px){.ex-flow.hm-flow{grid-template-columns:repeat(4,1fr)}}
 
 /* ===== Page styles (cohesion pass, A3) ===== */
@@ -851,7 +853,6 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 .svc-rings{margin:0 auto;width:100%;max-width:460px}
 @media (min-width:900px){.svc-rings{margin:0 0 0 auto}}
 .svc-rings-map{position:relative;border-radius:18px;background:var(--paper);border:1px solid var(--line);padding:clamp(14px,3vw,24px);box-shadow:0 1px 2px rgba(28,58,44,.08),0 30px 60px -38px rgba(28,58,44,.45)}
-.svc-rings-map>.badge-illus{position:absolute;top:12px;left:12px;z-index:2}
 .svc-rings svg{display:block;width:100%;height:auto;overflow:visible}
 .svc-rings .b3{fill:#EEF3EC}
 .svc-rings .b2{fill:#E6EDE5}
@@ -902,13 +903,12 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 
 /* ===== Page styles (cohesion pass, A4) ===== */
 
-/* ---------- caption row: label + "Illustrative" badge under a visual ---------- */
+/* ---------- caption row: label (and enlarge button) under a visual ---------- */
 .hiw-cap{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px;margin-top:16px}
 .hiw-cap .card-cap{margin-top:0}
 .gift-row .hiw-cap{margin-top:13px}
 .hiw-tags{display:flex;flex-wrap:wrap;align-items:center;gap:10px 12px;margin-bottom:6px}
 .hiw-tags .tag{margin-bottom:0}
-.hiw-illus-note{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin-top:20px;font-size:.92rem;line-height:1.5;color:var(--ink-3)}
 
 /* ---------- how it works: seven-step overview ---------- */
 .hiw-journey{margin-top:clamp(8px,1.5vw,16px)}
@@ -916,8 +916,8 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 .hiw-journey>li:hover{border-color:var(--gold);box-shadow:0 14px 26px -22px rgba(28,58,44,.5)}
 .hiw-journey .card-link{color:var(--ink)}
 @media (min-width:960px){.hiw-journey{grid-auto-columns:minmax(0,1fr);gap:22px}.hiw-journey>li+li::after{left:-19px;width:16px}}
-/* small desktops: seven columns are too narrow to read, so wrap into rows of four */
-@media (min-width:960px) and (max-width:1199.98px){
+/* desktops: seven columns are too narrow for the step names, so wrap into rows of four */
+@media (min-width:960px){
   .hiw-journey{grid-auto-flow:row;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
   .hiw-journey>li+li::after{display:none}
 }
@@ -957,10 +957,9 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
   .hiw-cc .cc-to{grid-column:2}
 }
 
-/* ---------- direct mail: illustrative carrier-route map ---------- */
+/* ---------- direct mail: sample carrier-route map ---------- */
 .hiw-routes{margin:0}
 .hiw-routes-map{position:relative;border-radius:18px;overflow:hidden;background:var(--map-land);border:1px solid var(--line);box-shadow:0 1px 2px rgba(28,58,44,.08),0 30px 60px -36px rgba(28,58,44,.45)}
-.hiw-routes-map>.badge-illus{position:absolute;top:12px;left:12px;z-index:2}
 .hiw-routes-map svg{display:block;width:100%;height:auto}
 .hiw-routes .rt{fill:rgba(28,58,44,.035);stroke:#B9C8BC;stroke-width:1.2;stroke-linejoin:round}
 .hiw-routes .rt.on{fill:rgba(189,113,137,.17);stroke:var(--gold);stroke-width:1.6}
@@ -1008,12 +1007,12 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 .cm-art{margin:0;width:100%;max-width:460px;margin-inline:auto}
 .cm-art .card-cap{margin-top:12px}
 
-/* language: illustrative label above the localized flyers */
+/* language: label above the localized flyers */
 .cm-illus{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin-bottom:16px;font-size:.9rem;color:var(--ink-3)}
 .cm-lang-cards{margin-top:clamp(30px,4vw,44px)}
 
 /* our approach: the one canonical statement */
-.cm-statement p{font:400 clamp(1.18rem,1.02rem + .6vw,1.45rem)/1.45 var(--serif);color:var(--ink);max-width:none}
+.cm-statement p{font:500 clamp(1.18rem,1.02rem + .6vw,1.45rem)/1.42 var(--display);letter-spacing:-.012em;color:var(--ink);max-width:none}
 
 /* ---------- FAQ (.cm-faq-) ---------- */
 .cm-faq-head{max-width:820px;margin-inline:auto}
@@ -1027,7 +1026,7 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 @media (min-width:560px){.cm-pillars{grid-template-columns:1fr 1fr;grid-template-rows:repeat(4,auto);grid-auto-flow:column}}
 .cm-steps-list{counter-reset:sl;gap:10px}
 .cm-pillars li,.cm-steps-list li{position:relative;padding-left:32px}
-.cm-pillars li::before,.cm-steps-list li::before{position:absolute;left:0;top:.2em;font:400 .8rem/1.6 var(--serif);letter-spacing:.06em;color:var(--gold-sm)}
+.cm-pillars li::before,.cm-steps-list li::before{position:absolute;left:0;top:.2em;font:650 .8rem/1.6 var(--display);letter-spacing:.03em;color:var(--gold-sm)}
 .cm-pillars li::before{counter-increment:pl;content:counter(pl,decimal-leading-zero)}
 .cm-steps-list li::before{counter-increment:sl;content:counter(sl,decimal-leading-zero)}
 .cm-steps-list b{color:var(--ink);font-weight:600}
@@ -1042,7 +1041,7 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 /* ---------- custom marketing, kits, flyers, events (.cu-) ---------- */
 
 /* page-head h1 accent, matching .svc-hero */
-.cu-top h1 em{font-style:italic;color:var(--gold-lg)}
+.cu-top h1 em{font-style:normal;color:var(--gold-lg)}
 
 /* custom marketing: materials grouped by where they are used */
 .cu-where{list-style:none;display:grid;gap:18px}
@@ -1050,7 +1049,7 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 .bg-paper .cu-where>li{background:var(--ground)}
 @media (min-width:600px){.cu-where>li{grid-template-columns:minmax(0,1fr) minmax(0,.6fr);gap:28px}}
 @media (min-width:820px){.cu-where>li{grid-template-columns:minmax(0,1.35fr) minmax(0,.65fr);gap:clamp(28px,4vw,52px)}}
-.cu-k{display:flex;align-items:center;gap:10px;margin-bottom:12px;font:400 .82rem/1 var(--serif);letter-spacing:.14em;color:var(--gold-sm)}
+.cu-k{display:flex;align-items:center;gap:10px;margin-bottom:12px;font:650 .84rem/1 var(--display);letter-spacing:.06em;color:var(--gold-sm)}
 .cu-k svg{width:26px;height:26px;flex:none;color:var(--slate-soft)}
 .cu-where h3{font-size:clamp(1.3rem,1.15rem + .6vw,1.6rem);line-height:1.25}
 .cu-where h3+p{margin-top:10px;font-size:.98rem;line-height:1.65;max-width:54ch}
@@ -1064,15 +1063,10 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 .cu-art img{width:auto;height:auto;max-width:100%;max-height:100%;border-radius:4px;box-shadow:0 1px 2px rgba(28,58,44,.10),0 16px 28px -16px rgba(28,58,44,.4)}
 .cu-art.cu-photo{padding:0;background:var(--stone)}
 .cu-art.cu-photo img{width:100%;height:100%;max-width:none;max-height:none;object-fit:cover;border-radius:0;box-shadow:none}
-.cu-art>.badge-illus{position:absolute;top:12px;left:12px;z-index:2}
 @media (max-width:599.98px){.cu-art{max-width:460px}}
 
-/* kits: badges sit on the product photos */
 .cu-grid .mock{position:relative}
-
-/* flyers: badge on the rendered flyer */
 .cu-flyer{position:relative}
-.cu-flyer>.badge-illus{position:absolute;top:12px;left:12px;z-index:2}
 
 /* short journeys (4–5 steps) */
 @media (min-width:960px){.cu-journey{grid-auto-columns:minmax(0,1fr)}}
@@ -1088,8 +1082,6 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
   .cu-cc .cc-to{grid-column:2}
 }
 
-/* smaller badges on the two-up product grid */
-@media (max-width:859.98px){.cu-grid .mock>.badge-illus{top:8px;left:8px;padding:4px 8px;font-size:.56rem;letter-spacing:.12em}}
 @media (min-width:640px) and (max-width:1039.98px){.cu-cc>li:last-child:nth-child(odd){grid-column:1/-1}}
 
 /* ===== Page styles (cohesion pass, A7) ===== */
@@ -1111,19 +1103,16 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 /* keep the italic half of a headline on one line */
 .dg-h1 em{display:inline-block}
 
-/* figures: plain margins, two sizes, and a caption row that can carry the Illustrative badge */
+/* figures: plain margins, two sizes, and a caption row */
 .dg-art{margin:0;width:100%}
-/* the badge sits top-right on these screenshots, clear of the listing or post header */
-.dg-art .shot>.badge-illus{left:auto;right:12px}
 .dg-art-md{max-width:520px;margin-inline:auto}
 .dg-art-sm{max-width:360px;margin-inline:auto}
 .dg-cap{margin-top:12px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;font-size:.84rem;line-height:1.5;color:var(--ink-3)}
 .dg-p{margin-top:14px;max-width:42em}
 
-/* Google Ads: illustrative sketch of one ad group (searches to show for / to exclude) */
+/* Google Ads: sample sketch of one ad group (searches to show for / to exclude) */
 .dg-panel{padding:clamp(22px,3vw,30px);background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 1px 2px rgba(28,58,44,.08),0 24px 44px -26px rgba(28,58,44,.34)}
-.dg-panel>.badge-illus{margin-bottom:16px}
-.dg-panel-t{font:400 1.25rem/1.3 var(--serif);color:var(--ink)}
+.dg-panel-t{font:600 1.25rem/1.28 var(--display);letter-spacing:-.015em;color:var(--ink)}
 .dg-panel .dg-k{margin:20px 0 0}
 .dg-panel .ex-chips li{background:var(--ground)}
 .dg-neg li{color:var(--ink-3);text-decoration:line-through;text-decoration-color:rgba(158,79,104,.55)}
@@ -1131,13 +1120,13 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 
 /* Facebook & Instagram: the same offer on a mailer and in the feed */
 .dg-pair{max-width:540px;margin-inline:auto}
-.dg-pair-art{position:relative;margin-top:14px;padding-bottom:16%}
+.dg-pair-art{position:relative;margin-top:0;padding-bottom:16%}
 .dg-pair-mail{width:80%;transform:rotate(-2deg)}
 .dg-pair-mail img{width:100%}
 .dg-pair-feed{position:absolute;right:0;bottom:0;width:42%;border:1px solid var(--line);background:#fff;box-shadow:0 1px 2px rgba(28,58,44,.10),0 26px 44px -20px rgba(28,58,44,.45)}
 .dg-pair .dg-cap{margin-top:16px}
 
-/* Promotional platforms: phone listing with its badge in the caption */
+/* Promotional platforms: phone listing with a caption below */
 .dg-phone{max-width:320px;margin-inline:auto}
 .dg-phone picture{display:block;filter:drop-shadow(0 22px 30px rgba(28,58,44,.22))}
 /* the PNG carries its own soft shadow, cut off square at the image edge; clip to the phone frame instead */
@@ -1191,7 +1180,7 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 
 /* closing line under the cards */
 .ind-close{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px 28px;margin-top:clamp(30px,4vw,44px);padding-top:26px;border-top:1px solid var(--line)}
-.ind-close p{max-width:56ch;font:400 clamp(1.1rem,1rem + .4vw,1.3rem)/1.4 var(--serif);color:var(--ink)}
+.ind-close p{max-width:56ch;font:600 clamp(1.1rem,1rem + .4vw,1.3rem)/1.38 var(--display);letter-spacing:-.015em;color:var(--ink)}
 .ind-close .textlink{flex:none}
 
 /* =========================== examples =========================== */
@@ -1210,7 +1199,7 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 /* six stages, numbered in order */
 .exs-flow{counter-reset:exs;margin-top:clamp(24px,3vw,34px)}
 .exs-flow>li{display:flex;flex-direction:column}
-.exs-flow>li::after{counter-increment:exs;content:counter(exs,decimal-leading-zero);position:absolute;top:17px;right:16px;font:400 .78rem/1 var(--serif);color:var(--gold-sm)}
+.exs-flow>li::after{counter-increment:exs;content:counter(exs,decimal-leading-zero);position:absolute;top:17px;right:16px;font:650 .8rem/1 var(--display);letter-spacing:.02em;color:var(--gold-sm)}
 .exs-flow .ex-k{padding-right:30px}
 .exs-flow .ex-chips{padding-top:2px}
 /* channel chips read as the channels the map points to */
@@ -1220,7 +1209,7 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 
 /* closing line under the two campaigns */
 .exs-close{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px 28px;padding-top:26px;border-top:1px solid var(--line)}
-.exs-close p{max-width:58ch;font:400 clamp(1.1rem,1rem + .4vw,1.3rem)/1.4 var(--serif);color:var(--ink)}
+.exs-close p{max-width:58ch;font:600 clamp(1.1rem,1rem + .4vw,1.3rem)/1.38 var(--display);letter-spacing:-.015em;color:var(--ink)}
 .exs-close .textlink{flex:none}
 
 /* ===== Accessibility fixes (audit pass) ===== */
@@ -1239,8 +1228,7 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
   .zoom-close{position:fixed;z-index:2;background:rgba(28,58,44,.85)}
 }
 
-/* Local-search mock: the image carries its own label, so the page badge sits above it, not on the search bar. */
-.shot.shot-ls>.badge-illus{position:static;display:inline-flex;margin:12px 0 0 12px}
+/* Local-search mock */
 .shot.shot-ls{display:flex;flex-direction:column;align-items:flex-start;background:#fff}
 .shot.shot-ls>picture{width:100%}
 
@@ -1259,7 +1247,7 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
   .hm-ind>li:last-child:nth-child(3n+1){grid-column:1/-1}
 }
 
-/* ---------- home: illustrative campaign, five stages ---------- */
+/* ---------- home: example campaign, five stages ---------- */
 .hm-ex-brief{margin-top:4px;font-size:1.02rem;line-height:1.65;color:var(--ink-2);max-width:48ch}
 /* Two columns: the fifth stage (tracking) takes the full row. */
 @media (min-width:720px) and (max-width:1099.98px){
@@ -1363,3 +1351,43 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
     .est-row>.field>.err{grid-row:4}
   }
 }
+
+/* Final polish (round 3) */
+a[href^="tel:"],.nowrap{white-space:nowrap}
+.intro,.est-aside li span{text-wrap:pretty}
+@media (max-width:420px){h1{letter-spacing:-.04em}h2{letter-spacing:-.03em}}
+
+/* ===== Page styles (round 3, A) ===== */
+
+/* ---------- estimate (meeting request): photo at the top of "What happens next" ---------- */
+.est-photo{display:block;margin:0 0 22px;border-radius:12px;overflow:hidden;background:var(--stone);aspect-ratio:3/2}
+.est-photo img{width:100%;height:100%;object-fit:cover;object-position:50% 30%}
+@media (min-width:1000px){
+  .est-photo{aspect-ratio:3/2}
+  /* the card is taller with the photo: only keep it pinned when the whole card fits on screen */
+  .est-aside{position:static}
+}
+@media (min-width:1000px) and (min-height:940px){.est-aside{position:sticky;top:110px}}
+
+/* ---------- home: "Invested in your growth" (heading + photo, four points below) ---------- */
+.hm-growth{display:grid;gap:clamp(28px,4vw,44px)}
+.hm-growth-art{margin:0}
+.hm-growth-list{list-style:none;display:grid;gap:12px}
+.hm-growth-list>li{padding:20px 20px 22px;border-radius:14px;background:var(--paper);border:1px solid var(--line)}
+.hm-growth-list svg{display:block;width:26px;height:26px;margin-bottom:14px;color:var(--slate-soft)}
+.hm-growth-list h3{font-size:1.1rem;line-height:1.3;letter-spacing:-.012em}
+.hm-growth-list p{margin-top:8px;font-size:.95rem;line-height:1.6}
+@media (min-width:640px){.hm-growth-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (min-width:720px){
+  .hm-growth{grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);align-items:center;column-gap:clamp(32px,5vw,72px)}
+  .hm-growth-list{grid-column:1/-1}
+}
+@media (min-width:1100px){.hm-growth-list{grid-template-columns:repeat(4,minmax(0,1fr))}}
+
+/* ===== Page styles (round 3, B1) ===== */
+/* custom-marketing: the extra top padding held the old "Illustrative" badge; center the art now that it is gone */
+.cu-art{padding:36px 10%}
+
+/* ===== Page styles (round 3, B2) ===== */
+/* Rewritten intros: avoid a one-word last line */
+.b2-pretty{text-wrap:pretty}

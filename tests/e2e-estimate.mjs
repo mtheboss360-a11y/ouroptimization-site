@@ -1,4 +1,5 @@
-// End-to-end checks for the campaign estimate form (estimate.html + assets/estimate.js).
+// End-to-end checks for the strategy meeting request form (estimate.html + assets/estimate.js).
+// The page lives at /estimate and posts the Netlify form "campaign-estimate"; both names stay for printed links and the registered form.
 //
 //   node tests/e2e-estimate.mjs            (local preview server on http://localhost:8770)
 //   E2E_BASE_URL=http://127.0.0.1:8770 node tests/e2e-estimate.mjs
@@ -109,6 +110,9 @@ await scenario('static HTML keeps the Netlify Forms contract', async () => {
   assert.match(html, /name="business_type_other"/, 'the "Something else" field is in the static HTML');
   assert.match(html, /<script src="assets\/estimate\.js" defer><\/script>/);
   assert.doesNotMatch(html, /Build My Campaign/);
+  assert.match(html, /<button class="btn btn-primary" type="submit" id="submit">Request My Strategy Meeting<\/button>/);
+  // the retired labels must stay gone
+  assert.doesNotMatch(html, /Get a Campaign Estimat(?:e)|Request My Campaign Estimat(?:e)|Illustrat(?:ive)/i);
 
   // Phone is optional (email stays required); the field keeps its name and input hints.
   const phone = await page.$eval('#phone', (el) => ({
@@ -270,7 +274,8 @@ await scenario('double-click sends exactly one POST; success shows #sent and mov
   assert.equal(await page.isHidden('#form-area'), true, 'form is hidden');
   assert.equal(await page.evaluate(() => document.activeElement.id), 'sent-h', 'focus on the success heading');
   const copy = await page.textContent('#sent');
-  assert.match(copy, /sent/i);
+  assert.match(copy, /request is in/i);
+  assert.match(copy, /set up a time to talk/i);
   assert.doesNotMatch(copy, /\b(hour|hours|day|days|business day|within|24)\b/i, 'no timeframe promised');
   assert.deepEqual(consoleErrors, []);
   await close();
@@ -292,7 +297,7 @@ await scenario('server error keeps the data, shows an alert with the phone numbe
   }
   assert.equal(await page.inputValue('#budget'), '$2,500 – $5,000');
   const btn = await page.$eval('#submit', (b) => ({ disabled: b.disabled, busy: b.hasAttribute('aria-busy'), text: b.textContent }));
-  assert.deepEqual(btn, { disabled: false, busy: false, text: 'Request My Campaign Estimate' });
+  assert.deepEqual(btn, { disabled: false, busy: false, text: 'Request My Strategy Meeting' });
 
   // Retrying once the server answers 200 goes through and clears the alert.
   ctl.respond = 200;

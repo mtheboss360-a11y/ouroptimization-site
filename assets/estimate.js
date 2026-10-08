@@ -393,7 +393,7 @@
       formArea.hidden = true;
       if (intro) intro.hidden = true;
       sent.hidden = false;
-      document.title = 'Request sent | Our Wellness Optimization';
+      document.title = 'Meeting request sent | Our Wellness Optimization';
       sentH.focus({ preventScroll: true });
       window.scrollTo(0, 0);
     };
