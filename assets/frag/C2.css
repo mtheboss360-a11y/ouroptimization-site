@@ -1,1 +1,4 @@
 /* C2 fragment (temporary; merged into site.css) */
+/* community-marketing: sample-brand wordmark on the localized flyer cards */
+.flyer-mini .clinic.c2-brand{display:flex;align-items:center;gap:7px;line-height:1.15;color:#1C3A2C}
+.flyer-mini .c2-brand svg{flex:none;width:20px;height:20px;padding:3px;border-radius:50%;background:#1C3A2C;color:#F4EFE6}
