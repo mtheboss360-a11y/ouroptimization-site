@@ -296,7 +296,7 @@ describe('package links (?package=digital)', () => {
     assert.match(m[0], /\bdata-package="digital"/);
     assert.match(m[0], /\shidden>/);
     assert.match(m[1], /You&rsquo;re asking about the Digital Growth Package \(\$900\/month\)\./);
-    assert.match(m[1], /Ad spend and platform fees are separate and paid directly to Google, Meta and Groupon\./);
+    assert.match(m[1], /Ad spend and platform fees are separate and paid directly to Meta and Groupon\./);
     assert.ok(html.indexOf('id="est-package"') < html.indexOf('<form name="campaign-estimate"'), 'the line sits above the form');
     assert.doesNotMatch(m[0], /<input|<select|<textarea|\bname=/, 'the line adds no form field');
   });
