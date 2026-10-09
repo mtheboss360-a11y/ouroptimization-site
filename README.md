@@ -30,14 +30,14 @@ Clean, extensionless URLs are canonical (`/how-it-works`, not `/how-it-works.htm
 | `services.html` | The 8 strategy pillars and how they work together |
 | `community-marketing.html` | The core differentiator: touchpoints, sponsorships and partnerships, events, language, and **Our approach** (`#our-approach`), the one place the demographic-information statement lives (with one FAQ answer) |
 | `custom-marketing.html` | Materials organized by where they are used |
-| `digital-marketing.html` | Digital as a layer on the local strategy |
-| `industries.html`, `examples.html` | Industry cards (challenge + channels); example Example Spa campaigns |
-| `estimate.html` + `assets/estimate.js` | Strategy-meeting request form (Netlify form `campaign-estimate`; validation and submission script). `/meeting` redirects here. |
+| `digital-marketing.html` | Digital as a layer on the local strategy; the **Digital Growth Package** card (`#package`, $900/month, ad spend separate) |
+| `industries.html`, `examples.html` | Industry cards (challenge + channels); example campaigns for the sample brands |
+| `estimate.html` + `assets/estimate.js` | Strategy-meeting request form (Netlify form `campaign-estimate`; validation and submission script). `/meeting` redirects here. `?package=digital` prefills the package's channels and shows a one-line note. |
 | `market-research`, `direct-mail`, `flyers`, `marketing-kits`, `events`, `seo`, `google-ads`, `social-media`, `groupon` (Promotional Platforms), `gift-cards` (offer strategy), `tracking`, `sample-advertisements`, `faq`, `privacy`, `terms` | Pillar detail and supporting pages |
 
 Shared UI lives in `assets/site.css` (`.cc` community → channel rows, `.journey`, `.ind-meta`, `.excase`/`.ex-flow`).
 
-Example Spa is a fictional business. That is disclosed in the footer and in one sentence in the /examples and /sample-advertisements intros; example visuals carry no per-image labels, and the examples contain no results or performance figures. Type: Bricolage Grotesque (display) and Figtree (text), self-hosted, OFL.
+Integrative Wellness and Integrative Spa are sample brands, not clients. That is disclosed in the footer and in one sentence in the /examples and /sample-advertisements intros; example visuals carry no per-image labels, and the examples contain no results or performance figures. The `mockup-01`–`04` images on /sample-advertisements are campaign mockups prepared for real med spas, with business details blurred; they are never presented as client work. Service area: nationwide (US). Type: Bricolage Grotesque (display) and Figtree (text), self-hosted, OFL.
 
 ## Tests
 

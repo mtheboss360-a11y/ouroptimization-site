@@ -105,7 +105,7 @@
       <div class="rule" aria-hidden="true"></div>
       <p class="eyebrow">Strategy meeting</p>
       <h1 id="est-h">Let&rsquo;s set up a meeting.</h1>
-      <p class="intro" id="est-intro">Tell us about your business and the customers you want more of. Mustafa will reach out to set up a time to talk through your market, your goals and what a campaign could look like. Nothing gets built until we&rsquo;ve talked it through. Only the first section is required, and phone is optional.</p>
+      <p class="intro" id="est-intro">Tell us about your business and the customers you want more of. Mustafa will reach out to set up the meeting, by video call or in person around Chicago. We talk through your market, your goals and the campaign that fits. Nothing gets built until we&rsquo;ve talked it through. Only the first section is required, and phone is optional.</p>
     </div>
 
     <!-- ===== success: shown by assets/estimate.js once the request is accepted ===== -->
@@ -123,6 +123,9 @@
     <!-- ===== form ===== -->
     <div class="form-layout est-layout" id="form-area">
       <div class="form-wrap">
+
+        <!-- shown by assets/estimate.js when the page is opened with ?package=digital -->
+        <p class="c1-est-pkg" id="est-package" data-package="digital" hidden><b>You&rsquo;re asking about the Digital Growth Package ($900/month).</b> <span>Ad spend and platform fees are separate and paid directly to Meta and Groupon.</span></p>
 
         <div class="est-summary" id="est-summary" hidden>
           <h2 id="est-summary-h" tabindex="-1">Check these fields before sending</h2>
@@ -193,11 +196,11 @@
 
           <fieldset class="est-group est-optional" aria-describedby="est-optional-hint">
             <legend>Optional details</legend>
-            <p class="est-hint" id="est-optional-hint">These help us prepare for the meeting. Skip anything you&rsquo;re not sure about.</p>
+            <p class="est-hint" id="est-optional-hint">We use these to prepare for the meeting. Skip anything you&rsquo;re not sure about.</p>
 
             <div class="field">
               <label for="website">Website</label>
-              <p class="help" id="website-help">So your materials can match how your brand already looks.</p>
+              <p class="help" id="website-help">So your materials match how your brand already looks.</p>
               <input id="website" name="website" type="text" inputmode="url" autocomplete="url" autocapitalize="off" spellcheck="false" maxlength="300" placeholder="yourbusiness.com" aria-describedby="website-help">
               <p class="err" id="website-err"></p>
             </div>
@@ -286,7 +289,7 @@
           <li><svg aria-hidden="true"><use href="#i-profile"/></svg><span><b>We review your request</b>Mustafa reads it and reaches out to set up a time to talk.</span></li>
           <li><svg aria-hidden="true"><use href="#i-booking"/></svg><span><b>We set up a meeting</b>Your goals, services and capacity, and the customers you want more of.</span></li>
           <li><svg aria-hidden="true"><use href="#i-research"/></svg><span><b>We study your market</b>After we meet: the neighborhoods, competitors and search demand around you.</span></li>
-          <li><svg aria-hidden="true"><use href="#i-print"/></svg><span><b>You see the plan and estimate</b>The channels and materials we recommend, with the cost.</span></li>
+          <li><svg aria-hidden="true"><use href="#i-print"/></svg><span><b>You see the plan and estimate</b>The channels and materials we recommend, with the price of each.</span></li>
         </ul>
         <p class="est-call">Rather talk first? Call Mustafa at <a href="tel:+13312716851">331-271-6851</a>.</p>
       </aside>
@@ -332,7 +335,7 @@
         <ul>
           <li><a href="tel:+13312716851">331-271-6851</a></li>
           <li class="foot-email" data-email-slot hidden></li>
-          <li>Chicago&rsquo;s western suburbs</li>
+          <li>Based in Chicago &middot; Serving businesses nationwide</li>
         </ul>
         <h3 class="foot-legal-h">Legal</h3>
         <ul>
@@ -343,7 +346,7 @@
     </div>
     <div class="foot-bottom">
       <p>&copy; 2026 OUR Optimization LLC. Our Wellness Optimization is a brand of OUR Optimization LLC.</p>
-      <p>Example Spa is a fictional business used to illustrate our work.</p>
+      <p>Integrative Wellness and Integrative Spa are sample brands used to show our work.</p>
     </div>
   </div>
 </footer>
