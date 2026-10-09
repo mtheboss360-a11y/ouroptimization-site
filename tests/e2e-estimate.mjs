@@ -42,7 +42,7 @@ const results = [];
 
 /* Opens the page with POST interception. `respond` decides what each POST gets:
    a number (status), or 'hold' to never answer. */
-async function open({ width = 1280, height = 900, respond = 200, delay = 0, clock = false } = {}) {
+async function open({ width = 1280, height = 900, respond = 200, delay = 0, clock = false, path = '/estimate' } = {}) {
   const context = await browser.newContext({ viewport: { width, height } });
   const page = await context.newPage();
   const ctl = { respond };
@@ -65,7 +65,7 @@ async function open({ width = 1280, height = 900, respond = 200, delay = 0, cloc
     return route.continue();
   });
   if (clock) await page.clock.install();
-  await page.goto(PAGE, { waitUntil: 'load' });
+  await page.goto(`${BASE}${path}`, { waitUntil: 'load' });
   const close = async () => {
     for (const r of held) await r.abort().catch(() => {});
     await context.close();
@@ -88,6 +88,9 @@ const state = (page, sel) => page.$eval(sel, (el) => {
 });
 
 const noOverflow = (page) => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth);
+
+const checkedChannels = (page) => page.$$eval('input[name="channels[]"]:checked', (els) => els.map((el) => el.value));
+const PACKAGE_CHANNELS = ['Local SEO', 'Facebook and Instagram ads', 'Offers and promotions'];
 
 async function scenario(name, fn) {
   const started = Date.now();
@@ -370,6 +373,73 @@ await scenario('keyboard-only completion', async () => {
   assert.equal(body.get('business_type_other'), 'Massage studio');
   assert.equal(body.getAll('channels[]').length, 1);
   assert.equal(await page.evaluate(() => document.activeElement.id), 'sent-h');
+  await close();
+});
+
+await scenario('?package=digital: nothing is prefilled without it, or for an unknown package', async () => {
+  for (const path of ['/estimate', '/estimate?package=print', '/estimate?package=']) {
+    const { page, close, consoleErrors } = await open({ path });
+    assert.equal(await page.isHidden('#est-package'), true, `${path}: package line hidden`);
+    assert.deepEqual(await checkedChannels(page), [], `${path}: no channel prefilled`);
+    assert.deepEqual(consoleErrors, []);
+    await close();
+  }
+});
+
+await scenario('?package=digital prefills the package channels, shows the line, and posts them (POST intercepted)', async () => {
+  const { page, posts, close, consoleErrors } = await open({ path: '/estimate?package=digital' });
+  assert.equal(await page.isVisible('#est-package'), true, 'package line shown');
+  const line = (await page.textContent('#est-package')).replace(/\s+/g, ' ').trim();
+  assert.match(line, /^You’re asking about the Digital Growth Package \(\$900\/month\)\./);
+  assert.match(line, /Ad spend and platform fees are separate and paid directly to Google, Meta and Groupon\.$/);
+  assert.ok(await page.evaluate(() => {
+    const note = document.getElementById('est-package').getBoundingClientRect();
+    const form = document.getElementById('estimate-form').getBoundingClientRect();
+    return note.bottom <= form.top;
+  }), 'the line sits above the form');
+  assert.deepEqual(await checkedChannels(page), PACKAGE_CHANNELS);
+
+  // Validation is unchanged: an empty submit sends nothing, lists the five required fields
+  // and leaves the prefilled boxes alone.
+  await page.click('#submit');
+  assert.equal(posts.length, 0, 'nothing is sent while required fields are empty');
+  assert.deepEqual(await page.$$eval('#est-summary-list a', (as) => as.map((a) => a.getAttribute('href'))),
+    ['#clinic', '#type', '#address', '#contact', '#email']);
+  assert.deepEqual(await checkedChannels(page), PACKAGE_CHANNELS, 'prefill survives a failed submit');
+
+  await fillValid(page);
+  assert.equal(await page.isHidden('#est-summary'), true, 'summary clears once the fields are fixed');
+  await page.click('#submit');
+  await page.waitForSelector('#sent', { state: 'visible' });
+  assert.equal(posts.length, 1, `expected 1 POST, got ${posts.length}`);
+  const post = posts[0];
+  assert.equal(new URL(post.url).pathname, '/');
+  assert.equal(post.method, 'POST');
+  assert.equal(post.headers['content-type'], 'application/x-www-form-urlencoded');
+  const body = new URLSearchParams(post.body);
+  assert.equal(body.get('form-name'), 'campaign-estimate');
+  assert.equal(body.get('clinic'), 'Example Dental');
+  assert.deepEqual(body.getAll('channels[]'), PACKAGE_CHANNELS);
+  assert.equal(body.has('package'), false, 'no new field is posted');
+  const html = await (await page.request.get(PAGE)).text();
+  const staticNames = new Set([...html.matchAll(/\bname="([^"]+)"/g)].map((m) => m[1]));
+  for (const key of new Set(body.keys())) assert.ok(staticNames.has(key), `posted field "${key}" exists in the static HTML`);
+  assert.equal(await page.isHidden('#est-package'), true, 'the line goes away with the form');
+  assert.equal(await page.evaluate(() => document.activeElement.id), 'sent-h');
+  assert.deepEqual(consoleErrors, []);
+  await close();
+});
+
+await scenario('?package=digital: the prefilled channels stay editable', async () => {
+  const { page, posts, close } = await open({ path: '/estimate?package=digital', width: 360, height: 780 });
+  assert.ok(await noOverflow(page), 'no overflow at 360px with the package line');
+  await page.uncheck('input[name="channels[]"][value="Offers and promotions"]');
+  await page.check('input[name="channels[]"][value="Direct mail"]');
+  await fillValid(page);
+  await page.click('#submit');
+  await page.waitForSelector('#sent', { state: 'visible' });
+  assert.equal(posts.length, 1);
+  assert.deepEqual(new URLSearchParams(posts[0].body).getAll('channels[]'), ['Direct mail', 'Local SEO', 'Facebook and Instagram ads']);
   await close();
 });
 

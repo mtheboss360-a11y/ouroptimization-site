@@ -3,9 +3,11 @@
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
+import { readFileSync } from 'node:fs';
 
 const require = createRequire(import.meta.url);
 const v = require('../assets/estimate.js');
+const html = readFileSync(new URL('../estimate.html', import.meta.url), 'utf8');
 
 // A complete, valid submission. Individual tests override one field at a time.
 const valid = Object.freeze({
@@ -248,5 +250,54 @@ describe('optional fields', () => {
     assert.notEqual(errorFor('target_area', { target_area: 'x'.repeat(301) }), '');
     assert.equal(errorFor('notes', { notes: 'x'.repeat(2000) }), '');
     assert.notEqual(errorFor('notes', { notes: 'x'.repeat(2001) }), '');
+  });
+});
+
+describe('package links (?package=digital)', () => {
+  const accept = [
+    '?package=digital', 'package=digital', '?utm_source=mailer&package=digital', '?package=Digital',
+    '?package=DIGITAL', '?package=%20digital%20', '?package=+digital', '?package=digital#form',
+    '?package=digital&package=print'
+  ];
+  for (const search of accept) {
+    test(`recognizes ${JSON.stringify(search)}`, () => {
+      assert.equal(v.packageFromSearch(search), 'digital');
+    });
+  }
+
+  const ignore = [
+    '', '?', '?package', '?package=', '?package=print', '?package=digitals', '?mypackage=digital',
+    '?package=__proto__', '?package=toString', '?package=constructor', '?package=%E0%A4%A',
+    '?package=print&package=digital', undefined, null
+  ];
+  for (const search of ignore) {
+    test(`ignores ${JSON.stringify(search) ?? String(search)}`, () => {
+      assert.equal(v.packageFromSearch(search), '');
+    });
+  }
+
+  test('the digital package ticks Local SEO, Facebook & Instagram and Offers & promotions', () => {
+    assert.deepEqual(Object.keys(v.PACKAGES), ['digital']);
+    assert.equal(v.PACKAGES.digital.name, 'Digital Growth Package');
+    assert.deepEqual(v.PACKAGES.digital.channels, ['Local SEO', 'Facebook and Instagram ads', 'Offers and promotions']);
+  });
+
+  test('every prefilled channel is an existing checkbox in the static HTML (no new form fields)', () => {
+    const values = [...html.matchAll(/<input type="checkbox" name="channels\[\]" value="([^"]+)">/g)].map((m) => m[1]);
+    assert.ok(values.length >= 3, 'channel checkboxes found');
+    for (const pkg of Object.values(v.PACKAGES)) {
+      for (const channel of pkg.channels) assert.ok(values.includes(channel), `"${channel}" is a checkbox value`);
+    }
+  });
+
+  test('the package line is in the static HTML, hidden until the script shows it, with the small print', () => {
+    const m = /<p\b[^>]*\bid="est-package"[^>]*>([\s\S]*?)<\/p>/.exec(html);
+    assert.ok(m, 'the #est-package line exists');
+    assert.match(m[0], /\bdata-package="digital"/);
+    assert.match(m[0], /\shidden>/);
+    assert.match(m[1], /You&rsquo;re asking about the Digital Growth Package \(\$900\/month\)\./);
+    assert.match(m[1], /Ad spend and platform fees are separate and paid directly to Google, Meta and Groupon\./);
+    assert.ok(html.indexOf('id="est-package"') < html.indexOf('<form name="campaign-estimate"'), 'the line sits above the form');
+    assert.doesNotMatch(m[0], /<input|<select|<textarea|\bname=/, 'the line adds no form field');
   });
 });

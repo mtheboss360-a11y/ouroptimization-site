@@ -1,4 +1,4 @@
-/* Campaign estimate form: validation and submission.
+/* Campaign estimate form: validation, submission and the ?package= prefill.
    Classic script, loaded with defer on /estimate. No dependencies, no eval, no inline
    handlers, no requests other than the Netlify Forms POST to "/".
    The validators are pure functions so they can run in Node (tests/estimate.test.mjs);
@@ -28,8 +28,28 @@
   };
   var TIMEOUT_MS = 15000;
 
+  /* Package links: /estimate?package=digital ticks the channel boxes the package covers
+     and shows a one-line note above the form. Only checkboxes that already exist in the
+     static HTML are used, so the posted fields stay the ones Netlify registered. */
+  var PACKAGES = {
+    digital: {
+      name: 'Digital Growth Package',
+      channels: ['Local SEO', 'Facebook and Instagram ads', 'Offers and promotions']
+    }
+  };
+
   function str(v) { return v == null ? '' : String(v); }
   function trim(v) { return str(v).replace(/^\s+|\s+$/g, ''); }
+
+  /* Reads ?package=<key> from a query string. Returns a known package key, or ''. */
+  function packageFromSearch(search) {
+    var m = /(?:^|[?&])package=([^&#]*)/.exec(str(search));
+    if (!m) return '';
+    var key;
+    try { key = decodeURIComponent(m[1].replace(/\+/g, ' ')); } catch (e) { return ''; }
+    key = trim(key).toLowerCase();
+    return Object.prototype.hasOwnProperty.call(PACKAGES, key) ? key : '';
+  }
 
   var LABEL_RE = /^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/;
   var TLD_RE = /^(?:[a-z]{2,63}|xn--[a-z0-9-]{1,59})$/;
@@ -188,6 +208,8 @@
     BUSINESS_TYPES: BUSINESS_TYPES,
     MAX: MAX,
     TIMEOUT_MS: TIMEOUT_MS,
+    PACKAGES: PACKAGES,
+    packageFromSearch: packageFromSearch,
     isHostname: isHostname,
     isWebsite: isWebsite,
     isEmail: isEmail,
@@ -460,7 +482,22 @@
       if (canSend) send(); // otherwise the browser posts the form natively
     });
 
+    /* ?package=digital: tick the package's channels and show its note. The boxes stay
+       ordinary choices: the visitor can change them, and they post like any other. */
+    var applyPackage = function () {
+      var key = v.packageFromSearch(window.location.search);
+      if (!key) return;
+      var wanted = v.PACKAGES[key].channels;
+      var boxes = form.querySelectorAll('input[type="checkbox"][name="channels[]"]');
+      for (var i = 0; i < boxes.length; i++) {
+        if (wanted.indexOf(boxes[i].value) >= 0) boxes[i].checked = true;
+      }
+      var note = document.querySelector('[data-package="' + key + '"]');
+      if (note) note.hidden = false;
+    };
+
     syncOther();
+    applyPackage();
   }
 
   if (typeof module === 'object' && module.exports) {
