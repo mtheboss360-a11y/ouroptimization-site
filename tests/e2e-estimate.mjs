@@ -113,7 +113,7 @@ await scenario('static HTML keeps the Netlify Forms contract', async () => {
   assert.match(html, /name="business_type_other"/, 'the "Something else" field is in the static HTML');
   assert.match(html, /<script src="assets\/estimate\.js" defer><\/script>/);
   assert.doesNotMatch(html, /Build My Campaign/);
-  assert.match(html, /<button class="btn btn-primary" type="submit" id="submit">Request My Strategy Meeting<\/button>/);
+  assert.match(html, /<button class="btn btn-primary" type="submit" id="submit">Request My Free Snapshot<\/button>/);
   // the retired labels must stay gone
   assert.doesNotMatch(html, /Get a Campaign Estimat(?:e)|Request My Campaign Estimat(?:e)|Illustrat(?:ive)/i);
 
@@ -300,7 +300,7 @@ await scenario('server error keeps the data, shows an alert with the phone numbe
   }
   assert.equal(await page.inputValue('#budget'), '$2,500 – $5,000');
   const btn = await page.$eval('#submit', (b) => ({ disabled: b.disabled, busy: b.hasAttribute('aria-busy'), text: b.textContent }));
-  assert.deepEqual(btn, { disabled: false, busy: false, text: 'Request My Strategy Meeting' });
+  assert.deepEqual(btn, { disabled: false, busy: false, text: 'Request My Free Snapshot' });
 
   // Retrying once the server answers 200 goes through and clears the alert.
   ctl.respond = 200;
