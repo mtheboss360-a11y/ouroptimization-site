@@ -14,11 +14,19 @@ The campaign-estimate form uses **Netlify Forms** (no function, no secrets):
 - Submissions are also listed under **Forms** in the Netlify UI.
 - After changing form fields, redeploy so Netlify re-reads the form. The field list lives in the static HTML of `estimate.html`, including the hidden `business_type_other` field.
 
+The **expo RSVP** page (`expo-rsvp.html`, short link `/rsvp`) uses a second Netlify form, `expo-rsvp`, the same way:
+- Email per RSVP: **Site configuration → Notifications → Form submission notifications → Add notification → Email notification**, form `expo-rsvp`.
+- Running count: **Forms → expo-rsvp** in the Netlify UI shows every RSVP; **Download as CSV** exports the list (the count to show vendors, and the check-in list for the door).
+- Live spreadsheet (optional): add a Zapier or Make "Netlify: new form submission" trigger for `expo-rsvp` that appends a row to a Google Sheet.
+- `consent_share_vendors` is `yes` only for parents who ticked the box. Share a parent's details with providers only when it is `yes` (see the expo section of the privacy policy).
+- The page is `noindex` until the expo has a final name, date and venue. Update the "Where" and "When" facts and remove `noindex` then.
+
 ## URLs
 
 Clean, extensionless URLs are canonical (`/how-it-works`, not `/how-it-works.html`). Internal links, canonical tags, `og:url` and `sitemap.xml` all use them, and `netlify.toml` 301-redirects every old `.html` URL to its clean URL. Other redirects:
 - `/who-its-for` → `/industries`
 - `/landing` → `/direct-mail` (the old direct-mail ad page was retired)
+- `/rsvp` → `/expo-rsvp` (short link for expo flyers and posts)
 - `/tests/*` and `/README.md` return 404 (repository-only files)
 
 ## Structure
@@ -33,6 +41,7 @@ Clean, extensionless URLs are canonical (`/how-it-works`, not `/how-it-works.htm
 | `digital-marketing.html` | Digital as a layer on the local strategy; the **Digital Growth Package** card (`#package`, $900/month, ad spend separate) |
 | `industries.html`, `examples.html` | Industry cards (challenge + channels); example campaigns for the sample brands |
 | `estimate.html` + `assets/estimate.js` | Strategy-meeting request form (Netlify form `campaign-estimate`; validation and submission script). `/meeting` redirects here. `?package=digital` prefills the package's channels and shows a one-line note. |
+| `expo-rsvp.html` | Parent RSVP page for the Baby & Kids Health Expo (Netlify form `expo-rsvp`, inline validation script). Standalone header with no site nav. `/rsvp` redirects here. |
 | `market-research`, `direct-mail`, `flyers`, `marketing-kits`, `events`, `seo`, `google-ads`, `social-media`, `groupon` (Promotional Platforms), `gift-cards` (offer strategy), `tracking`, `sample-advertisements`, `faq`, `privacy`, `terms` | Pillar detail and supporting pages |
 
 Shared UI lives in `assets/site.css` (`.cc` community → channel rows, `.journey`, `.ind-meta`, `.excase`/`.ex-flow`).

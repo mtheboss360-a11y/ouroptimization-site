@@ -208,3 +208,16 @@
   to = "/estimate"
   status = 301
   force = true
+
+# Baby & Kids Health Expo parent RSVP (Netlify form "expo-rsvp"). /rsvp is the short link for flyers and posts.
+[[redirects]]
+  from = "/expo-rsvp.html"
+  to = "/expo-rsvp"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/rsvp"
+  to = "/expo-rsvp"
+  status = 301
+  force = true
