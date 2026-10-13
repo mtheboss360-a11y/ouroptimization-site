@@ -14,11 +14,14 @@ The campaign-estimate form uses **Netlify Forms** (no function, no secrets):
 - Submissions are also listed under **Forms** in the Netlify UI.
 - After changing form fields, redeploy so Netlify re-reads the form. The field list lives in the static HTML of `estimate.html`, including the hidden `business_type_other` field.
 
+The **Baby & Kids Health Expo** practice sign-up page (`expo-vendors.html`, `/expo-vendors`, short link `/vendors`) uses a second Netlify form, `expo-vendor`, set up the same way. Add an email notification for it so each table request reaches you. The page is `noindex`; update the "Where" and "When" facts once the venue and date are set. Parent follow-up requests at the expo are collected outside this site (a Google Form and Sheet per practice, each with its own QR code).
+
 ## URLs
 
 Clean, extensionless URLs are canonical (`/how-it-works`, not `/how-it-works.html`). Internal links, canonical tags, `og:url` and `sitemap.xml` all use them, and `netlify.toml` 301-redirects every old `.html` URL to its clean URL. Other redirects:
 - `/who-its-for` → `/industries`
 - `/landing` → `/direct-mail` (the old direct-mail ad page was retired)
+- `/vendors` → `/expo-vendors` (short link for practice outreach)
 - `/tests/*` and `/README.md` return 404 (repository-only files)
 
 ## Structure
@@ -33,6 +36,7 @@ Clean, extensionless URLs are canonical (`/how-it-works`, not `/how-it-works.htm
 | `digital-marketing.html` | Digital as a layer on the local strategy; the **Digital Growth Package** card (`#package`, $900/month, ad spend separate) |
 | `industries.html`, `examples.html` | Industry cards (challenge + channels); example campaigns for the sample brands |
 | `estimate.html` + `assets/estimate.js` | Strategy-meeting request form (Netlify form `campaign-estimate`; validation and submission script). `/meeting` redirects here. `?package=digital` prefills the package's channels and shows a one-line note. |
+| `expo-vendors.html` | Baby & Kids Health Expo practice table requests (Netlify form `expo-vendor`, inline validation script). Standalone header with no site nav. `/vendors` redirects here. |
 | `market-research`, `direct-mail`, `flyers`, `marketing-kits`, `events`, `seo`, `google-ads`, `social-media`, `groupon` (Promotional Platforms), `gift-cards` (offer strategy), `tracking`, `sample-advertisements`, `faq`, `privacy`, `terms` | Pillar detail and supporting pages |
 
 Shared UI lives in `assets/site.css` (`.cc` community → channel rows, `.journey`, `.ind-meta`, `.excase`/`.ex-flow`).
