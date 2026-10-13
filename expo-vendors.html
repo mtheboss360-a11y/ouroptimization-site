@@ -26,11 +26,12 @@
 .xp-side h2{font-size:clamp(1.35rem,1.2rem + .6vw,1.7rem);letter-spacing:-.018em}
 .xp-h2-gap{margin-top:36px}
 .xp-steps{list-style:none;counter-reset:s;display:grid;gap:18px;margin-top:20px}
-.xp-steps li{counter-increment:s;display:grid;grid-template-columns:36px minmax(0,1fr);gap:14px}
-.xp-steps li::before{content:counter(s);display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:var(--blush);color:var(--gold-sm);font:700 .95rem/1 var(--display)}
+.xp-steps>li{counter-increment:s;display:grid;grid-template-columns:36px minmax(0,1fr);gap:14px}
+.xp-steps>li::before{content:counter(s);display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:var(--blush);color:var(--gold-sm);font:700 .95rem/1 var(--display)}
 .xp-steps b{color:var(--ink)}
 .xp-sub{margin-top:8px}
 .xp-cats{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px;list-style:none}
+.xp-gifts{grid-column:2;margin-top:10px}
 .xp-cats li{padding:6px 12px;border:1px solid var(--line);border-radius:999px;font-size:.86rem;background:var(--paper)}
 .xp-note{margin-top:22px;font-size:.88rem;color:var(--ink-3)}
 .xp-card{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:clamp(22px,3.5vw,36px)}
@@ -91,16 +92,20 @@
       <p class="xp-price"><b>$600</b> <span>per table, one practice per specialty</span></p>
       <ol class="xp-steps">
         <li><span><b>Your category, exclusively.</b> No other practice in your specialty gets a table.</span></li>
-        <li><span><b>Families who stop at every table.</b> Parents rotate through the tables on a two-minute timer, so you get time to introduce yourself to every family in the room: your future patients.</span></li>
-        <li><span><b>Your own QR code, free.</b> Parents scan it during their two minutes at your table and leave their details for you, with their consent.</span></li>
-        <li><span><b>Hand them a free gift.</b> Bring your own gifts for families, or ask us for branded ones.</span></li>
+        <li><span><b>Small groups stop at every table.</b> Families rotate through the tables in small groups on a five-minute timer, so you get time to introduce yourself to every family in the room: your future patients.</span></li>
+        <li><span><b>Your own QR code, free.</b> Parents scan it during their five minutes at your table and leave their details for you, with their consent.</span></li>
+        <li><span><b>Hand them a free gift.</b> Order your custom gifts through us, made with your logo:</span>
+          <ul class="xp-cats xp-gifts">
+            <li>Teddy bears in a logo hoodie</li><li>Canvas tote bags</li><li>Grip socks</li><li>Satin eye masks</li><li>Insulated water bottles</li><li>Umbrellas</li><li>Polo shirts</li><li>Notebooks</li><li>Pens</li>
+          </ul>
+        </li>
         <li><span><b>A list after the event</b> of every family who asked to hear from you.</span></li>
       </ol>
       <h2 class="xp-h2-gap">Specialties we&rsquo;re filling</h2>
       <ul class="xp-cats">
         <li>Pediatric dentist</li><li>Orthodontist</li><li>Pediatrician</li><li>Speech &amp; occupational therapy</li><li>Pediatric chiropractor</li><li>Lactation consultant</li><li>Doula</li><li>Newborn photography</li><li>Swim school</li>
       </ul>
-      <p class="xp-note">Optional extras: a logo tablecloth you keep, and branded gifts to hand families at your table. Tick them below and we&rsquo;ll send pricing.</p>
+      <p class="xp-note">Optional extras: a logo tablecloth you keep, and custom gifts with your logo. Tick them below and we&rsquo;ll send pricing.</p>
     </div>
 
     <div class="xp-card" id="reserve">
@@ -161,7 +166,7 @@
           <fieldset class="xp-choice">
             <legend>Send me pricing for <span class="xp-opt">(optional)</span></legend>
             <label><input type="checkbox" name="extras[]" value="logo-tablecloth"> A logo tablecloth I keep</label>
-            <label><input type="checkbox" name="extras[]" value="giveaways"> Branded gifts to hand families at my table</label>
+            <label><input type="checkbox" name="extras[]" value="giveaways"> Custom gifts with my logo to hand families</label>
           </fieldset>
 
           <div class="field">
