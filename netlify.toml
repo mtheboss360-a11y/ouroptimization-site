@@ -208,3 +208,16 @@
   to = "/estimate"
   status = 301
   force = true
+
+# Baby & Kids Health Expo practice sign-up (Netlify form "expo-vendor"). /vendors is the short link.
+[[redirects]]
+  from = "/expo-vendors.html"
+  to = "/expo-vendors"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/vendors"
+  to = "/expo-vendors"
+  status = 301
+  force = true
