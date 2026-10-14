@@ -28,7 +28,7 @@ Clean, extensionless URLs are canonical (`/how-it-works`, not `/how-it-works.htm
 
 | Page | Purpose |
 |---|---|
-| `index.html` | Event-hosting hero (Reserve a Table → `/vendors`); community event hosting section; community → channel map; 7-step model; five main services (event hosting, Google SEO, Facebook ads, custom marketing, EDDM direct mail); physical + digital; industries; an example campaign; pricing approach |
+| `index.html` | Community map hero ("Marketing targeted to your demographic and community", meeting-first buttons); community → channel map; 7-step model; 8 strategy pillars (pillar 02, Community Marketing & Events, includes the events we host); community event hosting section as part of the plan (Reserve a Table → `/vendors`); physical + digital; industries; an example campaign; pricing |
 | `how-it-works.html` | The 7-step operating model in detail |
 | `services.html` | The 8 strategy pillars and how they work together |
 | `community-marketing.html` | The core differentiator: touchpoints, sponsorships and partnerships, events, language, and **Our approach** (`#our-approach`), the one place the demographic-information statement lives (with one FAQ answer) |
@@ -36,7 +36,7 @@ Clean, extensionless URLs are canonical (`/how-it-works`, not `/how-it-works.htm
 | `digital-marketing.html` | Digital as a layer on the local strategy; the **Digital Growth Package** card (`#package`, $900/month, ad spend separate) |
 | `industries.html`, `examples.html` | Industry cards (challenge + channels); example campaigns for the sample brands |
 | `estimate.html` + `assets/estimate.js` | Strategy-meeting request form (Netlify form `campaign-estimate`; validation and submission script). `/meeting` redirects here. `?package=digital` prefills the package's channels and shows a one-line note. |
-| `events.html` | Community Event Hosting: how our events work, the next event, other community events. Nav item "Event Hosting". |
+| `events.html` | Community Event Hosting: how our events work, the next event, other community events. Part of the Community Marketing pillar (the nav marks Community Marketing as its section); linked from the homepage, services, FAQ, community marketing page and footer. |
 | `expo-vendors.html` | Baby & Kids Health Expo practice table requests (Netlify form `expo-vendor`, inline validation script). Standalone header with no site nav. `/vendors` redirects here. |
 | `market-research`, `direct-mail`, `flyers`, `marketing-kits`, `seo`, `google-ads`, `social-media`, `groupon` (Promotional Platforms), `gift-cards` (offer strategy), `tracking`, `sample-advertisements`, `faq`, `privacy`, `terms` | Pillar detail and supporting pages |
 
