@@ -42,7 +42,7 @@ Clean, extensionless URLs are canonical (`/how-it-works`, not `/how-it-works.htm
 
 Shared UI lives in `assets/site.css` (`.cc` community → channel rows, `.journey`, `.ind-meta`, `.excase`/`.ex-flow`).
 
-Integrative Wellness and Integrative Spa are sample brands, not clients. That is disclosed in the footer and in one sentence in the /examples and /sample-advertisements intros; example visuals carry no per-image labels, and the examples contain no results or performance figures. The `mockup-01`–`04` images on /sample-advertisements are campaign mockups prepared for real med spas, with business details blurred; they are never presented as client work. Service area: nationwide (US). Type: Bricolage Grotesque (display) and Figtree (text), self-hosted, OFL.
+Integrative Wellness and Integrative Spa are sample brands, not clients. That is disclosed in the footer and in one sentence in the /examples and /sample-advertisements intros; example visuals carry no per-image labels, and the examples contain no results or performance figures. The `mockup-01`–`04` images on /sample-advertisements are campaign mockups prepared for real med spas, with business details blurred; they are never presented as client work. Grace Pediatrics (Glendale Heights, IL) is a real client, shown by name with the practice's permission in the home page `#client-work` section; the section shows the work we did and claims no results. Add a result only with the client's written OK and figures that back it. Its photo and video are `assets/img/grace-*` (EXIF and location metadata stripped; WebM first, MP4 fallback). Service area: nationwide (US). Type: Bricolage Grotesque (display) and Figtree (text), self-hosted, OFL.
 
 ## Tests
 
