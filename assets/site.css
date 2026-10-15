@@ -657,7 +657,8 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 }
 .net-line{stroke-opacity:.55;stroke-width:1.9}
 
-@media (max-width:767.98px){.tp-homes{left:max(13%,54px)!important;top:49%!important}}
+/* phones: the Neighborhoods label would sit on the temple; the list under the map still names it */
+@media (max-width:767.98px){.tp-homes{display:none!important}}
 /* the CSS drop-shadow filter on the transparent town image clipped into a visible box in Chromium;
    a soft ground shadow under the tile gives the same lift without the artifact */
 .town-img{filter:none}
