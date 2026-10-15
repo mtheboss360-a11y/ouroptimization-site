@@ -119,6 +119,18 @@
   force = true
 
 [[redirects]]
+  from = "/website-design.html"
+  to = "/website-design"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/review-tags.html"
+  to = "/review-tags"
+  status = 301
+  force = true
+
+[[redirects]]
   from = "/google-ads.html"
   to = "/google-ads"
   status = 301

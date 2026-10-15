@@ -37,6 +37,8 @@ Clean, extensionless URLs are canonical (`/how-it-works`, not `/how-it-works.htm
 | `industries.html`, `examples.html` | Industry cards (challenge + channels); example campaigns for the sample brands |
 | `estimate.html` + `assets/estimate.js` | Strategy-meeting request form (Netlify form `campaign-estimate`; validation and submission script). `/meeting` redirects here. `?package=digital` prefills the package's channels and shows a one-line note. |
 | `events.html` | Community Event Hosting: how our events work, the next event, other community events. Part of the Community Marketing pillar (the nav marks Community Marketing as its section); linked from the homepage, services, FAQ, community marketing page and footer. |
+| `website-design.html` | Website Redesign service: what we build, how a redesign runs, what we need, pricing note (quoted after the strategy meeting; not part of the Digital Growth Package). CTAs use `/estimate?package=website`. |
+| `review-tags.html` | Tap-to-review NFC tags (QR on the same piece) that open the client's own Google review link directly, with the review rules (ask everyone, no incentives, no staff reviews). Quoted separately. CTAs use `/estimate?package=reviews`. |
 | `expo-vendors.html` | Baby & Kids Health Expo practice table requests (Netlify form `expo-vendor`, inline validation script). Standalone header with no site nav. `/vendors` redirects here. |
 | `market-research`, `direct-mail`, `flyers`, `marketing-kits`, `seo`, `google-ads`, `social-media`, `groupon` (Promotional Platforms), `gift-cards` (offer strategy), `tracking`, `sample-advertisements`, `faq`, `privacy`, `terms` | Pillar detail and supporting pages |
 
