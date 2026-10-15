@@ -35,7 +35,9 @@
     digital: {
       name: 'Digital Growth Package',
       channels: ['Local SEO', 'Facebook and Instagram ads', 'Offers and promotions']
-    }
+    },
+    website: { name: 'Website redesign', channels: ['Website redesign'] },
+    reviews: { name: 'Review tags', channels: ['Review tags'] }
   };
 
   function str(v) { return v == null ? '' : String(v); }

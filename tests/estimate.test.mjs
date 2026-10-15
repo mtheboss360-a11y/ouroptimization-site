@@ -277,9 +277,16 @@ describe('package links (?package=digital)', () => {
   }
 
   test('the digital package ticks Local SEO, Facebook & Instagram and Offers & promotions', () => {
-    assert.deepEqual(Object.keys(v.PACKAGES), ['digital']);
+    assert.deepEqual(Object.keys(v.PACKAGES), ['digital', 'website', 'reviews']);
     assert.equal(v.PACKAGES.digital.name, 'Digital Growth Package');
     assert.deepEqual(v.PACKAGES.digital.channels, ['Local SEO', 'Facebook and Instagram ads', 'Offers and promotions']);
+  });
+
+  test('the website and review-tag links tick their own box', () => {
+    assert.equal(v.packageFromSearch('?package=website'), 'website');
+    assert.equal(v.packageFromSearch('?package=reviews'), 'reviews');
+    assert.deepEqual(v.PACKAGES.website.channels, ['Website redesign']);
+    assert.deepEqual(v.PACKAGES.reviews.channels, ['Review tags']);
   });
 
   test('every prefilled channel is an existing checkbox in the static HTML (no new form fields)', () => {
