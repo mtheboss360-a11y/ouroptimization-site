@@ -1,0 +1,18 @@
+/* R: tap-to-review tags (/review-tags). Loaded only by review-tags.html. Prefix: rt- */
+.rt-art{margin:0}
+
+/* where they go: five spots; the odd card spans the row at two columns */
+.rt-spots>li{display:flex;flex-direction:column}
+.rt-spots .ex-chips{margin-top:auto;padding-top:16px}
+@media (min-width:640px) and (max-width:1099.98px){.rt-spots>li:last-child{grid-column:1/-1}}
+@media (min-width:1100px){.rt-spots{grid-template-columns:repeat(5,1fr)}}
+
+/* pricing panel beside the spec list */
+.rt-price{padding:clamp(24px,3vw,36px);border-radius:18px;background:var(--ground);border:1px solid var(--line)}
+.rt-price h3{margin-top:12px;font-size:clamp(1.3rem,1.1rem + .7vw,1.6rem);line-height:1.22;letter-spacing:-.014em}
+.rt-price>p:not(.eyebrow){margin-top:18px;font-size:.96rem;line-height:1.6}
+.rt-drivers{list-style:none;margin-top:10px;display:grid;gap:0}
+.rt-drivers li{position:relative;padding:11px 2px 11px 22px;border-top:1px solid var(--line);font-size:.96rem;line-height:1.45;color:var(--ink)}
+.rt-drivers li:last-child{border-bottom:1px solid var(--line)}
+.rt-drivers li::before{content:"";position:absolute;left:3px;top:1.05em;width:7px;height:7px;border-radius:50%;background:var(--gold)}
+.rt-price .rt-ship{font-size:.9rem;color:var(--ink-3)}
