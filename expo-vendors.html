@@ -52,8 +52,6 @@
 .xp-done h2{display:flex;gap:10px;align-items:center}
 .xp-done h2 svg{width:28px;height:28px;color:var(--gold-sm);flex:none}
 .xp-done p{margin-top:12px}
-.xp-price{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;margin-top:20px;padding:18px 20px;border-radius:12px;background:var(--blush)}
-.xp-price b{font:650 clamp(1.8rem,1.5rem + 1vw,2.3rem)/1 var(--display);color:var(--ink);letter-spacing:-.02em}
 .xp-from{font-weight:600;color:var(--ink)}
 .xp-foot{border-top:1px solid var(--line);padding-block:28px;font-size:.85rem;color:var(--ink-3)}
 .xp-foot .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-between}
@@ -89,7 +87,6 @@
   <div class="wrap xp-grid">
     <div class="xp-side">
       <h2>What your table includes</h2>
-      <p class="xp-price"><b>$600</b> <span>per table, one practice per specialty</span></p>
       <ol class="xp-steps">
         <li><span><b>Your category, exclusively.</b> No other practice in your specialty gets a table.</span></li>
         <li><span><b>Small groups stop at every table.</b> Families rotate through the tables in small groups on a five-minute timer, so you get time to introduce yourself to every family in the room: your future patients.</span></li>
@@ -105,13 +102,13 @@
       <ul class="xp-cats">
         <li>Pediatric dentist</li><li>Orthodontist</li><li>Pediatrician</li><li>Speech &amp; occupational therapy</li><li>Pediatric chiropractor</li><li>Lactation consultant</li><li>Doula</li><li>Newborn photography</li><li>Swim school</li>
       </ul>
-      <p class="xp-note">Optional extras: a logo tablecloth you keep, and custom gifts with your logo. Tick them below and we&rsquo;ll send pricing.</p>
+      <p class="xp-note">Optional extras: a logo tablecloth you keep, and custom gifts with your logo. Tick the ones you want on the request form.</p>
     </div>
 
     <div class="xp-card" id="reserve">
       <div id="xp-form-area">
         <h2>Request your specialty</h2>
-        <p>We&rsquo;ll confirm your category is open and send the date, venue and deposit details. Nothing is charged on this page.</p>
+        <p>We&rsquo;ll confirm your category is open and send the date, venue and next steps.</p>
 
         <form name="expo-vendor" id="xp-form" method="POST" action="/expo-vendors?sent=1" data-netlify="true" netlify-honeypot="bot-field" novalidate>
           <input type="hidden" name="form-name" value="expo-vendor">
@@ -164,7 +161,7 @@
           </div>
 
           <fieldset class="xp-choice">
-            <legend>Send me pricing for <span class="xp-opt">(optional)</span></legend>
+            <legend>I&rsquo;m interested in <span class="xp-opt">(optional)</span></legend>
             <label><input type="checkbox" name="extras[]" value="logo-tablecloth"> A logo tablecloth I keep</label>
             <label><input type="checkbox" name="extras[]" value="giveaways"> Custom gifts with my logo to hand families</label>
           </fieldset>
@@ -182,7 +179,7 @@
 
       <div class="xp-done" id="xp-done" hidden tabindex="-1">
         <h2><svg aria-hidden="true"><use href="#i-check"/></svg>Request received</h2>
-        <p>We&rsquo;ll check that your specialty is still open and email the date, venue and deposit details. Your category is held once the deposit is in.</p>
+        <p>We&rsquo;ll check that your specialty is still open and email the date, venue and next steps.</p>
       </div>
     </div>
   </div>

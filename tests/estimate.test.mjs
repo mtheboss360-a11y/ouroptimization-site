@@ -297,13 +297,13 @@ describe('package links (?package=digital)', () => {
     }
   });
 
-  test('the package line is in the static HTML, hidden until the script shows it, with the small print', () => {
+  test('the package line is in the static HTML, hidden until the script shows it, with no price', () => {
     const m = /<p\b[^>]*\bid="est-package"[^>]*>([\s\S]*?)<\/p>/.exec(html);
     assert.ok(m, 'the #est-package line exists');
     assert.match(m[0], /\bdata-package="digital"/);
     assert.match(m[0], /\shidden>/);
-    assert.match(m[1], /You&rsquo;re asking about the Digital Growth Package \(\$900\/month\)\./);
-    assert.match(m[1], /Ad spend and platform fees are separate and paid directly to Meta and Groupon\./);
+    assert.match(m[1], /^<b>You&rsquo;re asking about the Digital Growth Package\.<\/b>$/);
+    assert.doesNotMatch(m[1], /\$|price|\/month|fee/i, 'the line carries no price or small print');
     assert.ok(html.indexOf('id="est-package"') < html.indexOf('<form name="campaign-estimate"'), 'the line sits above the form');
     assert.doesNotMatch(m[0], /<input|<select|<textarea|\bname=/, 'the line adds no form field');
   });

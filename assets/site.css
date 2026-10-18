@@ -1396,10 +1396,6 @@ a[href^="tel:"],.nowrap{white-space:nowrap}
 /* Round 4: Digital Growth Package card, home teaser, services package lines, FAQ list, estimate note */
 /* ---------- Digital Growth Package: shared price type ---------- */
 .c1-pkg-k{font:700 .7rem/1.4 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--gold-sm)}
-.c1-pkg-price{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px;margin-top:12px;color:var(--ink)}
-.c1-pkg-amt{font:700 clamp(2.4rem,1.95rem + 1.7vw,3.2rem)/1 var(--display);letter-spacing:-.035em}
-.c1-pkg-per{font:600 1rem/1.2 var(--sans);color:var(--ink-2)}
-.c1-pkg-fine{margin-top:14px;font-size:.84rem;line-height:1.5;color:var(--ink-3)}
 
 /* ---------- home: pricing panel with the package teaser ---------- */
 .c1-price .spec{margin-top:24px}
@@ -1413,13 +1409,14 @@ a[href^="tel:"],.nowrap{white-space:nowrap}
 /* ---------- /digital-marketing: the package card (#package) ---------- */
 .c1-pkg{display:grid;background:#fff;border:1px solid var(--line);border-radius:20px;overflow:hidden;box-shadow:0 1px 2px rgba(28,58,44,.08),0 30px 60px -38px rgba(28,58,44,.45)}
 .c1-pkg-head{padding:clamp(24px,3.2vw,38px);background:var(--ink)}
+/* two-column package card: centre the head beside the taller list of groups */
+@media (min-width:960px){.c1-pkg-head{display:flex;flex-direction:column;justify-content:center}}
 .c1-pkg-head .c1-pkg-k{color:var(--gold-bright)}
 .c1-pkg-head h2{margin-top:8px;color:var(--ground);font-size:clamp(1.6rem,1.3rem + 1.2vw,2.2rem);line-height:1.12;letter-spacing:-.025em}
-.c1-pkg-head .c1-pkg-price{color:var(--ground)}
-.c1-pkg-head .c1-pkg-per{color:#C3D2C6}
+
 .c1-pkg-sum{margin-top:14px;font-size:.98rem;line-height:1.6;color:#C3D2C6;max-width:36em}
 .c1-pkg-cta{margin-top:24px}
-.c1-pkg-head .c1-pkg-fine{color:#C3D2C6}
+
 .c1-pkg-groups{display:grid;padding:clamp(6px,1.4vw,12px) clamp(24px,3.2vw,38px) clamp(18px,2.6vw,28px)}
 .c1-pkg-group{padding:20px 0;border-top:1px solid var(--line-soft)}
 .c1-pkg-group:first-child{border-top:0}
@@ -1483,7 +1480,6 @@ a[href^="tel:"],.nowrap{white-space:nowrap}
 .c3-pkg>svg{width:18px;height:18px;flex:none;margin-top:3px;color:var(--gold-sm)}
 .c3-pkg p{font:500 .95rem/1.5 var(--sans);color:var(--ink)}
 .c3-pkg a{font-weight:600;color:var(--ink);text-underline-offset:3px;text-decoration-color:var(--gold)}
-.c3-pkg .c3-pkg-fine{margin-top:6px;font-weight:400;font-size:.84rem;line-height:1.5;color:var(--ink-3)}
 
 /* Free market snapshot: what the offer covers (estimate page head) */
 .snap-list{list-style:none;margin:20px 0 0;padding:0;display:grid;gap:10px;max-width:42em}
@@ -1522,12 +1518,6 @@ a[href^="tel:"],.nowrap{white-space:nowrap}
 .wd-need{display:grid;gap:clamp(34px,4.4vw,56px)}
 @media (min-width:900px){.wd-need{grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);align-items:center}}
 .wd-need .spec li span{min-width:0}
-.wd-price{padding:clamp(24px,3vw,34px);background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 1px 2px rgba(28,58,44,.08),0 24px 44px -28px rgba(28,58,44,.34)}
-.wd-price h3{font-size:clamp(1.3rem,1.16rem + .6vw,1.6rem);line-height:1.22;letter-spacing:-.018em}
-.wd-price .dg-k{margin:22px 0 0}
-.wd-price .ex-chips li{background:var(--ground)}
-.wd-price-note{margin-top:20px;padding-top:16px;border-top:1px solid var(--line-soft);font-size:.9rem;line-height:1.55;color:var(--ink-3)}
-.wd-price-note a{font-weight:600;color:var(--ink);text-underline-offset:3px;text-decoration-color:var(--gold)}
 
 /* ---------- /digital-marketing: website redesign section ---------- */
 .wd-dg-art{margin:0;width:100%;max-width:620px;margin-inline:auto}
@@ -1558,11 +1548,9 @@ a[href^="tel:"],.nowrap{white-space:nowrap}
 @media (min-width:1100px){.rt-spots{grid-template-columns:repeat(5,1fr)}}
 
 /* pricing panel beside the spec list */
-.rt-price{padding:clamp(24px,3vw,36px);border-radius:18px;background:var(--ground);border:1px solid var(--line)}
-.rt-price h3{margin-top:12px;font-size:clamp(1.3rem,1.1rem + .7vw,1.6rem);line-height:1.22;letter-spacing:-.014em}
-.rt-price>p:not(.eyebrow){margin-top:18px;font-size:.96rem;line-height:1.6}
+
 .rt-drivers{list-style:none;margin-top:10px;display:grid;gap:0}
 .rt-drivers li{position:relative;padding:11px 2px 11px 22px;border-top:1px solid var(--line);font-size:.96rem;line-height:1.45;color:var(--ink)}
 .rt-drivers li:last-child{border-bottom:1px solid var(--line)}
 .rt-drivers li::before{content:"";position:absolute;left:3px;top:1.05em;width:7px;height:7px;border-radius:50%;background:var(--gold)}
-.rt-price .rt-ship{font-size:.9rem;color:var(--ink-3)}
+

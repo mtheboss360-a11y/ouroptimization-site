@@ -28,19 +28,21 @@ Clean, extensionless URLs are canonical (`/how-it-works`, not `/how-it-works.htm
 
 | Page | Purpose |
 |---|---|
-| `index.html` | Community map hero ("Marketing targeted to your demographic and community", meeting-first buttons); community → channel map; 7-step model; 8 strategy pillars (pillar 02, Community Marketing & Events, includes the events we host); community event hosting section as part of the plan (Reserve a Table → `/vendors`); physical + digital; industries; an example campaign; pricing |
+| `index.html` | Community map hero ("Marketing targeted to your demographic and community", meeting-first buttons); community → channel map; 7-step model; 8 strategy pillars (pillar 02, Community Marketing & Events, includes the events we host); community event hosting section as part of the plan (Reserve a Table → `/vendors`); physical + digital; industries; an example campaign; working together (`#working-together`: the Digital Growth Package and what it includes, no price) |
 | `how-it-works.html` | The 7-step operating model in detail |
 | `services.html` | The 8 strategy pillars and how they work together |
 | `community-marketing.html` | The core differentiator: touchpoints, sponsorships and partnerships, events, language, and **Our approach** (`#our-approach`), the one place the demographic-information statement lives (with one FAQ answer) |
 | `custom-marketing.html` | Materials organized by where they are used |
-| `digital-marketing.html` | Digital as a layer on the local strategy; the **Digital Growth Package** card (`#package`, $900/month, ad spend separate) |
+| `digital-marketing.html` | Digital as a layer on the local strategy; the **Digital Growth Package** card (`#package`: what the package includes, no price) |
 | `industries.html`, `examples.html` | Industry cards (challenge + channels); example campaigns for the sample brands |
 | `estimate.html` + `assets/estimate.js` | Strategy-meeting request form (Netlify form `campaign-estimate`; validation and submission script). `/meeting` redirects here. `?package=digital` prefills the package's channels and shows a one-line note. |
 | `events.html` | Community Event Hosting: how our events work, the next event, other community events. Part of the Community Marketing pillar (the nav marks Community Marketing as its section); linked from the homepage, services, FAQ, community marketing page and footer. |
-| `website-design.html` | Website Redesign service: what we build, how a redesign runs, what we need, pricing note (quoted after the strategy meeting; not part of the Digital Growth Package). CTAs use `/estimate?package=website`. |
-| `review-tags.html` | Tap-to-review NFC tags (QR on the same piece) that open the client's own Google review link directly, with the review rules (ask everyone, no incentives, no staff reviews). Quoted separately. CTAs use `/estimate?package=reviews`. |
+| `website-design.html` | Website Redesign service: what we build, how a redesign runs, what we need, scope note (separate from the Digital Growth Package). CTAs use `/estimate?package=website`. |
+| `review-tags.html` | Tap-to-review NFC tags (QR on the same piece) that open the client's own Google review link directly, with the review rules (ask everyone, no incentives, no staff reviews). Separate from the Digital Growth Package. CTAs use `/estimate?package=reviews`. |
 | `expo-vendors.html` | Baby & Kids Health Expo practice table requests (Netlify form `expo-vendor`, inline validation script). Standalone header with no site nav. `/vendors` redirects here. |
 | `market-research`, `direct-mail`, `flyers`, `marketing-kits`, `seo`, `google-ads`, `social-media`, `groupon` (Promotional Platforms), `gift-cards` (offer strategy), `tracking`, `sample-advertisements`, `faq`, `privacy`, `terms` | Pillar detail and supporting pages |
+
+No prices: the site publishes no prices or quote language for our own services (no package price, no event-table price, no "quoted after the meeting" notes). Dollar amounts on sample ads, sample campaigns and mockups are placeholder offer values that show what a client's ad looks like, and `terms.html` keeps the legal quote and payment clauses. Keep it that way unless the owner asks for prices to go back on the site.
 
 Shared UI lives in `assets/site.css` (`.cc` community → channel rows, `.journey`, `.ind-meta`, `.excase`/`.ex-flow`).
 

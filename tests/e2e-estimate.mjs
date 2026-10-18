@@ -390,8 +390,7 @@ await scenario('?package=digital prefills the package channels, shows the line, 
   const { page, posts, close, consoleErrors } = await open({ path: '/estimate?package=digital' });
   assert.equal(await page.isVisible('#est-package'), true, 'package line shown');
   const line = (await page.textContent('#est-package')).replace(/\s+/g, ' ').trim();
-  assert.match(line, /^You’re asking about the Digital Growth Package \(\$900\/month\)\./);
-  assert.match(line, /Ad spend and platform fees are separate and paid directly to Meta and Groupon\.$/);
+  assert.equal(line, 'You’re asking about the Digital Growth Package.');
   assert.ok(await page.evaluate(() => {
     const note = document.getElementById('est-package').getBoundingClientRect();
     const form = document.getElementById('estimate-form').getBoundingClientRect();
