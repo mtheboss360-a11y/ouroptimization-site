@@ -22,6 +22,15 @@
 <link rel="preload" href="assets/fonts/figtree-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/bricolage-grotesque-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/site.css">
+<style>
+/* "Redesign or package" panel beside "What we need from you" */
+.wd-scope{padding:clamp(24px,3vw,34px);background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 1px 2px rgba(28,58,44,.08),0 24px 44px -28px rgba(28,58,44,.34)}
+.wd-scope h3{font-size:clamp(1.3rem,1.16rem + .6vw,1.6rem);line-height:1.22;letter-spacing:-.018em}
+.wd-scope .dg-k{margin:22px 0 0}
+.wd-scope .ex-chips li{background:var(--ground)}
+.wd-scope-note{margin-top:20px;padding-top:16px;border-top:1px solid var(--line-soft);font-size:.9rem;line-height:1.55;color:var(--ink-3)}
+.wd-scope-note a{font-weight:600;color:var(--ink);text-underline-offset:3px;text-decoration-color:var(--gold)}
+</style>
 <script>document.documentElement.classList.add('js');setTimeout(function(){if(!window.__owoReady)document.documentElement.classList.remove('js')},4000);</script>
 </head>
 <body>
@@ -182,19 +191,18 @@
         <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>Approvals: one person on your side who signs off on copy and design.</span></li>
       </ul>
     </div>
-    <aside class="wd-price" aria-labelledby="wd-price-h">
-      <p class="eyebrow">Pricing</p>
-      <h3 id="wd-price-h">Quoted after the strategy meeting, by the number of pages and features.</h3>
-      <p class="dg-k">What sets the quote</p>
+    <aside class="wd-scope" aria-labelledby="wd-scope-h">
+      <p class="eyebrow">Redesign or package</p>
+      <h3 id="wd-scope-h">A redesign rebuilds the site itself.</h3>
+      <p class="dg-k">What a rebuild can include</p>
       <ul class="ex-chips">
-        <li>Number of pages</li>
         <li>Service and area pages</li>
         <li>Languages</li>
         <li>Online booking and forms</li>
         <li>Campaign landing pages</li>
         <li>Content moved from your current site</li>
       </ul>
-      <p class="wd-price-note">The redesign is quoted on its own. It is not part of the <a href="/digital-marketing#package">Digital Growth Package</a>: the package adds and updates service and area pages on your current site, and a redesign rebuilds the site itself.</p>
+      <p class="wd-scope-note">A redesign is separate from the <a href="/digital-marketing#package">Digital Growth Package</a>, which adds and updates service and area pages on your current site.</p>
     </aside>
   </div>
 </section>
