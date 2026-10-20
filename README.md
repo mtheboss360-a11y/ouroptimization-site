@@ -46,7 +46,13 @@ No prices: the site publishes no prices or quote language for our own services (
 
 Shared UI lives in `assets/site.css` (`.cc` community → channel rows, `.journey`, `.ind-meta`, `.excase`/`.ex-flow`).
 
-Integrative Wellness and Integrative Spa are sample brands, not clients. That is disclosed in the footer and in one sentence in the /examples and /sample-advertisements intros; example visuals carry no per-image labels, and the examples contain no results or performance figures. The `mockup-01`–`04` images on /sample-advertisements are campaign mockups prepared for real med spas, with business details blurred; they are never presented as client work. Grace Pediatrics (Glendale Heights, IL) is a real client, shown by name with the practice's permission in the home page `#client-work` section; the section shows the work we did and claims no results. Add a result only with the client's written OK and figures that back it. Its photo and video are `assets/img/grace-*` (EXIF and location metadata stripped; WebM first, MP4 fallback). Service area: nationwide (US). Type: Bricolage Grotesque (display) and Figtree (text), self-hosted, OFL.
+Integrative Wellness and Integrative Spa are sample brands, not clients. That is disclosed in the footer and in one sentence in the /examples and /sample-advertisements intros; example visuals carry no per-image labels, and the examples contain no results or performance figures. The `mockup-01`–`04` images on /sample-advertisements are campaign mockups prepared for real med spas, with business details blurred; they are never presented as client work. Grace Pediatrics (Glendale Heights, IL) is a real client, shown by name with the practice's permission in the home page `#client-work` section and in the captions and alt text of the `kit-tins` photo (home page and /marketing-kits hero); these show the work we did and claim no results. Add a result only with the client's written OK and figures that back it. Its photos and video are `assets/img/grace-*` (EXIF and location metadata stripped; WebM first, MP4 fallback) and `assets/img/kit-tins.*` / `kit-tins-640.*`. Service area: nationwide (US). Type: Bricolage Grotesque (display) and Figtree (text), self-hosted, OFL.
+
+Images: the sample visuals (scenes, merch, mailers, ads, deal pages and the home page map) are flat illustrations and layouts drawn in code (SVG or HTML and CSS, rasterised with Playwright). That includes `kit-tins-b*`, the Keepsake tins tile on /marketing-kits: a code-drawn illustration of Integrative Wellness sample tins, not a photo. The photos and video on the site are the owner's own (`grace-*` and `kit-tins.*` / `kit-tins-640.*`) plus the blurred `mockup-*` campaign mockups. `kit-tins.*` is the owner's unedited photo of gift tins we branded for Grace Pediatrics, with the practice's own labels; it is captioned as Grace work on the home page and the /marketing-kits hero. Keep it unedited: never paste sample labels onto it. The QR codes inside the sample illustrations are real and open `/estimate?ref=sample-mailer` (the review stand opens `/review-tags?ref=sample-stand`).
+
+Share image: every page's `og:image` is `assets/img/og-community.jpg` (1200 x 630). Social platforms cache link previews by image URL, so when the share image changes, save it under a new file name and update `og:image` on every page, then re-scrape the home page in the Facebook Sharing Debugger and the LinkedIn Post Inspector. `og.jpg` holds the same art so older links to that path show the current image.
+
+Favicons: `favicon.ico` (16, 32 and 48 px), `assets/favicon.svg`, `apple-touch-icon.png` and `site.webmanifest` (with `assets/icon-192.png` and `assets/icon-512.png`) are linked from every page. `assets/favicon-32.png` and `assets/favicon-180.png` are no longer linked but stay, with the new mark, for old cached pages that still point at them; `assets/favicon-16.png` and `assets/favicon-48.png` are spare PNG copies of the sizes inside `favicon.ico`.
 
 ## Tests
 
@@ -56,6 +62,8 @@ No dependencies are needed for the unit tests (Node 18+):
 node --test
 ```
 
-This runs `tests/estimate.test.mjs`, which covers the form validators in `assets/estimate.js`.
+This runs both unit test files:
+- `tests/estimate.test.mjs` covers the form validators in `assets/estimate.js`.
+- `tests/assets.test.mjs` guards the static assets: every local file a page references (src, srcset, data-zoom, poster, file hrefs, og:image) exists, every page links the root-absolute favicon set, the manifest icons match their declared sizes, the favicon PNGs are real artwork and not near-black squares, and the removed AI hero images stay gone.
 
 `tests/e2e-estimate.mjs` is a Playwright end-to-end check of the form. It needs a local server and Playwright; every form POST is intercepted, so nothing is ever submitted. It refuses to run against the production domain.
