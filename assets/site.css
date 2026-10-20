@@ -593,6 +593,8 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 .svc-hero h1 em{font-style:normal;color:var(--gold-lg)}
 .svc-hero .media{align-items:center}
 .svc-hero-art .shot img{width:100%}
+/* a portrait photo in a one-column hero would fill the content width and push its caption below the fold */
+@media (max-width:899.98px){.svc-hero-portrait{max-width:440px}}
 
 .related{list-style:none;display:flex;flex-wrap:wrap;gap:14px 26px}
 .related .textlink{white-space:nowrap}
@@ -659,6 +661,16 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 
 /* phones: the Neighborhoods label would sit on the temple; the list under the map still names it */
 @media (max-width:767.98px){.tp-homes{display:none!important}}
+/* the Community center chip hangs below its building at every width, so it leaves the festival tents and their dot in view
+   (above the building it covered the tents on small desktops, where the map shrinks but the chips keep their size) */
+.tp-cc{transform:translate(-50%,0);margin-top:6px}
+.tp-cc::after{top:-5px;bottom:auto;transform:translateX(-50%) rotate(225deg)}
+.js .tp-cc{animation-name:tpInBelow}
+/* phones: the Local shops chip sits a little right of its pointer so it clears the third house */
+@media (max-width:767.98px){
+  .tp-shops{margin-left:8px}.tp-shops::after{left:calc(50% - 8px)}
+}
+@keyframes tpInBelow{from{opacity:0;transform:translate(-50%,-20%)}to{opacity:1;transform:translate(-50%,0)}}
 /* the CSS drop-shadow filter on the transparent town image clipped into a visible box in Chromium;
    a soft ground shadow under the tile gives the same lift without the artifact */
 .town-img{filter:none}
@@ -1062,8 +1074,10 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 .cu-art{position:relative;margin:0;aspect-ratio:4/3;border-radius:14px;overflow:hidden;background:linear-gradient(160deg,#FBFCFA,#E6EDE5);border:1px solid var(--line-soft);display:flex;align-items:center;justify-content:center;padding:46px 10% 26px}
 .cu-art picture{display:contents}
 .cu-art img{width:auto;height:auto;max-width:100%;max-height:100%;border-radius:4px;box-shadow:0 1px 2px rgba(28,58,44,.10),0 16px 28px -16px rgba(28,58,44,.4)}
-.cu-art.cu-photo{padding:0;background:var(--stone)}
-.cu-art.cu-photo img{width:100%;height:100%;max-width:none;max-height:none;object-fit:cover;border-radius:0;box-shadow:none}
+/* square illustrations (the event table): less padding, so the scene reads at the same weight as the cards beside it */
+.cu-art.cu-sq{padding:16px 10%}
+/* portrait pieces (the flyer and the social ad): height is their limit in a 4:3 tile, so trim the top and bottom padding */
+.cu-art.cu-tall{padding:12px 10%}
 @media (max-width:599.98px){.cu-art{max-width:460px}}
 
 .cu-grid .mock{position:relative}
