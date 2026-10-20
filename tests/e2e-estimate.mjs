@@ -287,7 +287,7 @@ await scenario('double-click sends exactly one POST; success shows #sent and mov
 await scenario('server error keeps the data, shows an alert with the phone number, re-enables the button', async () => {
   const { page, posts, close, ctl } = await open({ respond: 500 });
   await fillValid(page, { '#notes': 'Spring opening in Oak Park.' });
-  await page.selectOption('#budget', '$2,500 – $5,000');
+  await page.selectOption('#budget', '$2,500 to $5,000');
   await page.click('#submit');
   await page.waitForSelector('#alert .est-fail');
   assert.equal(posts.length, 1);
@@ -298,7 +298,7 @@ await scenario('server error keeps the data, shows an alert with the phone numbe
   for (const [sel, val] of Object.entries({ ...VALID, '#notes': 'Spring opening in Oak Park.' })) {
     assert.equal(await page.inputValue(sel), val, `${sel} kept`);
   }
-  assert.equal(await page.inputValue('#budget'), '$2,500 – $5,000');
+  assert.equal(await page.inputValue('#budget'), '$2,500 to $5,000');
   const btn = await page.$eval('#submit', (b) => ({ disabled: b.disabled, busy: b.hasAttribute('aria-busy'), text: b.textContent }));
   assert.deepEqual(btn, { disabled: false, busy: false, text: 'Request My Free Snapshot' });
 
