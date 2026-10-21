@@ -50,11 +50,12 @@ const form = html.slice(html.indexOf(formOpen), html.indexOf('</form>', html.ind
 /* ---------- the page ---------- */
 describe('home page: head', () => {
   test('title, description and share image', () => {
-    assert.match(html, /<title>Patient Dinners for Med Spas \| Our Wellness Optimization<\/title>/);
+    assert.match(html, /<title>Your Best Patients Bring the Next Ones \| Patient Dinners for Med Spas<\/title>/);
     const metas = tags(html, 'meta');
     const meta = (key, val) => metas.find((t) => attr(t, key) === val);
     for (const [k, v] of [['name', 'description'], ['property', 'og:description'], ['name', 'twitter:description']]) {
       const content = decode(attr(meta(k, v), 'content'));
+      assert.ok(content.startsWith('Your best patients bring the next ones. '), `${v} leads with the headline idea`);
       assert.match(content, /patient dinners/i, `${v} mentions patient dinners`);
       assert.match(content, /med spas/i, `${v} mentions med spas`);
       assert.match(content, /western suburbs/i, `${v} names the area`);
@@ -78,20 +79,26 @@ describe('home page: head', () => {
 });
 
 describe('home page: hero', () => {
-  test('h1 is exactly "Marketing targeted to your community."', () => {
+  test('h1 is exactly "Your best patients bring the next ones."', () => {
     const h1s = [...html.matchAll(/<h1\b[^>]*>([\s\S]*?)<\/h1>/g)];
     assert.equal(h1s.length, 1, 'one h1');
-    assert.equal(h1s[0][1], 'Marketing targeted to <em>your community.</em>');
-    assert.equal(text(h1s[0][1]), 'Marketing targeted to your community.');
+    assert.equal(h1s[0][1], 'Your best patients <em>bring the next ones.</em>');
+    assert.equal(text(h1s[0][1]), 'Your best patients bring the next ones.');
+  });
+
+  test('the eyebrow above the h1 stays', () => {
+    const hero = html.slice(html.indexOf('<section class="hero'), html.indexOf('<h1'));
+    assert.match(text(hero), /Patient dinners for independent med spas\s*$/i);
   });
 
   test('the old "demographic and community" wording is gone', () => {
     assert.doesNotMatch(html, /demographic/i);
   });
 
-  test('lede opens with the brief line, then says what we do', () => {
+  test('lede says what we do, without repeating the h1', () => {
     const lede = text(/<p class="lede">([\s\S]*?)<\/p>/.exec(html)[1]);
-    assert.ok(lede.startsWith('Your best patients bring the next ones. '), lede);
+    assert.doesNotMatch(lede, /bring the next ones/i, 'the h1 line is not said twice');
+    assert.ok(lede.startsWith('We plan and run '), lede);
     assert.match(lede, /private restaurant dinners for independent med spas/);
     assert.match(lede, /referral network around your clinic/);
   });
@@ -256,15 +263,34 @@ describe('home page: sections', () => {
     assert.match(answers[1], /can't promise a number/, 'no turnout promise');
   });
 
-  test('the only image in the content is the dinner illustration, labelled as an illustration', () => {
+  test('content images: the dinner illustration, and the Grace Pediatrics photo as client proof', () => {
     const imgs = tags(main, 'img');
     const content = imgs.filter((t) => !/class="town-img"/.test(t));
-    assert.equal(content.length, 1);
-    assert.equal(attr(content[0], 'src'), 'assets/img/dinner-table.svg');
+    assert.deepEqual(content.map((t) => attr(t, 'src')), ['assets/img/dinner-table.svg', 'assets/img/kit-tins-640.jpg']);
     assert.match(attr(content[0], 'alt'), /^Illustration of a restaurant table set for a private dinner/);
     const cap = /<figure class="dn-illus">[\s\S]*?<figcaption[^>]*>([\s\S]*?)<\/figcaption>/.exec(main);
     assert.equal(text(cap[1]), 'Illustration');
-    assert.doesNotMatch(main, /<video\b|grace/i, 'Grace Pediatrics content is off the home page');
+    assert.match(attr(content[1], 'alt'), /Grace Pediatrics/);
+    assert.doesNotMatch(main, /<video\b/i, 'no video on the home page');
+  });
+
+  test('Grace Pediatrics appears once, in Who we are, as community marketing proof', () => {
+    const who = main.slice(main.indexOf('id="who"'), main.indexOf('id="add-ons"'));
+    const proof = /<figure class="dn-proof">[\s\S]*?<figcaption>([\s\S]*?)<\/figcaption>/.exec(who);
+    assert.ok(proof, 'the client work figure sits in #who');
+    assert.equal(text(proof[1]), 'Client work: Grace Pediatrics in Glendale Heights. We ran its community marketing: flyers for local families, branded gift tins, an event table and QR codes that track every scan.');
+    assert.doesNotMatch(text(proof[1]), /\d|dinner/i, 'no numbers or results, and not called a dinner');
+    assert.match(text(who), /None has been held yet/, 'still says no dinner has been held');
+    const outside = main.replace(who, '');
+    assert.doesNotMatch(outside, /grace/i, 'Grace appears only in Who we are');
+  });
+
+  test('referral network: mutual promotion only, nothing paid per patient or client', () => {
+    const addons = text(main.slice(main.indexOf('id="add-ons"'), main.indexOf('id="faq"')));
+    assert.ok(addons.includes('Partners promote each other. Nobody is paid per patient.'), 'the no-payment note');
+    for (const k of ['Introductions.', 'Cross-promotion.', 'Referral cards with their own code.']) assert.ok(addons.includes(k), k);
+    assert.doesNotMatch(text(main), /commission|referral fee|finder'?s fee|kickback|reward|bounty|earns?\b|per (client|referral|referred)|what each one sends/i);
+    assert.equal((text(main).match(/\bpaid\b/gi) || []).length, 1, '"paid" appears only in the no-payment note');
   });
 
   test('no invented proof: no testimonials, ratings, statistics or "as seen on"', () => {

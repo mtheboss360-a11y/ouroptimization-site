@@ -417,7 +417,6 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 @media (min-width:960px){.hero-town h1{font-size:clamp(2.9rem,5.9vw - .25rem,3.9rem)}}
 .hero-town h1 em{font-style:normal;color:var(--gold-lg)}
 /* two-column hero: "your community." stays on one line */
-@media (min-width:960px){.hero-town h1 em{white-space:nowrap}}
 .hero-town .eyebrow{margin-bottom:18px}
 @media (min-width:960px){.hero-town .hero-grid{grid-template-columns:.95fr 1.05fr}.hero-town .hero-art{max-width:600px;width:100%;margin-right:0}}
 .town{position:relative}
@@ -634,9 +633,8 @@ a[href^="tel:"],.nowrap{white-space:nowrap}
 .dn-page .bg-stone h2 em,.dn-privacy h3 em{color:var(--gold-sm)}
 
 /* ---------- hero: the opening line of the lede ---------- */
-.dn-lead{display:block;margin-bottom:10px;font:600 clamp(1.3rem,1.12rem + .75vw,1.62rem)/1.25 var(--display);letter-spacing:-.018em;color:var(--ink)}
 .hero-town .lede{max-width:34em}
-.hero-town .eyebrow,.dn-lead,.dn-cherry-line,.dn-both-say{text-wrap:balance}
+.hero-town .eyebrow,.dn-cherry-line,.dn-both-say{text-wrap:balance}
 /* a short accent phrase stays together, on its own line when the heading wraps */
 .dn-keep{display:inline-block}
 /* ...or always starts its own line */
@@ -744,6 +742,11 @@ a[href^="tel:"],.nowrap{white-space:nowrap}
 .dn-who .spec{margin-top:0}
 .dn-who .spec li{font-size:1rem;line-height:1.55}
 .dn-who .spec li span{min-width:0}
+.dn-proof{margin:26px 0 0;display:grid;grid-template-columns:minmax(96px,34%) 1fr;gap:18px;align-items:start;padding:16px;border-radius:16px;background:var(--paper);border:1px solid var(--line)}
+@media (min-width:900px){.dn-proof{grid-template-columns:180px 1fr;max-width:520px}}
+.dn-proof-img img{display:block;width:100%;height:auto;border-radius:10px}
+.dn-proof figcaption{font:400 .97rem/1.6 var(--sans);color:var(--ink-2)}
+.dn-proof figcaption strong{color:var(--ink);font-weight:650}
 .dn-contact{margin-top:24px;padding:22px 24px;border-radius:16px;background:var(--paper);border:1px solid var(--line)}
 .dn-contact-name{margin-top:6px;font:650 1.6rem/1.15 var(--display);letter-spacing:-.02em;color:var(--ink)}
 .dn-contact ul{list-style:none;margin-top:8px;display:flex;flex-wrap:wrap;gap:0 26px}

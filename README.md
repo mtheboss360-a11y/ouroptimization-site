@@ -25,7 +25,7 @@ Forms use **Netlify Forms** (no function, no secrets):
 
 | Page | Purpose |
 |---|---|
-| `index.html` | Home. Community map hero ("Marketing targeted to your community.", opening with "Your best patients bring the next ones."), then `#formats` (the two dinners and the price card), `#how` (plan, invitations, the night, the follow-up), `#handle` (what we handle, and "Your patient list stays yours. We never see it."), `#who` (who we are), `#add-ons` (`#referrals` referral network, then flyer drops, then Google Ads last), `#faq` (seven questions) and `#call` (the `dinner-call` form). |
+| `index.html` | Home. Community map hero (h1 "Your best patients bring the next ones." under the eyebrow "Patient dinners for independent med spas"), then `#formats` (the two dinners and the price card), `#how` (plan, invitations, the night, the follow-up), `#handle` (what we handle, and "Your patient list stays yours. We never see it."), `#who` (who we are), `#add-ons` (`#referrals` referral network, then flyer drops, then Google Ads last), `#faq` (seven questions) and `#call` (the `dinner-call` form). |
 | `thanks.html` | Thank-you page the call form posts to. `noindex`, not in the sitemap. |
 | `website-design.html` | Website redesign. CTAs go to `/?about=website-design#call`. |
 | `review-tags.html` | Tap-to-review NFC tags (QR on the same piece) that open the client's own Google review link, with the review rules (ask everyone, no incentives, no staff reviews). CTAs go to `/?about=review-tags#call`. |
@@ -63,7 +63,8 @@ Older redirects point straight at their final target, with no chains: `/who-its-
 - The clinic sends invitations from its own list. We never receive, see or keep its patient list. Guests reply on an RSVP page in the clinic's name.
 - Referral network: we find the businesses near a clinic using mapping software and local business data (describe it only that way: no named platform, database size or accuracy claim), then set up, or help the clinic set up, the network. Partnerships are introductions and cross-promotion, with referral cards that carry each partner's own code. Nobody is paid per patient (medical fee-splitting rules).
 - No em or en dashes in visible copy or alt text. Plain hyphens inside words (Plus-One, 15-minute) are fine.
-- The only photo on the home page is a placeholder until a real dinner has been photographed, and it is never captioned as one of our events. Today it is an illustration drawn in code (`assets/img/dinner-table.svg`, captioned "Illustration").
+- The dinner image on the home page is a placeholder until a real dinner has been photographed, and it is never captioned as one of our events. Today it is an illustration drawn in code (`assets/img/dinner-table.svg`, captioned "Illustration").
+- The only photo is client proof in `#who`: the owner's unedited Grace Pediatrics gift-tin photo (`kit-tins.*`, `kit-tins-640.*`) beside the line about the community marketing we ran for Grace Pediatrics. It is never called a dinner and carries no numbers or results.
 
 ## Images
 
@@ -71,7 +72,7 @@ Visuals are drawn in code (SVG or HTML and CSS, rasterised with Playwright where
 
 Share image: `assets/img/og-dinners.jpg` (1200 x 630) on every page that has share tags. Social platforms cache link previews by image URL, so when the share image changes, save it under a new file name and update `og:image` on every page, then re-scrape the home page in the Facebook Sharing Debugger and the LinkedIn Post Inspector. `og-community.jpg` and `og.jpg` are byte-for-byte copies of `og-dinners.jpg`, so links shared before October 2026 (which still point at those names) show the new art once a platform re-scrapes them.
 
-Images used only by the retired pages, the old hero (`hero-community.svg`) and the Grace Pediatrics photos and video were deleted in October 2026. `assets/img` holds only what a kept page uses: `hero-map.svg`, `dinner-table.svg`, `owo-logo.png`, the share images, and the `review-tag*` and `website-redesign*` illustrations.
+Images used only by the retired pages, the old hero (`hero-community.svg`) and the other Grace Pediatrics photos and video were deleted in October 2026. `assets/img` holds only what a kept page uses: `hero-map.svg`, `dinner-table.svg`, the Grace Pediatrics gift-tin photo (`kit-tins*`), `owo-logo.png`, the share images, and the `review-tag*` and `website-redesign*` illustrations.
 
 Type: Bricolage Grotesque (display) and Figtree (text), self-hosted, OFL. Shared UI lives in `assets/site.css`; shared behaviour (contact email, header, menu, reveal) in `assets/site.js`. `site.js` also catches an old link whose query string a redirect left after the fragment (`/#call?package=website`): it moves the query in front of the `#` and opens the section. Still check `/estimate?package=website` on a Netlify deploy preview.
 
