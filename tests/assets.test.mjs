@@ -35,7 +35,7 @@ const KEPT = ['404.html', 'expo-vendors.html', 'index.html', 'privacy.html', 're
 const RETIRED = {
   'how-it-works': '/#how', services: '/', 'community-marketing': '/#referrals', 'custom-marketing': '/#add-ons',
   'digital-marketing': '/#add-ons', industries: '/', examples: '/', estimate: '/#call', 'market-research': '/#referrals',
-  'direct-mail': '/#add-ons', events: '/#formats', flyers: '/#add-ons', 'marketing-kits': '/#handle', seo: '/#add-ons',
+  'direct-mail': '/#add-ons', events: '/#formats', flyers: '/#flyer-drops', 'marketing-kits': '/#handle', seo: '/#add-ons',
   'google-ads': '/#add-ons', 'social-media': '/#add-ons', groupon: '/#add-ons', 'gift-cards': '/#add-ons', tracking: '/#handle',
   'sample-advertisements': '/', faq: '/#faq'
 };

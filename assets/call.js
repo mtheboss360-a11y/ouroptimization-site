@@ -11,10 +11,11 @@
   var ORDER = ['name', 'clinic', 'phone', 'email', 'town', 'best_time', 'dinner', 'message'];
   var MAX = { name: 120, clinic: 150, phone: 30, email: 254, town: 120, best_time: 60, message: 2000 };
 
-  /* Links from other pages: /?about=website-design#call and /?about=review-tags#call */
+  /* Links from other pages and sections: /?about=website-design#call, /?about=review-tags#call, /?about=flyer-drops#call */
   var ABOUT = {
     'website-design': "I'm asking about a website redesign.",
-    'review-tags': "I'm asking about review tags."
+    'review-tags': "I'm asking about review tags.",
+    'flyer-drops': "I'm asking about flyer drops."
   };
 
   function str(v) { return v == null ? '' : String(v); }

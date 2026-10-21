@@ -213,13 +213,13 @@
 # /flyers
 [[redirects]]
   from = "/flyers"
-  to = "/#add-ons"
+  to = "/#flyer-drops"
   status = 301
   force = true
 
 [[redirects]]
   from = "/flyers.html"
-  to = "/#add-ons"
+  to = "/#flyer-drops"
   status = 301
   force = true
 
