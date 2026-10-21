@@ -191,15 +191,15 @@ describe('home page: sections', () => {
     assert.match(formats, /It is a sales evening, and we say so\./);
   });
 
-  test('the price sentence is exact, with its conditions', () => {
-    const sentence = 'From $2,000 per dinner, restaurant and food included.';
+  test('no price figure: the card and the FAQ explain how pricing works instead', () => {
     const formats = text(byId(html, 'formats'));
-    assert.ok(formats.includes(sentence), 'price card');
-    assert.ok(text(byId(html, 'faq')).includes(sentence), 'FAQ answer');
-    for (const line of ['Upscale venues are quoted separately.', 'The price is fixed in writing before you commit.', 'No monthly contract.']) {
+    for (const line of ['No surprises', 'One fixed quote per dinner.', 'Restaurant and food included.', 'Quoted for your clinic after the 15-minute call.', 'The price is fixed in writing before you commit.', 'No monthly contract.']) {
       assert.ok(formats.includes(line), line);
     }
-    assert.equal((text(main).match(/\$[\d,]+/g) || []).filter((p) => p !== '$2,000').length, 0, 'no other prices');
+    const faq = text(byId(html, 'faq'));
+    assert.match(faq, /We quote it for your clinic after the 15-minute call/);
+    assert.doesNotMatch(text(html), /\$\s?\d|\b\d[\d,]*\s?(dollars|usd)\b|\bfrom \$|per dinner, restaurant/i, 'no dollar amounts anywhere on the home page');
+    assert.doesNotMatch(html, /2,000/, 'the old price is gone from the markup too');
   });
 
   test('how it works: four steps, plan, invitations, the night, the follow-up', () => {

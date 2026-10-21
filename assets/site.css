@@ -669,8 +669,7 @@ a[href^="tel:"],.nowrap{white-space:nowrap}
 .dn-price{background:var(--ink);color:#C3D2C6;box-shadow:0 30px 60px -38px rgba(28,58,44,.6)}
 .dn-price .dn-k{color:var(--gold-bright)}
 .dn-price-line{margin-top:16px;font:500 1.05rem/1.5 var(--sans);color:#DCE6DE}
-.dn-price-big{display:block;margin-bottom:8px;font:650 clamp(2.6rem,2.1rem + 1.8vw,3.4rem)/1 var(--display);letter-spacing:-.035em;color:var(--ground);white-space:nowrap}
-.dn-price-from{font:600 1rem/1 var(--sans);letter-spacing:.01em;color:var(--gold-bright)}
+.dn-price-head{display:block;margin-bottom:8px;font:650 clamp(1.5rem,1.3rem + .8vw,1.9rem)/1.15 var(--display);letter-spacing:-.02em;color:var(--ground);text-wrap:balance}
 .dn-price ul{list-style:none;margin-top:22px;border-top:1px solid rgba(243,246,242,.16)}
 .dn-price li{display:flex;align-items:flex-start;gap:11px;padding:11px 0;border-bottom:1px solid rgba(243,246,242,.16);font-size:.95rem;line-height:1.45;color:var(--ground)}
 .dn-price li svg{width:18px;height:18px;flex:none;margin-top:2px;color:var(--gold-bright)}

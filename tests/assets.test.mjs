@@ -418,7 +418,8 @@ describe('legal pages', () => {
   test('terms describe the dinners and today\'s forms, not the retired services', () => {
     const t = visible('terms.html');
     assert.doesNotMatch(t, /demographic|Digital Growth Package|Groupon|Meta\b|Strategy Meeting|direct.mail|across the United States/i);
-    assert.match(t, /From \$2,000 per dinner, restaurant and food included\./);
+    assert.match(t, /Each dinner is quoted for your clinic, with the restaurant and food included\./);
+    assert.doesNotMatch(t, /\$\s?\d/, 'no price figures in the terms');
     assert.match(t, /Chicago's western suburbs/);
     assert.match(t, /Book a 15-minute call/);
     assert.match(t, /Last updated: October 21, 2026/);
