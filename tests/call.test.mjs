@@ -60,7 +60,7 @@ describe('home page: head', () => {
       assert.match(content, /med spas/i, `${v} mentions med spas`);
       assert.match(content, /western suburbs/i, `${v} names the area`);
     }
-    assert.equal(attr(meta('property', 'og:image'), 'content'), 'https://ouroptimization.com/assets/img/og-dinners.jpg');
+    assert.equal(attr(meta('property', 'og:image'), 'content'), 'https://ouroptimization.com/assets/img/og-best-patients.jpg');
     assert.equal(attr(meta('property', 'og:image:width'), 'content'), '1200');
     assert.equal(attr(meta('property', 'og:image:height'), 'content'), '630');
     assert.ok(attr(meta('property', 'og:image:alt'), 'content').length > 20, 'og:image:alt is descriptive');
