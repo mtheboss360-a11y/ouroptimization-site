@@ -1,7 +1,8 @@
-# OUR Optimization — static site, no build step.
-# The campaign-estimate form is handled by Netlify Forms (data-netlify="true" in
-# estimate.html): submissions appear under Forms in the Netlify UI, and email
-# alerts are set in Site configuration > Notifications > Form submission notifications.
+# OUR Optimization: static site, no build step.
+# Two Netlify Forms (data-netlify="true" in the static HTML): "dinner-call" on the home
+# page (index.html, #call, posts to /thanks) and "expo-vendor" on expo-vendors.html.
+# Submissions appear under Forms in the Netlify UI, and email alerts are set in
+# Site configuration > Notifications > Form submission notifications.
 [build]
   publish = "."
 
@@ -24,108 +25,11 @@
   [headers.values]
     Content-Type = "application/manifest+json"
 
-# "Who it's for" became "Industries" in the 2026 repositioning; keep old links working.
-[[redirects]]
-  from = "/who-its-for"
-  to = "/industries"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/who-its-for.html"
-  to = "/industries"
-  status = 301
-  force = true
-
-# --- URL standardization (generated) ---
-# Extensionless URLs are canonical; old .html links 301 to the clean URL.
+# --- URL standardization ---
+# Extensionless URLs are canonical; old .html links of kept pages 301 to the clean URL.
 [[redirects]]
   from = "/index.html"
   to = "/"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/how-it-works.html"
-  to = "/how-it-works"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/services.html"
-  to = "/services"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/community-marketing.html"
-  to = "/community-marketing"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/custom-marketing.html"
-  to = "/custom-marketing"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/digital-marketing.html"
-  to = "/digital-marketing"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/industries.html"
-  to = "/industries"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/examples.html"
-  to = "/examples"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/estimate.html"
-  to = "/estimate"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/market-research.html"
-  to = "/market-research"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/direct-mail.html"
-  to = "/direct-mail"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/events.html"
-  to = "/events"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/flyers.html"
-  to = "/flyers"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/marketing-kits.html"
-  to = "/marketing-kits"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/seo.html"
-  to = "/seo"
   status = 301
   force = true
 
@@ -142,48 +46,6 @@
   force = true
 
 [[redirects]]
-  from = "/google-ads.html"
-  to = "/google-ads"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/social-media.html"
-  to = "/social-media"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/groupon.html"
-  to = "/groupon"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/gift-cards.html"
-  to = "/gift-cards"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/tracking.html"
-  to = "/tracking"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/sample-advertisements.html"
-  to = "/sample-advertisements"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/faq.html"
-  to = "/faq"
-  status = 301
-  force = true
-
-[[redirects]]
   from = "/privacy.html"
   to = "/privacy"
   status = 301
@@ -195,16 +57,320 @@
   status = 301
   force = true
 
-# The old direct-mail ad landing page was retired in the 2026 cohesion pass.
+[[redirects]]
+  from = "/thanks.html"
+  to = "/thanks"
+  status = 301
+  force = true
+
+# --- Retired pages (October 2026: the site now sells private patient dinners for med spas) ---
+# Each old service page 301s, with and without .html, straight to the home page or the
+# closest home page section. The .html files are deleted. Point new rules at the final
+# target, never at another redirected path, so there are no chains.
+# /how-it-works
+[[redirects]]
+  from = "/how-it-works"
+  to = "/#how"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/how-it-works.html"
+  to = "/#how"
+  status = 301
+  force = true
+
+# /services
+[[redirects]]
+  from = "/services"
+  to = "/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/services.html"
+  to = "/"
+  status = 301
+  force = true
+
+# /community-marketing
+[[redirects]]
+  from = "/community-marketing"
+  to = "/#referrals"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/community-marketing.html"
+  to = "/#referrals"
+  status = 301
+  force = true
+
+# /custom-marketing
+[[redirects]]
+  from = "/custom-marketing"
+  to = "/#add-ons"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/custom-marketing.html"
+  to = "/#add-ons"
+  status = 301
+  force = true
+
+# /digital-marketing
+[[redirects]]
+  from = "/digital-marketing"
+  to = "/#add-ons"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/digital-marketing.html"
+  to = "/#add-ons"
+  status = 301
+  force = true
+
+# /industries
+[[redirects]]
+  from = "/industries"
+  to = "/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/industries.html"
+  to = "/"
+  status = 301
+  force = true
+
+# /examples
+[[redirects]]
+  from = "/examples"
+  to = "/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/examples.html"
+  to = "/"
+  status = 301
+  force = true
+
+# /estimate
+[[redirects]]
+  from = "/estimate"
+  to = "/#call"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/estimate.html"
+  to = "/#call"
+  status = 301
+  force = true
+
+# /market-research
+[[redirects]]
+  from = "/market-research"
+  to = "/#referrals"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/market-research.html"
+  to = "/#referrals"
+  status = 301
+  force = true
+
+# /direct-mail
+[[redirects]]
+  from = "/direct-mail"
+  to = "/#add-ons"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/direct-mail.html"
+  to = "/#add-ons"
+  status = 301
+  force = true
+
+# /events
+[[redirects]]
+  from = "/events"
+  to = "/#formats"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/events.html"
+  to = "/#formats"
+  status = 301
+  force = true
+
+# /flyers
+[[redirects]]
+  from = "/flyers"
+  to = "/#add-ons"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/flyers.html"
+  to = "/#add-ons"
+  status = 301
+  force = true
+
+# /marketing-kits
+[[redirects]]
+  from = "/marketing-kits"
+  to = "/#handle"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/marketing-kits.html"
+  to = "/#handle"
+  status = 301
+  force = true
+
+# /seo
+[[redirects]]
+  from = "/seo"
+  to = "/#add-ons"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/seo.html"
+  to = "/#add-ons"
+  status = 301
+  force = true
+
+# /google-ads
+[[redirects]]
+  from = "/google-ads"
+  to = "/#add-ons"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/google-ads.html"
+  to = "/#add-ons"
+  status = 301
+  force = true
+
+# /social-media
+[[redirects]]
+  from = "/social-media"
+  to = "/#add-ons"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/social-media.html"
+  to = "/#add-ons"
+  status = 301
+  force = true
+
+# /groupon
+[[redirects]]
+  from = "/groupon"
+  to = "/#add-ons"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/groupon.html"
+  to = "/#add-ons"
+  status = 301
+  force = true
+
+# /gift-cards
+[[redirects]]
+  from = "/gift-cards"
+  to = "/#add-ons"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/gift-cards.html"
+  to = "/#add-ons"
+  status = 301
+  force = true
+
+# /tracking
+[[redirects]]
+  from = "/tracking"
+  to = "/#handle"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/tracking.html"
+  to = "/#handle"
+  status = 301
+  force = true
+
+# /sample-advertisements
+[[redirects]]
+  from = "/sample-advertisements"
+  to = "/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/sample-advertisements.html"
+  to = "/"
+  status = 301
+  force = true
+
+# /faq
+[[redirects]]
+  from = "/faq"
+  to = "/#faq"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/faq.html"
+  to = "/#faq"
+  status = 301
+  force = true
+
+# Older retired URLs, pointed straight at their final target.
+# "Who it's for" became "Industries" in the 2026 repositioning; Industries is now retired too.
+[[redirects]]
+  from = "/who-its-for"
+  to = "/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/who-its-for.html"
+  to = "/"
+  status = 301
+  force = true
+
+# The old direct-mail ad landing page (retired in the 2026 cohesion pass); direct mail is now retired too.
 [[redirects]]
   from = "/landing"
-  to = "/direct-mail"
+  to = "/#add-ons"
   status = 301
   force = true
 
 [[redirects]]
   from = "/landing.html"
-  to = "/direct-mail"
+  to = "/#add-ons"
+  status = 301
+  force = true
+
+# Short link for sharing: /meeting opens the call request form on the home page.
+[[redirects]]
+  from = "/meeting"
+  to = "/#call"
   status = 301
   force = true
 
@@ -224,12 +390,6 @@
   from = "/netlify.toml"
   to = "/404.html"
   status = 404
-  force = true
-# Short link for sharing: /meeting opens the strategy-meeting request form.
-[[redirects]]
-  from = "/meeting"
-  to = "/estimate"
-  status = 301
   force = true
 
 # Baby & Kids Health Expo practice sign-up (Netlify form "expo-vendor"). /vendors is the short link.

@@ -1,11 +1,14 @@
 // Guard tests for the site's static assets: every local file a page points at exists,
-// every page carries the favicon set, removed images stay removed, and the favicons
-// are real artwork (the old ones had decayed into near-solid black squares).
+// every page carries the favicon set, removed images and deleted files stay removed, the
+// favicons are real artwork (the old ones had decayed into near-solid black squares), and the
+// retired service pages (October 2026) stay retired: each has a forced 301 in netlify.toml,
+// no kept page links to one, and the sitemap lists only the kept, indexable pages.
 // Zero dependencies: node:test + node:assert + node:zlib. Run from the repo root: node --test
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, readdirSync, existsSync, statSync } from 'node:fs';
 import { inflateSync } from 'node:zlib';
+import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
 
@@ -25,6 +28,33 @@ const FAVICON_LINKS = [
 // AI-generated images that were removed. Nothing may link to them again.
 const REMOVED = ['assets/img/hero-town.png', 'assets/img/hero-town.webp', 'assets/img/hero-town-700.webp'];
 
+// The pages the site keeps after the October 2026 patient dinner rebuild.
+const KEPT = ['404.html', 'expo-vendors.html', 'index.html', 'privacy.html', 'review-tags.html', 'terms.html', 'thanks.html', 'website-design.html'];
+
+// Retired service pages and the home page section each one now 301s to (with and without .html).
+const RETIRED = {
+  'how-it-works': '/#how', services: '/', 'community-marketing': '/#referrals', 'custom-marketing': '/#add-ons',
+  'digital-marketing': '/#add-ons', industries: '/', examples: '/', estimate: '/#call', 'market-research': '/#referrals',
+  'direct-mail': '/#add-ons', events: '/#formats', flyers: '/#add-ons', 'marketing-kits': '/#handle', seo: '/#add-ons',
+  'google-ads': '/#add-ons', 'social-media': '/#add-ons', groupon: '/#add-ons', 'gift-cards': '/#add-ons', tracking: '/#handle',
+  'sample-advertisements': '/', faq: '/#faq'
+};
+
+// Files deleted with the retired pages (the old strategy meeting form, its script and its tests).
+const DELETED = ['assets/estimate.js', 'tests/estimate.test.mjs', 'tests/e2e-estimate.mjs', ...Object.keys(RETIRED).map((n) => `${n}.html`)];
+
+/* The [[redirects]] rules in netlify.toml, as { from, to, status, force }. */
+function redirects() {
+  return read('netlify.toml').split(/^\[\[redirects\]\]\s*$/m).slice(1).map((block) => {
+    const body = block.split(/^\[/m)[0];
+    const get = (key) => { const m = new RegExp(`^\\s*${key}\\s*=\\s*(?:"([^"]*)"|(\\S+))`, 'm').exec(body); return m ? (m[1] ?? m[2]) : null; };
+    return { from: get('from'), to: get('to'), status: Number(get('status') ?? 301), force: get('force') === 'true' };
+  });
+}
+/* Netlify-style match: a splat (*) matches anything, and a trailing slash is ignored. */
+const matchesRule = (pattern, path) => new RegExp(`^${pattern.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*')}/?$`).test(path);
+const pathOf = (url) => url.split(/[?#]/)[0] || '/';
+
 const attr = (tag, name) => {
   const m = new RegExp(`\\s${name}\\s*=\\s*(?:"([^"]*)"|'([^']*)')`, 'i').exec(tag);
   return m ? (m[1] ?? m[2]) : null;
@@ -41,11 +71,11 @@ function localPath(url) {
   return u;
 }
 
-/* Every local file URL a page references: src, srcset, data-zoom, poster, file hrefs. */
+/* Every local file URL a page references: src, srcset, poster, file hrefs. */
 function fileRefs(html) {
   const refs = [];
   for (const [tag] of html.matchAll(/<[a-z][^>]*>/gi)) {
-    for (const name of ['src', 'data-zoom', 'poster']) {
+    for (const name of ['src', 'poster']) {
       const v = attr(tag, name);
       if (v != null) refs.push(v);
     }
@@ -121,13 +151,12 @@ function tones(pixels) {
 }
 
 describe('local file references', () => {
-  test('pages were found', () => {
-    assert.ok(pages.length >= 20, `found ${pages.length} pages`);
-    assert.ok(pages.includes('404.html') && pages.includes('index.html'));
+  test('the kept pages were found', () => {
+    for (const page of KEPT) assert.ok(pages.includes(page), `${page} exists`);
   });
 
   for (const page of pages) {
-    test(`${page}: every src, srcset, data-zoom, poster, <source> and asset href exists`, () => {
+    test(`${page}: every src, srcset, poster, <source> and asset href exists`, () => {
       const refs = fileRefs(read(page));
       assert.ok(refs.length > 0, 'the page references local files');
       const missing = refs.filter((r) => !isFile(r.path)).map((r) => r.url);
@@ -158,10 +187,9 @@ describe('favicon set', () => {
   });
 
   test('netlify.toml has no redirect that would swallow the favicon files', () => {
-    const froms = [...read('netlify.toml').matchAll(/^\s*from\s*=\s*"([^"]+)"/gm)].map((m) => m[1]);
-    const matches = (pattern, path) => new RegExp(`^${pattern.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*')}$`).test(path);
+    const froms = redirects().map((r) => r.from);
     for (const { href } of FAVICON_LINKS) {
-      for (const from of froms) assert.ok(!matches(from, href), `redirect from "${from}" catches ${href}`);
+      for (const from of froms) assert.ok(!matchesRule(from, href), `redirect from "${from}" catches ${href}`);
     }
   });
 
@@ -225,5 +253,184 @@ describe('removed images', () => {
 
   test('the removed AI hero files are gone from the repo', () => {
     for (const removed of REMOVED) assert.ok(!isFile(removed), `${removed} is back`);
+  });
+});
+
+describe('retired pages', () => {
+  const rules = redirects();
+  const ruleFor = (path) => rules.find((r) => matchesRule(r.from, path));
+
+  test('the retired pages and their form script and tests are deleted', () => {
+    for (const file of DELETED) assert.ok(!isFile(file), `${file} is back`);
+  });
+
+  for (const [name, target] of Object.entries(RETIRED)) {
+    test(`/${name} and /${name}.html have a forced 301 to ${target}`, () => {
+      for (const path of [`/${name}`, `/${name}.html`]) {
+        const rule = ruleFor(path);
+        assert.ok(rule, `a redirect rule catches ${path}`);
+        assert.equal(rule.from, path, `${path} has its own rule`);
+        assert.equal(rule.to, target, `${path} target`);
+        assert.equal(rule.status, 301, `${path} status`);
+        assert.ok(rule.force, `${path} force = true`);
+      }
+    });
+  }
+
+  test('redirects go straight to their final target: no chains, no loops, no missing targets', () => {
+    for (const r of rules.filter((x) => x.status === 301)) {
+      const to = pathOf(r.to);
+      const hop = ruleFor(to);
+      assert.ok(!hop, `${r.from} -> ${r.to} chains into ${hop && hop.from} -> ${hop && hop.to}`);
+      const file = to === '/' ? 'index.html' : `${to.replace(/^\//, '')}.html`;
+      assert.ok(isFile(file), `${r.from} -> ${r.to}: ${file} exists`);
+    }
+  });
+
+  test('no redirect catches a kept page, the assets or the site files', () => {
+    const keep = ['/', '/expo-vendors', '/privacy', '/terms', '/review-tags', '/website-design', '/thanks', '/404.html',
+      '/assets/site.css', '/assets/site.js', '/assets/call.js', '/assets/favicon.svg', '/assets/img/owo-logo.png',
+      '/favicon.ico', '/apple-touch-icon.png', '/site.webmanifest', '/robots.txt', '/sitemap.xml'];
+    for (const path of keep) {
+      const rule = ruleFor(path);
+      assert.ok(!rule, `redirect from "${rule && rule.from}" catches ${path}`);
+    }
+  });
+
+  test('the expo sign-up links keep working', () => {
+    for (const path of ['/vendors', '/expo-vendors.html']) {
+      const rule = ruleFor(path);
+      assert.ok(rule && rule.to === '/expo-vendors' && rule.status === 301, `${path} -> /expo-vendors`);
+    }
+    assert.match(read('expo-vendors.html'), /<form name="expo-vendor"[^>]*data-netlify="true"/, 'the expo-vendor Netlify form');
+  });
+
+  for (const page of pages) {
+    test(`${page}: links no retired page`, () => {
+      const hrefs = [...read(page).matchAll(/<a\b[^>]*>/gi)].map(([tag]) => attr(tag, 'href')).filter((h) => h != null);
+      for (const href of hrefs) {
+        const path = localPath(href);
+        if (path === null) continue; // anchors on this page, mail, tel and other sites
+        const name = path.replace(/\.html$/, '').replace(/\/$/, '');
+        assert.ok(!Object.hasOwn(RETIRED, name), `${page} links ${href}, a retired page`);
+      }
+    });
+  }
+
+  test('no page, script or stylesheet references a deleted file', () => {
+    const sources = [...pages, 'assets/site.css', 'assets/site.js', 'site.webmanifest', 'sitemap.xml'];
+    if (isFile('assets/call.js')) sources.push('assets/call.js');
+    for (const file of sources) {
+      const text = read(file);
+      for (const deleted of DELETED.filter((d) => d.startsWith('assets/'))) assert.ok(!text.includes(deleted.split('/').pop()), `${file} references ${deleted}`);
+    }
+  });
+
+  test('sitemap.xml lists only the kept, indexable pages', () => {
+    const locs = [...read('sitemap.xml').matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
+    assert.deepEqual(locs.sort(), ['/', '/privacy', '/review-tags', '/terms', '/website-design'].map((p) => `https://ouroptimization.com${p}`).sort());
+    for (const loc of locs) {
+      const path = localPath(loc);
+      const file = path === '' ? 'index.html' : `${path}.html`;
+      assert.ok(isFile(file), `${loc}: ${file} exists`);
+      assert.doesNotMatch(read(file), /<meta name="robots" content="noindex"/, `${loc} is indexable`);
+    }
+  });
+});
+
+describe('image folder', () => {
+  // og.jpg and og-community.jpg are kept only as byte-for-byte copies of the current share image,
+  // so links shared before October 2026 (which still point at those names) show the new art.
+  const LEGACY_SHARE = ['og.jpg', 'og-community.jpg'];
+
+  test('assets/img holds only images a page, the stylesheet, a script or a site file uses', () => {
+    const text = [...KEPT, 'assets/site.css', 'assets/site.js', 'assets/call.js', 'site.webmanifest', 'netlify.toml', 'sitemap.xml']
+      .map((f) => read(f)).join('\n');
+    const unused = readdirSync(join(ROOT, 'assets/img')).filter((f) => !LEGACY_SHARE.includes(f) && !text.includes(f));
+    assert.deepEqual(unused, [], 'unreferenced images in assets/img');
+  });
+
+  test('the legacy share image names are copies of og-dinners.jpg', () => {
+    const current = readFileSync(join(ROOT, 'assets/img/og-dinners.jpg'));
+    for (const name of LEGACY_SHARE) assert.ok(readFileSync(join(ROOT, 'assets/img', name)).equals(current), `${name} matches og-dinners.jpg`);
+  });
+});
+
+describe('expo sign-up form', () => {
+  // The Baby & Kids Health Expo form is printed on QR codes: its URL, form name and fields must not change.
+  // These hashes are of the <form name="expo-vendor">...</form> block and its inline script as they were
+  // before the October 2026 rebuild. If a change is deliberate (and Mustafa has OK'd it), update them.
+  const FORM_SHA = '9b90cacb95089ed848f8039dc3a257ab6c739ecf227c67b1adf1f70cb98999d8';
+  const SCRIPT_SHA = '72376c39e213173eba5f3f81d9341cba087f2ce470a86ec283861fe5b2039c87';
+  const src = read('expo-vendors.html');
+  const start = src.indexOf('<form name="expo-vendor"');
+  const form = src.slice(start, src.indexOf('</form>', start) + '</form>'.length);
+  const sha = (s) => createHash('sha256').update(s).digest('hex');
+
+  test('the form keeps its name, Netlify detection, form-name value, honeypot and fields', () => {
+    assert.ok(start > 0, 'form[name="expo-vendor"] exists');
+    assert.match(form, /^<form name="expo-vendor" id="xp-form" method="POST" [^>]*data-netlify="true" netlify-honeypot="bot-field"/);
+    assert.match(form, /<input type="hidden" name="form-name" value="expo-vendor">/);
+    const names = [...form.matchAll(/<(?:input|select|textarea)\b[^>]*\sname="([^"]+)"/g)].map((m) => m[1]);
+    assert.deepEqual([...new Set(names)], ['form-name', 'event', 'bot-field', 'practice', 'specialty', 'contact', 'role', 'email', 'phone', 'website', 'extras[]', 'notes']);
+  });
+
+  test('the form block and its script are byte-for-byte unchanged', () => {
+    assert.equal(sha(form), FORM_SHA, 'the <form name="expo-vendor"> block changed');
+    const scripts = [...src.matchAll(/<script>([\s\S]*?)<\/script>/g)].map((m) => m[1]).filter((s) => /xp-form/.test(s));
+    assert.equal(scripts.length, 1, 'one inline script drives the form');
+    assert.equal(sha(scripts.join('\n')), SCRIPT_SHA, 'the expo form script changed');
+  });
+});
+
+describe('every kept page', () => {
+  /* The page minus comments, scripts and styles: visible text plus the attributes people or tools read. */
+  const markup = (page) => read(page).replace(/<!--[\s\S]*?-->/g, ' ').replace(/<(script|style)\b[\s\S]*?<\/\1>/gi, ' ');
+
+  for (const page of KEPT) {
+    test(`${page}: no em or en dashes in copy, alt text or meta tags`, () => {
+      const m = /.{0,40}(?:[–—]|&mdash;|&ndash;|&#821[12];|&#x201[34];).{0,40}/i.exec(markup(page));
+      assert.equal(m, null, `dash in ${page}: ${m && m[0]}`);
+    });
+
+    test(`${page}: no duplicate ids`, () => {
+      const ids = [...markup(page).matchAll(/<[a-z][^>]*\sid="([^"]+)"/gi)].map((m) => m[1]);
+      const dup = ids.filter((id, i) => ids.indexOf(id) !== i);
+      assert.deepEqual([...new Set(dup)], [], `duplicate ids on ${page}`);
+    });
+
+    test(`${page}: the sample brand is disclosed only where it is shown`, () => {
+      const src = read(page);
+      const shows = /Integrative Wellness/.test(src.replace(/<footer[\s\S]*<\/footer>/, ''));
+      if (shows) {
+        assert.match(src, /class="sample-cap">Sample design\. Integrative Wellness is a sample brand we use to show our work, not a client\./, 'a caption under the sample');
+        for (const [tag] of src.matchAll(/<img\b[^>]*alt="[^"]*Integrative Wellness[^"]*"/g)) assert.match(tag, /a made-up brand/, 'the alt text says it is made up');
+      } else {
+        assert.doesNotMatch(src, /sample brand/i, `${page} shows no sample brand, so it needs no disclosure`);
+      }
+    });
+  }
+});
+
+describe('legal pages', () => {
+  const visible = (page) => read(page).replace(/<!--[\s\S]*?-->/g, ' ').replace(/<(script|style)\b[\s\S]*?<\/\1>/gi, ' ').replace(/<[^>]+>/g, ' ').replace(/&rsquo;/g, "'").replace(/\s+/g, ' ');
+
+  test('terms describe the dinners and today\'s forms, not the retired services', () => {
+    const t = visible('terms.html');
+    assert.doesNotMatch(t, /demographic|Digital Growth Package|Groupon|Meta\b|Strategy Meeting|direct.mail|across the United States/i);
+    assert.match(t, /Each dinner is quoted for your clinic, with the restaurant and food included\./);
+    assert.doesNotMatch(t, /\$\s?\d/, 'no price figures in the terms');
+    assert.match(t, /Chicago's western suburbs/);
+    assert.match(t, /Book a 15-minute call/);
+    assert.match(t, /Last updated: October 21, 2026/);
+  });
+
+  test('privacy describes both forms and what we see of guests\' RSVP replies', () => {
+    const t = visible('privacy.html');
+    assert.match(t, /Last updated: October 21, 2026/);
+    assert.match(t, /We never receive, see or keep your patient list\./);
+    assert.match(t, /Guests who reply to an invitation/);
+    assert.match(t, /we see the replies guests send there/);
+    assert.match(t, /any optional extras you tick/);
   });
 });
