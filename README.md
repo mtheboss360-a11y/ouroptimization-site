@@ -25,7 +25,7 @@ Forms use **Netlify Forms** (no function, no secrets):
 
 | Page | Purpose |
 |---|---|
-| `index.html` | Home. Community map hero (h1 "Your best patients bring the next ones." under the eyebrow "Patient dinners for independent med spas"), then `#formats` (the two dinners and the "No surprises" pricing card, with no figure), `#how` (plan, invitations, the night, the follow-up), `#handle` (what we handle, and "Your patient list stays yours. We never see it."), `#who` (who we are), `#add-ons` (`#referrals` referral network, then flyer drops, then Google Ads last), `#faq` (seven questions) and `#call` (the `dinner-call` form). |
+| `index.html` | Home. Community map hero (h1 "Your best patients bring the next ones." under the eyebrow "Patient dinners for independent med spas"), then `#formats` (the two dinners and the "No surprises" pricing card, with no figure), `#how` (plan, invitations, the night, the follow-up), `#handle` (what we handle, and "Your patient list stays yours. We never see it."), `#who` (who we are), `#add-ons` (`#referrals` referral network, then flyer drops, then Google Ads last), `#flyer-drops` (how flyer drops work: the clinic's list first, or a referral network we build with them if they have none, someone on the ground every two weeks, referral cards with their own code, the network grows), `#faq` (the brief's seven questions plus three on flyer drops) and `#call` (the `dinner-call` form). |
 | `thanks.html` | Thank-you page the call form posts to. `noindex`, not in the sitemap. |
 | `website-design.html` | Website redesign. CTAs go to `/?about=website-design#call`. |
 | `review-tags.html` | Tap-to-review NFC tags (QR on the same piece) that open the client's own Google review link, with the review rules (ask everyone, no incentives, no staff reviews). CTAs go to `/?about=review-tags#call`. |
@@ -46,7 +46,8 @@ Clean, extensionless URLs are canonical (`/privacy`, not `/privacy.html`). Inter
 | `/how-it-works` | `/#how` |
 | `/services`, `/industries`, `/examples`, `/sample-advertisements` | `/` |
 | `/community-marketing`, `/market-research` | `/#referrals` |
-| `/custom-marketing`, `/digital-marketing`, `/direct-mail`, `/flyers`, `/seo`, `/google-ads`, `/social-media`, `/groupon`, `/gift-cards` | `/#add-ons` |
+| `/custom-marketing`, `/digital-marketing`, `/direct-mail`, `/seo`, `/google-ads`, `/social-media`, `/groupon`, `/gift-cards` | `/#add-ons` |
+| `/flyers` | `/#flyer-drops` |
 | `/estimate` | `/#call` |
 | `/events` | `/#formats` |
 | `/marketing-kits`, `/tracking` | `/#handle` |

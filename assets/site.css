@@ -707,6 +707,7 @@ a[href^="tel:"],.nowrap{white-space:nowrap}
   /* two-column sections: the heading scales with its column, as in .split */
   .dn-how h2,.dn-handle h2{font-size:clamp(1.95rem,1rem + 2.4vw,2.95rem)}
 }
+.dn-flyer-ads{margin-top:18px;padding:14px 16px;border-left:3px solid var(--gold);border-radius:0 12px 12px 0;background:var(--paper);font:500 .97rem/1.55 var(--sans);color:var(--ink-2);max-width:520px}
 .dn-illus{margin:clamp(28px,3.6vw,40px) 0 0;max-width:560px}
 .dn-illus .shot{background:var(--paper);border:1px solid var(--line-soft)}
 .dn-illus img{width:100%;height:auto}

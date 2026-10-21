@@ -151,8 +151,8 @@ describe('home page: hero', () => {
 });
 
 describe('home page: sections', () => {
-  test('sections in order: formats, how, handle, who, add-ons, faq, call', () => {
-    const ids = ['formats', 'how', 'handle', 'who', 'add-ons', 'faq', 'call'];
+  test('sections in order: formats, how, handle, who, add-ons, flyer-drops, faq, call', () => {
+    const ids = ['formats', 'how', 'handle', 'who', 'add-ons', 'flyer-drops', 'faq', 'call'];
     const at = ids.map((id) => main.search(new RegExp(`<section\\b[^>]*\\sid="${id}"`)));
     for (let i = 0; i < ids.length; i++) assert.ok(at[i] > 0, `section #${ids[i]} exists`);
     assert.deepEqual([...at].sort((a, b) => a - b), at, 'sections are in order');
@@ -242,7 +242,7 @@ describe('home page: sections', () => {
     assert.match(who, /<a href="mailto:mustafa@ouroptimization\.com">[\s\S]*?mustafa@ouroptimization\.com<\/a>/);
   });
 
-  test('FAQ: exactly the seven questions from the brief, in order', () => {
+  test('FAQ: the seven questions from the brief, in order, then the three flyer questions', () => {
     const faq = byId(html, 'faq');
     const qs = [...faq.matchAll(/<summary>([\s\S]*?)<span class="sign"/g)].map((m) => text(m[1]));
     assert.deepEqual(qs, [
@@ -252,10 +252,20 @@ describe('home page: sections', () => {
       'Do you ever see my patient list?',
       'My rep already sponsors events. Why use you?',
       'What does it cost?',
-      'Who are you?'
+      'Who are you?',
+      'How do flyer drops work?',
+      "What if I don't have a referral network yet?",
+      'Do I have to book a dinner to get flyer drops?'
     ]);
     const answers = [...faq.matchAll(/<div class="answer">([\s\S]*?)<\/div>/g)].map((m) => text(m[1]));
-    assert.equal(answers.length, 7);
+    assert.equal(answers.length, 10);
+    assert.match(answers[7], /Every two weeks, someone walks your clinic's flyers into the places on your list/);
+    assert.match(answers[7], /If you don't have a referral network yet, we build one first\./);
+    assert.ok(answers[8].startsWith('We build one with you.'), 'no network yet: we build one');
+    assert.match(answers[8], /mapping software and local business data/);
+    assert.ok(answers[9].startsWith('No. The dinner is separate, and flyer drops can run without one.'), 'flyer drops do not require a dinner');
+    assert.match(faq, /href="\/\?about=flyer-drops#call"/, 'the flyer FAQ links to the call form with the flyer prefill');
+    assert.match(answers[7], /Flyer drops are quoted for your clinic before they start\./);
     assert.ok(answers[2].startsWith('Yes.'), 'the sales evening answer is a plain yes');
     assert.ok(answers[3].startsWith('No.'), 'we never see the patient list');
     assert.match(answers[3], /We see the replies guests send there/, 'says what we do see');
@@ -290,7 +300,8 @@ describe('home page: sections', () => {
     assert.ok(addons.includes('Partners promote each other. Nobody is paid per patient.'), 'the no-payment note');
     for (const k of ['Introductions.', 'Cross-promotion.', 'Referral cards with their own code.']) assert.ok(addons.includes(k), k);
     assert.doesNotMatch(text(main), /commission|referral fee|finder'?s fee|kickback|reward|bounty|earns?\b|per (client|referral|referred)|what each one sends/i);
-    assert.equal((text(main).match(/\bpaid\b/gi) || []).length, 1, '"paid" appears only in the no-payment note');
+    const paid = text(main).match(/[^.]*\bpaid\b[^.]*\./gi) || [];
+    assert.ok(paid.length >= 1 && paid.every((p) => /nobody is paid per patient\.$/i.test(p.trim())), `"paid" appears only in a no-payment statement: ${paid.join(' | ')}`);
   });
 
   test('no invented proof: no testimonials, ratings, statistics or "as seen on"', () => {
@@ -316,6 +327,39 @@ describe('home page: sections', () => {
     const nav = /<nav class="site-nav"[\s\S]*?<\/nav>/.exec(html)[0];
     const items = [...nav.matchAll(/<a\b[^>]*>([\s\S]*?)<\/a>/g)].map((m) => `${text(m[1])} ${attr(m[0], 'href')}`);
     assert.deepEqual(items, ['Home /', 'Patient Dinners /#formats', 'How It Works /#how', 'Referral Network /#referrals', 'FAQ /#faq', 'Book a 15-minute call /#call']);
+  });
+});
+
+describe('home page: how flyer drops work', () => {
+  // How flyer drops work: the clinic's own list first (or a network we build with them), someone on the
+  // ground every two weeks, referral cards with their own code, new places added as we go.
+  const section = () => text(byId(html, 'flyer-drops'));
+  test('four steps in order, from the offer', () => {
+    const t = section();
+    const steps = ['Your list, or a new one', 'Every two weeks', 'Their own code', 'The network grows'];
+    const at = steps.map((h) => t.indexOf(h));
+    assert.ok(at.every((i) => i > 0), steps.join(', '));
+    assert.deepEqual([...at].sort((a, b) => a - b), at, 'steps in order');
+    assert.match(t, /places on your list that send you patients/);
+    assert.match(t, /No referral network yet\? We build one with you first\./);
+    assert.match(t, /If you don't, we build one/);
+    assert.match(t, /every two weeks, walking your clinic's flyers into the places on the list, in person/);
+    assert.match(t, /referral cards with its own code/);
+    assert.match(t, /We never pay a place per patient\./);
+    assert.match(t, /If you also run Google Ads with us, the two work side by side\./);
+    assert.match(t, /The ad budget goes straight to Google from your own account/);
+    assert.doesNotMatch(t, /Nothing goes in the mail|into each place/, 'no unsupported promises');
+  });
+  test('no price and no promised results', () => {
+    const t = section();
+    assert.doesNotMatch(t, /\$\s?\d|\bper month\b|a month\b/i);
+    assert.doesNotMatch(t, /guarantee|\bexpect\b|\d+\s?%|will (bring|get|send|fill|double|grow)|more (new )?patients/i);
+  });
+  test('the flyer add-on card says every two weeks and links to the section', () => {
+    const card = /<article class="dn-addon reveal" aria-labelledby="flyers-h">([\s\S]*?)<\/article>/.exec(html)[1];
+    assert.match(text(card), /Every two weeks/);
+    assert.doesNotMatch(text(card), /one to two weeks/);
+    assert.match(card, /href="\/#flyer-drops"/);
   });
 });
 
@@ -509,6 +553,7 @@ describe('call.js: ?about= prefill', () => {
   test('known keys', () => {
     assert.equal(call.aboutFromSearch('?about=website-design'), 'website-design');
     assert.equal(call.aboutFromSearch('?about=review-tags'), 'review-tags');
+    assert.equal(call.aboutFromSearch('?about=flyer-drops'), 'flyer-drops');
     assert.equal(call.aboutFromSearch('?ref=x&about=Review-Tags'), 'review-tags');
     assert.equal(call.aboutFromSearch('?about=%20website-design%20'), 'website-design');
   });
@@ -520,6 +565,7 @@ describe('call.js: ?about= prefill', () => {
   test('prefill text, only into an empty message', () => {
     assert.equal(call.prefillFor('?about=website-design', ''), "I'm asking about a website redesign.");
     assert.equal(call.prefillFor('?about=review-tags', '   '), "I'm asking about review tags.");
+    assert.equal(call.prefillFor('?about=flyer-drops', ''), "I'm asking about flyer drops.");
     assert.equal(call.prefillFor('?about=review-tags', 'My own words'), '');
     assert.equal(call.prefillFor('?about=nothing', ''), '');
     assert.equal(call.prefillFor('', ''), '');
