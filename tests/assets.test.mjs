@@ -339,9 +339,9 @@ describe('retired pages', () => {
 });
 
 describe('image folder', () => {
-  // og.jpg and og-community.jpg are kept only as byte-for-byte copies of the current share image,
-  // so links shared before October 2026 (which still point at those names) show the new art.
-  const LEGACY_SHARE = ['og.jpg', 'og-community.jpg'];
+  // og.jpg, og-community.jpg and og-dinners.jpg are kept only as byte-for-byte copies of the current
+  // share image, so links shared earlier (which still point at those names) show the new art.
+  const LEGACY_SHARE = ['og.jpg', 'og-community.jpg', 'og-dinners.jpg'];
 
   test('assets/img holds only images a page, the stylesheet, a script or a site file uses', () => {
     const text = [...KEPT, 'assets/site.css', 'assets/site.js', 'assets/call.js', 'site.webmanifest', 'netlify.toml', 'sitemap.xml']
@@ -350,9 +350,9 @@ describe('image folder', () => {
     assert.deepEqual(unused, [], 'unreferenced images in assets/img');
   });
 
-  test('the legacy share image names are copies of og-dinners.jpg', () => {
-    const current = readFileSync(join(ROOT, 'assets/img/og-dinners.jpg'));
-    for (const name of LEGACY_SHARE) assert.ok(readFileSync(join(ROOT, 'assets/img', name)).equals(current), `${name} matches og-dinners.jpg`);
+  test('the legacy share image names are copies of og-best-patients.jpg', () => {
+    const current = readFileSync(join(ROOT, 'assets/img/og-best-patients.jpg'));
+    for (const name of LEGACY_SHARE) assert.ok(readFileSync(join(ROOT, 'assets/img', name)).equals(current), `${name} matches og-best-patients.jpg`);
   });
 });
 
