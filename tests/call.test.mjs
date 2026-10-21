@@ -268,8 +268,8 @@ describe('home page: sections', () => {
     const content = imgs.filter((t) => !/class="town-img"/.test(t));
     assert.deepEqual(content.map((t) => attr(t, 'src')), ['assets/img/dinner-table.svg', 'assets/img/kit-tins-640.jpg']);
     assert.match(attr(content[0], 'alt'), /^Illustration of a restaurant table set for a private dinner/);
-    const cap = /<figure class="dn-illus">[\s\S]*?<figcaption[^>]*>([\s\S]*?)<\/figcaption>/.exec(main);
-    assert.equal(text(cap[1]), 'Illustration');
+    const illus = /<figure class="dn-illus">([\s\S]*?)<\/figure>/.exec(main)[1];
+    assert.doesNotMatch(illus, /<figcaption/, 'no visible caption on the dinner illustration, and never one calling it our event');
     assert.match(attr(content[1], 'alt'), /Grace Pediatrics/);
     assert.doesNotMatch(main, /<video\b/i, 'no video on the home page');
   });

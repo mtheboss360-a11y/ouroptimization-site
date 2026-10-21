@@ -710,7 +710,6 @@ a[href^="tel:"],.nowrap{white-space:nowrap}
 .dn-illus{margin:clamp(28px,3.6vw,40px) 0 0;max-width:560px}
 .dn-illus .shot{background:var(--paper);border:1px solid var(--line-soft)}
 .dn-illus img{width:100%;height:auto}
-.dn-illus .card-cap{margin-top:12px}
 .dn-steps{list-style:none;display:grid;gap:12px}
 .dn-steps>li{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:20px;padding:24px 24px 26px;border-radius:16px;background:var(--paper);border:1px solid var(--line)}
 .dn-step-n{grid-row:1/span 2;display:flex;align-items:center;justify-content:center;width:48px;height:48px;border-radius:50%;background:var(--blush);font:650 .92rem/1 var(--display);letter-spacing:.02em;color:var(--gold-sm)}

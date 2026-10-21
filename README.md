@@ -63,7 +63,7 @@ Older redirects point straight at their final target, with no chains: `/who-its-
 - The clinic sends invitations from its own list. We never receive, see or keep its patient list. Guests reply on an RSVP page in the clinic's name.
 - Referral network: we find the businesses near a clinic using mapping software and local business data (describe it only that way: no named platform, database size or accuracy claim), then set up, or help the clinic set up, the network. Partnerships are introductions and cross-promotion, with referral cards that carry each partner's own code. Nobody is paid per patient (medical fee-splitting rules).
 - No em or en dashes in visible copy or alt text. Plain hyphens inside words (Plus-One, 15-minute) are fine.
-- The dinner image on the home page is a placeholder until a real dinner has been photographed, and it is never captioned as one of our events. Today it is an illustration drawn in code (`assets/img/dinner-table.svg`, captioned "Illustration").
+- The dinner image on the home page is a placeholder until a real dinner has been photographed, and it is never captioned as one of our events. Today it is an illustration drawn in code (`assets/img/dinner-table.svg`, no visible caption; its alt text says it is an illustration).
 - The only photo is client proof in `#who`: the owner's unedited Grace Pediatrics gift-tin photo (`kit-tins.*`, `kit-tins-640.*`) beside the line about the community marketing we ran for Grace Pediatrics. It is never called a dinner and carries no numbers or results.
 
 ## Images
