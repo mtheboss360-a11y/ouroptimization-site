@@ -1,4 +1,4 @@
-/* OUR Optimization — demographic & community-targeted marketing.
+/* OUR Optimization: patient dinners for independent med spas, and marketing targeted to your community.
    Static site: no build step, no framework, no external requests.
    Fonts are self-hosted variable fonts (SIL Open Font License 1.1 — licences in assets/fonts/):
    Bricolage Grotesque for display and headings, Figtree for text. Neither ships an italic,
@@ -52,7 +52,7 @@ strong{font-weight:600;color:var(--ink)}
 
 .sprite{position:absolute;width:0;height:0;overflow:hidden}
 .sprite *{vector-effect:non-scaling-stroke}
-.visually-hidden{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
 .skip{position:absolute;left:12px;top:-80px;z-index:100;background:var(--ink);color:var(--ground);padding:12px 18px;border-radius:999px;font-weight:600;text-decoration:none}
 .skip:focus{top:12px}
 .wrap{width:100%;max-width:var(--wrap);margin-inline:auto;padding-inline:var(--gutter)}
@@ -77,7 +77,7 @@ strong{font-weight:600;color:var(--ink)}
 .header-row{display:flex;align-items:center;gap:10px;min-height:66px}
 .brand{display:inline-flex;align-items:center;margin-right:auto;text-decoration:none;flex:none;min-height:44px}
 .brand img{width:clamp(148px,40vw,186px);height:auto}
-@media (max-width:389.98px){.brand .word{font-size:.98rem}}
+
 .site-nav ul{list-style:none}
 .site-nav a{display:flex;align-items:center;min-height:44px;padding:0 9px;white-space:nowrap;text-decoration:none;font-weight:500;font-size:.86rem;letter-spacing:.02em;color:var(--ink);border-radius:999px;transition:color .25s ease}
 .site-nav a:hover{color:var(--gold-sm)}
@@ -135,23 +135,13 @@ h1{font-size:clamp(2.3rem,1.25rem + 4.2vw,4.1rem);line-height:1.03;letter-spacin
 h2{font-size:clamp(1.95rem,1.35rem + 2.4vw,2.95rem);line-height:1.08;letter-spacing:-.025em}
 h3{font-size:1.28rem;line-height:1.25;font-weight:600;letter-spacing:-.012em}
 /* h2s set at card size take the h3 weight and tracking, so tight display tracking stays on big type */
-.steps h2,.doc h2,.callout h2,.cardgrid h2,.form-aside h2,.ind-card h2{font-weight:600;letter-spacing:-.014em}
+.steps h2,.doc h2,.cardgrid h2,.form-aside h2{font-weight:600;letter-spacing:-.014em}
 .intro{margin-top:16px;font-size:1.05rem;max-width:42em}
 .center .intro{margin-inline:auto}
 .lede{margin-top:22px;font-size:clamp(1.05rem,.98rem + .35vw,1.18rem);line-height:1.66;max-width:36em}
 
-/* ---------- the mailed advertisement object (used in the hero and everywhere) ---------- */
-.card-shot{position:relative;border-radius:3px;overflow:hidden;background:var(--paper);box-shadow:0 1px 2px rgba(28,58,44,.10),0 18px 34px -18px rgba(28,58,44,.34),0 40px 70px -46px rgba(28,58,44,.45)}
-.card-shot img{width:100%}
-.card-stack{position:relative;padding:6.5% 8% 0 0}
-.card-stack .card-shot{transition:transform .5s ease}
-.card-stack .back{position:absolute;top:0;right:0;width:92%;transform:rotate(3deg);opacity:.96}
-.card-stack .front{position:relative;transform:rotate(-1.5deg)}
-@media (prefers-reduced-motion:no-preference){
-  .card-stack:hover .front{transform:rotate(-1deg) translateY(-5px)}
-  .card-stack:hover .back{transform:rotate(3.6deg) translateY(-3px)}
-}
-@media (max-width:959.98px){.card-stack{padding-right:11%}}
+/* ---------- caption label under a visual ---------- */
+
 .card-cap{margin-top:16px;font:600 .68rem/1.5 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3)}
 
 /* ---------- hero ---------- */
@@ -168,39 +158,16 @@ h3{font-size:1.28rem;line-height:1.25;font-weight:600;letter-spacing:-.012em}
   .hero-art{max-width:420px;margin-inline:auto;margin-right:0}
 }
 
-/* ---------- the flow strip (households -> card -> scan -> booking) ---------- */
-.flow{list-style:none;display:grid;gap:10px;margin-top:clamp(30px,4vw,44px)}
-.flow li{display:flex;align-items:center;gap:14px;padding:16px 18px;background:var(--paper);border:1px solid var(--line-soft);border-radius:12px}
-.bg-paper .flow li{background:var(--ground)}
-.bg-ink .flow li{background:rgba(243,246,242,.06);border-color:rgba(243,246,242,.16)}
-.flow svg{width:24px;height:24px;flex:none;color:var(--slate-soft)}
-.bg-ink .flow svg{color:var(--gold-bright)}
-.flow b{display:block;font:600 .74rem/1.4 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--ink)}
-.bg-ink .flow b{color:var(--ground)}
-.flow span{display:block;font-size:.92rem;line-height:1.5}
-.flow .arrow{display:flex;justify-content:center;color:var(--gold);padding:0}
-.flow .arrow svg{width:16px;height:16px;color:var(--gold)}
-@media (min-width:760px){
-  .flow{grid-template-columns:1fr auto 1fr auto 1fr auto 1fr;align-items:stretch;gap:8px}
-  .flow li{flex-direction:column;align-items:flex-start;gap:10px;text-align:left}
-  .flow .arrow{align-items:center;background:none;border:0;padding:0}
-  .flow .arrow svg{transform:rotate(-90deg)}
-}
-@media (max-width:759.98px){.flow .arrow svg{transform:none}}
-
 /* ---------- two-column media block ---------- */
 .media{display:grid;gap:clamp(32px,4.5vw,52px);align-items:center}
 @media (min-width:900px){
   .media{grid-template-columns:1.04fr .96fr}
-  .media.flip .media-art{order:-1}
+  
 }
 .spec{list-style:none;margin-top:26px;display:grid;gap:0}
 .spec li{display:flex;align-items:flex-start;gap:13px;padding:13px 2px;border-top:1px solid var(--line);font-size:.98rem;color:var(--ink)}
 .spec li:last-child{border-bottom:1px solid var(--line)}
 .spec svg{width:19px;height:19px;flex:none;margin-top:3px;color:var(--slate-soft)}
-.note{margin-top:20px;font-size:.9rem;color:var(--ink-3);max-width:40em}
-
-/* ---------- stages (design / target / print / mail / track) ---------- */
 
 /* ---------- steps ---------- */
 .steps{list-style:none;display:grid;gap:1px;background:var(--line);border-block:1px solid var(--line)}
@@ -211,16 +178,6 @@ h3{font-size:1.28rem;line-height:1.25;font-weight:600;letter-spacing:-.012em}
 .steps p{font-size:.95rem;line-height:1.6}
 @media (min-width:700px){.steps{grid-template-columns:1fr 1fr}}
 @media (min-width:1000px){.steps{grid-template-columns:repeat(4,1fr)}}
-
-/* ---------- sample ---------- */
-.sample-pair{display:grid;gap:clamp(26px,3.4vw,40px)}
-@media (min-width:820px){.sample-pair{grid-template-columns:1fr 1fr;align-items:start}}
-.sample-foot{margin-top:clamp(30px,4vw,44px);padding-top:26px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:18px 26px;align-items:center;justify-content:space-between}
-.sample-foot p{font-size:.9rem;color:var(--ink-3);max-width:44em}
-.sample-foot .btn{flex:none}
-@media (max-width:479.98px){.sample-foot .btn{flex:1 1 100%}}
-
-/* ---------- who it's for ---------- */
 
 /* ---------- faq ---------- */
 .faq{max-width:820px;margin-inline:auto;border-top:1px solid var(--line)}
@@ -256,18 +213,9 @@ h3{font-size:1.28rem;line-height:1.25;font-weight:600;letter-spacing:-.012em}
 .foot-col ul{list-style:none;display:grid;gap:10px}
 .foot-col a{text-decoration:none;color:var(--ink-2);transition:color .25s ease}
 .foot-col a:hover{color:var(--gold-sm)}
+.foot-col .foot-mail{overflow-wrap:anywhere}
 .foot-bottom{margin-top:clamp(34px,4.5vw,48px);padding-top:22px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:8px 28px;justify-content:space-between;font-size:.82rem;color:var(--ink-3)}
 .foot-bottom strong{color:var(--ink-2);font-weight:600}
-
-/* ---------- lightbox ---------- */
-.zoom{position:fixed;inset:0;z-index:90;background:rgba(28,58,44,.9);display:flex;align-items:center;justify-content:center;padding:clamp(14px,3vw,40px);border:0}
-.zoom[hidden]{display:none}
-.zoom img{max-width:100%;max-height:88vh;width:auto;border-radius:3px;box-shadow:0 30px 70px -30px rgba(28,58,44,.7)}
-.zoom-close{position:absolute;top:14px;right:14px;width:46px;height:46px;border-radius:999px;border:1px solid rgba(243,246,242,.45);background:transparent;color:var(--ground);display:flex;align-items:center;justify-content:center;cursor:pointer}
-.zoom-close svg{width:16px;height:16px}
-.enlarge{position:absolute;right:10px;bottom:10px;z-index:2;display:inline-flex;align-items:center;gap:7px;min-height:36px;padding:0 13px;border-radius:999px;border:0;background:rgba(28,58,44,.82);color:var(--ground);font:600 .7rem/1 var(--sans);letter-spacing:.06em;cursor:pointer}
-.enlarge svg{width:13px;height:13px}
-html:not(.js) .enlarge{display:none}
 
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
@@ -292,7 +240,7 @@ html:not(.js) .enlarge{display:none}
 .backlink:hover{color:var(--gold-sm)}
 .backlink svg{width:15px;height:15px;transform:rotate(90deg)}
 
-/* ---------- campaign estimate form ---------- */
+/* ---------- forms ---------- */
 .form-wrap{max-width:720px}
 
 .field{margin-top:24px}
@@ -308,18 +256,13 @@ html:not(.js) .enlarge{display:none}
 .err{display:none;margin-top:7px;font:500 .84rem/1.45 var(--sans);color:#8E2D25}
 .err.on{display:block}
 
-.form-alert{display:none;margin-bottom:26px;padding:16px 18px;border-radius:10px;border:1px solid #E2BDB8;background:#FCF4F3;color:#7E2A22;font-size:.93rem;line-height:1.55}
-.form-alert.on{display:block}
-.form-alert h2{font:600 1rem/1.3 var(--sans);color:#7E2A22;margin-bottom:6px}
-.form-alert ul{list-style:none;margin-top:9px;display:flex;flex-wrap:wrap;gap:6px 16px}
-.form-alert a{color:#7E2A22;font-weight:600}
 /* Netlify honeypot: hidden from sight AND from assistive tech. Must not use the
    .visually-hidden clip recipe — that leaves it in the a11y tree, where a screen-reader
    user could fill it and have the submission silently dropped. */
 .hp{display:none}
 .form-submit{margin-top:clamp(30px,4vw,38px)}
 .form-submit .btn[disabled]{opacity:.62;cursor:progress}
-.form-foot{margin-top:14px;font-size:.86rem;color:var(--ink-3)}
+
 .sent{max-width:640px}
 .sent .rule{margin-bottom:22px}
 .sent h1{font-size:clamp(1.9rem,1.4rem + 2vw,2.8rem)}
@@ -338,7 +281,7 @@ html:not(.js) .enlarge{display:none}
 
 /* ---------- page tops ---------- */
 .page-top{padding-block:clamp(44px,6vw,80px) clamp(28px,3.5vw,40px)}
-.pt-0{padding-top:0}
+
 .page-head h1{font-size:clamp(2.1rem,1.45rem + 2.6vw,3.3rem);line-height:1.04;letter-spacing:-.035em}
 .page-head .intro{margin-top:18px;font-size:1.06rem}
 
@@ -347,69 +290,22 @@ html:not(.js) .enlarge{display:none}
 .shot img{width:100%;display:block}
 
 /* ---------- inline text link ---------- */
-.more{margin-top:clamp(26px,3.4vw,36px)}
+
 .textlink{display:inline-flex;align-items:center;gap:9px;font:600 .92rem/1 var(--sans);color:var(--ink);text-decoration:none;border-bottom:1px solid var(--gold);padding-bottom:5px;transition:color .25s ease,border-color .25s ease}
 .textlink:hover{color:var(--gold-sm);border-color:var(--gold-sm)}
 .textlink svg{width:14px;height:14px;transform:rotate(-90deg)}
 
-/* ---------- taller step cards on the dedicated page ---------- */
-
-/* ---------- who-it's-for cards ---------- */
-
-/* ---------- callout ---------- */
-.callout{margin-top:clamp(32px,4vw,46px);padding:clamp(24px,3vw,32px);background:var(--blush);border-left:2px solid var(--gold);border-radius:0 12px 12px 0}
-.callout h2,.callout h3{font-size:1.2rem;line-height:1.3;margin-bottom:10px}
-.callout p{font-size:.97rem;max-width:62ch}
-
-/* ---------- sample tag ---------- */
-.tag{display:inline-block;margin-bottom:22px;padding:7px 14px;border:1px solid var(--line);border-radius:999px;background:var(--paper);font:600 .68rem/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--gold-sm)}
-
-/* ---------- wide spec list ---------- */
-@media (min-width:820px){.spec-wide{grid-template-columns:1fr 1fr;column-gap:40px}
-  .spec-wide li:nth-child(2){border-top:1px solid var(--line)}}
-
 /* ---------- targeting ---------- */
-.target-grid{display:grid;gap:1px;background:var(--line);border-block:1px solid var(--line)}
-@media (min-width:840px){.target-grid{grid-template-columns:1fr 1fr}}
-.target-card{background:var(--ground);padding:clamp(26px,3.2vw,38px) clamp(20px,2.6vw,32px)}
-.target-card svg{width:28px;height:28px;color:var(--slate-soft);margin-bottom:18px;display:block}
-.target-card h3{font-size:1.24rem;line-height:1.28;margin-bottom:13px}
-.target-card p{font-size:.96rem;line-height:1.65}
-.target-card p+p{margin-top:12px;color:var(--ink-3)}
+
 .target-strip{margin-top:clamp(30px,4vw,42px);padding:clamp(24px,3vw,32px);background:var(--paper);border:1px solid var(--line);border-radius:14px;display:grid;gap:22px;align-items:center}
 @media (min-width:860px){.target-strip{grid-template-columns:1fr auto;gap:34px}}
 .target-strip h3{font-size:1.18rem;line-height:1.3;margin-bottom:9px}
 .target-strip p{font-size:.96rem;line-height:1.6;max-width:58ch}
 .target-strip .btn{flex:none;white-space:nowrap}
-.callout em{font-style:italic;color:var(--ink)}
-
-/* ---------- sample gallery ---------- */
-
-.sample{padding-block:clamp(34px,4.5vw,52px);border-top:1px solid var(--line)}
-.sample:first-of-type{border-top:0;padding-top:0}
-.sample-head{max-width:70ch;margin-bottom:clamp(22px,2.8vw,30px)}
-.sample-blurb{margin-top:14px;font-size:.98rem;line-height:1.65;color:var(--ink-2)}
-
-/* ---------- gift cards ---------- */
-.reasons{list-style:none;display:grid;gap:1px;background:var(--line);border-block:1px solid var(--line)}
-@media (min-width:720px){.reasons{grid-template-columns:1fr 1fr}}
-@media (min-width:1080px){.reasons{grid-template-columns:repeat(3,1fr)}}
-.reasons li{background:var(--paper);padding:clamp(24px,3vw,32px) clamp(20px,2.4vw,28px)}
-.reasons .rn{display:block;font:650 .82rem/1 var(--display);letter-spacing:.06em;color:var(--gold-sm);margin-bottom:14px}
-.reasons h3{font-size:1.14rem;line-height:1.3;margin-bottom:10px}
-.reasons p{font-size:.94rem;line-height:1.62}
-.reasons p a{color:var(--ink);text-underline-offset:3px}
-.gift-row{list-style:none;display:grid;gap:clamp(22px,3vw,32px);margin-top:clamp(28px,3.6vw,40px)}
-@media (min-width:760px){.gift-row{grid-template-columns:repeat(3,1fr)}}
-/* A gift card is CR80, 1.586:1. The ratio is declared so the box can never be
-   stretched by its container, and object-fit guarantees the art is never distorted. */
-.gift-row img{width:100%;height:auto;display:block;aspect-ratio:1.586;object-fit:contain;border-radius:10px;box-shadow:0 1px 2px rgba(28,58,44,.10),0 18px 34px -20px rgba(28,58,44,.36)}
-.gift-row .card-cap{margin-top:13px}
-/* a gift card should read at card size, not fill the column */
 
 /* =====================================================================
-   2026 repositioning — demographic & community-targeted marketing.
-   Everything below extends the system above; nothing above was removed.
+   2026 repositioning: shared tokens and components added on top of the base system.
+   Everything below extends the system above.
    ===================================================================== */
 :root{
   --map-land:#EEF3EC;
@@ -424,112 +320,42 @@ html:not(.js) .enlarge{display:none}
 @media (min-width:1060px){.brand img{width:190px}.header-row{padding-block:8px}}
 @media (min-width:1360px){.brand img{width:206px}}
 .foot-brand > img{width:190px;height:auto;margin-bottom:14px}
-.foot-brand .foot-tag{font:600 .7rem/1.5 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--gold-sm);margin:0 0 12px}
 
 /* ---------- nav: short labels on desktop, full labels in the menu ---------- */
-.site-nav .nav-long{display:inline}
+
 .site-nav .nav-home{display:list-item}
 @media (min-width:1060px){
-  .site-nav .nav-long{display:none}
+  
   .site-nav .nav-home{display:none}
   .site-nav a{padding:0 8px}
 }
-@media (min-width:1360px){.site-nav .nav-long{display:inline}}
+
 @media (min-width:1060px) and (max-width:1359.98px){.header-row{max-width:1240px}}
 @media (min-width:1360px){.header-row{max-width:1400px}}
 
-/* ---------- hero: market map ---------- */
-
-@keyframes halo{0%,100%{transform:scale(1);opacity:.22}50%{transform:scale(1.35);opacity:.08}}
-
-/* ---------- the full-process chain ---------- */
-
-.chain{list-style:none;display:flex;flex-wrap:wrap;justify-content:center;gap:6px 0;font:600 .7rem/1.6 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--ink)}
-.chain li{display:inline-flex;align-items:center}
-.chain li+li::before{content:"";width:16px;height:1px;background:var(--gold);margin:0 10px}
-.chain li:nth-child(4n+1){color:var(--ink)}
-.chain .lead{color:var(--gold-sm)}
-
-/* ---------- generic card grid (services, industries, touchpoints) ---------- */
+/* ---------- generic card grid ---------- */
 .cardgrid{list-style:none;display:grid;gap:1px;background:var(--line);border-block:1px solid var(--line)}
 .cardgrid>li{background:var(--ground);padding:clamp(24px,3vw,32px) clamp(20px,2.4vw,28px);position:relative}
 .bg-paper .cardgrid>li{background:var(--paper)}
 .bg-stone .cardgrid>li{background:var(--ground)}
-.cardgrid .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
-.cardgrid .top svg,.cardgrid>li>svg{width:28px;height:28px;color:var(--slate-soft);flex:none}
+
+.cardgrid>li>svg{width:28px;height:28px;color:var(--slate-soft);flex:none}
 .cardgrid>li>svg{display:block;margin-bottom:16px}
-.cardgrid .n{font:650 .84rem/1 var(--display);letter-spacing:.06em;color:var(--gold-sm)}
+
 .cardgrid h3{font-size:1.16rem;line-height:1.3;margin-bottom:10px}
 .cardgrid p{font-size:.94rem;line-height:1.62}
 .cardgrid p+p{margin-top:10px}
-.cardgrid .kicker{display:block;font:600 .64rem/1.4 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--gold-sm);margin-bottom:8px}
+
 .cardgrid a.textlink{margin-top:16px}
 @media (min-width:640px){.cardgrid{grid-template-columns:1fr 1fr}}
-@media (min-width:1040px){.cardgrid.c4{grid-template-columns:repeat(4,1fr)}.cardgrid.c3{grid-template-columns:repeat(3,1fr)}}
+@media (min-width:1040px){.cardgrid.c4{grid-template-columns:repeat(4,1fr)}}
 
-/* ---------- six-step process ---------- */
+/* ---------- two-column split ---------- */
 
-/* ---------- strategy before execution ---------- */
-
-/* ---------- community touchpoints ---------- */
-.tp-grid{list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-@media (min-width:640px){.tp-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media (min-width:1040px){.tp-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
-.tp-grid li{display:flex;align-items:center;gap:12px;min-height:64px;padding:12px 14px;background:var(--paper);border:1px solid var(--line-soft);border-radius:12px;font:500 .92rem/1.3 var(--sans);color:var(--ink)}
-.bg-paper .tp-grid li{background:var(--ground)}
-.tp-grid svg{width:24px;height:24px;flex:none;color:var(--slate-soft)}
-.uses{list-style:none;display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
-.uses li{padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:var(--paper);font:500 .86rem/1.2 var(--sans);color:var(--ink)}
-.bg-ink .uses li{background:rgba(243,246,242,.06);border-color:rgba(243,246,242,.2);color:var(--ground)}
 .split{display:grid;gap:clamp(30px,4vw,52px)}
 @media (min-width:960px){.split{grid-template-columns:.9fr 1.1fr;align-items:start}
   /* the heading shares the row, so it scales with its narrower column */
   .split h2{font-size:clamp(1.95rem,1rem + 2.4vw,2.95rem)}}
-
-/* ---------- language & localization ---------- */
-.lang-grid{list-style:none;display:grid;gap:14px;grid-template-columns:1fr}
-@media (min-width:560px){.lang-grid{grid-template-columns:1fr 1fr}}
-@media (min-width:1040px){.lang-grid{grid-template-columns:repeat(5,1fr)}}
-.flyer-mini{position:relative;background:#fff;border-radius:6px;padding:18px 16px 16px;min-height:178px;display:flex;flex-direction:column;box-shadow:0 1px 2px rgba(28,58,44,.08),0 18px 30px -22px rgba(28,58,44,.4);overflow:hidden}
-.flyer-mini::before{content:"";position:absolute;left:0;right:0;top:0;height:4px;background:var(--gold)}
-.flyer-mini .lname{font:600 .6rem/1.3 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3)}
-.flyer-mini .clinic{margin-top:12px;font:650 .9rem/1 var(--display);letter-spacing:-.01em;color:var(--ink)}
-.flyer-mini .hl{margin-top:10px;font:600 1.12rem/1.3 var(--sans);color:var(--ink)}
-.flyer-mini .hl[lang="ar"]{font-family:"Geeza Pro","Noto Naskh Arabic","Segoe UI",Tahoma,sans-serif;font-size:1.25rem;text-align:right}
-.flyer-mini .hl[lang="zh-Hans"]{font-family:"PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif}
-.flyer-mini .cta{margin-top:auto;padding-top:14px;display:flex;align-items:center;justify-content:space-between;gap:10px;font:500 .74rem/1.3 var(--sans);color:var(--gold-sm)}
-.flyer-mini .cta[dir="rtl"]{flex-direction:row-reverse}
-.flyer-mini .qr{width:30px;height:30px;flex:none;color:var(--ink)}
-
-/* ---------- physical + digital ---------- */
-
-/* ---------- branded materials mockups ---------- */
-.mock-grid{list-style:none;display:grid;gap:14px;grid-template-columns:1fr 1fr}
-@media (min-width:860px){.mock-grid{grid-template-columns:repeat(3,1fr);gap:18px}}
-.mock-grid li{margin:0}
-.mock{aspect-ratio:1/1;border-radius:16px;background:linear-gradient(160deg,#FBFCFA,#E9EFE8);border:1px solid var(--line-soft);display:flex;align-items:center;justify-content:center;overflow:hidden}
-.mock svg{width:82%;height:82%}
-.mock-grid .card-cap{margin-top:12px}
-.tagline-strip{margin-top:clamp(26px,3.4vw,38px);display:flex;flex-wrap:wrap;gap:6px 22px;font:600 clamp(1.25rem,1rem + 1vw,1.7rem)/1.3 var(--display);letter-spacing:-.02em;color:var(--ink)}
-.tagline-strip em{font-style:normal;color:var(--gold-sm)}
-
-/* ---------- worked examples ---------- */
-.example{border:1px solid var(--line);border-radius:18px;background:var(--paper);padding:clamp(24px,3.4vw,44px)}
-.bg-paper .example{background:var(--ground)}
-.example+.example{margin-top:22px}
-.example .tag{margin-bottom:16px}
-.example h3{font-size:clamp(1.35rem,1.15rem + .8vw,1.75rem);line-height:1.2}
-
-/* ---------- pricing positioning ---------- */
-.price-panel{display:grid;gap:22px;padding:clamp(26px,3.4vw,44px);border-radius:18px;background:var(--paper);border:1px solid var(--line)}
-@media (min-width:900px){.price-panel{grid-template-columns:1.1fr .9fr;gap:44px;align-items:center}}
-.price-panel h2{font-size:clamp(1.7rem,1.3rem + 1.6vw,2.4rem)}
-.price-panel .spec{margin-top:0}
-
-/* ---------- sub-nav pills on long pages ---------- */
-.jump{list-style:none;display:flex;flex-wrap:wrap;gap:8px;margin-top:26px}
-.jump a{display:inline-flex;align-items:center;min-height:40px;padding:0 15px;border-radius:999px;border:1px solid var(--line);background:var(--paper);font:500 .84rem/1 var(--sans);color:var(--ink);text-decoration:none;transition:border-color .25s ease,color .25s ease}
-.jump a:hover{border-color:var(--gold-sm);color:var(--gold-sm)}
 
 /* ---------- ink-band variants ---------- */
 .bg-ink .intro,.bg-ink p{color:#C3D2C6}
@@ -537,10 +363,8 @@ html:not(.js) .enlarge{display:none}
 .bg-ink .cardgrid>li{background:var(--ink)}
 .bg-ink .cardgrid h3{color:var(--ground)}
 .bg-ink .cardgrid svg{color:var(--gold-bright)}
-.bg-ink .callout{background:rgba(243,246,242,.06);border-left-color:var(--gold-bright)}
+
 .bg-ink .textlink{color:var(--ground);border-color:var(--gold-bright)}
-.label-ex{display:inline-flex;align-items:center;gap:8px}
-.label-ex::before{content:"";width:7px;height:7px;border-radius:50%;border:1.5px solid currentColor}
 
 /* ---------- gentle reveal (JS-gated; content is never hidden without JS) ---------- */
 @media (prefers-reduced-motion:no-preference){
@@ -548,7 +372,7 @@ html:not(.js) .enlarge{display:none}
   .js .reveal.in{opacity:1;transform:none}
 }
 
-/* ---------- estimate form additions ---------- */
+/* ---------- form rows, and the form beside its aside ---------- */
 .field-row{display:grid;gap:0 18px}
 @media (min-width:640px){.field-row{grid-template-columns:1fr 1fr}.field-row .field:nth-child(2){margin-top:0}}
 
@@ -569,57 +393,37 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 
 .spec svg{color:var(--slate-soft)}
 .form-aside a{color:var(--ink);font-weight:600;text-underline-offset:3px}
-.callout a.textlink{display:inline}
-/* small desktops: tighten nav and CTA spacing so "Set Up a Strategy Meeting" always fits
-   (Figtree is narrower than the old face, so the label keeps its full size here) */
+
+/* small desktops: tighten nav and CTA spacing so the four links and "Book a 15-minute call" sit on one row */
 @media (min-width:1060px) and (max-width:1199.98px){
   .btn-head{padding:0 16px}
   .site-nav a{padding:0 7px}
 }
-
-/* ---------- promotional-channel listing screenshot ---------- */
-.deal-shot{margin:0}
-.deal-shot .shot{border:1px solid var(--line);background:#fff}
-.deal-shot .card-cap{margin-top:12px}
-.note a{color:var(--ink);text-underline-offset:3px}
-
-/* ---------- product photos and rendered flyer ---------- */
-.mock.photo{background:var(--stone)}
-.mock.photo picture,.mock.photo img{display:block;width:100%;height:100%;object-fit:cover}
-.flyer-shot{max-width:420px;margin-inline:auto;border-radius:6px;overflow:hidden;box-shadow:0 1px 2px rgba(28,58,44,.10),0 22px 40px -22px rgba(28,58,44,.42)}
-.flyer-shot img{display:block;width:100%;height:auto}
 
 /* ---------- service pages ---------- */
 .svc-hero h1 em{font-style:normal;color:var(--gold-lg)}
 .svc-hero .media{align-items:center}
 .svc-hero-art .shot img{width:100%}
 /* a portrait photo in a one-column hero would fill the content width and push its caption below the fold */
-@media (max-width:899.98px){.svc-hero-portrait{max-width:440px}}
 
 .related{list-style:none;display:flex;flex-wrap:wrap;gap:14px 26px}
 .related .textlink{white-space:nowrap}
 @media (min-width:860px){.target-strip:has(.related){grid-template-columns:1fr 1.1fr}}
 
-/* ---------- market map: channel labels + legend ---------- */
-
-.card-link{color:inherit;text-decoration:none;background-image:linear-gradient(var(--gold),var(--gold));background-size:0 1px;background-repeat:no-repeat;background-position:0 100%;transition:background-size .3s ease,color .25s ease}
-.card-link:hover{color:var(--gold-sm);background-size:100% 1px}
-.card-link::after{content:"";position:absolute;inset:0}
-
-/* ---------- market map v3: calm, text-free, legend below ---------- */
-
-/* ---------- hero v4: illustrated community town ---------- */
+/* ---------- home hero: the illustrated community map ---------- */
 .hero-town{padding-top:clamp(28px,5vw,64px)}
 .hero-town h1{font-size:clamp(2.3rem,1.3rem + 3.8vw,3.9rem)}
 /* two-column hero: size the headline to its column so "targeted to your" holds one line on small desktops */
 @media (min-width:960px){.hero-town h1{font-size:clamp(2.9rem,5.9vw - .25rem,3.9rem)}}
 .hero-town h1 em{font-style:normal;color:var(--gold-lg)}
+/* two-column hero: "your community." stays on one line */
+@media (min-width:960px){.hero-town h1 em{white-space:nowrap}}
 .hero-town .eyebrow{margin-bottom:18px}
 @media (min-width:960px){.hero-town .hero-grid{grid-template-columns:.95fr 1.05fr}.hero-town .hero-art{max-width:600px;width:100%;margin-right:0}}
 .town{position:relative}
 .town-img{display:block;width:100%;height:auto;filter:drop-shadow(0 30px 40px rgba(28,58,44,.16))}
 
-/* ---------- hero v5: community marketing network ---------- */
+/* ---------- hero: the community map network (lines, dots and chips) ---------- */
 .town{margin:0}
 .net{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
 .net-line{fill:none;stroke:var(--ink);stroke-opacity:.42;stroke-width:1.6;stroke-linecap:round;vector-effect:non-scaling-stroke}
@@ -645,7 +449,7 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 @keyframes tpIn{from{opacity:0;transform:translate(-50%,-80%)}to{opacity:1;transform:translate(-50%,-100%)}}
 @keyframes hubGlow{0%,100%{stroke-width:3}50%{stroke-width:7}}
 @media (min-width:960px){.hero-town .hero-art{max-width:620px}}
-/* phones: keep the hub + three priority touchpoints on the map, list the rest below */
+/* phones: keep the clinic, small businesses and restaurants chips on the map; the list below names all five places */
 @media (max-width:767.98px){
   .tp{padding:5px 8px 6px;border-radius:10px}
   .tp-place{font-size:.62rem;letter-spacing:.08em}
@@ -659,17 +463,15 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 }
 .net-line{stroke-opacity:.55;stroke-width:1.9}
 
-/* phones: the Neighborhoods label would sit on the temple; the list under the map still names it */
-@media (max-width:767.98px){.tp-homes{display:none!important}}
-/* the Community center chip hangs below its building at every width, so it leaves the festival tents and their dot in view
-   (above the building it covered the tents on small desktops, where the map shrinks but the chips keep their size) */
-.tp-cc{transform:translate(-50%,0);margin-top:6px}
-.tp-cc::after{top:-5px;bottom:auto;transform:translateX(-50%) rotate(225deg)}
-.js .tp-cc{animation-name:tpInBelow}
-/* phones: the Local shops chip sits a little right of its pointer so it clears the third house */
-@media (max-width:767.98px){
-  .tp-shops{margin-left:8px}.tp-shops::after{left:calc(50% - 8px)}
-}
+/* chips that hang below their landmark, so the building stays in view: the restaurant (its patio and windows)
+   and the houses (the Neighborhoods chip would cover the low office above them) */
+.tp-below{transform:translate(-50%,0);margin-top:6px}
+.tp-below::after{top:-5px;bottom:auto;transform:translateX(-50%) rotate(225deg)}
+.js .tp-below{animation-name:tpInBelow}
+/* the Neighborhoods chip sits left of its pointer so it clears the small businesses */
+.tp-homes{margin-left:-30px}.tp-homes::after{left:calc(50% + 30px)}
+/* phones: the map shrinks but the chips keep their size, so the Small businesses chip sits right of its pointer to clear the houses */
+@media (max-width:767.98px){.tp-shops{margin-left:12px}.tp-shops::after{left:calc(50% - 12px)}}
 @keyframes tpInBelow{from{opacity:0;transform:translate(-50%,-20%)}to{opacity:1;transform:translate(-50%,0)}}
 /* the CSS drop-shadow filter on the transparent town image clipped into a visible box in Chromium;
    a soft ground shadow under the tile gives the same lift without the artifact */
@@ -682,23 +484,9 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
    one-off styles so every page speaks the same visual language.
    ===================================================================== */
 
-/* Community -> Channel rows: "touchpoint  ->  channel" */
-.cc{list-style:none;display:grid;gap:10px;grid-template-columns:1fr}
-@media (min-width:640px){.cc{grid-template-columns:1fr 1fr}}
-@media (min-width:1040px){.cc.c3{grid-template-columns:repeat(3,1fr)}}
-.cc>li>a,.cc>li>div{position:relative;display:grid;grid-template-columns:minmax(0,1fr) 34px minmax(0,1fr);align-items:center;gap:8px;min-height:72px;padding:14px 16px;border-radius:14px;background:var(--paper);border:1px solid var(--line);text-decoration:none;color:inherit;transition:border-color .25s ease,box-shadow .25s ease,transform .25s ease}
-.bg-paper .cc>li>a,.bg-paper .cc>li>div{background:var(--ground)}
-.cc>li>a:hover{border-color:var(--gold);box-shadow:0 14px 26px -20px rgba(28,58,44,.5);transform:translateY(-1px)}
-.cc-from{display:flex;align-items:center;gap:10px;font:600 .66rem/1.35 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
-.cc-from svg{width:22px;height:22px;flex:none;color:var(--slate-soft)}
-.cc-arrow{position:relative;height:1px;background:var(--gold)}
-.cc-arrow::after{content:"";position:absolute;right:-1px;top:-3px;width:7px;height:7px;border-top:1px solid var(--gold);border-right:1px solid var(--gold);transform:rotate(45deg)}
-.cc-to{font:600 .98rem/1.3 var(--sans);color:var(--ink)}
-.cc-to small{display:block;margin-top:2px;font:400 .82rem/1.4 var(--sans);color:var(--ink-3)}
-
 .shot{position:relative}
 
-/* Journey / flow line: Business -> Market -> ... (wraps to a vertical list on phones) */
+/* Numbered journey (website-design steps; a vertical list on phones) */
 .journey{list-style:none;display:grid;gap:10px;counter-reset:j}
 .journey>li{position:relative;padding:16px 16px 16px 52px;border-radius:14px;background:var(--paper);border:1px solid var(--line)}
 .bg-paper .journey>li{background:var(--ground)}
@@ -712,91 +500,20 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
   .journey>li+li::after{content:"";position:absolute;left:-22px;top:50%;width:18px;height:1px;background:var(--gold)}
 }
 
-/* Industry card metadata */
-.ind-meta{margin:14px 0 0;display:grid;gap:10px}
-.ind-meta div{padding-top:10px;border-top:1px solid var(--line)}
-.ind-meta dt{font:600 .62rem/1.3 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--gold-sm)}
-.ind-meta dd{margin:4px 0 0;font-size:.92rem;line-height:1.5;color:var(--ink)}
-
-/* Example campaign: a visual stage flow instead of paragraphs */
-.excase{border:1px solid var(--line);border-radius:18px;background:var(--paper);padding:clamp(22px,3.2vw,40px)}
-.bg-paper .excase{background:var(--ground)}
-.excase+.excase{margin-top:22px}
-.excase-head{display:grid;gap:10px;max-width:68ch}
-.excase-head h2,.excase-head h3{font-size:clamp(1.35rem,1.15rem + .8vw,1.75rem);line-height:1.2}
-.ex-flow{list-style:none;display:grid;gap:10px;margin-top:22px}
-@media (min-width:720px){.ex-flow{grid-template-columns:repeat(2,1fr)}}
-@media (min-width:1100px){.ex-flow{grid-template-columns:repeat(3,1fr)}}
-.ex-flow>li{position:relative;padding:16px 16px 18px;border-radius:14px;background:var(--ground);border:1px solid var(--line)}
-.bg-paper .ex-flow>li{background:var(--paper)}
-.ex-k{display:flex;align-items:center;gap:8px;font:600 .64rem/1.3 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--gold-sm)}
-.ex-k svg{width:18px;height:18px;color:var(--slate-soft)}
-.ex-flow p{margin-top:8px;font-size:.93rem;line-height:1.55;color:var(--ink)}
+/* chips: short labels in a row (flyer drop places, review tag spots) */
 .ex-chips{list-style:none;display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
 .ex-chips li{padding:5px 10px;border-radius:999px;border:1px solid var(--line);background:var(--paper);font:500 .8rem/1.2 var(--sans);color:var(--ink)}
 .bg-paper .ex-chips li{background:var(--ground)}
 
-/* .cc rows that end up narrow (phones, two-column tablets, three-up desktops) stack the
-   touchpoint above the arrow + channel so long labels never run into the arrow. */
-.cc>li{container-type:inline-size}
-@container (max-width:419.98px){
-  .cc>li>a,.cc>li>div{grid-template-columns:22px minmax(0,1fr);column-gap:10px;row-gap:8px;align-content:center}
-  .cc .cc-from{grid-column:1/-1}
-  .cc .cc-arrow{grid-column:1}
-  .cc .cc-to{grid-column:2}
-}
-.foot-legal-h{margin-top:26px}
-
-/* ===== Page styles (cohesion pass, A1) ===== */
-/* ---------- estimate page (.est-) ---------- */
-
-/* Author display rules (.form-layout is a grid) must not beat the hidden attribute. */
-.est-page [hidden]{display:none!important}
-
-/* Form + "what happens next" card. Below 1000px the card follows the form. */
-@media (min-width:1000px){.est-layout{grid-template-columns:minmax(0,1fr) 340px}}
-.est-layout .form-wrap{min-width:0}
-
-/* Two groups: what we need, then optional details. Floated legends behave like
-   ordinary blocks, so the group divider can sit above them. */
-.est-group{border:0;margin:0;padding:0;min-width:0}
-.est-group>legend{float:left;width:100%;padding:0;margin-bottom:6px;font:600 clamp(1.3rem,1.16rem + .55vw,1.6rem)/1.22 var(--display);letter-spacing:-.018em;color:var(--ink)}
-.est-group>legend+*{clear:both}
-.est-group>legend+.field{margin-top:0;padding-top:16px}
-.est-optional{margin-top:clamp(40px,5vw,54px);padding-top:clamp(30px,4vw,38px);border-top:1px solid var(--line)}
-.est-hint{padding-top:2px;font-size:.9rem;line-height:1.55;color:var(--ink-3)}
-.est-req{font:500 .8rem/1.4 var(--sans);color:var(--ink-3)}
+/* ---------- form bits shared by the call form, the expo form and the thank-you page (.est-) ---------- */
 .est-row{margin-top:24px}
-.est-other{margin-top:14px;padding-left:16px;border-left:2px solid var(--gold)}
 
-/* Error summary: listed problems link to their fields. */
-.est-summary{margin-bottom:28px;padding:18px 20px;border:1px solid #E2BDB8;border-left:4px solid #A3342B;border-radius:10px;background:#FCF4F3;color:#7E2A22}
-.est-summary:focus-within{box-shadow:0 0 0 3px rgba(163,52,43,.16)}
-.est-summary h2{font:600 1rem/1.35 var(--sans);color:#7E2A22}
-.est-summary h2:focus{outline:none}
-.est-summary ul{list-style:none;margin-top:10px;display:grid;gap:6px}
-.est-summary a{color:#7E2A22;font-weight:600;font-size:.92rem;line-height:1.45;text-underline-offset:3px}
+/* the privacy line under the submit button */
 
-/* Submit block: send failure, button, privacy line, patient-information warning. */
-.est-submit .est-fail{margin:0 0 20px}
-.est-fail p+p{margin-top:6px}
-.est-fail strong{color:#7E2A22}
-.est-fail a[href^="tel:"]{white-space:nowrap}
 .est-privacy{margin-top:16px;font-size:.88rem;line-height:1.55;color:var(--ink-2)}
 .est-privacy a{color:var(--ink);font-weight:600;text-underline-offset:3px}
-.est-submit .form-foot{margin-top:6px}
-@media (max-width:479.98px){.est-submit .btn{width:100%}}
 
-/* "What happens next": the shared journey list, kept vertical in the narrow card. */
-.est-aside{max-width:720px}
-.est-aside .journey{grid-auto-flow:row;grid-auto-columns:auto;gap:10px;margin-top:18px}
-.est-aside .journey>li{padding:14px 14px 14px 48px;background:var(--ground)}
-.est-aside .journey>li::before{position:absolute;left:14px;top:15px;display:inline;margin:0}
-.est-aside .journey>li+li::after{display:none}
-.est-aside .est-call{margin-top:18px}
-.est-call a{white-space:nowrap}
-
-/* Success panel */
+/* the sent panel (thanks.html) */
 .est-sent{padding:clamp(24px,3.4vw,38px);border:1px solid var(--line);border-radius:18px;background:var(--paper)}
 .est-sent-mark{display:inline-flex;align-items:center;justify-content:center;width:46px;height:46px;margin-bottom:18px;border-radius:50%;background:var(--ink);color:var(--ground)}
 .est-sent-mark svg{width:22px;height:22px}
@@ -807,554 +524,32 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 .est-sent a[href^="tel:"]{white-space:nowrap}
 .est-sent .actions{margin-top:26px}
 
-/* ===== Page styles (cohesion pass, A2) ===== */
-
-/* ---------- home: community -> channel rows ----------
-   Where a row is narrow (phones, and two columns on tablets) the touchpoint label sits
-   on its own line and the arrow leads into the channel, so long labels never run into the arrow. */
-@media (max-width:519.98px),(min-width:640px) and (max-width:959.98px){
-  .hm-cc>li>a,.hm-cc>li>div{grid-template-columns:22px minmax(0,1fr);column-gap:10px;row-gap:8px;align-content:center}
-  .hm-cc .cc-from{grid-column:1/-1}
-  .hm-cc .cc-arrow{grid-column:1}
-  .hm-cc .cc-to{grid-column:2}
-}
-
-/* ---------- home: seven-step journey ---------- */
-@media (min-width:960px){.hm-journey{grid-auto-columns:minmax(0,1fr)}}
-/* desktops: seven columns are too narrow for the step names, so wrap into rows of four */
-@media (min-width:960px){
-  .hm-journey{grid-auto-flow:row;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
-  .hm-journey>li+li::after{display:none}
-}
-
-/* ---------- home: physical + digital image ---------- */
-.hm-pd-art{margin:0 auto;width:100%;max-width:440px}
-@media (min-width:900px){.hm-pd-art{margin:0 0 0 auto}}
-
-/* ---------- home: industries teaser (chips beside the heading) ---------- */
-.hm-ind{grid-template-columns:1fr 1fr}
-@media (min-width:640px){.hm-ind{grid-template-columns:repeat(3,1fr)}}
-@media (min-width:960px){
-  .hm-ind-wrap{align-items:center}
-  .hm-ind{grid-template-columns:1fr 1fr}
-}
-
-/* ---------- home: example campaign, four stages in one row on wide screens ---------- */
-@media (min-width:1100px){.ex-flow.hm-flow{grid-template-columns:repeat(4,1fr)}}
-
-/* ===== Page styles (cohesion pass, A3) ===== */
-
-/* ---------- services: the eight pillar cards ---------- */
-.svc-pillars>li{display:flex;flex-direction:column}
-.svc-pillars .top{margin-bottom:14px}
-.svc-pillars .kicker{margin-bottom:6px}
-.svc-inc,.cardgrid .svc-inc{margin-top:18px;font:600 .62rem/1.3 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3)}
-.svc-inc+.ex-chips{margin-top:8px}
-.svc-links{margin-top:auto;padding-top:22px;display:flex;flex-wrap:wrap;gap:14px 22px}
-.cardgrid .svc-links a.textlink{margin-top:0}
-.svc-pillars>li:target{box-shadow:inset 0 0 0 1px var(--gold)}
-
-/* ---------- services: how the pillars work together ---------- */
-.svc-jtag{display:inline-block;margin-top:10px;padding:4px 9px;border-radius:999px;border:1px solid var(--line);font:600 .6rem/1.2 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--gold-sm);white-space:nowrap}
-.svc-note{margin-top:clamp(24px,3vw,32px)}
-/* the stages carry pillar numbers, so the journey's own step counter is dropped here */
-.svc-journey>li{padding-left:18px}
-.svc-journey>li::before{content:none}
-
-/* ---------- market research: three-layer diagram ---------- */
-.svc-mr-head{margin-bottom:0}
-.svc-rings{margin:0 auto;width:100%;max-width:460px}
-@media (min-width:900px){.svc-rings{margin:0 0 0 auto}}
-.svc-rings-map{position:relative;border-radius:18px;background:var(--paper);border:1px solid var(--line);padding:clamp(14px,3vw,24px);box-shadow:0 1px 2px rgba(28,58,44,.08),0 30px 60px -38px rgba(28,58,44,.45)}
-.svc-rings svg{display:block;width:100%;height:auto;overflow:visible}
-.svc-rings .b3{fill:#EEF3EC}
-.svc-rings .b2{fill:#E6EDE5}
-.svc-rings .b1{fill:#DCE6DB}
-.svc-rings .st{fill:none;stroke:#fff;stroke-width:8;stroke-linecap:round;opacity:.7}
-.svc-rings .st.minor{stroke-width:4}
-.svc-rings .ln{fill:none;stroke:var(--slate-soft);stroke-opacity:.55;stroke-width:1.2;stroke-dasharray:3 5}
-.svc-rings .nd circle{fill:var(--paper);stroke:var(--ink);stroke-opacity:.45;stroke-width:1.2}
-.svc-rings .nd use{color:var(--ink)}
-.svc-rings .nd.n1 circle{stroke:var(--gold);stroke-opacity:1}
-.svc-rings .nd.n3 circle{stroke:var(--slate-soft);stroke-opacity:.9}
-.svc-rings .bd circle{fill:var(--gold-sm)}
-.svc-rings .bd text{fill:#fff;font:600 11px/1 var(--sans);text-anchor:middle;dominant-baseline:central}
-.svc-rings .halo{fill:var(--gold);opacity:.2}
-.svc-rings .core{fill:var(--ink)}
-.svc-rings .core-ic{color:var(--ground)}
-@media (prefers-reduced-motion:no-preference){
-  .svc-rings .halo{animation:halo 4s ease-in-out 3;transform-origin:center;transform-box:fill-box}
-}
-.svc-rings-key ol{list-style:none;display:flex;flex-direction:column;gap:8px;margin-top:14px}
-@media (min-width:480px){.svc-rings-key ol{flex-direction:row;flex-wrap:wrap;gap:8px 20px}}
-.svc-rings-key li{display:flex;align-items:center;gap:9px;font:500 .84rem/1.3 var(--sans);color:var(--ink)}
-.svc-rings-key b{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;flex:none;border-radius:50%;background:var(--gold-sm);color:#fff;font:600 .68rem/1 var(--sans)}
-
-/* ---------- market research: layers, deliverables, links ---------- */
-.svc-layers>li .ex-chips{margin-top:14px}
-.svc-get .spec{margin-top:16px}
-.svc-get .spec li{font-size:.94rem}
-.svc-inline{color:var(--ink);text-underline-offset:3px;font-weight:500}
-/* narrow rows: the finding sits on its own line and the arrow leads into the pillar */
-@media (max-width:519.98px),(min-width:640px) and (max-width:1039.98px){
-  .svc-cc>li>a{grid-template-columns:22px minmax(0,1fr);column-gap:10px;row-gap:8px;align-content:center}
-  .svc-cc .cc-from{grid-column:1/-1}
-  .svc-cc .cc-arrow{grid-column:1}
-  .svc-cc .cc-to{grid-column:2}
-}
-
-/* ---------- tracking: methods and refinement ---------- */
-.svc-methods>li{display:flex;flex-direction:column}
-.cardgrid.svc-methods .svc-inc{margin-top:auto;padding-top:18px}
-.svc-adjust{margin-top:clamp(28px,3.6vw,40px)}
-.svc-adjust h3{font:600 .72rem/1.4 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--gold-sm)}
-.svc-adjust .ex-chips{margin-top:12px}
-@media (min-width:960px){.svc-loop{grid-auto-columns:minmax(0,1fr)}}
-.svc-cc>li>a{height:100%}
-.svc-flow{margin-top:0}
-.svc-flow .arrow{background:none;border:0;padding:0}
-
-/* ===== Page styles (cohesion pass, A4) ===== */
-
-/* ---------- caption row: label (and enlarge button) under a visual ---------- */
-.hiw-cap{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px;margin-top:16px}
-.hiw-cap .card-cap{margin-top:0}
-.gift-row .hiw-cap{margin-top:13px}
-.hiw-tags{display:flex;flex-wrap:wrap;align-items:center;gap:10px 12px;margin-bottom:6px}
-.hiw-tags .tag{margin-bottom:0}
-
-/* ---------- how it works: seven-step overview ---------- */
-.hiw-journey{margin-top:clamp(8px,1.5vw,16px)}
-.hiw-journey>li{transition:border-color .25s ease,box-shadow .25s ease}
-.hiw-journey>li:hover{border-color:var(--gold);box-shadow:0 14px 26px -22px rgba(28,58,44,.5)}
-.hiw-journey .card-link{color:var(--ink)}
-@media (min-width:960px){.hiw-journey{grid-auto-columns:minmax(0,1fr);gap:22px}.hiw-journey>li+li::after{left:-19px;width:16px}}
-/* desktops: seven columns are too narrow for the step names, so wrap into rows of four */
-@media (min-width:960px){
-  .hiw-journey{grid-auto-flow:row;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
-  .hiw-journey>li+li::after{display:none}
-}
-
-/* ---------- how it works: one block per step ---------- */
-.hiw-steps{list-style:none;counter-reset:hs;border-top:1px solid var(--line)}
-.hiw-step{display:grid;gap:18px 40px;padding-block:clamp(28px,3.6vw,44px);border-bottom:1px solid var(--line)}
-.hiw-head{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;align-content:start;gap:12px 14px}
-.hiw-head::before{counter-increment:hs;content:"Step " counter(hs,decimal-leading-zero);grid-column:1/-1;font:600 .66rem/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--gold-sm)}
-.hiw-head svg{width:30px;height:30px;color:var(--slate-soft)}
-.hiw-head h3{font-size:clamp(1.3rem,1.15rem + .6vw,1.6rem);line-height:1.2}
-.hiw-label{font:600 .64rem/1.3 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);margin-bottom:8px}
-.hiw-body>p:not(.hiw-label){font-size:.98rem;line-height:1.66;max-width:60ch}
-.hiw-body .textlink{margin-top:18px}
-.hiw-out{margin:0;padding:4px 20px;background:var(--ground);border:1px solid var(--line);border-radius:14px}
-.hiw-out div{padding:14px 0}
-.hiw-out div+div{border-top:1px solid var(--line)}
-.hiw-out dt{font:600 .64rem/1.3 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--gold-sm)}
-.hiw-out dd{margin:6px 0 0;font-size:.94rem;line-height:1.55;color:var(--ink)}
-@media (min-width:700px){
-  .hiw-step{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)}
-  .hiw-head{grid-column:1/-1}
-}
-@media (min-width:1040px){
-  .hiw-step{grid-template-columns:minmax(0,.78fr) minmax(0,1.3fr) minmax(0,1fr);align-items:start}
-  .hiw-head{grid-column:auto}
-}
-
-/* ---------- how it works: touchpoint -> channel rows ----------
-   Rows in the same grid line share a height; narrow rows put the touchpoint on its
-   own line so long labels never meet the arrow. */
-.hiw-cc>li>a{height:100%}
-@media (max-width:519.98px),(min-width:640px) and (max-width:959.98px){
-  .hiw-cc>li>a,.hiw-cc>li>div{grid-template-columns:22px minmax(0,1fr);column-gap:10px;row-gap:8px;align-content:center}
-  .hiw-cc .cc-from{grid-column:1/-1}
-  .hiw-cc .cc-arrow{grid-column:1}
-  .hiw-cc .cc-to{grid-column:2}
-}
-
-/* ---------- direct mail: sample carrier-route map ---------- */
-.hiw-routes{margin:0}
-.hiw-routes-map{position:relative;border-radius:18px;overflow:hidden;background:var(--map-land);border:1px solid var(--line);box-shadow:0 1px 2px rgba(28,58,44,.08),0 30px 60px -36px rgba(28,58,44,.45)}
-.hiw-routes-map svg{display:block;width:100%;height:auto}
-.hiw-routes .rt{fill:rgba(28,58,44,.035);stroke:#B9C8BC;stroke-width:1.2;stroke-linejoin:round}
-.hiw-routes .rt.on{fill:rgba(189,113,137,.17);stroke:var(--gold);stroke-width:1.6}
-.hiw-routes .st{fill:none;stroke:#fff;stroke-width:8;stroke-linecap:round;opacity:.85}
-.hiw-routes .st.minor{stroke-width:4;opacity:.75}
-.hiw-routes .zip{fill:none;stroke:var(--ink);stroke-opacity:.4;stroke-width:1.4;stroke-dasharray:6 6;stroke-linejoin:round}
-.hiw-routes .hm{color:var(--gold-sm)}
-.hiw-routes .biz .core{fill:var(--ink)}
-.hiw-routes .biz .halo{fill:var(--gold);opacity:.22}
-.hiw-legend{list-style:none;display:grid;gap:8px;margin-top:16px}
-.hiw-legend li{display:flex;align-items:center;gap:10px;font:500 .84rem/1.35 var(--sans);color:var(--ink)}
-.hiw-sw{width:20px;height:13px;flex:none;border-radius:3px;background:rgba(28,58,44,.035);border:1px solid #B9C8BC}
-.hiw-sw.on{background:rgba(189,113,137,.17);border-color:var(--gold)}
-.hiw-sw.biz{width:13px;height:13px;margin-inline:3.5px;border-radius:50%;background:var(--ink);border-color:var(--ink);box-shadow:0 0 0 4px rgba(189,113,137,.22)}
-@media (min-width:900px){.hiw-routes{max-width:520px;width:100%;margin-left:auto}}
-
-/* ---------- direct mail: five-step drop line ---------- */
-.hiw-drop+.note{margin-top:22px}
-
-/* ---------- gift cards: where the offer sits ---------- */
-.hiw-chain{justify-content:flex-start;margin-top:26px;color:var(--ink-3)}
-.hiw-chain li:nth-child(4n+1){color:var(--ink-3)}
-.hiw-chain .lead{color:var(--gold-sm)}
-
-/* ---------- sample mailers: anatomy lists ---------- */
-.hiw-spec{margin-top:6px}
-.hiw-spec li{font-size:.95rem}
-.target-card .hiw-spec svg{width:19px;height:19px;margin:3px 0 0;display:block}
-.hiw-more{margin-top:22px}
-.target-card .hiw-more .textlink svg{width:14px;height:14px;margin:0;display:inline-block}
-
-/* ===== Page styles (cohesion pass, A5) ===== */
-
-/* ---------- community marketing (.cm-) ---------- */
-/* "Also on the map" chips under the touchpoint -> channel grid */
-.cm-also{margin-top:clamp(26px,3.4vw,36px)}
-.cm-also .uses{margin-top:10px}
-.cm-k{font:600 .68rem/1.4 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3)}
-.cm-cc>li>a{height:100%}
-.cm-note{margin-top:clamp(20px,2.6vw,26px);font-size:.95rem;line-height:1.6;max-width:66ch}
-.cm-note a{color:var(--ink);font-weight:600;text-underline-offset:3px}
-
-/* what the business brings: inline links in the spec list, square photo kept to a sensible size */
-.cm-spec a{color:var(--ink);text-underline-offset:3px}
-.cm-art{margin:0;width:100%;max-width:460px;margin-inline:auto}
-.cm-art .card-cap{margin-top:12px}
-
-/* language: label above the localized flyers */
-.cm-illus{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin-bottom:16px;font-size:.9rem;color:var(--ink-3)}
-.cm-lang-cards{margin-top:clamp(30px,4vw,44px)}
-
-/* our approach: the one canonical statement */
-.cm-statement p{font:500 clamp(1.18rem,1.02rem + .6vw,1.45rem)/1.42 var(--display);letter-spacing:-.012em;color:var(--ink);max-width:none}
-
-/* ---------- FAQ (.cm-faq-) ---------- */
-.cm-faq-head{max-width:820px;margin-inline:auto}
-.cm-faq-group{max-width:820px;margin-inline:auto;scroll-margin-top:24px}
-.cm-faq-group+.cm-faq-group{margin-top:clamp(48px,6vw,72px)}
-.cm-faq-group>h2{font-size:clamp(1.45rem,1.2rem + 1vw,1.9rem);line-height:1.2;margin-bottom:clamp(12px,1.8vw,18px)}
-.cm-faq-group .answer p+p,.cm-faq-group .answer p+ol,.cm-faq-group .answer ol+p{margin-top:12px}
-.cm-faq-group .answer a{color:var(--ink);text-underline-offset:3px}
-.cm-pillars,.cm-steps-list{list-style:none;display:grid;gap:8px}
-.cm-pillars{counter-reset:pl;column-gap:28px}
-@media (min-width:560px){.cm-pillars{grid-template-columns:1fr 1fr;grid-template-rows:repeat(4,auto);grid-auto-flow:column}}
-.cm-steps-list{counter-reset:sl;gap:10px}
-.cm-pillars li,.cm-steps-list li{position:relative;padding-left:32px}
-.cm-pillars li::before,.cm-steps-list li::before{position:absolute;left:0;top:.2em;font:650 .8rem/1.6 var(--display);letter-spacing:.03em;color:var(--gold-sm)}
-.cm-pillars li::before{counter-increment:pl;content:counter(pl,decimal-leading-zero)}
-.cm-steps-list li::before{counter-increment:sl;content:counter(sl,decimal-leading-zero)}
-.cm-steps-list b{color:var(--ink);font-weight:600}
-/* narrow columns: stack the icon over the touchpoint name so "Neighborhoods" clears the arrow */
-@media (max-width:899.98px){
-  .cm-cc>li>a{padding:14px}
-  @container (min-width:420px){.cm-cc>li>a{grid-template-columns:minmax(0,1fr) 24px minmax(0,1.15fr)}}
-  .cm-cc .cc-from{flex-direction:column;align-items:flex-start;gap:6px;letter-spacing:.1em}
-}
-
-/* ===== Page styles (cohesion pass, A6) ===== */
-/* ---------- custom marketing, kits, flyers, events (.cu-) ---------- */
-
-/* page-head h1 accent, matching .svc-hero */
-.cu-top h1 em{font-style:normal;color:var(--gold-lg)}
-
-/* custom marketing: materials grouped by where they are used */
-.cu-where{list-style:none;display:grid;gap:18px}
-.cu-where>li{display:grid;gap:24px;align-items:center;padding:clamp(20px,2.8vw,34px);border:1px solid var(--line);border-radius:18px;background:var(--paper);scroll-margin-top:100px}
-.bg-paper .cu-where>li{background:var(--ground)}
-@media (min-width:600px){.cu-where>li{grid-template-columns:minmax(0,1fr) minmax(0,.6fr);gap:28px}}
-@media (min-width:820px){.cu-where>li{grid-template-columns:minmax(0,1.35fr) minmax(0,.65fr);gap:clamp(28px,4vw,52px)}}
-.cu-k{display:flex;align-items:center;gap:10px;margin-bottom:12px;font:650 .84rem/1 var(--display);letter-spacing:.06em;color:var(--gold-sm)}
-.cu-k svg{width:26px;height:26px;flex:none;color:var(--slate-soft)}
-.cu-where h3{font-size:clamp(1.3rem,1.15rem + .6vw,1.6rem);line-height:1.25}
-.cu-where h3+p{margin-top:10px;font-size:.98rem;line-height:1.65;max-width:54ch}
-.cu-where .ex-chips{margin-top:16px}
-.cu-links{display:flex;flex-wrap:wrap;gap:14px 26px;margin-top:22px}
-.cu-links .textlink{white-space:nowrap}
-
-/* the picture beside each group: a soft surface with the printed piece sitting on it */
-.cu-art{position:relative;margin:0;aspect-ratio:4/3;border-radius:14px;overflow:hidden;background:linear-gradient(160deg,#FBFCFA,#E6EDE5);border:1px solid var(--line-soft);display:flex;align-items:center;justify-content:center;padding:46px 10% 26px}
-.cu-art picture{display:contents}
-.cu-art img{width:auto;height:auto;max-width:100%;max-height:100%;border-radius:4px;box-shadow:0 1px 2px rgba(28,58,44,.10),0 16px 28px -16px rgba(28,58,44,.4)}
-/* square illustrations (the event table): less padding, so the scene reads at the same weight as the cards beside it */
-.cu-art.cu-sq{padding:16px 10%}
-/* portrait pieces (the flyer and the social ad): height is their limit in a 4:3 tile, so trim the top and bottom padding */
-.cu-art.cu-tall{padding:12px 10%}
-@media (max-width:599.98px){.cu-art{max-width:460px}}
-
-.cu-grid .mock{position:relative}
-.cu-flyer{position:relative}
-
-/* short journeys (4–5 steps) */
-@media (min-width:960px){.cu-journey{grid-auto-columns:minmax(0,1fr)}}
-
-/* events: the three community -> channel rows. The touchpoint sits above the channel so the
-   detail line has room; only a wide single column (520-639px) keeps the side-by-side row */
-.cu-cc>li{display:flex}
-.cu-cc>li>div{flex:1}
-@media (max-width:519.98px),(min-width:640px){
-  .cu-cc>li>div{grid-template-columns:22px minmax(0,1fr);column-gap:10px;row-gap:8px;align-content:start}
-  .cu-cc .cc-from{grid-column:1/-1}
-  .cu-cc .cc-arrow{grid-column:1}
-  .cu-cc .cc-to{grid-column:2}
-}
-
-@media (min-width:640px) and (max-width:1039.98px){.cu-cc>li:last-child:nth-child(odd){grid-column:1/-1}}
-
-/* ===== Page styles (cohesion pass, A7) ===== */
-
-/* ---------- digital & promotional pages (.dg-) ---------- */
-
-/* "On the community map": a single touchpoint -> channel row tying a channel back to the map */
-.dg-map{margin-top:24px;max-width:520px}
+/* small uppercase label (website-design) */
 .dg-k{font:600 .66rem/1.4 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3);margin-bottom:10px}
-.cc.dg-cc{grid-template-columns:1fr}
-/* phones: the touchpoint sits on its own line and the arrow leads into the channel */
-@media (max-width:519.98px){
-  .dg-cc>li>div{grid-template-columns:22px minmax(0,1fr);column-gap:10px;row-gap:8px}
-  .dg-cc .cc-from{grid-column:1/-1}
-  .dg-cc .cc-arrow{grid-column:1}
-  .dg-cc .cc-to{grid-column:2}
-}
-.dg-map+.intro{margin-top:22px}
-/* keep the italic half of a headline on one line */
-.dg-h1 em{display:inline-block}
-
-/* figures: plain margins, two sizes, and a caption row */
-.dg-art{margin:0;width:100%}
-.dg-art-md{max-width:520px;margin-inline:auto}
-.dg-art-sm{max-width:360px;margin-inline:auto}
-.dg-cap{margin-top:12px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;font-size:.84rem;line-height:1.5;color:var(--ink-3)}
-.dg-p{margin-top:14px;max-width:42em}
-
-/* Google Ads: sample sketch of one ad group (searches to show for / to exclude) */
-.dg-panel{padding:clamp(22px,3vw,30px);background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 1px 2px rgba(28,58,44,.08),0 24px 44px -26px rgba(28,58,44,.34)}
-.dg-panel-t{font:600 1.25rem/1.28 var(--display);letter-spacing:-.015em;color:var(--ink)}
-.dg-panel .dg-k{margin:20px 0 0}
-.dg-panel .ex-chips li{background:var(--ground)}
-.dg-neg li{color:var(--ink-3);text-decoration:line-through;text-decoration-color:rgba(158,79,104,.55)}
-.dg-panel .dg-cap{margin-top:22px;padding-top:14px;border-top:1px solid var(--line-soft)}
-
-/* Facebook & Instagram: the same offer on a mailer and in the feed */
-.dg-pair{max-width:540px;margin-inline:auto}
-.dg-pair-art{position:relative;margin-top:0;padding-bottom:16%}
-.dg-pair-mail{width:80%;transform:rotate(-2deg)}
-.dg-pair-mail img{width:100%}
-.dg-pair-feed{position:absolute;right:0;bottom:0;width:42%;border:1px solid var(--line);background:#fff;box-shadow:0 1px 2px rgba(28,58,44,.10),0 26px 44px -20px rgba(28,58,44,.45)}
-.dg-pair .dg-cap{margin-top:16px}
-
-/* Promotional platforms: phone listing with a caption below */
-.dg-phone{max-width:320px;margin-inline:auto}
-.dg-phone picture{display:block;filter:drop-shadow(0 22px 30px rgba(28,58,44,.22))}
-/* the PNG carries its own soft shadow, cut off square at the image edge; clip to the phone frame instead */
-.dg-phone img{display:block;width:100%;height:auto;clip-path:inset(1.6% 3.26% 1.6% 3.26% round 10.9% / 5.2%)}
-.dg-phone .dg-cap{justify-content:center;text-align:center}
-
-/* Promotional platforms: when a deal can fit, and when it usually doesn't */
-.dg-fit{display:grid;gap:16px}
-@media (min-width:760px){.dg-fit{grid-template-columns:1.1fr .9fr;gap:20px;align-items:start}}
-.dg-fit-col{background:var(--ground);border:1px solid var(--line);border-radius:16px;padding:clamp(22px,2.8vw,32px)}
-.dg-fit-no{background:transparent;border-style:dashed;border-color:#B9C8BC}
-.dg-fit-col h3{display:flex;align-items:center;gap:10px;font-size:1.2rem;line-height:1.3;margin-bottom:14px}
-.dg-fit-col h3 svg{width:22px;height:22px;flex:none;color:var(--slate-soft)}
-.dg-fit-no h3 svg{color:var(--gold-sm)}
-.dg-fit-col ul{list-style:none}
-.dg-fit-col li{position:relative;padding:12px 0 12px 18px;border-top:1px solid var(--line);font-size:.96rem;line-height:1.5;color:var(--ink)}
-.dg-fit-col li::before{content:"";position:absolute;left:2px;top:1.3em;width:6px;height:6px;border-radius:50%;background:var(--gold)}
-.dg-fit-no li{color:var(--ink-2)}
-.dg-fit-no li::before{background:#B9C8BC}
-
-/* ===== Page styles (cohesion pass, A8) ===== */
-
-/* =========================== industries =========================== */
-
-/* market-first chain under the intro: the shared .chain, left-aligned */
-.ind-chain{justify-content:flex-start;margin-top:26px;gap:8px 0}
-.ind-chain li{white-space:nowrap}
-.ind-chain li.lead{color:var(--gold-sm)}
-/* the connector trails each step, so a wrapped line never starts with a dash */
-.ind-chain li+li::before{display:none}
-.ind-chain li:not(:last-child)::after{content:"";width:16px;height:1px;margin:0 10px;background:var(--gold)}
-
-/* industry cards */
-.ind-grid{list-style:none;display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
-@media (min-width:680px){.ind-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}}
-@media (min-width:1040px){.ind-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}}
-.ind-card{position:relative;display:flex;flex-direction:column;padding:clamp(24px,2.8vw,32px);background:var(--paper);border:1px solid var(--line);border-radius:18px;box-shadow:0 1px 2px rgba(28,58,44,.05),0 24px 42px -34px rgba(28,58,44,.5);scroll-margin-top:110px;transition:border-color .25s ease,box-shadow .25s ease}
-.ind-card::before{content:"";position:absolute;top:-1px;left:clamp(24px,2.8vw,32px);width:44px;height:2px;border-radius:0 0 2px 2px;background:var(--gold)}
-.ind-card:hover{border-color:#C6D4C7;box-shadow:0 1px 2px rgba(28,58,44,.06),0 28px 46px -32px rgba(28,58,44,.55)}
-.ind-card:target{border-color:var(--gold)}
-.ind-ic{display:flex;align-items:center;justify-content:center;width:54px;height:54px;margin-bottom:18px;border-radius:50%;background:var(--slate-wash);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line)}
-.ind-ic svg{width:27px;height:27px}
-.ind-card h2{font-size:clamp(1.3rem,1.16rem + .5vw,1.5rem);line-height:1.2}
-.ind-who{margin-top:8px;font-size:.95rem;line-height:1.55;color:var(--ink-2)}
-.ind-card .ind-meta{margin-top:20px;gap:12px}
-.ind-card .ind-meta div{padding-top:12px}
-.ind-chips{list-style:none;display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.ind-chips li{padding:6px 11px;border-radius:999px;border:1px solid var(--line);background:var(--ground);font:500 .8rem/1.2 var(--sans);color:var(--ink)}
-.ind-link{margin-top:auto;padding-top:24px}
-.ind-link .textlink{line-height:1.35}
-
-/* closing line under the cards */
-.ind-close{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px 28px;margin-top:clamp(30px,4vw,44px);padding-top:26px;border-top:1px solid var(--line)}
-.ind-close p{max-width:56ch;font:600 clamp(1.1rem,1rem + .4vw,1.3rem)/1.38 var(--display);letter-spacing:-.015em;color:var(--ink)}
-.ind-close .textlink{flex:none}
-
-/* =========================== examples =========================== */
-
-.exs-list{display:grid;gap:clamp(22px,3vw,32px)}
-.exs-list>.excase+.excase{margin-top:0}
-.exs-case{scroll-margin-top:110px}
-.exs-top{display:grid;gap:clamp(22px,3vw,40px);align-items:center}
-@media (min-width:900px){.exs-top{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
-.exs-case .excase-head{align-content:center}
-.exs-case .excase-head .eyebrow{margin:0}
-.exs-brief{margin-top:4px;font-size:1.02rem;line-height:1.65;color:var(--ink-2);max-width:48ch}
-.exs-media{margin:0}
-.exs-media .card-cap{margin-top:12px}
-
-/* six stages, numbered in order */
-.exs-flow{counter-reset:exs;margin-top:clamp(24px,3vw,34px)}
-.exs-flow>li{display:flex;flex-direction:column}
-.exs-flow>li::after{counter-increment:exs;content:counter(exs,decimal-leading-zero);position:absolute;top:17px;right:16px;font:650 .8rem/1 var(--display);letter-spacing:.02em;color:var(--gold-sm)}
-.exs-flow .ex-k{padding-right:30px}
-.exs-flow .ex-chips{padding-top:2px}
-/* channel chips read as the channels the map points to */
-.exs-ch li{background:var(--slate-wash);border-color:#C6D4C7}
-/* tracking is a plan, not a report: dashed to read as "to be measured" */
-.exs-flow>li.exs-measure{border-style:dashed;border-color:var(--gold)}
-
-/* closing line under the two campaigns */
-.exs-close{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px 28px;padding-top:26px;border-top:1px solid var(--line)}
-.exs-close p{max-width:58ch;font:600 clamp(1.1rem,1rem + .4vw,1.3rem)/1.38 var(--display);letter-spacing:-.015em;color:var(--ink)}
-.exs-close .textlink{flex:none}
 
 /* ===== Accessibility fixes (audit pass) ===== */
-/* Focus rings that stay visible on dark ink surfaces and in the zoom dialog (7.5:1). */
-.bg-ink :focus-visible,.zoom :focus-visible{outline-color:var(--gold-bright)}
+/* Focus rings that stay visible on dark ink surfaces (7.5:1). */
+.bg-ink :focus-visible{outline-color:var(--gold-bright)}
 /* Form controls keep a real outline on keyboard focus (and in forced-colors mode). */
 .field :is(input,select,textarea):focus-visible{outline:2px solid var(--gold-sm);outline-offset:2px}
 .field ::placeholder{color:var(--ink-3);opacity:1}
-.tp-grid li{min-width:0;overflow-wrap:anywhere}
-/* Zoom dialog on small screens: show the image larger and let it pan, close button stays put. */
-@media (max-width:899.98px){
-  .zoom{overflow:auto;align-items:flex-start;justify-content:flex-start}
-  .zoom img{max-width:none;max-height:none;width:100%;margin:auto;cursor:zoom-in}
-  .zoom.big img{width:min(1800px,190vw);cursor:zoom-out}
-  .zoom-hint{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);padding:7px 13px;border-radius:999px;background:rgba(28,58,44,.88);color:var(--ground);font:600 .72rem/1 var(--sans);white-space:nowrap;pointer-events:none}
-  .zoom-close{position:fixed;z-index:2;background:rgba(28,58,44,.85)}
-}
-
-/* Local-search mock */
-.shot.shot-ls{display:flex;flex-direction:column;align-items:flex-start;background:#fff}
-.shot.shot-ls>picture{width:100%}
-
-/* ===== Page styles (audit fixes, F1) ===== */
-
-/* ---------- home: industries teaser, five items ---------- */
-/* Two columns (phones, desktop): the odd last item takes the full row. */
-.hm-ind>li:last-child:nth-child(odd){grid-column:1/-1}
-/* Narrow phones: two columns leave about 100px for a label, so "Chiropractors" would break
-   mid-word. One column keeps every label whole. */
-@media (max-width:399.98px){.hm-ind{grid-template-columns:minmax(0,1fr)}}
-/* Three columns (tablets): a last item that would sit alone or in a pair fills the row. */
-@media (min-width:640px) and (max-width:959.98px){
-  .hm-ind>li:last-child:nth-child(odd){grid-column:auto}
-  .hm-ind>li:last-child:nth-child(3n+2){grid-column:span 2}
-  .hm-ind>li:last-child:nth-child(3n+1){grid-column:1/-1}
-}
-
-/* ---------- home: example campaign, five stages ---------- */
-.hm-ex-brief{margin-top:4px;font-size:1.02rem;line-height:1.65;color:var(--ink-2);max-width:48ch}
-/* Two columns: the fifth stage (tracking) takes the full row. */
-@media (min-width:720px) and (max-width:1099.98px){
-  .ex-flow.hm-flow>li:last-child:nth-child(odd){grid-column:1/-1}
-}
-/* Wide screens: market, community map and channels on the first row; offer and tracking below. */
-@media (min-width:1100px){
-  .ex-flow.hm-flow{grid-template-columns:repeat(6,minmax(0,1fr))}
-  .ex-flow.hm-flow>li{grid-column:span 2}
-  .ex-flow.hm-flow>li:nth-child(n+4){grid-column:span 3}
-}
-
-/* ---------- estimate: "What happens next", an unnumbered list ---------- */
-.est-next{list-style:none;display:grid;gap:10px;margin-top:18px}
-.est-next>li{display:flex;align-items:flex-start;gap:12px;padding:14px;border-radius:14px;background:var(--ground);border:1px solid var(--line)}
-.est-next svg{width:20px;height:20px;flex:none;margin-top:1px;color:var(--slate-soft)}
-.est-next>li>span{display:block;min-width:0;font-size:.88rem;line-height:1.5;color:var(--ink-3)}
-.est-next b{display:block;margin-bottom:4px;font:600 .72rem/1.3 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--ink)}
 
 /* ===== Page styles (audit fixes, F2) ===== */
 /* Legal pages: "Last updated" line under the h1 (terms, privacy) */
 .lg-updated{margin-top:12px;font-size:.86rem;line-height:1.5;color:var(--ink-3)}
 .page-head .lg-updated+.intro{margin-top:14px}
 
-/* ===== Page styles (audit fixes, F3) ===== */
-
-/* Community marketing: the fair-table photo matches its 450px srcset candidate */
-.cm-art{max-width:450px}
-/* Localized flyers: native language names keep their own script shaping.
-   Letter-spacing splits joined Arabic letters, so it is turned off for the Arabic and Chinese names. */
-.flyer-mini .lname [lang="ar"],.flyer-mini .lname [lang="zh-Hans"]{letter-spacing:0}
-/* the space and dot after the Arabic name inherit its script, so they get no letter-spacing; a small margin evens the gap */
-.flyer-mini .lname [lang="ar"]{font-family:"Geeza Pro","Noto Naskh Arabic","Segoe UI",Tahoma,sans-serif;font-size:.72rem;margin-right:.1em}
-.flyer-mini .lname [lang="zh-Hans"]{font-family:"PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif;font-size:.68rem}
-
-/* Facebook & Instagram, "Who sees the ads": three cards; at two columns the third takes the full row */
-@media (min-width:640px) and (max-width:1039.98px){.dg-who>li:last-child:nth-child(odd){grid-column:1/-1}}
-
-/* ===== Page styles (audit fixes, F4) ===== */
-
-/* gift cards: the offer chain under the intro. The connector trails each step
-   (same pattern as .ind-chain), so a wrapped line never starts with a dash and
-   no step breaks across two lines. */
-.hiw-chain{gap:8px 0}
-.hiw-chain li{white-space:nowrap}
-.hiw-chain li+li::before{display:none}
-.hiw-chain li:not(:last-child)::after{content:"";width:16px;height:1px;margin:0 10px;background:var(--gold)}
-
-/* responsive mailer images: the <picture> wrapper behaves like the block <img> it holds */
-.card-shot picture{display:block}
-
-/* ===== Page styles (audit fixes, F5) ===== */
-
-/* industries: five cards with no orphan in the last row.
-   Two columns: the fifth card spans the row (from 720px its details sit beside the heading).
-   Three columns (six tracks): three cards, then two wider cards. */
-@media (min-width:680px) and (max-width:1039.98px){
-  .ind-grid>.ind-card:last-child:nth-child(odd){grid-column:1/-1}
-}
-@media (min-width:720px) and (max-width:1039.98px){
-  .ind-grid>.ind-card:last-child:nth-child(odd){display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:auto auto 1fr auto;column-gap:clamp(28px,4.5vw,48px);align-items:start}
-  .ind-grid>.ind-card:last-child:nth-child(odd)>*{grid-column:1}
-  .ind-grid>.ind-card:last-child:nth-child(odd)>.ind-meta{grid-column:2;grid-row:1/-1;margin-top:0}
-}
-@media (min-width:1040px){
-  .ind-grid{grid-template-columns:repeat(6,minmax(0,1fr))}
-  .ind-grid>.ind-card{grid-column:span 2}
-  .ind-grid>.ind-card:nth-child(4):nth-last-child(2),
-  .ind-grid>.ind-card:nth-child(5):last-child{grid-column:span 3}
-}
-
 /* ===== Final audit fixes ===== */
-/* 3-card grids: the last card spans the row when the grid is two columns wide (no blank cell). */
-@media (min-width:640px) and (max-width:1039.98px){.cardgrid.c3>li:last-child:nth-child(odd){grid-column:1/-1}}
-/* Localized flyer grid: 3 + 2 on tablets instead of 2 + 2 + 1. */
-@media (min-width:768px) and (max-width:1039.98px){.lang-grid{grid-template-columns:repeat(6,1fr)}.lang-grid>li{grid-column:span 2}.lang-grid>li:nth-child(n+4){grid-column:span 3}}
+
 /* Footer on tablets: brand on its own row, three link columns share the width. */
 @media (min-width:720px) and (max-width:1099.98px){.foot-top{grid-template-columns:repeat(3,1fr)}.foot-brand{grid-column:1/-1}}
 /* Stacked hero buttons on small desktops line up at equal width. */
 @media (min-width:900px) and (max-width:1119.98px){.hero .actions .btn,.page-top .actions .btn{min-width:262px}}
-.zoom-hint{display:none}
-@media (max-width:899.98px){.zoom .zoom-hint{display:block}}
-/* Enlarge buttons sit in the caption row, not on the artwork. */
-.card-capbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:10px}
-.card-capbar .card-cap{margin:0}
-.card-capbar .enlarge{position:static}
-.hiw-cap .enlarge{position:static;margin-left:auto}
 
-/* ===== Estimate form: optional phone ===== */
+/* ===== Forms: optional fields ===== */
 /* "(optional)" marker, styled like the "(required)" markers. */
 .est-opt{font:500 .8rem/1.4 var(--sans);color:var(--ink-3)}
-/* Email and phone share a row and only phone has a help line: line up the label, help,
+/* Two fields share a row and only one has a help line: line up the label, help,
    input and error rows of both fields so the two inputs stay level. */
 @media (min-width:640px){
   @supports (grid-template-rows:subgrid){
@@ -1369,146 +564,20 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 
 /* Final polish (round 3) */
 a[href^="tel:"],.nowrap{white-space:nowrap}
-.intro,.est-aside li span{text-wrap:pretty}
+.intro{text-wrap:pretty}
 @media (max-width:420px){h1{letter-spacing:-.04em}h2{letter-spacing:-.03em}}
 
-/* ===== Page styles (round 3, A) ===== */
+/* the small note under the hero buttons */
+.hero-note{margin-top:14px;font-size:.92rem;color:var(--ink-3);text-wrap:pretty}
 
-/* ---------- estimate (meeting request): photo at the top of "What happens next" ---------- */
-.est-photo{display:block;margin:0 0 22px;border-radius:12px;overflow:hidden;background:var(--stone);aspect-ratio:3/2}
-.est-photo img{width:100%;height:100%;object-fit:cover;object-position:50% 30%}
-@media (min-width:1000px){
-  .est-photo{aspect-ratio:3/2}
-  /* the card is taller with the photo: only keep it pinned when the whole card fits on screen */
-  .est-aside{position:static}
-}
-@media (min-width:1000px) and (min-height:940px){.est-aside{position:sticky;top:110px}}
+/* the line under the hero map that says what the Restaurants chip means */
+.tp-note{margin-top:-14px;font-size:.88rem;line-height:1.5;color:var(--ink-3);text-align:center;text-wrap:balance}
+@media (max-width:767.98px){.tp-note{margin-top:12px;text-align:left}}
 
-/* ---------- home: "Invested in your growth" (heading + photo, four points below) ---------- */
-.hm-growth{display:grid;gap:clamp(28px,4vw,44px)}
-.hm-growth-art{margin:0}
-.hm-growth-list{list-style:none;display:grid;gap:12px}
-.hm-growth-list>li{padding:20px 20px 22px;border-radius:14px;background:var(--paper);border:1px solid var(--line)}
-.hm-growth-list svg{display:block;width:26px;height:26px;margin-bottom:14px;color:var(--slate-soft)}
-.hm-growth-list h3{font-size:1.1rem;line-height:1.3;letter-spacing:-.012em}
-.hm-growth-list p{margin-top:8px;font-size:.95rem;line-height:1.6}
-@media (min-width:640px){.hm-growth-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (min-width:720px){
-  .hm-growth{grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);align-items:center;column-gap:clamp(32px,5vw,72px)}
-  .hm-growth-list{grid-column:1/-1}
-}
-@media (min-width:1100px){.hm-growth-list{grid-template-columns:repeat(4,minmax(0,1fr))}}
+/* sample brand illustrations (/website-design, /review-tags): the caption under the picture */
+.sample-cap{margin-top:12px;font-size:.84rem;line-height:1.5;color:var(--ink-3);text-wrap:pretty}
 
-/* ===== Page styles (round 3, B1) ===== */
-/* custom-marketing: the extra top padding held the old "Illustrative" badge; center the art now that it is gone */
-.cu-art{padding:36px 10%}
-
-/* ===== Page styles (round 3, B2) ===== */
-/* Rewritten intros: avoid a one-word last line */
-.b2-pretty{text-wrap:pretty}
-
-/* Round 4: Digital Growth Package card, home teaser, services package lines, FAQ list, estimate note */
-/* ---------- Digital Growth Package: shared price type ---------- */
-.c1-pkg-k{font:700 .7rem/1.4 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--gold-sm)}
-
-/* ---------- home: pricing panel with the package teaser ---------- */
-.c1-price .spec{margin-top:24px}
-.c1-pkg-teaser{padding:clamp(22px,3vw,30px);background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 1px 2px rgba(28,58,44,.08),0 24px 44px -28px rgba(28,58,44,.34)}
-.c1-pkg-teaser h3{margin-top:6px;font-size:clamp(1.3rem,1.16rem + .6vw,1.6rem);line-height:1.2;letter-spacing:-.018em}
-.c1-pkg-mini{list-style:none;margin-top:18px;border-top:1px solid var(--line-soft)}
-.c1-pkg-mini li{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--line-soft);font-size:.95rem;line-height:1.45;color:var(--ink)}
-.c1-pkg-mini svg{width:20px;height:20px;flex:none;margin-top:1px;color:var(--slate-soft)}
-.c1-pkg-more{margin-top:20px}
-
-/* ---------- /digital-marketing: the package card (#package) ---------- */
-.c1-pkg{display:grid;background:#fff;border:1px solid var(--line);border-radius:20px;overflow:hidden;box-shadow:0 1px 2px rgba(28,58,44,.08),0 30px 60px -38px rgba(28,58,44,.45)}
-.c1-pkg-head{padding:clamp(24px,3.2vw,38px);background:var(--ink)}
-/* two-column package card: centre the head beside the taller list of groups */
-@media (min-width:960px){.c1-pkg-head{display:flex;flex-direction:column;justify-content:center}}
-.c1-pkg-head .c1-pkg-k{color:var(--gold-bright)}
-.c1-pkg-head h2{margin-top:8px;color:var(--ground);font-size:clamp(1.6rem,1.3rem + 1.2vw,2.2rem);line-height:1.12;letter-spacing:-.025em}
-
-.c1-pkg-sum{margin-top:14px;font-size:.98rem;line-height:1.6;color:#C3D2C6;max-width:36em}
-.c1-pkg-cta{margin-top:24px}
-
-.c1-pkg-groups{display:grid;padding:clamp(6px,1.4vw,12px) clamp(24px,3.2vw,38px) clamp(18px,2.6vw,28px)}
-.c1-pkg-group{padding:20px 0;border-top:1px solid var(--line-soft)}
-.c1-pkg-group:first-child{border-top:0}
-.c1-pkg-group h3{display:flex;align-items:center;gap:10px;font-size:1.06rem;line-height:1.3;letter-spacing:-.01em}
-.c1-pkg-group h3 svg{width:24px;height:24px;flex:none;color:var(--slate-soft)}
-.c1-pkg-group ul{list-style:none;margin-top:12px;display:grid;gap:7px}
-.c1-pkg-group li{position:relative;padding-left:22px;font-size:.94rem;line-height:1.5;color:var(--ink-2)}
-.c1-pkg-group li::before{content:"";position:absolute;left:2px;top:.45em;width:9px;height:5px;border-left:1.6px solid var(--gold-sm);border-bottom:1.6px solid var(--gold-sm);transform:rotate(-45deg)}
-@media (max-width:479.98px){.c1-pkg-cta .btn{width:100%}}
-@media (min-width:640px){
-  .c1-pkg-groups{grid-template-columns:1fr 1fr;column-gap:32px}
-  .c1-pkg-group:nth-child(2){border-top:0}
-}
-@media (min-width:960px){
-  .c1-pkg{grid-template-columns:minmax(0,.8fr) minmax(0,1.5fr)}
-  .c1-pkg-groups{align-content:center;padding-block:clamp(14px,2vw,22px)}
-}
-.c1-dg-jump{margin-top:clamp(22px,3vw,30px)}
-
-/* "part of the package" line in the channel sections */
-.c1-dg-inpkg{display:inline-flex;align-items:center;gap:9px;margin-top:22px;padding:8px 16px 8px 12px;border-radius:999px;background:var(--blush);font:500 .88rem/1.35 var(--sans);color:var(--ink)}
-.c1-dg-inpkg svg{width:16px;height:16px;flex:none;color:var(--gold-sm)}
-.c1-dg-inpkg a{font-weight:600;color:var(--ink);text-underline-offset:3px;text-decoration-color:var(--gold)}
-.dg-p.c1-dg-note{font-size:.9rem;line-height:1.55;color:var(--ink-3)}
-
-/* ---------- /services: the package line on the digital pillars ---------- */
-.cardgrid .c1-svc-pkg{margin-top:18px;padding:12px 14px;border-radius:10px;background:var(--blush);font-size:.86rem;line-height:1.45;color:var(--ink)}
-.c1-svc-pkg span{display:block;margin-bottom:5px;font:600 .62rem/1.4 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--gold-sm)}
-.c1-svc-pkg a{display:block;font-weight:600;color:var(--ink);text-underline-offset:3px;text-decoration-color:var(--gold)}
-.c1-svc-pkg small{display:block;margin-top:6px;font-size:.78rem;line-height:1.45;color:var(--ink-3)}
-
-/* ---------- /faq: the inclusion list in the pricing answer ---------- */
-.c1-faq-list{list-style:none;margin-top:12px;display:grid;gap:9px}
-.c1-faq-list li{position:relative;padding-left:20px}
-.c1-faq-list li::before{content:"";position:absolute;left:2px;top:.66em;width:6px;height:6px;border-radius:50%;background:var(--gold)}
-.c1-faq-list b{font-weight:600;color:var(--ink)}
-.cm-faq-group .answer .c1-faq-list+p{margin-top:14px}
-.cm-faq-group .answer b{font-weight:600;color:var(--ink)}
-
-/* ---------- /estimate?package=digital: the line above the form ---------- */
-.c1-est-pkg{margin-bottom:26px;padding:14px 18px;border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:0 10px 10px 0;background:var(--blush);font-size:.96rem;line-height:1.5;color:var(--ink-2)}
-.c1-est-pkg b{display:block;font-weight:600;color:var(--ink)}
-.c1-est-pkg span{display:block;margin-top:4px;font-size:.84rem;color:var(--ink-3)}
-/* keep the bottom links pinned when the package box sits just above them (beats .cardgrid p+p) */
-.svc-pillars .c1-svc-pkg+.svc-links{margin-top:auto}
-
-/* Round 4: sample-brand wordmark on the localized flyer cards */
-/* community-marketing: sample-brand wordmark on the localized flyer cards */
-.flyer-mini .clinic.c2-brand{display:flex;align-items:center;gap:7px;line-height:1.15;color:#1C3A2C}
-.flyer-mini .c2-brand svg{flex:none;width:20px;height:20px;padding:3px;border-radius:50%;background:#1C3A2C;color:#F4EFE6}
-
-/* Round 4: med-spa campaign mockups gallery, package notes */
-/* /sample-advertisements: the four campaign mockups, two per row from 820px */
-.c3-mockups{list-style:none;display:grid;gap:clamp(30px,3.6vw,44px) clamp(26px,3.4vw,40px)}
-@media (min-width:820px){.c3-mockups{grid-template-columns:1fr 1fr;align-items:start}}
-.c3-mockups>li{min-width:0}
-.c3-mock-shot{border-radius:6px;background:#F0EEE9}
-
-/* /seo, /social-media, /groupon: one line placing the service in the Digital Growth Package */
-.c3-pkg{display:flex;align-items:flex-start;gap:12px;max-width:44rem;margin-top:clamp(26px,3vw,34px);padding:16px 20px 16px 16px;border-radius:14px;background:var(--blush)}
-.c3-pkg>svg{width:18px;height:18px;flex:none;margin-top:3px;color:var(--gold-sm)}
-.c3-pkg p{font:500 .95rem/1.5 var(--sans);color:var(--ink)}
-.c3-pkg a{font-weight:600;color:var(--ink);text-underline-offset:3px;text-decoration-color:var(--gold)}
-
-/* Free market snapshot: what the offer covers (estimate page head) */
-.snap-list{list-style:none;margin:20px 0 0;padding:0;display:grid;gap:10px;max-width:42em}
-.snap-list li{display:flex;gap:10px;align-items:flex-start;color:var(--ink-2);line-height:1.5}
-.snap-list b{color:var(--ink)}
-.snap-list svg{flex:none;width:20px;height:20px;margin-top:2px;color:var(--gold-sm)}
-.hero-note{margin-top:14px;font-size:.92rem;color:var(--ink-3)}
-
-/* Client work: Grace Pediatrics (home) */
-.work-art{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
-.work-art .shot video,.work-art .shot img{display:block;width:100%;height:auto;aspect-ratio:3/4;object-fit:cover}
-.work-art .shot:last-child{margin-top:36px}
-
-/* Website redesign page, digital-marketing redesign section, services/home "Also from us" row */
-/* ===== Website redesign: /website-design (.wd-), its section on /digital-marketing (.wd-dg-) and the "Also from us" row on /services (.wd-also) ===== */
+/* ===== Website redesign: /website-design (.wd-) ===== */
 
 /* ---------- /website-design: hero with the full-width device showcase ---------- */
 .wd-head{margin-bottom:0}
@@ -1533,25 +602,6 @@ a[href^="tel:"],.nowrap{white-space:nowrap}
 @media (min-width:900px){.wd-need{grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);align-items:center}}
 .wd-need .spec li span{min-width:0}
 
-/* ---------- /digital-marketing: website redesign section ---------- */
-.wd-dg-art{margin:0;width:100%;max-width:620px;margin-inline:auto}
-.wd-dg-art .shot{border-radius:16px;background:#ECEEE7}
-.wd-dg-art picture{display:block}
-
-/* ---------- /services: "Also from us", two compact cards under the eight pillars ---------- */
-.wd-also{margin-top:clamp(34px,4.4vw,52px)}
-.wd-also-h{font:700 .74rem/1.5 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--gold-sm);margin-bottom:14px}
-.wd-also-list{list-style:none;display:grid;gap:12px}
-@media (min-width:760px){.wd-also-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}}
-.wd-also-list>li{position:relative;display:flex;align-items:flex-start;gap:16px;padding:20px 22px;border-radius:14px;background:var(--paper);border:1px solid var(--line);transition:border-color .25s ease,box-shadow .25s ease,transform .25s ease}
-.wd-also-list>li:hover{border-color:var(--gold);box-shadow:0 14px 26px -20px rgba(28,58,44,.5);transform:translateY(-1px)}
-.wd-also-list>li>svg{width:28px;height:28px;flex:none;color:var(--slate-soft)}
-.wd-also-list h3{font-size:1.12rem;line-height:1.3;letter-spacing:-.012em}
-.wd-also-list p{margin-top:5px;font-size:.93rem;line-height:1.55;color:var(--ink-2)}
-.wd-also-list .wd-also-go{align-self:center;margin-left:auto;width:16px;height:16px;flex:none;color:var(--gold-sm);transform:rotate(-90deg)}
-.wd-also-list .card-link{color:var(--ink)}
-
-/* Tap-to-review tags page */
 /* R: tap-to-review tags (/review-tags). Loaded only by review-tags.html. Prefix: rt- */
 .rt-art{margin:0}
 
@@ -1568,3 +618,206 @@ a[href^="tel:"],.nowrap{white-space:nowrap}
 .rt-drivers li:last-child{border-bottom:1px solid var(--line)}
 .rt-drivers li::before{content:"";position:absolute;left:3px;top:1.05em;width:7px;height:7px;border-radius:50%;background:var(--gold)}
 
+/* =====================================================================
+   Patient dinners (October 2026): the home page (index.html) and the
+   thank-you page (thanks.html). Prefix: dn-
+   Built on the shared system above (.section, .wrap, .section-head,
+   .rule, .eyebrow, .field, .checks, .faq, .spec, the hero map chips);
+   nothing above is changed, only extended here.
+   ===================================================================== */
+
+/* ---------- shared bits ---------- */
+.dn-k{display:block;font:700 .7rem/1.45 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--gold-sm)}
+/* the accent half of a heading, in peony (scoped to the dinner pages) */
+.dn-page h2 em{color:var(--gold-lg)}
+/* stone and blush surfaces need the darker peony to keep 3:1 or better */
+.dn-page .bg-stone h2 em,.dn-privacy h3 em{color:var(--gold-sm)}
+
+/* ---------- hero: the opening line of the lede ---------- */
+.dn-lead{display:block;margin-bottom:10px;font:600 clamp(1.3rem,1.12rem + .75vw,1.62rem)/1.25 var(--display);letter-spacing:-.018em;color:var(--ink)}
+.hero-town .lede{max-width:34em}
+.hero-town .eyebrow,.dn-lead,.dn-cherry-line,.dn-both-say{text-wrap:balance}
+/* a short accent phrase stays together, on its own line when the heading wraps */
+.dn-keep{display:inline-block}
+/* ...or always starts its own line */
+.dn-line{display:block}
+.dn-page h2:has(.dn-keep){text-wrap:wrap}
+/* phones: the list under the map names all five places; the odd last one takes the full row */
+@media (max-width:767.98px){
+  .tp-list li:last-child:nth-child(odd){grid-column:1/-1}
+}
+
+/* ---------- #formats: two dinner cards and the price card ---------- */
+.dn-formats{display:grid;gap:16px}
+@media (min-width:720px){
+  .dn-formats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .dn-price{grid-column:1/-1}
+}
+@media (min-width:1060px){
+  .dn-formats{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .dn-price{grid-column:auto}
+}
+.dn-format,.dn-price{display:flex;flex-direction:column;min-width:0;padding:clamp(24px,3vw,34px);border-radius:18px}
+.dn-format{background:#fff;border:1px solid var(--line);box-shadow:0 1px 2px rgba(28,58,44,.06),0 24px 44px -32px rgba(28,58,44,.34)}
+.dn-format-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px}
+.dn-format-top svg{width:30px;height:30px;flex:none;color:var(--slate-soft)}
+.dn-format h3{font-size:clamp(1.5rem,1.28rem + .8vw,1.9rem);line-height:1.12;letter-spacing:-.022em}
+.dn-format>p{margin-top:14px;font-size:.98rem;line-height:1.62}
+.dn-facts{margin:auto 0 0;padding-top:24px;display:grid}
+.dn-facts>div{padding:11px 0;border-top:1px solid var(--line-soft)}
+.dn-facts dt{font:600 .64rem/1.4 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3)}
+.dn-facts dd{margin:3px 0 0;font:500 .96rem/1.45 var(--sans);color:var(--ink)}
+
+.dn-price{background:var(--ink);color:#C3D2C6;box-shadow:0 30px 60px -38px rgba(28,58,44,.6)}
+.dn-price .dn-k{color:var(--gold-bright)}
+.dn-price-line{margin-top:16px;font:500 1.05rem/1.5 var(--sans);color:#DCE6DE}
+.dn-price-big{display:block;margin-bottom:8px;font:650 clamp(2.6rem,2.1rem + 1.8vw,3.4rem)/1 var(--display);letter-spacing:-.035em;color:var(--ground);white-space:nowrap}
+.dn-price-from{font:600 1rem/1 var(--sans);letter-spacing:.01em;color:var(--gold-bright)}
+.dn-price ul{list-style:none;margin-top:22px;border-top:1px solid rgba(243,246,242,.16)}
+.dn-price li{display:flex;align-items:flex-start;gap:11px;padding:11px 0;border-bottom:1px solid rgba(243,246,242,.16);font-size:.95rem;line-height:1.45;color:var(--ground)}
+.dn-price li svg{width:18px;height:18px;flex:none;margin-top:2px;color:var(--gold-bright)}
+.dn-price-cta{margin-top:auto;padding-top:26px}
+.dn-price-cta .btn{width:100%}
+.dn-price :focus-visible{outline-color:var(--gold-bright)}
+/* tablets: the price card spans the row, so the list and button sit beside the price */
+@media (min-width:720px) and (max-width:1059.98px){
+  .dn-price{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:40px;align-items:start}
+  .dn-price>.dn-k,.dn-price-line{grid-column:1}
+  .dn-price ul{grid-column:2;grid-row:1/span 2;margin-top:0}
+  .dn-price-cta{grid-column:2;padding-top:20px}
+}
+
+/* "At both dinners": the shared run of the night, and the plain statement */
+.dn-both{margin-top:16px;display:grid;gap:16px 32px;align-items:center;padding:clamp(22px,2.8vw,30px) clamp(22px,3vw,34px);border-radius:18px;background:var(--blush)}
+.dn-both ul{list-style:none;display:grid;gap:12px}
+.dn-both li{display:flex;align-items:center;gap:12px;font:500 .98rem/1.4 var(--sans);color:var(--ink)}
+.dn-both li svg{width:24px;height:24px;flex:none;color:var(--gold-sm)}
+.dn-both-say{font:600 clamp(1.15rem,1.05rem + .45vw,1.4rem)/1.3 var(--display);letter-spacing:-.015em;color:var(--ink)}
+@media (min-width:720px){.dn-both ul{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (min-width:1060px){
+  .dn-both{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"k say" "list list"}
+  .dn-both>.dn-k{grid-area:k}
+  .dn-both-say{grid-area:say;text-align:right}
+  .dn-both ul{grid-area:list;padding-top:16px;border-top:1px solid #EBD6DD}
+}
+
+.dn-format p{text-wrap:pretty}
+
+/* ---------- #how: the illustration beside four steps ---------- */
+.dn-how{display:grid;gap:clamp(34px,4.6vw,64px)}
+@media (min-width:960px){
+  .dn-how{grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);align-items:start}
+  /* two-column sections: the heading scales with its column, as in .split */
+  .dn-how h2,.dn-handle h2{font-size:clamp(1.95rem,1rem + 2.4vw,2.95rem)}
+}
+.dn-illus{margin:clamp(28px,3.6vw,40px) 0 0;max-width:560px}
+.dn-illus .shot{background:var(--paper);border:1px solid var(--line-soft)}
+.dn-illus img{width:100%;height:auto}
+.dn-illus .card-cap{margin-top:12px}
+.dn-steps{list-style:none;display:grid;gap:12px}
+.dn-steps>li{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:20px;padding:24px 24px 26px;border-radius:16px;background:var(--paper);border:1px solid var(--line)}
+.dn-step-n{grid-row:1/span 2;display:flex;align-items:center;justify-content:center;width:48px;height:48px;border-radius:50%;background:var(--blush);font:650 .92rem/1 var(--display);letter-spacing:.02em;color:var(--gold-sm)}
+.dn-steps h3{display:flex;align-items:center;gap:10px;min-height:48px;font-size:1.3rem;line-height:1.25}
+.dn-steps h3 svg{width:24px;height:24px;flex:none;color:var(--slate-soft)}
+.dn-steps p{grid-column:2;margin-top:4px;font-size:.98rem;line-height:1.62}
+@media (max-width:479.98px){
+  .dn-steps>li{column-gap:14px;padding:20px 18px 22px}
+  .dn-step-n{width:40px;height:40px;font-size:.84rem}
+  .dn-steps h3{min-height:40px;font-size:1.18rem}
+  .dn-steps p{grid-column:1/-1;margin-top:10px}
+}
+
+/* ---------- #handle: the checklist and the patient list panel ---------- */
+.dn-handle{display:grid;gap:clamp(34px,4.6vw,56px)}
+@media (min-width:960px){.dn-handle{grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);align-items:end}}
+.dn-checks{list-style:none;margin-top:clamp(28px,3.6vw,40px);display:grid;column-gap:32px;border-top:1px solid var(--line)}
+@media (min-width:640px){.dn-checks{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.dn-checks li{display:flex;align-items:flex-start;gap:12px;padding:13px 2px;border-bottom:1px solid var(--line);font-size:.98rem;line-height:1.45;color:var(--ink)}
+.dn-checks svg{width:20px;height:20px;flex:none;margin-top:1px;color:var(--gold-sm)}
+.dn-privacy{padding:clamp(26px,3.2vw,36px);border-radius:18px;background:var(--blush);border:1px solid #EBD6DD}
+.dn-privacy>svg{display:block;width:34px;height:34px;margin-bottom:18px;color:var(--gold-sm)}
+.dn-privacy h3{font-size:clamp(1.4rem,1.22rem + .7vw,1.75rem);line-height:1.18;letter-spacing:-.022em}
+.dn-privacy p{margin-top:14px;font-size:.98rem;line-height:1.62;color:var(--ink-2)}
+.dn-privacy .dn-rep{margin-top:18px;padding-top:16px;border-top:1px solid #E6CDD5;color:var(--ink)}
+
+/* ---------- #who ---------- */
+.dn-who .spec{margin-top:0}
+.dn-who .spec li{font-size:1rem;line-height:1.55}
+.dn-who .spec li span{min-width:0}
+.dn-contact{margin-top:24px;padding:22px 24px;border-radius:16px;background:var(--paper);border:1px solid var(--line)}
+.dn-contact-name{margin-top:6px;font:650 1.6rem/1.15 var(--display);letter-spacing:-.02em;color:var(--ink)}
+.dn-contact ul{list-style:none;margin-top:8px;display:flex;flex-wrap:wrap;gap:0 26px}
+.dn-contact a{display:inline-flex;align-items:center;gap:9px;min-height:44px;font-weight:600;color:var(--ink);text-underline-offset:4px;text-decoration-color:var(--gold);overflow-wrap:anywhere}
+.dn-contact svg{width:20px;height:20px;flex:none;color:var(--slate-soft)}
+
+/* ---------- #add-ons: the referral network first, Google Ads last ---------- */
+.dn-addons{display:grid;gap:16px}
+@media (min-width:820px){.dn-addons{grid-template-columns:repeat(2,minmax(0,1fr))}.dn-addon-feature{grid-column:1/-1}}
+.dn-addon{display:flex;flex-direction:column;min-width:0;padding:clamp(24px,3.2vw,38px);border-radius:18px;background:var(--paper);border:1px solid var(--line)}
+.dn-addon-top{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.dn-addon-top svg{width:30px;height:30px;flex:none;color:var(--slate-soft)}
+.dn-addon h3{font-size:clamp(1.45rem,1.22rem + .85vw,1.95rem);line-height:1.14;letter-spacing:-.022em}
+.dn-addon p{margin-top:12px;font-size:.98rem;line-height:1.64}
+.dn-addon-feature{display:grid;gap:28px 56px;background:#fff;box-shadow:0 1px 2px rgba(28,58,44,.06),0 24px 44px -32px rgba(28,58,44,.34)}
+@media (min-width:960px){.dn-addon-feature{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center}}
+.dn-addon-feature h3{font-size:clamp(1.7rem,1.35rem + 1.3vw,2.35rem)}
+/* the businesses we look for: a plain list with hairlines, like the checklist, not tiles */
+.dn-places{list-style:none;margin-top:22px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:28px;border-top:1px solid var(--line)}
+.dn-places li{display:flex;align-items:center;gap:11px;min-width:0;padding:12px 2px;border-bottom:1px solid var(--line);font:500 .97rem/1.35 var(--sans);color:var(--ink)}
+.dn-places svg{width:22px;height:22px;flex:none;color:var(--gold-sm)}
+@media (max-width:479.98px){.dn-places{grid-template-columns:minmax(0,1fr)}}
+.dn-ref-spec{margin-top:0}
+.dn-ref-spec li span{min-width:0}
+.dn-note{margin-top:14px;font-size:.88rem;line-height:1.5;color:var(--ink-3)}
+.dn-addon-cherry{background:var(--ink);border-color:var(--ink);color:#C3D2C6}
+.dn-addon-cherry h3{color:var(--ground)}
+.dn-addon-cherry .dn-k{color:var(--gold-bright)}
+.dn-addon-cherry .dn-addon-top svg{color:var(--gold-bright)}
+.dn-addon-cherry p{color:#C3D2C6}
+.dn-addon-cherry .dn-cherry-line{margin-top:auto;padding-top:22px;font:600 clamp(1.12rem,1.02rem + .4vw,1.3rem)/1.3 var(--display);letter-spacing:-.012em;color:var(--ground)}
+.dn-addon-cherry .dn-cherry-line::before{content:"";display:block;width:40px;height:1px;margin-bottom:16px;background:var(--gold-bright)}
+
+.dn-addon .dn-chips{margin-top:auto;padding-top:22px}
+.dn-addon .dn-chips li{background:var(--ground)}
+
+/* ---------- #faq ---------- */
+.dn-faq .answer a{color:var(--ink);text-underline-offset:3px}
+
+/* ---------- #call: the form card and the aside ---------- */
+.dn-call{align-items:start}
+.dn-form-card{max-width:none;padding:clamp(22px,3.4vw,40px);border-radius:18px;background:var(--paper);border:1px solid var(--line)}
+.dn-form-note{margin-bottom:4px;font-size:.88rem;color:var(--ink-3)}
+.dn-row{margin-top:24px}
+@media (min-width:640px){.dn-row>.field:nth-child(2){margin-top:0}}
+.dn-call .field input,.dn-call .field select,.dn-call .field textarea{background-color:#fff}
+.dn-call .field input[aria-invalid="true"],.dn-call .field select[aria-invalid="true"],.dn-call .field textarea[aria-invalid="true"]{background-color:#FCF6F5}
+.dn-choice{margin-top:24px}
+.dn-radios{grid-template-columns:minmax(0,1fr)}
+@media (min-width:480px){.dn-radios{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.dn-radios label{background:#fff}
+.dn-radios label:has(input:checked){border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.dn-radios label:has(input[aria-invalid="true"]){border-color:#A3342B;background:#FCF6F5}
+.dn-radios label:has(input:focus-visible){outline:2px solid var(--gold-sm);outline-offset:2px}
+.dn-nopatient{display:flex;align-items:center;gap:8px;margin-bottom:9px;font:600 .86rem/1.45 var(--sans);color:var(--ink)}
+.dn-nopatient svg{width:17px;height:17px;flex:none;color:var(--gold-sm)}
+.field .help+.dn-nopatient{margin-top:-4px}
+.dn-submit .est-privacy{margin-top:16px}
+@media (max-width:479.98px){.dn-submit .btn{width:100%}}
+.dn-call-aside{background:var(--paper)}
+@media (min-width:1000px){.dn-call-aside{position:sticky;top:120px}}
+.dn-call-aside h3{font-size:1.25rem;line-height:1.3}
+.dn-oncall{list-style:none;margin-top:14px;border-top:1px solid var(--line-soft)}
+.dn-oncall li{display:flex;align-items:flex-start;gap:11px;padding:11px 0;border-bottom:1px solid var(--line-soft);font-size:.95rem;line-height:1.45;color:var(--ink)}
+.dn-oncall svg{width:18px;height:18px;flex:none;margin-top:2px;color:var(--gold-sm)}
+.dn-talk{margin-top:20px;font-size:1rem;line-height:1.55;color:var(--ink-2)}
+.dn-talk b{display:block;margin-bottom:2px;font:600 1.08rem/1.35 var(--display);color:var(--ink)}
+.form-aside .dn-talk a,.form-aside .dn-talk-mail a{color:var(--ink);font-weight:600;text-underline-offset:3px;text-decoration-color:var(--gold)}
+.dn-talk-mail{margin-top:6px;font-size:.93rem;line-height:1.5;color:var(--ink-3);overflow-wrap:anywhere}
+
+/* ---------- thanks.html ---------- */
+.dn-sent{max-width:700px}
+.dn-sent p.eyebrow{margin:0 0 12px;font-size:.74rem;line-height:1.5}
+.dn-sent h1{font-size:clamp(2rem,1.45rem + 2.2vw,2.9rem);line-height:1.08;letter-spacing:-.03em}
+.dn-sent h1 em{font-style:normal;color:var(--gold-lg)}
+.dn-sent p a{white-space:nowrap}
+.dn-sent .dn-sent-mail a{white-space:normal;overflow-wrap:anywhere}

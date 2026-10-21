@@ -21,6 +21,18 @@
     });
   }
 
+  /* Old links to retired pages 301 to a home section (/estimate to /#call). If a redirect carried
+     the old query string after the fragment (/#call?package=website), put the query back in front
+     of the # and open the section, so the visitor still lands on it. */
+  var stray = /^#([A-Za-z][\w-]*)\?(.*)$/.exec(window.location.hash);
+  var strayTarget = stray && document.getElementById(stray[1]);
+  if (strayTarget) {
+    var query = window.location.search;
+    if (stray[2]) query = (query ? query + '&' : '?') + stray[2];
+    try { window.history.replaceState(window.history.state, '', window.location.pathname + query + '#' + stray[1]); } catch (e) { /* keep the URL as it is */ }
+    strayTarget.scrollIntoView();
+  }
+
   /* Header: hairline once the page scrolls; mobile menu. */
   var header = document.querySelector('.site-header');
   if (header) {
@@ -70,59 +82,4 @@
       reveals.forEach(function (el) { io.observe(el); });
     }
   }
-
-  /* Enlarge a mailed advertisement. */
-  var zoom = document.getElementById('zoom');
-  if (!zoom) return;
-  var zoomImg = document.getElementById('zoom-img');
-  var opener = null;
-  var BACKDROP = 'header.site-header, main, footer.site-foot';
-  var setInert = function (on) {
-    document.querySelectorAll(BACKDROP).forEach(function (el) {
-      if (on) { el.inert = true; el.setAttribute('aria-hidden', 'true'); }
-      else { el.inert = false; el.removeAttribute('aria-hidden'); }
-    });
-  };
-  /* Phones open the image fitted to the screen; a tap toggles a larger view to pan. */
-  var small = window.matchMedia('(max-width:899.98px)');
-  var hint = document.createElement('p');
-  hint.className = 'zoom-hint';
-  hint.setAttribute('aria-hidden', 'true');
-  zoom.appendChild(hint);
-  var setBig = function (on) {
-    zoom.classList.toggle('big', on);
-    hint.textContent = on ? 'Drag to look around · tap to fit' : 'Tap the image to zoom in';
-  };
-  setBig(false);
-  zoomImg.addEventListener('click', function () { if (small.matches) setBig(!zoom.classList.contains('big')); });
-  var closeZoom = function () {
-    setBig(false);
-    zoom.hidden = true;
-    zoomImg.removeAttribute('src');
-    document.body.style.overflow = '';
-    setInert(false);
-    if (opener) { opener.focus(); opener = null; }
-  };
-  document.querySelectorAll('[data-zoom]').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      opener = btn;
-      zoomImg.src = btn.getAttribute('data-zoom');
-      zoomImg.alt = btn.getAttribute('data-zoom-alt') || '';
-      zoom.hidden = false;
-      document.body.style.overflow = 'hidden';
-      setInert(true);
-      zoom.querySelector('.zoom-close').focus();
-    });
-  });
-  /* Keep Tab inside the dialog while it is open. */
-  zoom.addEventListener('keydown', function (e) {
-    if (e.key !== 'Tab') return;
-    var f = zoom.querySelectorAll('button, a[href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
-    if (!f.length) return;
-    var first = f[0], last = f[f.length - 1];
-    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
-    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
-  });
-  zoom.addEventListener('click', function (e) { if (!e.target.closest('#zoom-img')) closeZoom(); });
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !zoom.hidden) closeZoom(); });
 })();
