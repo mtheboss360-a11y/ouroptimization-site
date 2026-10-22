@@ -42,12 +42,12 @@ const REMOVED = ['assets/img/hero-town.png', 'assets/img/hero-town.webp', 'asset
   ...['stand', 'tap'].flatMap((n) => [`assets/img/ethr-mockup-${n}.jpg`, `assets/img/ethr-mockup-${n}.webp`, `assets/img/ethr-mockup-${n}-600.jpg`, `assets/img/ethr-mockup-${n}-600.webp`])];
 
 // The pages of the site (the multi-page site of October 22, 2026), and the clean URL of each.
-const KEPT = ['404.html', 'about.html', 'client-portal.html', 'contact.html', 'expo-vendors.html', 'faq.html', 'flyer-network.html', 'online-search-network.html', 'index.html',
-  'patient-network.html', 'pricing.html', 'privacy.html', 'sample-contract.html', 'referral-network.html', 'review-tags.html', 'terms.html', 'thanks.html', 'website-design.html'];
-const CLEAN = ['/', '/referral-network', '/flyer-network', '/patient-network', '/online-search-network', '/review-tags', '/website-design', '/client-portal', '/pricing', '/sample-contract', '/about',
+const KEPT = ['404.html', 'about.html', 'contact.html', 'expo-vendors.html', 'faq.html', 'flyer-network.html', 'online-search-network.html', 'index.html',
+  'patient-network.html', 'pricing.html', 'privacy.html', 'referral-network.html', 'sample-contract.html', 'review-tags.html', 'terms.html', 'thanks.html', 'website-design.html'];
+const CLEAN = ['/', '/referral-network', '/flyer-network', '/patient-network', '/online-search-network', '/review-tags', '/website-design', '/pricing', '/sample-contract', '/about',
   '/faq', '/contact', '/privacy', '/terms', '/thanks', '/expo-vendors'];
 // The pages the sitemap lists: every page people should find from a search.
-const INDEXABLE = ['/', '/referral-network', '/flyer-network', '/patient-network', '/online-search-network', '/review-tags', '/website-design', '/client-portal', '/pricing', '/sample-contract', '/about', '/faq', '/contact', '/privacy', '/terms'];
+const INDEXABLE = ['/', '/referral-network', '/flyer-network', '/patient-network', '/online-search-network', '/review-tags', '/website-design', '/pricing', '/sample-contract', '/about', '/faq', '/contact', '/privacy', '/terms'];
 
 // The service pages renamed on October 22, 2026, when the brand became Our Wellness Network: old path -> new path.
 const RENAMED = { 'flyer-drops': '/flyer-network', 'patient-dinners': '/patient-network', 'google-ads': '/online-search-network' };
@@ -58,7 +58,7 @@ const RETIRED = {
   'digital-marketing': '/online-search-network', industries: '/', examples: '/', estimate: '/contact', 'market-research': '/referral-network',
   'direct-mail': '/flyer-network', events: '/patient-network', flyers: '/flyer-network', 'marketing-kits': '/patient-network#handle', seo: '/website-design',
   'social-media': '/#services', groupon: '/#services', 'gift-cards': '/#services', tracking: '/patient-network#handle',
-  'sample-advertisements': '/'
+  'sample-advertisements': '/', 'client-portal': '/#portal'
 };
 
 // Files deleted with the retired pages (the old strategy meeting form, its script and its tests), the old SVG favicon,
@@ -538,9 +538,7 @@ describe('legal pages', () => {
   test('terms describe the dinners and today\'s forms, not the retired services', () => {
     const t = visible('terms.html');
     assert.doesNotMatch(t, /demographic|Digital Growth Package|Groupon|Meta\b|Strategy Meeting|direct.mail|across the United States/i);
-    assert.match(t, /Each dinner is one flat fee, quoted for your clinic per venue, with the restaurant and food included\./);
-    assert.match(t, /Our pricing page lists our current prices/);
-    assert.doesNotMatch(t, /\$\s?\d/, 'the figures stay on the pricing page');
+    assert.match(t, /Each dinner is quoted for your clinic, with the restaurant and food included\./);
     assert.match(t, /Chicago's western suburbs/);
     assert.match(t, /Book a 15-minute call/);
     assert.match(t, /Last updated: October 22, 2026/);

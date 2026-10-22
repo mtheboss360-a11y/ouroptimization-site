@@ -1,10 +1,11 @@
-// The pricing page (October 22, 2026): the only page, with this test, that may carry a price figure
-// (pages.test.mjs scans every other text file for one). Locks the figures the owner set, what each plan
-// includes, and that the page shows prices and a process, never results.
+// The pricing page and the sample contract (October 22, 2026, held for the owner's go-ahead): the only pages,
+// with this test, that may carry a price figure (pages.test.mjs scans every other text file for one). Locks the
+// figures the owner set, what each plan includes, the drumroll before the number, and that the pages show prices,
+// a process and an agreement, never results.
 // Zero dependencies: node:test + node:assert. Run from the repo root: node --test
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
-import { read, text, byId, links, mainOf } from './html.mjs';
+import { read, text, byId, links, mainOf, tags, attr } from './html.mjs';
 
 const src = read('pricing.html');
 const main = mainOf(src);
@@ -12,28 +13,33 @@ const t = text(main);
 const sec = (id) => text(byId(src, id));
 
 describe('pricing.html', () => {
-  test('the hero: the starter month, then one flat monthly fee', () => {
-    assert.equal(text(/<h1[^>]*>([\s\S]*?)<\/h1>/.exec(src)[1]), 'Start your referral network for $250.');
-    assert.match(t, /That's your first month, with the starter pack\. From month two, your referral network is one flat fee of \$500 a month\./);
-    const glance = text(/<aside class="pg-glance"[\s\S]*?<\/aside>/.exec(src)[0]);
-    for (const line of ['Month one: $250.', 'From month two: $500 a month.', 'Month to month.']) assert.ok(glance.includes(line), line);
+  test('the hero is a drumroll: no figure, no call button, a scroll cue to the reveal', () => {
+    const hero = /<section class="pr-hero"[\s\S]*?<\/section>/.exec(main)[0];
+    assert.equal(text(/<h1[^>]*>([\s\S]*?)<\/h1>/.exec(hero)[1]), 'Start your referral network for… drumroll, please.');
+    assert.doesNotMatch(text(hero), /\$|\d/, 'the number waits for the scroll');
+    assert.doesNotMatch(hero, /class="btn|Book a 15-minute call/, 'no call button in the hero');
+    assert.doesNotMatch(main, /pg-glance|At a glance/, 'the "At a glance" box is gone');
+    assert.match(hero, /<div class="pr-drum" aria-hidden="true">/);
+    assert.deepEqual(links(hero).map((l) => l.href), ['/', '#reveal']);
   });
 
-  test('the starter pack: $250 for the first month, one review tag, three stands, the signs made for you', () => {
-    const p = text(/<article class="pr-plan" aria-labelledby="starter-h">([\s\S]*?)<\/article>/.exec(src)[1]);
-    assert.match(p, /Starter pack \$250 for your first month/);
-    assert.match(p, /One review tag for your clinic\./);
-    assert.match(p, /Three tap-to-sign-up stands, placed for you in businesses near your clinic\./);
-    assert.match(p, /Send us your flyer and we turn it into the signs for your stands, at no extra cost\./);
+  test('the reveal: $250 for the whole first month, and what the starter pack includes', () => {
+    const r = sec('reveal');
+    assert.equal(text(/<h2 id="reveal-h"[^>]*>([\s\S]*?)<\/h2>/.exec(src)[1]), '$250for your whole first month.');
+    assert.match(r, /Yes, really\. That's the starter pack, and it includes all of this\./);
+    const items = [...byId(src, 'reveal').matchAll(/<li><svg[^>]*><use href="#i-[a-z]+"\/><\/svg><h3>([\s\S]*?)<\/h3><p>([\s\S]*?)<\/p><\/li>/g)].map((m) => [text(m[1]), text(m[2])]);
+    assert.deepEqual(items.map((i) => i[0]), ['One review tag for your clinic', 'Three tap-to-sign-up stands', 'The signs, made for you']);
+    assert.match(r, /A tap opens the form for your first-visit offer, and the link shows which business it came from\./);
+    assert.match(r, /Send us your flyer and we turn it into the signs for your stands, at no extra cost\./);
   });
 
-  test('the referral network: $500 a month from month two, five new stands, one field day, the monthly report', () => {
-    const p = text(/<article class="pr-plan pr-feature" aria-labelledby="network-h">([\s\S]*?)<\/article>/.exec(src)[1]);
-    assert.match(p, /From month two Referral Network \$500 a month/);
+  test('the referral network: $500 a month from month two, five new stands, one field day, the portal and report', () => {
+    const p = text(/<article class="pr-network reveal"[\s\S]*?<\/article>/.exec(src)[0]);
+    assert.match(p, /Then, from month two Referral Network \$500 a month/);
     assert.match(p, /Five new tap-to-sign-up stands every month, signs included, placed for you\./);
     assert.match(p, /One field day a month\./);
-    assert.match(p, /A monthly report that shows where your new leads come from\./);
-    assert.match(t, /One flat fee, set in advance\. It never moves with referrals, leads, bookings or revenue\. Nobody is paid per patient\./);
+    assert.match(p, /Your client portal and a monthly report that show where your new leads come from\./);
+    assert.match(t, /The fee never moves with referrals, leads, bookings or revenue\. Nobody is paid per patient\./);
   });
 
   test('the add-ons: the flyer network per location, online search plus the ad budget, dinners per event', () => {
@@ -50,7 +56,6 @@ describe('pricing.html', () => {
     assert.deepEqual([...byId(src, 'online-search').matchAll(/<li><span class="num">\d+<\/span><h3>([^<]+)<\/h3>/g)].map((m) => text(m[1])),
       ["Written to Google's rules", 'Built around your name', 'Your words, approved by you', 'One clear report']);
     assert.match(s, /We write yours to those policies from the first draft, before anything goes live\./);
-    assert.match(s, /The ad budget never passes through us, and our fee stays flat\./);
     assert.match(s, /Google and Google Ads are trademarks of Google LLC, and we are not affiliated with or endorsed by Google\./);
     assert.doesNotMatch(s, /\d+\s?%|\bROAS\b|click-through|\bCTR\b|cost per|top of Google|first page|guarantee|approved by Google/i);
   });
@@ -60,19 +65,25 @@ describe('pricing.html', () => {
     assert.match(d, /Each dinner is priced per venue, as one flat fee\./);
     assert.deepEqual([...byId(src, 'dinners').matchAll(/<h3>([^<]+)<\/h3>/g)].map((m) => m[1]), ['Food', 'Planning', 'Marketing materials', 'Custom setup']);
     assert.match(d, /Custom tablecloths, name tags and table setups, made for your event\./);
-    assert.match(d, /fixed in writing before you commit\. No monthly contract\./);
+  });
+
+  test('the agreement: a preview of the sample contract that links to it', () => {
+    const ag = byId(src, 'agreement');
+    assert.ok(ag, '#agreement exists');
+    assert.ok(links(ag).some((l) => l.href === '/sample-contract'));
+    assert.match(text(ag), /\$1,400/);
   });
 
   test('the questions match the rest of the site', () => {
     const q = sec('questions');
     assert.match(q, /Either side can end it with 30 days' written notice, and email counts\./);
-    assert.match(q, /Yes\. It is \$700 a month per location, on its own or with your referral network\./);
+    assert.match(q, /Yes\. The flyer network is \$700 a month per location, and online search is \$200 a month plus your ad budget\./);
     assert.match(q, /Your clinic pays Google directly, from your own Google Ads account\./);
   });
 
-  test('every call link on the page prefills the pricing question', () => {
+  test('every call link on the page prefills the pricing question, and none sits in the hero', () => {
     const calls = links(main).filter((l) => /Book a 15-minute call/.test(l.text));
-    assert.equal(calls.length, 4, 'the hero, both plans and the closing band');
+    assert.equal(calls.length, 2, 'the referral network card and the closing band');
     for (const l of calls) assert.equal(l.href, '/contact?about=pricing');
   });
 });

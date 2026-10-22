@@ -1120,6 +1120,36 @@ table,.tnum{font-variant-numeric:tabular-nums}
 .tp-place{font-size:.72rem;font-weight:500}
 .fd-table thead th{font-size:.82rem}
 
+/* ---------- the client portal (pt-): real screens from the portal's sample account ---------- */
+/* On the home page (#portal), the flyer network (#track) and the referral network (#portal). The screens are
+   screenshots of the portal app signed in to its sample account (a fictional clinic); the line under them says so. */
+.pt-band{background:linear-gradient(180deg,var(--ground) 0%,var(--paper) 100%)}
+.pt-stage{position:relative;max-width:1080px;margin:0 auto}
+.pt-browser{margin:0;border-radius:16px;overflow:hidden;background:#fff;border:1px solid var(--line);box-shadow:0 2px 4px rgba(28,58,44,.06),0 40px 80px -40px rgba(28,58,44,.45)}
+.pt-bar{display:flex;gap:7px;padding:11px 16px;background:var(--paper);border-bottom:1px solid var(--line-soft)}
+.pt-bar span{width:10px;height:10px;border-radius:50%;background:var(--line)}
+.pt-browser img,.pt-phone img,.pt-frame img{display:block;width:100%;height:auto}
+.pt-phone{margin:0 auto;width:min(270px,74vw);border-radius:30px;overflow:hidden;border:7px solid var(--ink);background:#fff;box-shadow:0 34px 60px -30px rgba(28,58,44,.62)}
+/* phones show the portal's own phone screen, which is legible at that size; wider screens show the desktop screen with the phone beside it */
+@media (max-width:759.98px){.pt-browser{display:none}}
+@media (min-width:760px){
+  .pt-stage{padding-right:clamp(70px,10vw,130px)}
+  .pt-phone{position:absolute;right:0;bottom:clamp(-64px,-4vw,-30px);width:clamp(150px,19vw,230px)}
+}
+.pt-points{list-style:none;display:grid;gap:24px;max-width:1080px;margin:clamp(44px,6vw,96px) auto 0}
+@media (min-width:820px){.pt-points{grid-template-columns:repeat(3,minmax(0,1fr));gap:34px}}
+.pt-points svg{display:block;width:26px;height:26px;color:var(--gold-sm);margin-bottom:12px}
+.pt-points h3{font-size:1.12rem;line-height:1.3;margin-bottom:6px}
+.pt-points p{font-size:.96rem;line-height:1.6;text-wrap:pretty}
+.pt-note{max-width:1080px;margin:26px auto 0;font-size:.86rem;line-height:1.5;color:var(--ink-3)}
+.pt-links{max-width:1080px;margin:16px auto 0}
+.pt-stack~.pt-note{margin-inline:0}
+.pt-stack{display:grid;gap:clamp(24px,3vw,34px);max-width:1040px}
+.fd-track+.pt-stack{margin-top:clamp(36px,4.6vw,52px)}
+.pt-shot{margin:0;min-width:0}
+.pt-label{margin-bottom:10px;font:600 .92rem/1.3 var(--sans);color:var(--ink)}
+.pt-frame{border-radius:14px;overflow:hidden;background:#fff;border:1px solid var(--line);box-shadow:0 1px 2px rgba(28,58,44,.06),0 28px 50px -34px rgba(28,58,44,.4)}
+
 /* ---------- pricing page (/pricing) ---------- */
 /* A drumroll hero with no figure, then the starter month revealed as the reader scrolls, the referral network
    from month two, the add-ons, how we build the ads, what a dinner includes, the agreement and questions.
