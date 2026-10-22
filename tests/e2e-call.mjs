@@ -323,13 +323,12 @@ await scenario('phone width (390px): no sideways scroll, the form and the call-n
   await close();
 });
 
-await scenario('an old link whose query landed after the # (/#call?package=website) still lands on the call band', async () => {
+await scenario('an old link to the home call band (/#call?package=website) opens the call form on /contact, query kept', async () => {
   const { page, jsErrors, close } = await open({ path: '/#call?package=website' });
-  await page.waitForTimeout(250);
-  assert.equal(await page.evaluate(() => location.pathname + location.search + location.hash), '/?package=website#call', 'the query moves in front of the #');
-  const top = await page.$eval('#call', (el) => el.getBoundingClientRect().top);
-  assert.ok(Math.abs(top) < 200, `#call is at the top of the view (top ${Math.round(top)})`);
-  assert.ok(await page.$('#call a[href="/contact"]'), 'the band links to the form');
+  await page.waitForURL((u) => u.pathname === '/contact', { timeout: 3000 });
+  await page.waitForLoadState('load');
+  assert.equal(await page.evaluate(() => location.pathname + location.search + location.hash), '/contact?package=website#call', 'the query moves in front of the #');
+  assert.ok(await page.$('#dinner-call'), 'the call form is on the page');
   assert.deepEqual(jsErrors, []);
   await close();
 });

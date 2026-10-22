@@ -39,7 +39,6 @@ const FAVICON_LINKS = [
 // (the example came off /referral-network on October 22, 2026, at the owner's request).
 const REMOVED = ['assets/img/hero-town.png', 'assets/img/hero-town.webp', 'assets/img/hero-town-700.webp',
   'assets/img/review-stand.jpg', 'assets/img/review-stand.webp', 'assets/img/review-stand-600.jpg', 'assets/img/review-stand-600.webp',
-  'assets/img/hero-map.svg',
   ...['stand', 'tap'].flatMap((n) => [`assets/img/ethr-mockup-${n}.jpg`, `assets/img/ethr-mockup-${n}.webp`, `assets/img/ethr-mockup-${n}-600.jpg`, `assets/img/ethr-mockup-${n}-600.webp`])];
 
 // The pages of the site (the multi-page site of October 22, 2026), and the clean URL of each.
