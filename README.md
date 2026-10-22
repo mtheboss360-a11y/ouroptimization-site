@@ -77,7 +77,7 @@ Images used only by the retired pages, the old hero (`hero-community.svg`) and t
 
 Type: Bricolage Grotesque (display) and Figtree (text), self-hosted, OFL. Shared UI lives in `assets/site.css`; shared behaviour (contact email, header, menu, reveal) in `assets/site.js`. `site.js` also catches an old link whose query string a redirect left after the fragment (`/#call?package=website`): it moves the query in front of the `#` and opens the section. Still check `/estimate?package=website` on a Netlify deploy preview.
 
-Favicons: `favicon.ico` (16, 32 and 48 px), `assets/favicon.svg`, `apple-touch-icon.png` and `site.webmanifest` (with `assets/icon-192.png` and `assets/icon-512.png`) are linked from every page. `assets/favicon-32.png` and `assets/favicon-180.png` are no longer linked but stay, with the new mark, for old cached pages that still point at them; `assets/favicon-16.png` and `assets/favicon-48.png` are spare PNG copies of the sizes inside `favicon.ico`.
+Favicons: `favicon.ico` (16, 32 and 48 px), `apple-touch-icon.png` and `site.webmanifest` (with `assets/icon-192.png` and `assets/icon-512.png`) are linked from every page. All of them are the infinity W mark from the Our Wellness Optimization logo on its off-white background; there is no SVG favicon, so browsers use these instead. `assets/favicon-32.png` and `assets/favicon-180.png` are no longer linked but stay, with the new mark, for old cached pages that still point at them; `assets/favicon-16.png` and `assets/favicon-48.png` are spare PNG copies of the sizes inside `favicon.ico`.
 
 ## Tests
 

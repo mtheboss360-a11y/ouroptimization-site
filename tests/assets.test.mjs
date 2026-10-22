@@ -20,7 +20,6 @@ const pages = readdirSync(ROOT).filter((f) => f.endsWith('.html')).sort();
 // The favicon block every page head carries. Root-absolute, so the 404 page works at any depth.
 const FAVICON_LINKS = [
   { rel: 'icon', href: '/favicon.ico' },
-  { rel: 'icon', href: '/assets/favicon.svg' },
   { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
   { rel: 'manifest', href: '/site.webmanifest' }
 ];
@@ -213,12 +212,9 @@ describe('favicon set', () => {
     assert.ok(sizes.includes(32), `entries: ${sizes.join(', ')}`);
   });
 
-  test('favicon.svg is the drawn mark: the ink tile and a light color, no raster', () => {
-    const svg = read('assets/favicon.svg');
-    assert.match(svg, /<svg\b[^>]*viewBox=/);
-    assert.match(svg, /#1C3A2C/i, 'ink tile');
-    assert.match(svg, /#(F9FBF8|EFBCCB|FFFFFF)/i, 'a light color for the mark');
-    assert.doesNotMatch(svg, /<image\b|base64/i, 'no embedded raster');
+  test('no SVG favicon is linked or shipped (browsers would prefer it over the logo mark PNGs)', () => {
+    assert.ok(!isFile('assets/favicon.svg'), 'assets/favicon.svg is back');
+    for (const page of pages) assert.doesNotMatch(read(page), /favicon\.svg/, `${page} links favicon.svg`);
   });
 
   const icons = [
@@ -289,7 +285,7 @@ describe('retired pages', () => {
 
   test('no redirect catches a kept page, the assets or the site files', () => {
     const keep = ['/', '/expo-vendors', '/privacy', '/terms', '/review-tags', '/website-design', '/thanks', '/404.html',
-      '/assets/site.css', '/assets/site.js', '/assets/call.js', '/assets/favicon.svg', '/assets/img/owo-logo.png',
+      '/assets/site.css', '/assets/site.js', '/assets/call.js', '/assets/favicon-48.png', '/assets/img/owo-logo.png',
       '/favicon.ico', '/apple-touch-icon.png', '/site.webmanifest', '/robots.txt', '/sitemap.xml'];
     for (const path of keep) {
       const rule = ruleFor(path);
