@@ -72,6 +72,8 @@
 [[redirects]]
   from = "/client-portal.html"
   to = "/client-portal"
+  from = "/pricing.html"
+  to = "/pricing"
   status = 301
   force = true
 

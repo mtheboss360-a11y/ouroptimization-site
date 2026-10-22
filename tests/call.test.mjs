@@ -228,7 +228,7 @@ describe('call.js: message (optional)', () => {
 });
 
 describe('call.js: ?about= prefill', () => {
-  // One key for each service page (named after its URL), plus the keys from before the pages were renamed
+  // One key for each service page and the pricing page (named after its URL), plus the keys from before the pages were renamed
   // (October 22, 2026), which keep working and prefill the same message as the new key.
   const KEYS = {
     'patient-network': "I'm asking about the patient dinners.",
@@ -238,6 +238,7 @@ describe('call.js: ?about= prefill', () => {
     'review-tags': "I'm asking about review tags.",
     'website-design': "I'm asking about a website redesign.",
     'client-portal': "I'm asking about the client portal.",
+    'pricing': "I'm asking about pricing.",
     'patient-dinners': "I'm asking about the patient dinners.",
     'flyer-drops': "I'm asking about flyer drops.",
     'google-ads': "I'm asking about Google Ads."
