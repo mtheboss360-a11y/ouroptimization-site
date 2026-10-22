@@ -72,8 +72,18 @@
 [[redirects]]
   from = "/client-portal.html"
   to = "/client-portal"
+  status = 301
+  force = true
+
+[[redirects]]
   from = "/pricing.html"
   to = "/pricing"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/sample-contract.html"
+  to = "/sample-contract"
   status = 301
   force = true
 

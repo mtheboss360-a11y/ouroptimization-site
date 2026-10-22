@@ -43,11 +43,11 @@ const REMOVED = ['assets/img/hero-town.png', 'assets/img/hero-town.webp', 'asset
 
 // The pages of the site (the multi-page site of October 22, 2026), and the clean URL of each.
 const KEPT = ['404.html', 'about.html', 'client-portal.html', 'contact.html', 'expo-vendors.html', 'faq.html', 'flyer-network.html', 'online-search-network.html', 'index.html',
-  'patient-network.html', 'pricing.html', 'privacy.html', 'referral-network.html', 'review-tags.html', 'terms.html', 'thanks.html', 'website-design.html'];
-const CLEAN = ['/', '/referral-network', '/flyer-network', '/patient-network', '/online-search-network', '/review-tags', '/website-design', '/client-portal', '/pricing', '/about',
+  'patient-network.html', 'pricing.html', 'privacy.html', 'sample-contract.html', 'referral-network.html', 'review-tags.html', 'terms.html', 'thanks.html', 'website-design.html'];
+const CLEAN = ['/', '/referral-network', '/flyer-network', '/patient-network', '/online-search-network', '/review-tags', '/website-design', '/client-portal', '/pricing', '/sample-contract', '/about',
   '/faq', '/contact', '/privacy', '/terms', '/thanks', '/expo-vendors'];
 // The pages the sitemap lists: every page people should find from a search.
-const INDEXABLE = ['/', '/referral-network', '/flyer-network', '/patient-network', '/online-search-network', '/review-tags', '/website-design', '/client-portal', '/pricing', '/about', '/faq', '/contact', '/privacy', '/terms'];
+const INDEXABLE = ['/', '/referral-network', '/flyer-network', '/patient-network', '/online-search-network', '/review-tags', '/website-design', '/client-portal', '/pricing', '/sample-contract', '/about', '/faq', '/contact', '/privacy', '/terms'];
 
 // The service pages renamed on October 22, 2026, when the brand became Our Wellness Network: old path -> new path.
 const RENAMED = { 'flyer-drops': '/flyer-network', 'patient-dinners': '/patient-network', 'google-ads': '/online-search-network' };

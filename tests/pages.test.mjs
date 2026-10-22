@@ -111,12 +111,12 @@ describe('every page: head, one h1, header tabs, breadcrumbs and footer', () => 
     }
   }
 
-  test('the tabs run Home, the three steps, the extras, then About, FAQ and Contact', () => {
-    assert.deepEqual(TABS.map((t) => t[0]), ['Home', 'Referral Network', 'Flyer Network', 'Patient Network', 'Online Search Network', 'Review Tags', 'Website Design', 'Client Portal', 'About', 'FAQ', 'Contact']);
-    assert.deepEqual(TABS.map((t) => t[1]), ['/', '/referral-network', '/flyer-network', '/patient-network', '/online-search-network', '/review-tags', '/website-design', '/client-portal', '/about', '/faq', '/contact']);
+  test('the tabs run Home, the three steps, the extras and the portal, then Pricing, Sample Contract, About, FAQ and Contact', () => {
+    assert.deepEqual(TABS.map((t) => t[0]), ['Home', 'Referral Network', 'Flyer Network', 'Patient Network', 'Online Search Network', 'Review Tags', 'Website Design', 'Client Portal', 'Pricing', 'Sample Contract', 'About', 'FAQ', 'Contact']);
+    assert.deepEqual(TABS.map((t) => t[1]), ['/', '/referral-network', '/flyer-network', '/patient-network', '/online-search-network', '/review-tags', '/website-design', '/client-portal', '/pricing', '/sample-contract', '/about', '/faq', '/contact']);
     for (const p of PAGES) {
       const nav = links(/<nav class="site-nav"[\s\S]*?<\/nav>/.exec(page[p.file])[0]).map((l) => l.text);
-      assert.deepEqual(nav.slice(0, 11), TABS.map((t) => t[0]), `${p.file}: header order`);
+      assert.deepEqual(nav.slice(0, TABS.length), TABS.map((t) => t[0]), `${p.file}: header order`);
     }
     const pages404 = links(/<ul class="pg-links"[\s\S]*?<\/ul>/.exec(page['404.html'])[0]).map((l) => l.text);
     assert.deepEqual(pages404, TABS.slice(1).map((t) => t[0]), '404.html: the page links follow the tabs');
@@ -476,7 +476,7 @@ describe('/flyer-network', () => {
     assert.match(t, /Set in advance\. It never moves with referrals, and no part of it goes to a business or anyone we visit\. Month to month, with 30 days' written notice to end it\./);
     assert.match(t, /Works on its own or with the online search network\.\s?If you add the online search network, the two work side by side, and the ad budget goes straight to Google from your own account/);
     assert.match(t, /You can also add flyer drops to a dinner, which is quoted on its own\./);
-    assert.match(t, /It starts with a 15-minute call, and the flyer network is quoted for your clinic before it starts\./);
+    assert.match(t, /It starts with a 15-minute call, and the flyer network is one flat monthly fee per location, set in advance\./);
   });
 });
 
@@ -491,8 +491,9 @@ describe('/online-search-network', () => {
     assert.match(t, /The ad budget goes straight to Google from that account, so you keep control of what you spend there\./);
     assert.match(t, /The online search network can run on its own\. If you also have the flyer network, the two work side by side\./);
     assert.match(t, /Your ads run in your clinic's own Google Ads account\./, 'Google Ads, the product, keeps its name');
-    assert.match(t, /Our part is quoted for your clinic first\./);
-    assert.equal((t.match(/Our part is quoted/g) || []).length, 1, 'said once');
+    assert.match(t, /Our part is one flat fee, shown on our pricing page\./);
+    assert.ok(links(main('online-search-network.html')).some((l) => l.href === '/pricing'), 'links the pricing page');
+    assert.doesNotMatch(t, /\$/, 'the figure stays on the pricing page');
     assert.deepEqual([...main('online-search-network.html').matchAll(/<h3><a href="([^"]+)">/g)].map((x) => x[1]), ['/referral-network', '/flyer-network', '/patient-network'], 'the steps in order, then the ads');
     assert.deepEqual([...main('online-search-network.html').matchAll(/<h3>(?:<a [^>]+>)?([^<]+)/g)].map((x) => x[1]).slice(0, 4), ['Referral network', 'Flyer network', 'Patient network', 'Then the online search network']);
   });
@@ -573,7 +574,7 @@ describe('/faq', () => {
   test('the new answers match the pages', () => {
     const a = text(m);
     assert.match(a, /fourteen for each location, on two field days a month, seven businesses a day\./);
-    assert.match(a, /The flyer network is quoted for your clinic before it starts, at a flat monthly fee that never moves with referrals\./);
+    assert.match(a, /The flyer network is one flat monthly fee per location, shown on our pricing page, and it never moves with referrals\./);
     assert.match(a, /You do\. You list them on one page, for example gyms, salons, primary care offices, chiropractors, physical therapy, boutiques, country clubs and employers\./);
     assert.match(a, /A visit log, within five business days: every business visited, who we spoke with, how many flyers we left there, and any follow-up they asked for\./);
     assert.match(a, /Yes\. It runs on its own or with the online search network\. You can also add flyer drops to a dinner, which is quoted separately\. If you add the online search network, the ad budget goes straight to Google from your own account\./);
@@ -680,9 +681,10 @@ describe('the brand: Our Wellness Network', () => {
 
 /* ---------- copy rules, site-wide ---------- */
 describe('copy rules across the site', () => {
-  test('no fee or price figures in any text file of the repository, tests included', () => {
+  test('no fee or price figures in any text file of the repository, tests included, except the pricing and sample contract pages and their test', () => {
     const figure = [/\$\s?\d/, /\b\d[\d,.]*\s?(dollars|usd)\b/i, /\b\d[\d,.]*\s*(\/|per|a)\s*(mo|month)\b/i, /\bsetup fee\b/i, /\bfee of\b/i];
-    for (const file of repoTextFiles().filter((f) => !f.endsWith('.svg'))) {
+    const PRICED = ['pricing.html', 'sample-contract.html', 'tests/pricing.test.mjs'];
+    for (const file of repoTextFiles().filter((f) => !f.endsWith('.svg') && !PRICED.includes(f))) {
       const src = read(file);
       for (const re of figure) {
         const hit = re.exec(src);

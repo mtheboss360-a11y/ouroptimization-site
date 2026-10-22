@@ -15,6 +15,8 @@ export const PAGES = [
   { file: 'review-tags.html', url: '/review-tags', tab: 'Review Tags' },
   { file: 'website-design.html', url: '/website-design', tab: 'Website Design' },
   { file: 'client-portal.html', url: '/client-portal', tab: 'Client Portal' },
+  { file: 'pricing.html', url: '/pricing', tab: 'Pricing' },
+  { file: 'sample-contract.html', url: '/sample-contract', tab: 'Sample Contract' },
   { file: 'about.html', url: '/about', tab: 'About' },
   { file: 'faq.html', url: '/faq', tab: 'FAQ' },
   { file: 'contact.html', url: '/contact', tab: 'Contact' },
@@ -26,7 +28,7 @@ export const PAGES = [
 /* The header tabs, in order: Home, the three steps (Referral Network, Flyer Network, Patient Network), the extras, then About, FAQ and Contact. */
 export const TABS = PAGES.filter((p) => p.tab).map((p) => [p.tab, p.url]);
 /* The pages in the top row of the desktop header, beside the button (they stay in the menu on phones). */
-export const UTIL = ['/about', '/faq', '/contact'];
+export const UTIL = ['/pricing', '/sample-contract', '/about', '/faq', '/contact'];
 
 const ENTITIES = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ', rsquo: "'", lsquo: "'", ldquo: '"', rdquo: '"', eacute: 'é', middot: '·', copy: '©', hellip: '…' };
 export const decode = (s) => s
