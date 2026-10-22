@@ -93,15 +93,14 @@ describe('every page: head, one h1, header tabs, breadcrumbs and footer', () => 
       assert.doesNotMatch(h, /tel:|331-271-6851|head-tel/, 'the phone number is in the footer, not the header');
     });
 
-    test(`${p.file}: the shared footer lists every page`, () => {
+    test(`${p.file}: the footer is one legal line, the same on every page`, () => {
+      // The owner took the full footer off (October 22, 2026). One line stays: the privacy policy and the
+      // terms stay reachable from every page while the site collects names and phone numbers.
       const f = footer(src);
-      const onSite = /<h2>On this site<\/h2>\s*<ul>([\s\S]*?)<\/ul>/.exec(f)[1];
-      assert.deepEqual(links(onSite).map((l) => [l.text, l.href]), TABS);
-      assert.deepEqual(links(/<h2>Legal<\/h2>\s*<ul>([\s\S]*?)<\/ul>/.exec(f)[1]).map((l) => l.href), ['/privacy', '/terms']);
-      assert.doesNotMatch(f, /<h3>/, 'the footer headings are h2, so no page skips a heading level');
-      assert.equal(text(/<div class="foot-brand">([\s\S]*?)<\/div>/.exec(f)[1]), "Referral, flyer and patient networks for independent med spas, from Chicago's western suburbs.", 'the footer line leads with the referral network');
-      assert.equal(text(/<div class="foot-bottom">\s*<p>([\s\S]*?)<\/p>/.exec(f)[1]), '© 2026 OUR Optimization LLC. Our Wellness Network is a brand of OUR Optimization LLC.');
-      assert.equal(f.replace(/\n\s*<p>Integrative Wellness is a sample brand used to show our work\.<\/p>/, ''), footer(page['index.html']), 'the footer is the same on every page');
+      assert.equal(f, footer(page['index.html']), 'the footer is the same on every page');
+      assert.equal(text(f).replace(/\s+/g, ' ').trim(), '© 2026 OUR Optimization LLC · Privacy Policy · Terms of Service');
+      assert.deepEqual(links(f).map((l) => l.href), ['/privacy', '/terms']);
+      assert.doesNotMatch(f, /<img|<h2|tel:|mailto:|331-271-6851|Book a 15-minute call/, 'no logo, headings, phone, email or call link in the footer');
     });
 
     if (p.tab && p.url !== '/') {
@@ -166,13 +165,21 @@ describe('every page: head, one h1, header tabs, breadcrumbs and footer', () => 
     }
   });
 
-  test('each marketing page ends with a way to book the call', () => {
-    for (const file of MARKETING.filter((f) => !['contact.html', 'index.html'].includes(f))) { // home ends on the portal (the owner's call)
-      const m = main(file);
-      const last = m.slice(m.lastIndexOf('<section'));
-      assert.match(last, /class="section bg-ink pg-cta"/, `${file}: closing call to action band`);
-      assert.ok(links(last).some((l) => /^\/contact/.test(l.href)), `${file}: the band links /contact`);
+  test('only the pricing page asks for the call; the contact page is the call form', () => {
+    // The owner took "Book a 15-minute call" off every page but pricing (October 22, 2026). The header's
+    // Contact tab and the pricing page lead to /contact, where the form books the call.
+    for (const p of PAGES) {
+      const m = main(p.file);
+      const calls = links(m).filter((l) => /15-minute call/i.test(l.text));
+      if (p.file === 'pricing.html') {
+        assert.ok(calls.length >= 1, 'pricing asks for the call');
+        assert.match(m.slice(m.lastIndexOf('<section')), /class="section bg-ink pg-cta"/, 'pricing ends with the call band');
+      } else {
+        assert.deepEqual(calls.map((l) => l.text), [], `${p.file}: a call link`);
+        assert.doesNotMatch(m, /pg-cta/, `${p.file}: a closing call band`);
+      }
     }
+    assert.match(main('contact.html'), /Book my 15-minute call/, 'the contact form still books the call');
   });
 });
 
@@ -253,8 +260,8 @@ describe('the three steps: Referral Network, Flyer Network, Patient Network', ()
       const head = m.slice(m.indexOf('<section class="pg-hero'), m.indexOf('<h1'));
       assert.equal(text(/<p class="eyebrow">([\s\S]*?)<\/p>/.exec(head)[1]), `Step ${st.n} of 3 · ${st.name}`);
       const sections = [...m.matchAll(/<section\b[^>]*>/g)];
-      const nextSec = m.slice(sections.at(-2).index, sections.at(-1).index);
-      assert.match(nextSec, /^<section class="section pg-next"/, 'the section before the closing band leads on');
+      const nextSec = m.slice(sections.at(-1).index);
+      assert.match(nextSec, /^<section class="section pg-next"/, 'the page ends with the next step (no call band since October 22, 2026)');
       const card = /<div class="pg-step-next">([\s\S]*?)<\/div>\s*<\/div>\s*<\/section>/.exec(nextSec)[1];
       assert.equal(text(/<p class="eyebrow">([\s\S]*?)<\/p>/.exec(card)[1]), 'Next step');
       assert.deepEqual(links(card).map((l) => [l.href, l.text]), [[st.next[1], st.next[2]]]);
@@ -280,7 +287,7 @@ describe('/patient-network', () => {
   test('the pricing card has no figure: one fixed quote, restaurant and food included', () => {
     const f = text(byId(html, 'formats'));
     for (const line of ['No surprises', 'One fixed quote per dinner.', 'Restaurant and food included.', 'Quoted for your clinic after the 15-minute call.', 'The price is fixed in writing before you commit.', 'No monthly contract.']) assert.ok(f.includes(line), line);
-    assert.match(byId(html, 'formats'), /<a class="btn btn-light" href="\/contact\?about=patient-network">Book a 15-minute call<\/a>/);
+    assert.doesNotMatch(byId(html, 'formats'), /class="btn|dn-price-cta/, 'no call button on the card (October 22, 2026)');
   });
 
   test('how the evening works: four steps, and the illustration with no caption', () => {
@@ -462,7 +469,6 @@ describe('/flyer-network', () => {
     assert.match(t, /Set in advance\. It never moves with referrals, and no part of it goes to a business or anyone we visit\. Month to month, with 30 days' written notice to end it\./);
     assert.match(t, /Works on its own or with the online search network\.\s?If you add the online search network, the two work side by side, and the ad budget goes straight to Google from your own account/);
     assert.match(t, /You can also add flyer drops to a dinner, which is quoted on its own\./);
-    assert.match(t, /It starts with a 15-minute call, and the flyer network is one flat monthly fee per location, set in advance\./);
   });
 });
 
@@ -528,9 +534,8 @@ describe('/about', () => {
 describe('/faq', () => {
   const html = page['faq.html'];
   const m = main('faq.html');
-  test('the intro sends unanswered questions to the 15-minute call', () => {
-    assert.match(text(/<p class="intro">([\s\S]*?)<\/p>/.exec(m)[1]), /Can't find yours\? Ask us on a 15-minute call\.$/);
-    assert.ok(links(/<p class="intro">([\s\S]*?)<\/p>/.exec(m)[1]).some((l) => l.href === '/contact'));
+  test('the intro lists the groups, with no call link (October 22, 2026)', () => {
+    assert.equal(text(/<p class="intro">([\s\S]*?)<\/p>/.exec(m)[1]), 'The referral network first, then the flyer network, the patient network and how we work.');
   });
   test('the patient dinners answers, as the owner changed them', () => {
     const d = text(byId(html, 'dinners-faq'));
@@ -569,7 +574,6 @@ describe('/faq', () => {
     assert.match(a, /Your front desk gives us the bookings and revenue as totals for each partner\. The numbers are for your report only, and we never drop a partner for its lead count\./);
     assert.match(m, /<a href="\/review-tags#nfc">/);
     assert.match(a, /A small chip inside a partner's stand or flyer\./);
-    assert.match(m, /<a href="\/contact\?about=flyer-network">Book a <span class="nowrap">15-minute call<\/span> about the flyer network<\/a>/);
   });
   test('"Can I track my flyer drops?": the visit log counts the flyers, month by month, and partner links, with no numbers promised', () => {
     const entry = [...byId(html, 'flyer-drops-faq').matchAll(/<details>([\s\S]*?)<\/details>/g)].map((x) => x[1]).find((x) => /Can I track my flyer drops\?/.test(x));
@@ -609,18 +613,18 @@ describe('the brand: Our Wellness Network', () => {
   });
 
   for (const p of PAGES) {
-    test(`${p.file}: the new logo in the header and footer, with the new name`, () => {
+    test(`${p.file}: the new logo in the header, with the new name`, () => {
       const src = page[p.file];
       const brand = /<a aria-label="([^"]+)" class="brand" href="\/">\s*(<img [^>]+>)\s*<\/a>/.exec(headerOf(src));
       assert.ok(brand, 'the header brand link');
       assert.equal(brand[1], 'Our Wellness Network home');
-      for (const img of [brand[2], tags(/<div class="foot-brand">[\s\S]*?<\/div>/.exec(footerOf(src))[0], 'img')[0]]) {
+      for (const img of [brand[2]]) {
         assert.equal(attr(img, 'src'), LOGO);
         assert.equal(attr(img, 'alt'), 'Our Wellness Network');
         assert.equal(attr(img, 'width'), '480');
         assert.equal(attr(img, 'height'), '174');
       }
-      assert.equal(tags(src, 'img').filter((t) => /logo/.test(attr(t, 'src') || '')).length, 2, 'the logo appears twice: header and footer');
+      assert.equal(tags(src, 'img').filter((t) => /logo/.test(attr(t, 'src') || '')).length, 1, 'the logo appears once, in the header (the footer is one legal line)');
       const title = decode(/<title>([^<]+)<\/title>/.exec(src)[1]);
       if (p.file !== 'index.html') assert.match(title, / \| Our Wellness Network$/, title);
     });
@@ -641,7 +645,8 @@ describe('the brand: Our Wellness Network', () => {
     assert.match(text(page['terms.html']), /Our Wellness Network is the customer-facing brand of OUR Optimization LLC\./);
     assert.match(text(page['terms.html']), /"We", "us" and "our" mean OUR Optimization LLC, operating as Our Wellness Network\./);
     assert.match(text(page['terms.html']), /Our Wellness Network, a brand of OUR Optimization LLC\. Contact us at mustafa@ouroptimization\.com, or through https:\/\/ouroptimization\.com\./);
-    for (const p of PAGES) assert.match(footerOf(page[p.file]), /mailto:mustafa@ouroptimization\.com/, p.file);
+    for (const file of ['contact.html', 'about.html']) assert.match(page[file], /mailto:mustafa@ouroptimization\.com/, file);
+    for (const file of ['privacy.html', 'terms.html']) assert.match(text(page[file]), /mustafa@ouroptimization\.com/, file);
   });
 
   test('the service names: networks where the service is named, plain words for the activity and the products', () => {
@@ -799,7 +804,7 @@ describe('copy rules across the site', () => {
     assert.match(copyOf(page['terms.html']), /Please do not send patient information, protected health information, or any sensitive personal data through the call or expo forms\. They are business inquiry forms and are not built for that\./);
   });
 
-  test('name and number: outside the header and footer, Mustafa only on /about and /contact, the phone only on /contact and /thanks', () => {
+  test('name and number: Mustafa only on /about and /contact, the phone only on /contact and /thanks', () => {
     const NAME = { 'about.html': 1, 'contact.html': 1 };
     const PHONE = { 'contact.html': 1, 'thanks.html': 1 };
     const HEAD_PHONE = { 'index.html': 1, 'contact.html': 3 }; // the home JSON-LD; the /contact description, og and twitter tags
@@ -812,10 +817,10 @@ describe('copy rules across the site', () => {
       assert.equal((body.match(/href="tel:/g) || []).length, PHONE[p.file] || 0, `${p.file}: tel links outside the header and footer`);
       assert.doesNotMatch(head, /Mustafa/, `${p.file}: the name in the head`);
       assert.equal((head.match(/331.?271.?6851/g) || []).length, HEAD_PHONE[p.file] || 0, `${p.file}: the phone number in the head`);
-      // The footer carries the phone and the email on every page; the header carries neither (the owner's call, October 22, 2026).
+      // Neither the header nor the footer carries the phone, the email or the name (the owner's calls, October 22, 2026):
+      // the number lives on /contact and /thanks only.
       assert.doesNotMatch(headerOf(src), /331-271-6851|tel:/, `${p.file}: no phone in the header`);
-      assert.match(footerOf(src), /<h2>Contact<\/h2>\s*<ul>\s*<li><a href="tel:\+13312716851">Call or text 331-271-6851<\/a><\/li>\s*<li><a class="foot-mail" href="mailto:mustafa@ouroptimization\.com">mustafa@ouroptimization\.com<\/a><\/li>/, `${p.file}: footer contact column`);
-      assert.doesNotMatch(footerOf(src), /Mustafa/, `${p.file}: the footer heading is "Contact"`);
+      assert.doesNotMatch(footerOf(src), /331-271-6851|tel:|mailto:|Mustafa/, `${p.file}: no phone, email or name in the footer`);
       // The call to action bands carry no name, number or email.
       for (const band of [...src.matchAll(/<section class="section bg-ink pg-cta"[\s\S]*?<\/section>/g)].map((x) => x[0])) {
         assert.doesNotMatch(band, /Mustafa|331-271-6851|tel:|mailto:|@ouroptimization|contact-name|data-email-slot/, `${p.file}: the call to action band`);

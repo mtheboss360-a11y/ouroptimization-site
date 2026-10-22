@@ -214,20 +214,11 @@ h3{font-size:1.28rem;line-height:1.25;font-weight:600;letter-spacing:-.012em}
 
 .area{margin-top:26px;font-size:.82rem;letter-spacing:.02em;color:#93A896}
 
-/* ---------- footer ---------- */
-.site-foot{padding-block:clamp(44px,6vw,64px) 30px;border-top:1px solid var(--line);background:var(--paper);font-size:.9rem;color:var(--ink-2)}
-.foot-top{display:grid;gap:clamp(30px,4vw,44px)}
-@media (min-width:720px){.foot-top{grid-template-columns:1.5fr 1fr 1fr 1fr}}
-.foot-brand img{width:180px;height:auto;margin-bottom:16px}
-.foot-brand p{max-width:26em;margin-bottom:20px}
-
-.foot-col h2{font:600 .72rem/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--ink);margin-bottom:16px}
-.foot-col ul{list-style:none;display:grid;gap:10px}
-.foot-col a{text-decoration:none;color:var(--ink-2);transition:color .25s ease}
-.foot-col a:hover{color:var(--gold-sm)}
-.foot-col .foot-mail{overflow-wrap:anywhere}
-.foot-bottom{margin-top:clamp(34px,4.5vw,48px);padding-top:22px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:8px 28px;justify-content:space-between;font-size:.82rem;color:var(--ink-3)}
-.foot-bottom strong{color:var(--ink-2);font-weight:600}
+/* ---------- footer: one legal line (the owner took the full footer off, October 22, 2026) ---------- */
+.site-foot{padding-block:22px;border-top:1px solid var(--line);background:var(--paper);font-size:.8rem;line-height:1.6;color:var(--ink-3)}
+.foot-legal{text-align:center;text-wrap:balance}
+.foot-legal a{color:inherit;text-underline-offset:3px;text-decoration-color:var(--line);transition:color .25s ease}
+.foot-legal a:hover{color:var(--gold-sm)}
 
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
@@ -332,9 +323,8 @@ h3{font-size:1.28rem;line-height:1.25;font-weight:600;letter-spacing:-.012em}
 /* ---------- brand: the full Our Wellness Network lockup ---------- */
 .brand img{width:clamp(140px,38vw,160px)}
 @media (min-width:1000px){.brand img{width:172px}}
-.foot-brand > img{width:190px;height:auto;margin-bottom:14px}
 /* The wordmark's "O" starts 45/480 into the logo file; shift the image so "Our" sits on the content edge. */
-.brand img,.foot-brand > img{transform:translateX(-9.375%)}
+.brand img{transform:translateX(-9.375%)}
 
 /* ---------- nav: every page is a tab, Home included ---------- */
 .site-nav .nav-home{display:list-item}
@@ -546,8 +536,6 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 
 /* ===== Final audit fixes ===== */
 
-/* Footer on tablets: brand on its own row, three link columns share the width. */
-@media (min-width:720px) and (max-width:1099.98px){.foot-top{grid-template-columns:1.25fr 1.4fr .75fr}.foot-brand{grid-column:1/-1}}
 /* Stacked hero buttons on small desktops line up at equal width. */
 @media (min-width:900px) and (max-width:1119.98px){.hero .actions .btn,.page-top .actions .btn{min-width:262px}}
 
@@ -676,15 +664,12 @@ a[href^="tel:"],.nowrap{white-space:nowrap}
 .dn-price ul{list-style:none;margin-top:22px;border-top:1px solid rgba(243,246,242,.16)}
 .dn-price li{display:flex;align-items:flex-start;gap:11px;padding:11px 0;border-bottom:1px solid rgba(243,246,242,.16);font-size:.95rem;line-height:1.45;color:var(--ground)}
 .dn-price li svg{width:18px;height:18px;flex:none;margin-top:2px;color:var(--gold-bright)}
-.dn-price-cta{margin-top:auto;padding-top:26px}
-.dn-price-cta .btn{width:100%}
 .dn-price :focus-visible{outline-color:var(--gold-bright)}
-/* tablets: the price card spans the row, so the list and button sit beside the price */
+/* tablets: the price card spans the row, so the list sits beside the price */
 @media (min-width:720px) and (max-width:1059.98px){
   .dn-price{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:40px;align-items:start}
   .dn-price>.dn-k,.dn-price-line{grid-column:1}
   .dn-price ul{grid-column:2;grid-row:1/span 2;margin-top:0}
-  .dn-price-cta{grid-column:2;padding-top:20px}
 }
 
 /* "At both dinners": the shared run of the night, and the plain statement */
@@ -904,12 +889,6 @@ a[href^="tel:"],.nowrap{white-space:nowrap}
 .cardgrid h3 a{color:inherit;text-underline-offset:4px;text-decoration-color:var(--gold)}
 .cardgrid h3 a:hover{color:var(--gold-sm)}
 
-/* ---------- footer: every page in "On this site" ---------- */
-.foot-pages ul{display:block;columns:2;column-gap:22px}
-.foot-pages li{margin-bottom:10px;break-inside:avoid}
-.foot-pages a{white-space:nowrap}
-@media (max-width:359.98px){.foot-pages ul{columns:1}}
-@media (min-width:1100px){.foot-top{grid-template-columns:1.3fr 1fr 1.4fr .8fr}}
 
 /* ---------- patient dinners: someone on site all evening ---------- */
 .dn-onsite{display:flex;align-items:flex-start;gap:12px;margin-top:22px;padding:14px 16px;border-radius:12px;background:var(--ground);border:1px solid var(--line);font-size:.97rem;line-height:1.5;color:var(--ink)}
@@ -1046,10 +1025,9 @@ h1 em,h2 em,h3 em,.hero h1 em,.svc-hero h1 em,.hero-town h1 em,.dn-sent h1 em,.p
 h3{font-weight:600;letter-spacing:-.012em}
 body{font-optical-sizing:auto}
 table,.tnum{font-variant-numeric:tabular-nums}
-.eyebrow,.foot-col h2,.tp-place,.tp-list b,.journey b,.dg-k,.dn-k,.dn-facts dt,.hm-also-h,.fd-table caption,.fd-table thead th,.fd-table td::before{text-transform:none;letter-spacing:.005em}
+.eyebrow,.tp-place,.tp-list b,.journey b,.dg-k,.dn-k,.dn-facts dt,.hm-also-h,.fd-table caption,.fd-table thead th,.fd-table td::before{text-transform:none;letter-spacing:.005em}
 .eyebrow{font-size:.9rem;font-weight:600}
 .dg-k,.dn-k,.hm-also-h,.fd-table caption{font-size:.84rem;font-weight:600}
-.foot-col h2{font-size:.9rem}
 .tp-place{font-size:.72rem;font-weight:500}
 .fd-table thead th{font-size:.82rem}
 

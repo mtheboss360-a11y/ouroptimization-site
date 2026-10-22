@@ -104,10 +104,9 @@ describe('sample-contract.html', () => {
     assert.doesNotMatch(st, /Sample practice|Sample clinic/i, 'the sheets say "your practice" (the owner, October 22, 2026)');
     assert.doesNotMatch(st, /Vein|Med Spa and|331-271-6851|@|Mustafa/i);
   });
-  test('the call at the end goes to /contact with the sample contract question, and the page points to pricing', () => {
-    const calls = links(mainOf(sc)).filter((l) => /Book a 15-minute call/.test(l.text));
-    assert.equal(calls.length, 1, 'only the closing band: the hero has no buttons');
-    for (const l of calls) assert.equal(l.href, '/contact?about=sample-contract');
-    assert.ok(links(mainOf(sc)).some((l) => l.href === '/pricing'));
+  test('no call on the sample contract page (only pricing asks for it, October 22, 2026); pricing is a tab', () => {
+    assert.deepEqual(links(mainOf(sc)).filter((l) => /15-minute call/i.test(l.text)), []);
+    assert.doesNotMatch(mainOf(sc), /pg-cta/);
+    assert.match(sc, /<a href="\/pricing">Pricing<\/a>/, 'the header links pricing');
   });
 });

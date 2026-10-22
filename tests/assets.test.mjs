@@ -523,9 +523,8 @@ describe('every kept page', () => {
       const src = read(page);
       const shows = /Integrative Wellness/.test(src.replace(/<footer[\s\S]*<\/footer>/, ''));
       if (shows) {
-        // The owner took the caption under the picture off (October 22, 2026); the footer line and the alt text say it.
+        // The owner took the caption under the picture and the full footer off (October 22, 2026); the alt text says it.
         assert.doesNotMatch(src, /sample-cap/, 'no caption under the sample');
-        assert.match(/<footer[\s\S]*<\/footer>/.exec(src)[0], /<p>Integrative Wellness is a sample brand used to show our work\.<\/p>/, 'the footer says it is a sample brand');
         for (const [tag] of src.matchAll(/<img\b[^>]*alt="[^"]*Integrative Wellness[^"]*"/g)) assert.match(tag, /a made-up brand/, 'the alt text says it is made up');
       } else {
         assert.doesNotMatch(src, /sample brand/i, `${page} shows no sample brand, so it needs no disclosure`);

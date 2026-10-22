@@ -270,16 +270,15 @@ await scenario('the renamed service pages: each old path, with and without .html
   }
 });
 
-await scenario('the header and footer show the Our Wellness Network logo, loaded and crisp', async () => {
+await scenario('the header shows the Our Wellness Network logo, loaded and crisp (the footer is one legal line)', async () => {
   const { page, close } = await open({ path: '/' });
   const logos = await page.$$eval('img[src*="logo"]', (imgs) => imgs.map((i) => ({ src: i.getAttribute('src'), alt: i.alt, ok: i.complete && i.naturalWidth === 480, w: i.getBoundingClientRect().width })));
-  assert.equal(logos.length, 2);
+  assert.equal(logos.length, 1);
   for (const l of logos) {
     assert.equal(l.src, '/assets/img/our-wellness-network-logo.png');
     assert.equal(l.alt, 'Our Wellness Network');
     assert.ok(l.w > 0 && l.w <= 240, `shown at ${l.w}px from a 480px file, so it stays sharp on 2x screens`);
   }
-  await page.locator('footer img').scrollIntoViewIfNeeded();
   await page.waitForFunction(() => [...document.querySelectorAll('img[src*="logo"]')].every((i) => i.complete && i.naturalWidth === 480));
   await close();
 });
