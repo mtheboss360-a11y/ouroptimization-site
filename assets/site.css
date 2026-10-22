@@ -4,8 +4,9 @@
    Bricolage Grotesque for display and headings, Figtree for text. Neither ships an italic,
    so emphasis inside headings is carried by color, never by a synthesized slant. */
 
-@font-face{font-family:"Bricolage Grotesque";font-style:normal;font-weight:200 800;font-display:swap;src:url("fonts/bricolage-grotesque-latin-wght-normal.woff2") format("woff2")}
-@font-face{font-family:"Figtree";font-style:normal;font-weight:300 900;font-display:swap;src:url("fonts/figtree-latin-wght-normal.woff2") format("woff2")}
+@font-face{font-family:"Inter";font-style:normal;font-weight:100 900;font-display:swap;src:url("fonts/inter-latin-opsz-normal.woff2") format("woff2")}
+@font-face{font-family:"Playfair Display";font-style:normal;font-weight:400 900;font-display:swap;src:url("fonts/playfair-display-latin-wght-normal.woff2") format("woff2")}
+@font-face{font-family:"Playfair Display";font-style:italic;font-weight:400 900;font-display:swap;src:url("fonts/playfair-display-latin-wght-italic.woff2") format("woff2")}
 
 :root{
   /* Deep green with peony-pink accents. Every ratio below is measured against every
@@ -27,8 +28,9 @@
   --stone:#E6EDE5;
   --line:#D5E0D5;
   --line-soft:#E2EAE1;
-  --display:"Bricolage Grotesque",system-ui,sans-serif;
-  --sans:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --hero:"Playfair Display",Georgia,"Times New Roman",serif;
+  --display:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+  --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
   --wrap:1180px;
   --gutter:20px;
   color-scheme:light;
@@ -994,10 +996,10 @@ a[href^="tel:"],.nowrap{white-space:nowrap}
 .et-band :focus-visible{outline-color:var(--et-gold)}
 .et-head{max-width:780px}
 .et-mark{display:flex;flex-direction:column;gap:8px;margin-bottom:28px}
-.et-word{font:400 clamp(1.7rem,1.35rem + 1.1vw,2.2rem)/1 Georgia,"Times New Roman",serif;letter-spacing:.22em;color:#FBF8F1}
+.et-word{font:400 clamp(1.7rem,1.35rem + 1.1vw,2.2rem)/1 var(--hero);letter-spacing:.22em;color:#FBF8F1}
 .et-sub{font:700 .68rem/1.4 var(--sans);letter-spacing:.26em;text-transform:uppercase;color:var(--et-gold)}
 .et-quote{margin:clamp(30px,4vw,44px) 0 0;padding:clamp(20px,2.6vw,28px) clamp(22px,3vw,32px);max-width:780px;border-left:2px solid var(--et-gold);border-radius:0 14px 14px 0;background:rgba(251,248,241,.05)}
-.et-quote p{font:400 clamp(1.3rem,1.08rem + 1vw,1.85rem)/1.3 Georgia,"Times New Roman",serif;color:#FBF8F1;text-wrap:balance}
+.et-quote p{font:400 clamp(1.3rem,1.08rem + 1vw,1.85rem)/1.3 var(--hero);color:#FBF8F1;text-wrap:balance}
 .et-quote footer{margin-top:12px;font:700 .7rem/1.45 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--et-gold)}
 .et-grid{margin-top:clamp(28px,3.6vw,40px);display:grid;gap:14px}
 /* two columns: the kit card takes the full row; three columns: it runs down two rows and the codes card spans two columns */
@@ -1128,3 +1130,12 @@ a[href^="tel:"],.nowrap{white-space:nowrap}
 /* Home hero on small desktops: the two buttons stack at one shared width. */
 @media (min-width:900px) and (max-width:1119.98px){.hero-town .actions{display:grid;grid-auto-columns:max-content;justify-content:start}.hero-town .actions .btn{min-width:0}}
 .svc-hero .page-head .intro{text-wrap:pretty}
+
+/* Type (October 22, 2026): Playfair Display for the page headline (h1) only, with its colored second line in italic.
+   Everything else, from section heads to numbers and tables, is set in Inter: plain, premium and easy to read. */
+h1,.hero h1,.page-head h1,.sent h1,.hero-town h1,.dn-sent h1,.pg-hero h1,.ct-head h1{font-family:var(--hero);font-weight:500;letter-spacing:-.012em}
+h1 em,.hero h1 em,.svc-hero h1 em,.hero-town h1 em,.dn-sent h1 em,.pg-hero h1 em,.ct-head h1 em{font-style:italic;font-weight:500}
+h2,h3{font-weight:600}
+h2{letter-spacing:-.022em}
+body{font-optical-sizing:auto}
+table,.tnum{font-variant-numeric:tabular-nums}
