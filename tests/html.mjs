@@ -25,6 +25,8 @@ export const PAGES = [
 ];
 /* The header tabs, in order: Home, the three steps (Referral Network, Flyer Network, Patient Network), the extras, then About, FAQ and Contact. */
 export const TABS = PAGES.filter((p) => p.tab).map((p) => [p.tab, p.url]);
+/* The pages in the top row of the desktop header, beside the button (they stay in the menu on phones). */
+export const UTIL = ['/about', '/faq', '/contact'];
 
 const ENTITIES = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ', rsquo: "'", lsquo: "'", ldquo: '"', rdquo: '"', eacute: 'é', middot: '·', copy: '©', hellip: '…' };
 export const decode = (s) => s
