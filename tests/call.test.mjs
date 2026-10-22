@@ -346,6 +346,7 @@ describe('home page: how flyer drops work', () => {
     assert.match(t, /every two weeks, walking your clinic's flyers into the places on the list, in person/);
     assert.match(t, /referral cards with its own code/);
     assert.match(t, /We never pay a place per patient\./);
+    assert.match(t, /It is two-way: each place promotes your clinic and you promote them back\./);
     assert.match(t, /Flyer drops work on their own or with Google Ads\./);
     assert.match(t, /If you add Google Ads, the two work side by side/);
     assert.match(t, /the ad budget goes straight to Google from your own account/i);
