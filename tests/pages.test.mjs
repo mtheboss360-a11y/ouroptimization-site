@@ -14,7 +14,7 @@ const call = require('../assets/call.js');
 const page = Object.fromEntries(PAGES.map((p) => [p.file, read(p.file)]));
 const main = (file) => mainOf(page[file]);
 /* The client login: the header button on every page, and the site's only off-site link. */
-const PORTAL = 'https://www.ournetworkportal.com';
+const PORTAL = 'https://ournetworkportal.com';
 const SITE = 'https://ouroptimization.com';
 /* The marketing pages (everything but the legal pages, the thank-you page and the 404). */
 const MARKETING = PAGES.filter((p) => p.tab).map((p) => p.file);
@@ -83,7 +83,7 @@ describe('every page: head, one h1, header tabs, breadcrumbs and footer', () => 
       assert.deepEqual(current, p.tab ? [p.tab] : [], 'aria-current marks the tab of this page');
       assert.equal(h.replaceAll(' aria-current="page"', ''), homeHeader, 'the header is the same on every page');
       // Contact is already a tab, so the header button is the client login (the owner, October 22, 2026).
-      assert.match(h, /<a class="btn btn-primary btn-head" href="https:\/\/www\.ournetworkportal\.com">Client Portal<\/a>/);
+      assert.match(h, /<a class="btn btn-primary btn-head" href="https:\/\/ournetworkportal\.com">Client Portal<\/a>/);
       // About, FAQ and Contact sit in the top row on desktops (and stay in the menu on phones); no phone number in the header.
       const util = links(/<nav class="head-util" aria-label="Company">[\s\S]*?<\/nav>/.exec(h)[0]);
       const top = TABS.filter((t) => UTIL.includes(t[1]));
