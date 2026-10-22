@@ -1,6 +1,6 @@
 # OUR Optimization: static site, no build step.
-# Two Netlify Forms (data-netlify="true" in the static HTML): "dinner-call" on the home
-# page (index.html, #call, posts to /thanks) and "expo-vendor" on expo-vendors.html.
+# Two Netlify Forms (data-netlify="true" in the static HTML): "dinner-call" on the contact
+# page (contact.html, #call, posts to /thanks) and "expo-vendor" on expo-vendors.html.
 # Submissions appear under Forms in the Netlify UI, and email alerts are set in
 # Site configuration > Notifications > Form submission notifications.
 [build]
@@ -26,10 +26,40 @@
     Content-Type = "application/manifest+json"
 
 # --- URL standardization ---
-# Extensionless URLs are canonical; old .html links of kept pages 301 to the clean URL.
+# Extensionless URLs are canonical; the .html URL of every kept page 301s to its clean URL.
 [[redirects]]
   from = "/index.html"
   to = "/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/patient-dinners.html"
+  to = "/patient-dinners"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/referral-network.html"
+  to = "/referral-network"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/flyer-drops.html"
+  to = "/flyer-drops"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/google-ads.html"
+  to = "/google-ads"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/review-tags.html"
+  to = "/review-tags"
   status = 301
   force = true
 
@@ -40,8 +70,20 @@
   force = true
 
 [[redirects]]
-  from = "/review-tags.html"
-  to = "/review-tags"
+  from = "/about.html"
+  to = "/about"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/faq.html"
+  to = "/faq"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/contact.html"
+  to = "/contact"
   status = 301
   force = true
 
@@ -63,72 +105,83 @@
   status = 301
   force = true
 
-# --- Retired pages (October 2026: the site now sells private patient dinners for med spas) ---
-# Each old service page 301s, with and without .html, straight to the home page or the
-# closest home page section. The .html files are deleted. Point new rules at the final
-# target, never at another redirected path, so there are no chains.
+# --- Old call links ---
+# The call form moved from the home page to /contact (October 22, 2026). Links such as
+# /?about=flyer-drops#call keep working: the about value carries over and prefills the message.
+# Only requests that carry ?about= match this rule; the plain home page is untouched.
+[[redirects]]
+  from = "/"
+  to = "/contact?about=:about"
+  status = 301
+  force = true
+  query = {about = ":about"}
+
+# --- Retired pages ---
+# The old community marketing service pages were retired in October 2026 (their .html files are
+# deleted). Each 301s, with and without .html, straight to the page that now covers it. Point new
+# rules at the final target, never at another redirected path, so there are no chains.
 # /how-it-works
 [[redirects]]
   from = "/how-it-works"
-  to = "/#how"
+  to = "/patient-dinners#how"
   status = 301
   force = true
 
 [[redirects]]
   from = "/how-it-works.html"
-  to = "/#how"
+  to = "/patient-dinners#how"
   status = 301
   force = true
 
 # /services
 [[redirects]]
   from = "/services"
-  to = "/"
+  to = "/#services"
   status = 301
   force = true
 
 [[redirects]]
   from = "/services.html"
-  to = "/"
+  to = "/#services"
   status = 301
   force = true
 
 # /community-marketing
 [[redirects]]
   from = "/community-marketing"
-  to = "/#referrals"
+  to = "/referral-network"
   status = 301
   force = true
 
 [[redirects]]
   from = "/community-marketing.html"
-  to = "/#referrals"
+  to = "/referral-network"
   status = 301
   force = true
 
 # /custom-marketing
 [[redirects]]
   from = "/custom-marketing"
-  to = "/#add-ons"
+  to = "/referral-network"
   status = 301
   force = true
 
 [[redirects]]
   from = "/custom-marketing.html"
-  to = "/#add-ons"
+  to = "/referral-network"
   status = 301
   force = true
 
 # /digital-marketing
 [[redirects]]
   from = "/digital-marketing"
-  to = "/#add-ons"
+  to = "/google-ads"
   status = 301
   force = true
 
 [[redirects]]
   from = "/digital-marketing.html"
-  to = "/#add-ons"
+  to = "/google-ads"
   status = 301
   force = true
 
@@ -161,156 +214,143 @@
 # /estimate
 [[redirects]]
   from = "/estimate"
-  to = "/#call"
+  to = "/contact"
   status = 301
   force = true
 
 [[redirects]]
   from = "/estimate.html"
-  to = "/#call"
+  to = "/contact"
   status = 301
   force = true
 
 # /market-research
 [[redirects]]
   from = "/market-research"
-  to = "/#referrals"
+  to = "/referral-network"
   status = 301
   force = true
 
 [[redirects]]
   from = "/market-research.html"
-  to = "/#referrals"
+  to = "/referral-network"
   status = 301
   force = true
 
 # /direct-mail
 [[redirects]]
   from = "/direct-mail"
-  to = "/#add-ons"
+  to = "/flyer-drops"
   status = 301
   force = true
 
 [[redirects]]
   from = "/direct-mail.html"
-  to = "/#add-ons"
+  to = "/flyer-drops"
   status = 301
   force = true
 
 # /events
 [[redirects]]
   from = "/events"
-  to = "/#formats"
+  to = "/patient-dinners"
   status = 301
   force = true
 
 [[redirects]]
   from = "/events.html"
-  to = "/#formats"
+  to = "/patient-dinners"
   status = 301
   force = true
 
 # /flyers
 [[redirects]]
   from = "/flyers"
-  to = "/#flyer-drops"
+  to = "/flyer-drops"
   status = 301
   force = true
 
 [[redirects]]
   from = "/flyers.html"
-  to = "/#flyer-drops"
+  to = "/flyer-drops"
   status = 301
   force = true
 
 # /marketing-kits
 [[redirects]]
   from = "/marketing-kits"
-  to = "/#handle"
+  to = "/patient-dinners#handle"
   status = 301
   force = true
 
 [[redirects]]
   from = "/marketing-kits.html"
-  to = "/#handle"
+  to = "/patient-dinners#handle"
   status = 301
   force = true
 
 # /seo
 [[redirects]]
   from = "/seo"
-  to = "/#add-ons"
+  to = "/website-design"
   status = 301
   force = true
 
 [[redirects]]
   from = "/seo.html"
-  to = "/#add-ons"
-  status = 301
-  force = true
-
-# /google-ads
-[[redirects]]
-  from = "/google-ads"
-  to = "/#add-ons"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/google-ads.html"
-  to = "/#add-ons"
+  to = "/website-design"
   status = 301
   force = true
 
 # /social-media
 [[redirects]]
   from = "/social-media"
-  to = "/#add-ons"
+  to = "/#services"
   status = 301
   force = true
 
 [[redirects]]
   from = "/social-media.html"
-  to = "/#add-ons"
+  to = "/#services"
   status = 301
   force = true
 
 # /groupon
 [[redirects]]
   from = "/groupon"
-  to = "/#add-ons"
+  to = "/#services"
   status = 301
   force = true
 
 [[redirects]]
   from = "/groupon.html"
-  to = "/#add-ons"
+  to = "/#services"
   status = 301
   force = true
 
 # /gift-cards
 [[redirects]]
   from = "/gift-cards"
-  to = "/#add-ons"
+  to = "/#services"
   status = 301
   force = true
 
 [[redirects]]
   from = "/gift-cards.html"
-  to = "/#add-ons"
+  to = "/#services"
   status = 301
   force = true
 
 # /tracking
 [[redirects]]
   from = "/tracking"
-  to = "/#handle"
+  to = "/patient-dinners#handle"
   status = 301
   force = true
 
 [[redirects]]
   from = "/tracking.html"
-  to = "/#handle"
+  to = "/patient-dinners#handle"
   status = 301
   force = true
 
@@ -324,19 +364,6 @@
 [[redirects]]
   from = "/sample-advertisements.html"
   to = "/"
-  status = 301
-  force = true
-
-# /faq
-[[redirects]]
-  from = "/faq"
-  to = "/#faq"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/faq.html"
-  to = "/#faq"
   status = 301
   force = true
 
@@ -357,20 +384,20 @@
 # The old direct-mail ad landing page (retired in the 2026 cohesion pass); direct mail is now retired too.
 [[redirects]]
   from = "/landing"
-  to = "/#add-ons"
+  to = "/#services"
   status = 301
   force = true
 
 [[redirects]]
   from = "/landing.html"
-  to = "/#add-ons"
+  to = "/#services"
   status = 301
   force = true
 
-# Short link for sharing: /meeting opens the call request form on the home page.
+# Short link for sharing: /meeting opens the call request form.
 [[redirects]]
   from = "/meeting"
-  to = "/#call"
+  to = "/contact"
   status = 301
   force = true
 
@@ -386,6 +413,7 @@
   to = "/404.html"
   status = 404
   force = true
+
 [[redirects]]
   from = "/netlify.toml"
   to = "/404.html"

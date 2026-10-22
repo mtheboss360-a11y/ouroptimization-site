@@ -1,371 +1,30 @@
-// Static checks of the patient dinner home page (index.html, thanks.html) and unit tests
-// for the call form rules in assets/call.js.
+// The call form on /contact (contact.html, Netlify form "dinner-call"), the thank-you page it posts
+// to, and unit tests for the form rules and the ?about= prefill in assets/call.js.
 // Zero dependencies: node:test + node:assert. Run from the repo root: node --test
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
-import { readFileSync } from 'node:fs';
+import { read, PAGES, text, attr, hasAttr, tags, byId, links } from './html.mjs';
 
 const require = createRequire(import.meta.url);
 const call = require('../assets/call.js');
-const read = (p) => readFileSync(new URL(`../${p}`, import.meta.url), 'utf8');
-const html = read('index.html');
+const html = read('contact.html');
 const thanks = read('thanks.html');
 const js = read('assets/call.js');
-const css = read('assets/site.css');
-
-/* ---------- tiny HTML helpers (regex based; the markup is ours and regular) ---------- */
-const ENTITIES = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ', rsquo: "'", lsquo: "'", ldquo: '"', rdquo: '"', eacute: 'é', middot: '·', copy: '©', hellip: '…' };
-const decode = (s) => s
-  .replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(Number(n)))
-  .replace(/&#x([0-9a-f]+);/gi, (_, n) => String.fromCodePoint(parseInt(n, 16)))
-  .replace(/&([a-z]+);/gi, (m, n) => (n in ENTITIES ? ENTITIES[n] : m));
-/* Visible text: tags removed, entities decoded, curly apostrophes made straight, spaces collapsed. */
-const text = (s) => decode(s.replace(/<!--[\s\S]*?-->/g, ' ').replace(/<(script|style)\b[\s\S]*?<\/\1>/gi, ' ').replace(/<[^>]+>/g, ''))
-  .replace(/[‘’]/g, "'").replace(/\s+/g, ' ').trim();
-const attr = (tag, name) => {
-  const m = new RegExp(`\\s${name}\\s*=\\s*(?:"([^"]*)"|'([^']*)')`, 'i').exec(tag);
-  return m ? (m[1] ?? m[2]) : null;
-};
-const hasAttr = (tag, name) => new RegExp(`\\s${name}(?:\\s*=|[\\s>/])`, 'i').test(tag);
-const tags = (src, name) => [...src.matchAll(new RegExp(`<${name}\\b[^>]*>`, 'gi'))].map((m) => m[0]);
-/* Inner HTML of the element with this id (handles nesting of the same tag name). */
-function byId(src, id) {
-  const open = new RegExp(`<([a-z0-9]+)\\b[^>]*\\sid="${id}"[^>]*>`, 'i').exec(src);
-  if (!open) return null;
-  const name = open[1];
-  const re = new RegExp(`<${name}\\b[^>]*>|</${name}>`, 'gi');
-  re.lastIndex = open.index + open[0].length;
-  let depth = 1, m;
-  while ((m = re.exec(src))) {
-    depth += m[0][1] === '/' ? -1 : 1;
-    if (depth === 0) return src.slice(open.index + open[0].length, m.index);
-  }
-  return null;
-}
-const main = html.slice(html.indexOf('<main'), html.indexOf('</main>'));
 const formOpen = tags(html, 'form').find((t) => attr(t, 'name') === 'dinner-call');
 const form = html.slice(html.indexOf(formOpen), html.indexOf('</form>', html.indexOf(formOpen)));
 
-/* ---------- the page ---------- */
-describe('home page: head', () => {
-  test('title, description and share image', () => {
-    assert.match(html, /<title>Your Best Patients Bring the Next Ones \| Patient Dinners for Med Spas<\/title>/);
-    const metas = tags(html, 'meta');
-    const meta = (key, val) => metas.find((t) => attr(t, key) === val);
-    for (const [k, v] of [['name', 'description'], ['property', 'og:description'], ['name', 'twitter:description']]) {
-      const content = decode(attr(meta(k, v), 'content'));
-      assert.ok(content.startsWith('Your best patients bring the next ones. '), `${v} leads with the headline idea`);
-      assert.match(content, /patient dinners/i, `${v} mentions patient dinners`);
-      assert.match(content, /med spas/i, `${v} mentions med spas`);
-      assert.match(content, /western suburbs/i, `${v} names the area`);
+describe('/contact: the call form', () => {
+  test('the form lives on /contact only, in the #call section, with call.js', () => {
+    for (const p of PAGES) {
+      const has = /<form name="dinner-call"/.test(read(p.file));
+      assert.equal(has, p.file === 'contact.html', `${p.file} ${has ? 'has' : 'does not have'} the form`);
     }
-    assert.equal(attr(meta('property', 'og:image'), 'content'), 'https://ouroptimization.com/assets/img/og-best-patients.jpg');
-    assert.equal(attr(meta('property', 'og:image:width'), 'content'), '1200');
-    assert.equal(attr(meta('property', 'og:image:height'), 'content'), '630');
-    assert.ok(attr(meta('property', 'og:image:alt'), 'content').length > 20, 'og:image:alt is descriptive');
-    assert.match(html, /<link rel="canonical" href="https:\/\/ouroptimization\.com\/">/);
+    assert.match(byId(html, 'call'), /<form name="dinner-call"/);
+    assert.match(html, /<script src="\/assets\/call\.js" defer><\/script>/);
+    assert.equal(/<h1\b[^>]*>([\s\S]*?)<\/h1>/.exec(html)[1], 'Book a <em class="dn-keep">15-minute call.</em>');
   });
 
-  test('JSON-LD: ProfessionalService with phone and email, and no prices, ratings or reviews', () => {
-    const raw = /<script type="application\/ld\+json">([\s\S]*?)<\/script>/.exec(html)[1];
-    const data = JSON.parse(raw);
-    assert.equal(data['@type'], 'ProfessionalService');
-    assert.equal(data.telephone, '+1-331-271-6851');
-    assert.equal(data.email, 'mustafa@ouroptimization.com');
-    assert.match(data.description, /patient dinners/i);
-    assert.doesNotMatch(raw, /price|offers|rating|review/i);
-  });
-});
-
-describe('home page: hero', () => {
-  test('h1 is exactly "Your best patients bring the next ones."', () => {
-    const h1s = [...html.matchAll(/<h1\b[^>]*>([\s\S]*?)<\/h1>/g)];
-    assert.equal(h1s.length, 1, 'one h1');
-    assert.equal(h1s[0][1], 'Your best patients <em>bring the next ones.</em>');
-    assert.equal(text(h1s[0][1]), 'Your best patients bring the next ones.');
-  });
-
-  test('the eyebrow above the h1 stays', () => {
-    const hero = html.slice(html.indexOf('<section class="hero'), html.indexOf('<h1'));
-    assert.match(text(hero), /Patient dinners for independent med spas\s*$/i);
-  });
-
-  test('the old "demographic and community" wording is gone', () => {
-    assert.doesNotMatch(html, /demographic/i);
-  });
-
-  test('lede says what we do, without repeating the h1', () => {
-    const lede = text(/<p class="lede">([\s\S]*?)<\/p>/.exec(html)[1]);
-    assert.doesNotMatch(lede, /bring the next ones/i, 'the h1 line is not said twice');
-    assert.ok(lede.startsWith('We plan and run '), lede);
-    assert.match(lede, /private restaurant dinners for independent med spas/);
-    assert.match(lede, /referral network around your clinic/);
-  });
-
-  test('CTAs: the call booking and the phone number', () => {
-    const hero = html.slice(html.indexOf('<section class="hero'), html.indexOf('</section>'));
-    const links = [...hero.matchAll(/<a\b[^>]*>([\s\S]*?)<\/a>/g)].map((m) => ({ href: attr(m[0], 'href'), text: text(m[1]) }));
-    assert.deepEqual(links, [
-      { href: '/#call', text: 'Book a 15-minute call' },
-      { href: 'tel:+13312716851', text: 'Call or text 331-271-6851' }
-    ]);
-    assert.match(text(hero), /You talk with Mustafa directly\./);
-    assert.doesNotMatch(text(hero), /\bfree\b/i, 'the brief never says the call is free');
-  });
-
-  test('map: new art, the five places and their channels, no school line', () => {
-    assert.match(html, /<img class="town-img" src="assets\/img\/hero-map\.svg" alt="" width="1100" height="1175" fetchpriority="high" decoding="async">/);
-    const chips = [...html.matchAll(/<li class="tp\b[^"]*"[^>]*>([\s\S]*?)<\/li>/g)]
-      .map((m) => [...m[1].matchAll(/<span class="tp-(?:place|ch)">([\s\S]*?)<\/span>/g)].map((s) => text(s[1])).join(' / '));
-    assert.deepEqual(chips.sort(), [
-      'Neighborhoods / Google Ads',
-      'Offices / Referral network',
-      'Restaurants / Sponsored events',
-      'Small businesses / Flyer drops',
-      'Training facilities / Partner referrals',
-      'Your clinic'
-    ]);
-    const tpList = /<ul class="tp-list"[^>]*>([\s\S]*?)<\/ul>/.exec(html)[1];
-    const pairs = [...tpList.matchAll(/<li><b>([\s\S]*?)<\/b><span>([\s\S]*?)<\/span><\/li>/g)].map((m) => `${text(m[1])} / ${text(m[2])}`);
-    assert.deepEqual(pairs, [
-      'Offices / Referral network',
-      'Small businesses / Flyer drops',
-      'Training facilities / Partner referrals',
-      'Restaurants / Sponsored events',
-      'Neighborhoods / Google Ads'
-    ]);
-    const net = /<svg class="net"[\s\S]*?<\/svg>/.exec(html)[0];
-    const dots = [...net.matchAll(/<circle class="net-dot"[^>]*cx="(\d+)" cy="(\d+)"/g)].map((m) => `${m[1]},${m[2]}`);
-    assert.deepEqual(dots.sort(), ['119,600', '265,250', '269,470', '399,830', '575,214', '830,752', '927,540'].sort());
-    assert.equal((net.match(/class="net-line"/g) || []).length, 7);
-    assert.doesNotMatch(net, /871 262|871,262|cx="871"/, 'no line or dot to the school');
-    assert.doesNotMatch(html, /mosque|church|temple|festival/i, 'worship places and the festival are gone');
-    const note = text(/<p class="tp-note">([\s\S]*?)<\/p>/.exec(html)[1]);
-    assert.equal(note, 'Sponsored events are your patient dinners, at a restaurant near your clinic.', 'visible note under the map');
-    const label = attr(tags(html, 'figure').find((t) => /class="town"/.test(t)), 'aria-label');
-    for (const word of ['clinic', 'offices', 'referral network', 'flyer drops', 'training facilities', 'restaurants', 'Google Ads']) {
-      assert.ok(label.includes(word), `map label mentions ${word}`);
-    }
-  });
-});
-
-describe('home page: sections', () => {
-  test('sections in order: formats, how, handle, who, add-ons, flyer-drops, faq, call', () => {
-    const ids = ['formats', 'how', 'handle', 'who', 'add-ons', 'flyer-drops', 'faq', 'call'];
-    const at = ids.map((id) => main.search(new RegExp(`<section\\b[^>]*\\sid="${id}"`)));
-    for (let i = 0; i < ids.length; i++) assert.ok(at[i] > 0, `section #${ids[i]} exists`);
-    assert.deepEqual([...at].sort((a, b) => a - b), at, 'sections are in order');
-  });
-
-  test('add-ons: referral network first (#referrals), flyer drops, Google Ads last as the cherry on top', () => {
-    const addons = byId(html, 'add-ons');
-    const ref = addons.indexOf('id="referrals"');
-    const flyers = addons.indexOf('Flyer drops');
-    const ads = addons.indexOf('>Google Ads</h3>');
-    assert.ok(ref > 0 && flyers > ref && ads > flyers, 'order: referrals, flyers, Google Ads');
-    assert.match(text(byId(html, 'referrals')), /The growth behind the ads\./);
-    assert.match(text(byId(html, 'referrals')), /mapping software and local business data/);
-    assert.match(text(byId(html, 'referrals')), /we set up, or help you set up, a referral network/);
-    const adsCard = text(addons.slice(addons.lastIndexOf('<article', ads)));
-    assert.match(adsCard, /The cherry on top/);
-    assert.match(adsCard, /You pay Google directly, in your own account\./);
-    assert.match(adsCard, /We drive the growth behind the ads\./);
-  });
-
-  test('referral partnerships stay introductions and cross-promotion, with no per-patient payments', () => {
-    const ref = text(byId(html, 'referrals'));
-    assert.match(ref, /Cross-promotion\./);
-    assert.match(ref, /Nobody is paid per patient\./);
-    assert.doesNotMatch(text(main), /referral fee|per referral|commission|kickback/i);
-    assert.doesNotMatch(text(main), /\b(AI|proprietary|algorithm|database of)\b/, 'the mapping tool is described generically');
-  });
-
-  test('two formats with the brief\'s numbers, and the sales evening said plainly', () => {
-    const formats = text(byId(html, 'formats'));
-    assert.match(formats, /The Plus-One Dinner/);
-    assert.match(formats, /About 15 of your favorite patients each bring a friend who isn't a patient yet\./);
-    assert.match(formats, /The VIP Night/);
-    assert.match(formats, /Up to 30 of your best patients/);
-    assert.match(formats, /For spas whose books are already full\./);
-    assert.match(formats, /It is a sales evening, and we say so\./);
-  });
-
-  test('no price figure: the card and the FAQ explain how pricing works instead', () => {
-    const formats = text(byId(html, 'formats'));
-    for (const line of ['No surprises', 'One fixed quote per dinner.', 'Restaurant and food included.', 'Quoted for your clinic after the 15-minute call.', 'The price is fixed in writing before you commit.', 'No monthly contract.']) {
-      assert.ok(formats.includes(line), line);
-    }
-    const faq = text(byId(html, 'faq'));
-    assert.match(faq, /We quote it for your clinic after the 15-minute call/);
-    assert.doesNotMatch(text(html), /\$\s?\d|\b\d[\d,]*\s?(dollars|usd)\b|\bfrom \$|per dinner, restaurant/i, 'no dollar amounts anywhere on the home page');
-    assert.doesNotMatch(html, /2,000/, 'the old price is gone from the markup too');
-  });
-
-  test('how it works: four steps, plan, invitations, the night, the follow-up', () => {
-    const how = byId(html, 'how');
-    const steps = [...how.matchAll(/<h3>([\s\S]*?)<\/h3>/g)].map((m) => text(m[1]));
-    assert.deepEqual(steps, ['Plan', 'Invitations', 'The night', 'The follow-up']);
-    assert.match(text(how), /results sheet: who came, how many were new, and what they booked/);
-  });
-
-  test('what we handle: the brief\'s checklist and the patient list promise', () => {
-    const handle = byId(html, 'handle');
-    const list = /<ul class="dn-checks"[^>]*>([\s\S]*?)<\/ul>/.exec(handle)[1];
-    const items = [...list.matchAll(/<li>([\s\S]*?)<\/li>/g)].map((m) => text(m[1]));
-    assert.deepEqual(items, [
-      'The restaurant and the food',
-      'The menu, set with the venue',
-      "Invitations designed in your clinic's name",
-      'An RSVP page',
-      'Reminder messages',
-      'Name cards and seating',
-      'The run of the evening',
-      'An offer card with its own code',
-      'The next-day follow-up',
-      'A results sheet at 30 days: who came, how many were new, what they booked'
-    ]);
-    const t = text(handle);
-    assert.match(t, /Your patient list stays yours\. We never see it\./);
-    assert.match(t, /We never receive, see or keep your patient list\./);
-    assert.match(t, /If your Allergan or Galderma rep sponsors events, we plan the dinner with them\./);
-  });
-
-  test('who we are: honest that nothing has been held yet, and Mustafa\'s contact links', () => {
-    const who = byId(html, 'who');
-    const t = text(who);
-    assert.match(t, /running our first patient dinners now/);
-    assert.match(t, /None has been held yet/);
-    assert.match(t, /With your permission, your clinic's results will be among our first case studies\./);
-    assert.match(t, /We already run marketing for a wellness clinic nearby\./);
-    assert.match(who, /<a href="tel:\+13312716851">[\s\S]*?331-271-6851<\/a>/);
-    assert.match(who, /<a href="mailto:mustafa@ouroptimization\.com">[\s\S]*?mustafa@ouroptimization\.com<\/a>/);
-  });
-
-  test('FAQ: the seven questions from the brief, in order, then the three flyer questions', () => {
-    const faq = byId(html, 'faq');
-    const qs = [...faq.matchAll(/<summary>([\s\S]*?)<span class="sign"/g)].map((m) => text(m[1]));
-    assert.deepEqual(qs, [
-      "Can't I just book a restaurant myself?",
-      'Will people actually come on a weeknight?',
-      'Is it a sales evening?',
-      'Do you ever see my patient list?',
-      'My rep already sponsors events. Why use you?',
-      'What does it cost?',
-      'Who are you?',
-      'How do flyer drops work?',
-      "What if I don't have a referral network yet?",
-      'Do I need a dinner or Google Ads to get flyer drops?'
-    ]);
-    const answers = [...faq.matchAll(/<div class="answer">([\s\S]*?)<\/div>/g)].map((m) => text(m[1]));
-    assert.equal(answers.length, 10);
-    assert.match(answers[7], /Every two weeks, someone walks your clinic's flyers into the places on your list/);
-    assert.match(answers[7], /If you don't have a referral network yet, we build one first\./);
-    assert.ok(answers[8].startsWith('We build one with you.'), 'no network yet: we build one');
-    assert.match(answers[8], /mapping software and local business data/);
-    assert.ok(answers[9].startsWith('No. Flyer drops run on their own, with Google Ads, or alongside a dinner.'), 'flyer drops need neither a dinner nor Google Ads');
-    assert.match(faq, /href="\/\?about=flyer-drops#call"/, 'the flyer FAQ links to the call form with the flyer prefill');
-    assert.match(answers[7], /Flyer drops are quoted for your clinic before they start\./);
-    assert.ok(answers[2].startsWith('Yes.'), 'the sales evening answer is a plain yes');
-    assert.ok(answers[3].startsWith('No.'), 'we never see the patient list');
-    assert.match(answers[3], /We see the replies guests send there/, 'says what we do see');
-    assert.match(answers[6], /with your permission, your clinic's results/, 'case studies need the clinic\'s permission');
-    assert.match(answers[1], /can't promise a number/, 'no turnout promise');
-  });
-
-  test('content images: the dinner illustration, and the Grace Pediatrics photo as client proof', () => {
-    const imgs = tags(main, 'img');
-    const content = imgs.filter((t) => !/class="town-img"/.test(t));
-    assert.deepEqual(content.map((t) => attr(t, 'src')), ['assets/img/dinner-table.svg', 'assets/img/kit-tins-640.jpg']);
-    assert.match(attr(content[0], 'alt'), /^Illustration of a restaurant table set for a private dinner/);
-    const illus = /<figure class="dn-illus">([\s\S]*?)<\/figure>/.exec(main)[1];
-    assert.doesNotMatch(illus, /<figcaption/, 'no visible caption on the dinner illustration, and never one calling it our event');
-    assert.match(attr(content[1], 'alt'), /Grace Pediatrics/);
-    assert.doesNotMatch(main, /<video\b/i, 'no video on the home page');
-  });
-
-  test('Grace Pediatrics appears once, in Who we are, as community marketing proof', () => {
-    const who = main.slice(main.indexOf('id="who"'), main.indexOf('id="add-ons"'));
-    const proof = /<figure class="dn-proof">[\s\S]*?<figcaption>([\s\S]*?)<\/figcaption>/.exec(who);
-    assert.ok(proof, 'the client work figure sits in #who');
-    assert.equal(text(proof[1]), 'Client work: Grace Pediatrics in Glendale Heights. We ran its community marketing: flyers for local families, branded gift tins, an event table and QR codes that track every scan.');
-    assert.doesNotMatch(text(proof[1]), /\d|dinner/i, 'no numbers or results, and not called a dinner');
-    assert.match(text(who), /None has been held yet/, 'still says no dinner has been held');
-    const outside = main.replace(who, '');
-    assert.doesNotMatch(outside, /grace/i, 'Grace appears only in Who we are');
-  });
-
-  test('referral network: mutual promotion only, nothing paid per patient or client', () => {
-    const addons = text(main.slice(main.indexOf('id="add-ons"'), main.indexOf('id="faq"')));
-    assert.ok(addons.includes('Partners promote each other. Nobody is paid per patient.'), 'the no-payment note');
-    for (const k of ['Introductions.', 'Cross-promotion.', 'Referral cards with their own code.']) assert.ok(addons.includes(k), k);
-    assert.doesNotMatch(text(main), /commission|referral fee|finder'?s fee|kickback|reward|bounty|earns?\b|per (client|referral|referred)|what each one sends/i);
-    const paid = text(main).match(/[^.]*\bpaid\b[^.]*\./gi) || [];
-    assert.ok(paid.length >= 1 && paid.every((p) => /nobody is paid per patient\.$/i.test(p.trim())), `"paid" appears only in a no-payment statement: ${paid.join(' | ')}`);
-  });
-
-  test('no invented proof: no testimonials, ratings, statistics or "as seen on"', () => {
-    const t = text(main);
-    assert.doesNotMatch(t, /testimonial|as seen on|\d+\s?%|\b5[- ]star|rated\b|guarantee/i);
-    assert.doesNotMatch(t, /\b(will|we'll) (get|bring|fill|double|triple)\b/i, 'no promised outcomes');
-    assert.doesNotMatch(t, /are your future patients|demand your community network creates/i, 'no outcome stated as certain');
-  });
-
-  test('no em or en dashes anywhere in the new pages, the script or the new CSS block', () => {
-    const block = css.slice(css.indexOf('Patient dinners (October 2026)'));
-    for (const [name, src] of [['index.html', html], ['thanks.html', thanks], ['assets/call.js', js], ['site.css dinner block', block]]) {
-      assert.doesNotMatch(src, /[–—]|&mdash;|&ndash;|&#821[12];/, name);
-    }
-  });
-
-  test('header and footer link only to kept pages and home sections', () => {
-    const retired = ['how-it-works', 'services', 'community-marketing', 'custom-marketing', 'digital-marketing', 'industries', 'examples', 'estimate', 'market-research', 'direct-mail', 'events', 'flyers', 'marketing-kits', 'seo', 'google-ads', 'social-media', 'groupon', 'gift-cards', 'tracking', 'sample-advertisements', 'faq'];
-    for (const [name, src] of [['index.html', html], ['thanks.html', thanks]]) {
-      const hrefs = tags(src, 'a').map((t) => attr(t, 'href'));
-      for (const r of retired) assert.ok(!hrefs.some((h) => new RegExp(`^/?${r}(?:\\.html)?(?:[?#]|$)`).test(h)), `${name} links /${r}`);
-    }
-    const nav = /<nav class="site-nav"[\s\S]*?<\/nav>/.exec(html)[0];
-    const items = [...nav.matchAll(/<a\b[^>]*>([\s\S]*?)<\/a>/g)].map((m) => `${text(m[1])} ${attr(m[0], 'href')}`);
-    assert.deepEqual(items, ['Home /', 'Patient Dinners /#formats', 'How It Works /#how', 'Referral Network /#referrals', 'FAQ /#faq', 'Book a 15-minute call /#call']);
-  });
-});
-
-describe('home page: how flyer drops work', () => {
-  // How flyer drops work: the clinic's own list first (or a network we build with them), someone on the
-  // ground every two weeks, referral cards with their own code, new places added as we go.
-  const section = () => text(byId(html, 'flyer-drops'));
-  test('four steps in order, from the offer', () => {
-    const t = section();
-    const steps = ['Your list, or a new one', 'Every two weeks', 'Their own code', 'The network grows'];
-    const at = steps.map((h) => t.indexOf(h));
-    assert.ok(at.every((i) => i > 0), steps.join(', '));
-    assert.deepEqual([...at].sort((a, b) => a - b), at, 'steps in order');
-    assert.match(t, /places on your list that send you patients/);
-    assert.match(t, /No referral network yet\? We build one with you first\./);
-    assert.match(t, /If you don't, we build one/);
-    assert.match(t, /every two weeks, walking your clinic's flyers into the places on the list, in person/);
-    assert.match(t, /referral cards with its own code/);
-    assert.match(t, /We never pay a place per patient\./);
-    assert.doesNotMatch(t, /It is two-way/, 'owner asked not to state this');
-    assert.match(t, /Flyer drops work on their own or with Google Ads\./);
-    assert.match(t, /If you add Google Ads, the two work side by side/);
-    assert.match(t, /the ad budget goes straight to Google from your own account/i);
-    assert.doesNotMatch(t, /Nothing goes in the mail|into each place/, 'no unsupported promises');
-  });
-  test('no price and no promised results', () => {
-    const t = section();
-    assert.doesNotMatch(t, /\$\s?\d|\bper month\b|a month\b/i);
-    assert.doesNotMatch(t, /guarantee|\bexpect\b|\d+\s?%|will (bring|get|send|fill|double|grow)|more (new )?patients/i);
-  });
-  test('the flyer add-on card says every two weeks and links to the section', () => {
-    const card = /<article class="dn-addon reveal" aria-labelledby="flyers-h">([\s\S]*?)<\/article>/.exec(html)[1];
-    assert.match(text(card), /Every two weeks/);
-    assert.doesNotMatch(text(card), /one to two weeks/);
-    assert.match(card, /href="\/#flyer-drops"/);
-  });
-});
-
-describe('home page: the call form', () => {
   test('Netlify form: name, method, action, detection and honeypot', () => {
     assert.ok(formOpen, 'form[name="dinner-call"] exists');
     assert.equal(attr(formOpen, 'method'), 'POST');
@@ -393,17 +52,18 @@ describe('home page: the call form', () => {
     assert.ok(!hasAttr(one('message'), 'required')); assert.match(one('message'), /^<textarea/);
 
     const radios = by('dinner');
-    assert.deepEqual(radios.map((t) => attr(t, 'value')), ['Plus-One Dinner', 'VIP Night', 'Not sure yet']);
+    assert.deepEqual(radios.map((t) => attr(t, 'value')), ['Plus-One Dinner', 'VIP Night', 'Flyer drops or referral network', 'Not sure yet']);
     assert.ok(radios.every((t) => attr(t, 'type') === 'radio' && hasAttr(t, 'required')));
-    assert.deepEqual(radios.map((t) => attr(t, 'value')), call.DINNERS, 'call.js knows the same three dinners');
+    assert.deepEqual(radios.map((t) => attr(t, 'value')), call.DINNERS, 'call.js knows the same four choices');
+    assert.match(form, /<legend>What would you like to talk about\?<\/legend>/);
 
     for (const t of controls) {
       const id = attr(t, 'id');
       if (id) assert.match(form, new RegExp(`<label for="${id}">`), `label for #${id}`);
       else assert.ok(new RegExp(`<label>${t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`).test(form), `${attr(t, 'name')} is wrapped in its label`);
     }
-    assert.match(text(byId(html, 'call')), /Email \(optional\)/);
-    assert.match(text(byId(html, 'call')), /Message \(optional\)/);
+    assert.match(text(form), /Email \(optional\)/);
+    assert.match(text(form), /Message \(optional\)/);
 
     const posted = new Set(controls.map((t) => attr(t, 'name')));
     assert.deepEqual([...posted].sort(), [...call.ORDER].sort(), 'call.js validates every posted field');
@@ -426,7 +86,7 @@ describe('home page: the call form', () => {
     assert.match(form, /aria-describedby="call-message-help call-message-note call-message-err"/);
     assert.match(form, /<button class="btn btn-primary" type="submit">Book my 15-minute call<\/button>/);
     assert.match(t, /Prefer to talk now\? Call or text Mustafa at 331-271-6851\./);
-    assert.match(html, /<script src="assets\/call\.js" defer><\/script>/);
+    assert.match(t, /We use these details to call you back about your request\./);
   });
 });
 
@@ -434,7 +94,7 @@ describe('thanks page', () => {
   test('noindex, canonical, favicon block and the site stylesheet', () => {
     assert.match(thanks, /<meta name="robots" content="noindex">/);
     assert.match(thanks, /<link rel="canonical" href="https:\/\/ouroptimization\.com\/thanks">/);
-    for (const link of ['<link rel="icon" href="/favicon.ico" sizes="32x32">', '<link rel="apple-touch-icon" href="/apple-touch-icon.png">', '<link rel="manifest" href="/site.webmanifest">']) {
+    for (const link of ['<link rel="icon" href="/favicon.ico" sizes="32x32">', '<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">', '<link rel="apple-touch-icon" href="/apple-touch-icon.png">', '<link rel="manifest" href="/site.webmanifest">']) {
       assert.ok(thanks.includes(link), link);
     }
     assert.match(thanks, /<link rel="stylesheet" href="\/assets\/site\.css">/);
@@ -446,6 +106,7 @@ describe('thanks page', () => {
     assert.match(thanks, /<a href="tel:\+13312716851">331-271-6851<\/a>/);
     assert.match(thanks, /<a href="mailto:mustafa@ouroptimization\.com">mustafa@ouroptimization\.com<\/a>/);
     assert.match(thanks, /<a class="btn btn-primary" href="\/">Back to the home page<\/a>/);
+    assert.ok(links(thanks).some((l) => l.href === '/patient-dinners#how'), 'how the evening works, on its own page');
   });
 });
 
@@ -477,6 +138,7 @@ describe('call.js: module shape', () => {
   test('a complete submission passes', () => {
     assert.deepEqual(call.validateAll(valid), []);
     assert.deepEqual(call.validateAll({ ...valid, email: 'jordan@example.com', message: 'Hello', dinner: 'VIP Night' }), []);
+    assert.deepEqual(call.validateAll({ ...valid, dinner: 'Flyer drops or referral network' }), []);
   });
 
   test('an empty form lists the required fields, in order', () => {
@@ -534,13 +196,16 @@ describe('call.js: email (optional)', () => {
   }
 });
 
-describe('call.js: which dinner (required radio)', () => {
-  for (const v of ['Plus-One Dinner', 'VIP Night', 'Not sure yet']) {
+describe('call.js: what to talk about (required radio, field name "dinner")', () => {
+  for (const v of ['Plus-One Dinner', 'VIP Night', 'Flyer drops or referral network', 'Not sure yet']) {
     test(`accepts ${v}`, () => assert.equal(errorFor('dinner', { dinner: v }), ''));
   }
-  for (const v of ['', 'Plus-One', 'vip night', 'Something else']) {
+  for (const v of ['', 'Plus-One', 'vip night', 'Flyer drops', 'Something else']) {
     test(`rejects ${JSON.stringify(v)}`, () => assert.notEqual(errorFor('dinner', { dinner: v }), ''));
   }
+  test('the error names the question, not only dinners', () => {
+    assert.equal(errorFor('dinner', { dinner: '' }), 'Choose what you would like to talk about, or Not sure yet.');
+  });
 });
 
 describe('call.js: message (optional)', () => {
@@ -552,10 +217,20 @@ describe('call.js: message (optional)', () => {
 });
 
 describe('call.js: ?about= prefill', () => {
-  test('known keys', () => {
-    assert.equal(call.aboutFromSearch('?about=website-design'), 'website-design');
-    assert.equal(call.aboutFromSearch('?about=review-tags'), 'review-tags');
-    assert.equal(call.aboutFromSearch('?about=flyer-drops'), 'flyer-drops');
+  const KEYS = {
+    'patient-dinners': "I'm asking about the patient dinners.",
+    'referral-network': "I'm asking about the referral network.",
+    'flyer-drops': "I'm asking about flyer drops.",
+    'google-ads': "I'm asking about Google Ads.",
+    'review-tags': "I'm asking about review tags.",
+    'website-design': "I'm asking about a website redesign."
+  };
+  test('one key for each service page', () => {
+    assert.deepEqual(call.ABOUT, KEYS);
+    for (const [key, message] of Object.entries(KEYS)) {
+      assert.equal(call.aboutFromSearch(`?about=${key}`), key);
+      assert.equal(call.prefillFor(`?about=${key}`, ''), message);
+    }
     assert.equal(call.aboutFromSearch('?ref=x&about=Review-Tags'), 'review-tags');
     assert.equal(call.aboutFromSearch('?about=%20website-design%20'), 'website-design');
   });
@@ -565,9 +240,7 @@ describe('call.js: ?about= prefill', () => {
     }
   });
   test('prefill text, only into an empty message', () => {
-    assert.equal(call.prefillFor('?about=website-design', ''), "I'm asking about a website redesign.");
     assert.equal(call.prefillFor('?about=review-tags', '   '), "I'm asking about review tags.");
-    assert.equal(call.prefillFor('?about=flyer-drops', ''), "I'm asking about flyer drops.");
     assert.equal(call.prefillFor('?about=review-tags', 'My own words'), '');
     assert.equal(call.prefillFor('?about=nothing', ''), '');
     assert.equal(call.prefillFor('', ''), '');

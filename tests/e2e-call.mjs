@@ -1,5 +1,5 @@
-// End-to-end checks for the patient dinner call form on the home page (#call, Netlify form
-// "dinner-call", assets/call.js) and the /thanks page it posts to.
+// End-to-end checks for the call form on /contact (#call, Netlify form "dinner-call",
+// assets/call.js), the /thanks page it posts to, and the old home page links that now lead there.
 //
 //   node tests/e2e-call.mjs            (local preview server on http://localhost:8770)
 //   E2E_BASE_URL=http://127.0.0.1:8770 node tests/e2e-call.mjs
@@ -45,7 +45,7 @@ const REQUIRED_IDS = ['call-name', 'call-clinic', 'call-phone', 'call-town', 'ca
 const browser = await chromium.launch();
 const results = [];
 
-async function open({ width = 1280, height = 900, path = '/', js = true } = {}) {
+async function open({ width = 1280, height = 900, path = '/contact', js = true } = {}) {
   const context = await browser.newContext({ viewport: { width, height }, javaScriptEnabled: js, reducedMotion: 'reduce' });
   const page = await context.newPage();
   const posts = [];
@@ -88,7 +88,7 @@ async function scenario(name, fn) {
   }
 }
 
-await scenario('home page loads with the form, no script errors, and JS validation takes over', async () => {
+await scenario('/contact loads with the form, no script errors, and JS validation takes over', async () => {
   const { page, jsErrors, missing, close } = await open();
   assert.equal(await page.$$eval('form[name="dinner-call"]', (f) => f.length), 1);
   assert.equal(await page.$eval('#dinner-call', (f) => f.noValidate), true, 'call.js turns off the browser bubbles');
@@ -138,7 +138,7 @@ await scenario('focus goes to the first problem in form order, and errors clear 
   await close();
 });
 
-await scenario('only the dinner missing: focus lands on the radio group', async () => {
+await scenario('only the topic missing: focus lands on the radio group', async () => {
   const { page, posts, close } = await open();
   for (const [sel, val] of Object.entries(VALID)) await page.fill(sel, val);
   await page.selectOption('#call-time', 'Any time');
@@ -146,9 +146,10 @@ await scenario('only the dinner missing: focus lands on the radio group', async 
   await page.waitForTimeout(150);
   assert.equal(posts.length, 0);
   assert.equal(await focusedId(page), 'dinner:Plus-One Dinner');
-  assert.equal(await page.textContent('#call-dinner-err'), 'Choose a dinner, or Not sure yet.');
-  await page.check('input[name="dinner"][value="Not sure yet"]');
-  assert.deepEqual(await invalidIds(page), [], 'choosing a dinner clears the error');
+  assert.equal(await page.textContent('#call-dinner-err'), 'Choose what you would like to talk about, or Not sure yet.');
+  await page.check('input[name="dinner"][value="Flyer drops or referral network"]');
+  assert.deepEqual(await invalidIds(page), [], 'choosing a topic clears the error');
+  assert.equal(await page.$$eval('input[name="dinner"]', (r) => r.length), 4, 'four choices');
   await close();
 });
 
@@ -190,7 +191,7 @@ await scenario('a double click does not post twice', async () => {
 });
 
 await scenario('?about=website-design prefills the message and brings the form into view', async () => {
-  const { page, close } = await open({ path: '/?about=website-design' });
+  const { page, close } = await open({ path: '/contact?about=website-design' });
   await page.waitForTimeout(250);
   assert.equal(await page.inputValue('#call-message'), "I'm asking about a website redesign.");
   const top = await page.$eval('#call', (el) => el.getBoundingClientRect().top);
@@ -199,13 +200,43 @@ await scenario('?about=website-design prefills the message and brings the form i
 });
 
 await scenario('?about=review-tags prefills; unknown keys leave the message empty', async () => {
-  let s = await open({ path: '/?about=review-tags' });
+  let s = await open({ path: '/contact?about=review-tags' });
   assert.equal(await s.page.inputValue('#call-message'), "I'm asking about review tags.");
   await s.close();
-  s = await open({ path: '/?about=seo' });
+  s = await open({ path: '/contact?about=seo' });
   assert.equal(await s.page.inputValue('#call-message'), '');
   assert.equal(await s.page.evaluate(() => window.scrollY), 0, 'no scroll for an unknown key');
   await s.close();
+});
+
+await scenario('an old /?about=flyer-drops link is redirected to /contact?about=flyer-drops and prefills', async () => {
+  const { page, jsErrors, close } = await open({ path: '/?about=flyer-drops' });
+  await page.waitForTimeout(250);
+  const url = new URL(page.url());
+  assert.equal(url.pathname, '/contact');
+  assert.equal(url.searchParams.get('about'), 'flyer-drops');
+  assert.equal(await page.inputValue('#call-message'), "I'm asking about flyer drops.");
+  assert.deepEqual(jsErrors, []);
+  await close();
+});
+
+await scenario('every service page key prefills on /contact', async () => {
+  for (const [key, message] of [['patient-dinners', "I'm asking about the patient dinners."], ['referral-network', "I'm asking about the referral network."], ['google-ads', "I'm asking about Google Ads."]]) {
+    const s = await open({ path: `/contact?about=${key}` });
+    assert.equal(await s.page.inputValue('#call-message'), message, key);
+    await s.close();
+  }
+});
+
+await scenario('old home section links open their new page (/#faq, /#formats, /#who)', async () => {
+  for (const [from, to] of [['/#faq', '/faq'], ['/#formats', '/patient-dinners#formats'], ['/#who', '/about'], ['/#referrals', '/referral-network'], ['/#flyer-drops', '/flyer-drops']]) {
+    const { page, jsErrors, close } = await open({ path: from });
+    await page.waitForURL((u) => u.pathname !== '/', { timeout: 3000 });
+    await page.waitForLoadState('load');
+    assert.equal(await page.evaluate(() => location.pathname + location.hash), to, from);
+    assert.deepEqual(jsErrors, []);
+    await close();
+  }
 });
 
 await scenario('without JavaScript the browser still blocks an empty form, and a valid one posts', async () => {
@@ -237,12 +268,20 @@ await scenario('phone width (390px): no sideways scroll, the form and the call-n
   await close();
 });
 
-await scenario('an old link whose query landed after the # (/#call?package=website) still opens the form', async () => {
+await scenario('an old link whose query landed after the # (/#call?package=website) still lands on the call band', async () => {
   const { page, jsErrors, close } = await open({ path: '/#call?package=website' });
   await page.waitForTimeout(250);
   assert.equal(await page.evaluate(() => location.pathname + location.search + location.hash), '/?package=website#call', 'the query moves in front of the #');
   const top = await page.$eval('#call', (el) => el.getBoundingClientRect().top);
   assert.ok(Math.abs(top) < 200, `#call is at the top of the view (top ${Math.round(top)})`);
+  assert.ok(await page.$('#call a[href="/contact"]'), 'the band links to the form');
+  assert.deepEqual(jsErrors, []);
+  await close();
+});
+
+await scenario('/estimate?package=website (a retired page) lands on /contact with no errors', async () => {
+  const { page, jsErrors, close } = await open({ path: '/estimate?package=website' });
+  assert.equal(new URL(page.url()).pathname, '/contact');
   assert.equal(await page.inputValue('#call-message'), '', 'an unknown key prefills nothing');
   assert.deepEqual(jsErrors, []);
   await close();

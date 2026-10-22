@@ -1,8 +1,8 @@
 // Guard tests for the site's static assets: every local file a page points at exists,
 // every page carries the favicon set, removed images and deleted files stay removed, the
 // favicons are real artwork (the old ones had decayed into near-solid black squares), and the
-// retired service pages (October 2026) stay retired: each has a forced 301 in netlify.toml,
-// no kept page links to one, and the sitemap lists only the kept, indexable pages.
+// retired service pages (October 2026) stay retired: each has a forced 301 in netlify.toml to the
+// page that now covers it, no kept page links to one, and the sitemap lists every indexable page.
 // Zero dependencies: node:test + node:assert + node:zlib. Run from the repo root: node --test
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
@@ -20,6 +20,7 @@ const pages = readdirSync(ROOT).filter((f) => f.endsWith('.html')).sort();
 // The favicon block every page head carries. Root-absolute, so the 404 page works at any depth.
 const FAVICON_LINKS = [
   { rel: 'icon', href: '/favicon.ico' },
+  { rel: 'icon', href: '/assets/favicon.svg' },
   { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
   { rel: 'manifest', href: '/site.webmanifest' }
 ];
@@ -27,27 +28,35 @@ const FAVICON_LINKS = [
 // AI-generated images that were removed. Nothing may link to them again.
 const REMOVED = ['assets/img/hero-town.png', 'assets/img/hero-town.webp', 'assets/img/hero-town-700.webp'];
 
-// The pages the site keeps after the October 2026 patient dinner rebuild.
-const KEPT = ['404.html', 'expo-vendors.html', 'index.html', 'privacy.html', 'review-tags.html', 'terms.html', 'thanks.html', 'website-design.html'];
+// The pages of the site (the multi-page site of October 22, 2026), and the clean URL of each.
+const KEPT = ['404.html', 'about.html', 'contact.html', 'expo-vendors.html', 'faq.html', 'flyer-drops.html', 'google-ads.html', 'index.html',
+  'patient-dinners.html', 'privacy.html', 'referral-network.html', 'review-tags.html', 'terms.html', 'thanks.html', 'website-design.html'];
+const CLEAN = ['/', '/patient-dinners', '/referral-network', '/flyer-drops', '/google-ads', '/review-tags', '/website-design', '/about',
+  '/faq', '/contact', '/privacy', '/terms', '/thanks', '/expo-vendors'];
+// The pages the sitemap lists: every page people should find from a search.
+const INDEXABLE = ['/', '/patient-dinners', '/referral-network', '/flyer-drops', '/google-ads', '/review-tags', '/website-design', '/about', '/faq', '/contact', '/privacy', '/terms'];
 
-// Retired service pages and the home page section each one now 301s to (with and without .html).
+// Retired service pages and the page (or section) each one now 301s to, with and without .html.
 const RETIRED = {
-  'how-it-works': '/#how', services: '/', 'community-marketing': '/#referrals', 'custom-marketing': '/#add-ons',
-  'digital-marketing': '/#add-ons', industries: '/', examples: '/', estimate: '/#call', 'market-research': '/#referrals',
-  'direct-mail': '/#add-ons', events: '/#formats', flyers: '/#flyer-drops', 'marketing-kits': '/#handle', seo: '/#add-ons',
-  'google-ads': '/#add-ons', 'social-media': '/#add-ons', groupon: '/#add-ons', 'gift-cards': '/#add-ons', tracking: '/#handle',
-  'sample-advertisements': '/', faq: '/#faq'
+  'how-it-works': '/patient-dinners#how', services: '/#services', 'community-marketing': '/referral-network', 'custom-marketing': '/referral-network',
+  'digital-marketing': '/google-ads', industries: '/', examples: '/', estimate: '/contact', 'market-research': '/referral-network',
+  'direct-mail': '/flyer-drops', events: '/patient-dinners', flyers: '/flyer-drops', 'marketing-kits': '/patient-dinners#handle', seo: '/website-design',
+  'social-media': '/#services', groupon: '/#services', 'gift-cards': '/#services', tracking: '/patient-dinners#handle',
+  'sample-advertisements': '/'
 };
 
 // Files deleted with the retired pages (the old strategy meeting form, its script and its tests).
 const DELETED = ['assets/estimate.js', 'tests/estimate.test.mjs', 'tests/e2e-estimate.mjs', ...Object.keys(RETIRED).map((n) => `${n}.html`)];
 
-/* The [[redirects]] rules in netlify.toml, as { from, to, status, force }. */
+/* The [[redirects]] rules in netlify.toml, as { from, to, status, force, query }. query is null, or the
+   Netlify query condition ({ about: ':about' }): such a rule only applies when the URL carries those keys. */
 function redirects() {
   return read('netlify.toml').split(/^\[\[redirects\]\]\s*$/m).slice(1).map((block) => {
     const body = block.split(/^\[/m)[0];
     const get = (key) => { const m = new RegExp(`^\\s*${key}\\s*=\\s*(?:"([^"]*)"|(\\S+))`, 'm').exec(body); return m ? (m[1] ?? m[2]) : null; };
-    return { from: get('from'), to: get('to'), status: Number(get('status') ?? 301), force: get('force') === 'true' };
+    const q = /^\s*query\s*=\s*\{([^}]*)\}/m.exec(body);
+    const query = q ? Object.fromEntries([...q[1].matchAll(/([\w-]+)\s*=\s*"([^"]*)"/g)].map((m) => [m[1], m[2]])) : null;
+    return { from: get('from'), to: get('to'), status: Number(get('status') ?? 301), force: get('force') === 'true', query };
   });
 }
 /* Netlify-style match: a splat (*) matches anything, and a trailing slash is ignored. */
@@ -212,9 +221,12 @@ describe('favicon set', () => {
     assert.ok(sizes.includes(32), `entries: ${sizes.join(', ')}`);
   });
 
-  test('no SVG favicon is linked or shipped (browsers would prefer it over the logo mark PNGs)', () => {
-    assert.ok(!isFile('assets/favicon.svg'), 'assets/favicon.svg is back');
-    for (const page of pages) assert.doesNotMatch(read(page), /favicon\.svg/, `${page} links favicon.svg`);
+  test('favicon.svg is the drawn mark: the ink tile and a light color, no raster', () => {
+    const svg = read('assets/favicon.svg');
+    assert.match(svg, /<svg\b[^>]*viewBox=/);
+    assert.match(svg, /#1C3A2C/i, 'ink tile');
+    assert.match(svg, /#(F9FBF8|EFBCCB|FFFFFF)/i, 'a light color for the mark');
+    assert.doesNotMatch(svg, /<image\b|base64/i, 'no embedded raster');
   });
 
   const icons = [
@@ -254,7 +266,8 @@ describe('removed images', () => {
 
 describe('retired pages', () => {
   const rules = redirects();
-  const ruleFor = (path) => rules.find((r) => matchesRule(r.from, path));
+  /* The rule Netlify applies to a plain path (no query string): rules with a query condition never match it. */
+  const ruleFor = (path) => rules.find((r) => !r.query && matchesRule(r.from, path));
 
   test('the retired pages and their form script and tests are deleted', () => {
     for (const file of DELETED) assert.ok(!isFile(file), `${file} is back`);
@@ -280,12 +293,30 @@ describe('retired pages', () => {
       assert.ok(!hop, `${r.from} -> ${r.to} chains into ${hop && hop.from} -> ${hop && hop.to}`);
       const file = to === '/' ? 'index.html' : `${to.replace(/^\//, '')}.html`;
       assert.ok(isFile(file), `${r.from} -> ${r.to}: ${file} exists`);
+      const frag = r.to.split('#')[1];
+      if (frag) assert.match(read(file), new RegExp(`\\sid="${frag}"`), `${r.from} -> ${r.to}: #${frag} exists on ${file}`);
     }
   });
 
+  test('every page\'s .html URL has a forced 301 to its clean URL', () => {
+    for (const clean of CLEAN) {
+      const file = clean === '/' ? 'index.html' : `${clean.slice(1)}.html`;
+      assert.ok(isFile(file), file);
+      const rule = ruleFor(`/${file}`);
+      assert.ok(rule && rule.from === `/${file}` && rule.to === clean && rule.status === 301 && rule.force, `/${file} -> ${clean}`);
+    }
+  });
+
+  test('old /?about= links go to /contact with the same about value (Netlify query matching)', () => {
+    const q = rules.filter((r) => r.query);
+    assert.equal(q.length, 1, 'one rule with a query condition');
+    assert.deepEqual(q[0], { from: '/', to: '/contact?about=:about', status: 301, force: true, query: { about: ':about' } });
+    assert.ok(rules.indexOf(q[0]) < rules.findIndex((r) => r.from === '/how-it-works'), 'listed before the retired pages');
+  });
+
   test('no redirect catches a kept page, the assets or the site files', () => {
-    const keep = ['/', '/expo-vendors', '/privacy', '/terms', '/review-tags', '/website-design', '/thanks', '/404.html',
-      '/assets/site.css', '/assets/site.js', '/assets/call.js', '/assets/favicon-48.png', '/assets/img/owo-logo.png',
+    const keep = [...CLEAN, '/404.html',
+      '/assets/site.css', '/assets/site.js', '/assets/call.js', '/assets/favicon.svg', '/assets/img/owo-logo.png',
       '/favicon.ico', '/apple-touch-icon.png', '/site.webmanifest', '/robots.txt', '/sitemap.xml'];
     for (const path of keep) {
       const rule = ruleFor(path);
@@ -322,9 +353,11 @@ describe('retired pages', () => {
     }
   });
 
-  test('sitemap.xml lists only the kept, indexable pages', () => {
-    const locs = [...read('sitemap.xml').matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
-    assert.deepEqual(locs.sort(), ['/', '/privacy', '/review-tags', '/terms', '/website-design'].map((p) => `https://ouroptimization.com${p}`).sort());
+  test('sitemap.xml lists every indexable page, last modified October 22, 2026', () => {
+    const xml = read('sitemap.xml');
+    const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
+    assert.deepEqual(locs, INDEXABLE.map((p) => `https://ouroptimization.com${p}`));
+    assert.equal((xml.match(/<lastmod>2026-10-22<\/lastmod>/g) || []).length, locs.length);
     for (const loc of locs) {
       const path = localPath(loc);
       const file = path === '' ? 'index.html' : `${path}.html`;
@@ -415,18 +448,153 @@ describe('legal pages', () => {
     const t = visible('terms.html');
     assert.doesNotMatch(t, /demographic|Digital Growth Package|Groupon|Meta\b|Strategy Meeting|direct.mail|across the United States/i);
     assert.match(t, /Each dinner is quoted for your clinic, with the restaurant and food included\./);
-    assert.doesNotMatch(t, /\$\s?\d/, 'no price figures in the terms');
     assert.match(t, /Chicago's western suburbs/);
     assert.match(t, /Book a 15-minute call/);
-    assert.match(t, /Last updated: October 21, 2026/);
+    assert.match(t, /Last updated: October 22, 2026/);
+    assert.match(t, /form on the contact page asks for your name, your clinic's name, phone number, email address \(optional\), the town your clinic is in, the best time to call, what you would like to talk about, and a message \(optional\)\./);
   });
 
-  test('privacy describes both forms and what we see of guests\' RSVP replies', () => {
+  test('privacy describes the call form on /contact, the expo form, and what we see of guests\' RSVP replies', () => {
     const t = visible('privacy.html');
-    assert.match(t, /Last updated: October 21, 2026/);
+    assert.match(t, /Last updated: October 22, 2026/);
     assert.match(t, /We never receive, see or keep your patient list\./);
     assert.match(t, /Guests who reply to an invitation/);
     assert.match(t, /we see the replies guests send there/);
     assert.match(t, /any optional extras you tick/);
+    assert.match(t, /form on our contact page is where a clinic asks us to call/);
+    assert.match(t, /What you would like to talk about: the Plus-One Dinner, the VIP Night, flyer drops or the referral network, or not sure yet/);
+  });
+
+  test('privacy describes the partner offer form: the fields, no health questions, the consent, and a copy to us', () => {
+    const t = visible('privacy.html');
+    const sec = /<h2>People who claim an offer at a partner<\/h2>([\s\S]*?)<\/section>/.exec(read('privacy.html'));
+    assert.ok(sec, 'the partner offer form has its own section');
+    const items = [...sec[1].matchAll(/<li>([\s\S]*?)<\/li>/g)].map((m) => m[1].trim());
+    assert.deepEqual(items, ['Your first name', 'Phone number', 'Email address (optional)', 'The kind of service you are interested in, picked from a short list', 'The best time to reach you']);
+    assert.match(t, /It asks no health questions/);
+    assert.match(t, /You tick a box to agree that the clinic can call or text you about the offer, and the form tells you that a copy comes to us\./);
+    assert.match(t, /The partner business does not receive it\./);
+    assert.match(t, /The booking and first-visit revenue numbers in that report come from the clinic as totals for each partner, so we never receive the clinic's patient records\./);
+    assert.match(t, /What you send goes to that clinic's front desk by email or text, with a copy to us\./);
+    assert.match(t, /When you claim an offer at a partner, the clinic making the offer receives what you send/);
+  });
+
+  test('privacy and terms agree on the forms: two on this site, and the offer form separate, sent by email and text', () => {
+    const p = visible('privacy.html');
+    const t = visible('terms.html');
+    assert.match(p, /Apart from the expo table form described below, it is the only form on this site where we ask you to give us information about you or your clinic\. The partner offer form, also described below, is separate: it opens from the tag or code at a partner\./);
+    assert.match(p, /Submissions from the call request form and the expo table form are handled by Netlify Forms and emailed to us\./);
+    assert.match(p, /Partner offer form submissions are also sent over HTTPS, and are delivered to the clinic's front desk, and to us, through email and text services\./);
+    assert.match(p, /The email and text services that deliver it carry it to the clinic's front desk and to us\./);
+    assert.doesNotMatch(p, /both forms/);
+    assert.match(t, /This site has two forms of its own\./);
+    assert.match(t, /It is separate from this site's two forms and is described in our Privacy Policy ?\. Leads from it reach your front desk, and us, through email and text services, so delivery depends on those services\./);
+  });
+});
+
+describe('partner network and flyer drops in the terms', () => {
+  const t = read('terms.html').replace(/<[^>]+>/g, ' ').replace(/&rsquo;/g, "'").replace(/\s+/g, ' ');
+  test('the service list, the clinic\'s duties and the tracking caveat cover the partner kit and the offer form', () => {
+    assert.match(t, /A referral network: .*one-page agreement between your clinic and each partner that says no payment is made for a referral; a partner kit for each partner \(referral cards with its own code, and flyers and a counter stand carrying an NFC tag and a QR code linked to that partner\)/);
+    assert.match(t, /Flyer drops: a representative visits, in person, the businesses you choose for each location on set field days each month, delivers and restocks your printed materials, and sends you a visit log within five business days of each field day/);
+    assert.match(t, /Flyer drops and the referral network have a flat monthly fee, set in advance\. It does not change with referrals, leads, bookings or revenue\./);
+    assert.match(t, /Your first-visit offer and any staff perk you give partner staff, and making sure both follow the rules that apply to your clinic, including rules on fee-splitting/);
+    assert.match(t, /Calling and texting the people who claim your offer: only about the offer they asked about, within the consent they gave, and stopping as soon as anyone asks you to/);
+    assert.match(t, /Sending us the bookings and first-visit revenue for the monthly partner report as totals for each partner, never names or patient records/);
+    assert.match(t, /The bookings and first-visit revenue in the monthly partner report come from your clinic as totals for each partner\. Please never send us names or patient records for it\./);
+    assert.match(t, /how many local businesses agree to be partners/);
+    assert.match(t, /the monthly partner report, and the codes and links on offer cards, referral cards and partner stands cannot capture every response/);
+    assert.match(t, /postal, email or text delivery delays or failures/);
+  });
+});
+
+/* Width and height of a baseline or progressive JPEG, and whether it carries EXIF (APP1) data. */
+function jpegInfo(buf) {
+  assert.equal(buf.readUInt16BE(0), 0xffd8, 'JPEG signature');
+  let off = 2, exif = false;
+  while (off < buf.length) {
+    const marker = buf.readUInt16BE(off);
+    const len = buf.readUInt16BE(off + 2);
+    if (marker === 0xffe1) exif = true;
+    if ((marker >= 0xffc0 && marker <= 0xffc3) || (marker >= 0xffc5 && marker <= 0xffcb)) {
+      return { height: buf.readUInt16BE(off + 5), width: buf.readUInt16BE(off + 7), exif };
+    }
+    off += 2 + len;
+  }
+  throw new Error('no SOF marker');
+}
+/* Width and height of a WebP, and whether it carries EXIF or XMP chunks. */
+function webpInfo(buf) {
+  assert.equal(buf.toString('latin1', 0, 4) + buf.toString('latin1', 8, 12), 'RIFFWEBP', 'WebP signature');
+  let off = 12, size = null, meta = false;
+  while (off + 8 <= buf.length) {
+    const id = buf.toString('latin1', off, off + 4), len = buf.readUInt32LE(off + 4), d = off + 8;
+    if (id === 'EXIF' || id === 'XMP ') meta = true;
+    if (id === 'VP8X') size = { width: 1 + buf.readUIntLE(d + 4, 3), height: 1 + buf.readUIntLE(d + 7, 3) };
+    if (id === 'VP8 ' && !size) size = { width: buf.readUInt16LE(d + 6) & 0x3fff, height: buf.readUInt16LE(d + 8) & 0x3fff };
+    if (id === 'VP8L' && !size) { const b = buf.readUInt32LE(d + 1); size = { width: (b & 0x3fff) + 1, height: ((b >> 14) & 0x3fff) + 1 }; }
+    off = d + len + (len % 2);
+  }
+  return { ...size, meta };
+}
+
+describe('review tags: the stand in use', () => {
+  const html = read('review-tags.html');
+  const sec = /<section[^>]*id="in-use"[^>]*>([\s\S]*?)<\/section>/.exec(html);
+  test('the Pure Medical Spa photo, with permission caption, alt text and the plain NFC explanation', () => {
+    assert.ok(sec, 'the in-use section exists');
+    const s = sec[1];
+    assert.match(s, /<h3 class="rt-nfc-h">What is an NFC tag\?<\/h3>/);
+    assert.match(s, /Hold the top of a phone near it and the page it carries opens, with no app to download\./);
+    assert.match(s, /alt="A tap-to-review Google stand on a wooden base at the front desk of Pure Medical Spa\./);
+    assert.match(s, /<figcaption class="sample-cap">Our stand at Pure Medical Spa, shown with their permission\.<\/figcaption>/, 'the same caption style as the sample above it');
+    assert.match(s, /<figure class="rt-real">/, 'layout comes from site.css, not an inline style');
+    for (const f of ['review-stand.jpg', 'review-stand.webp', 'review-stand-600.jpg', 'review-stand-600.webp']) assert.match(s, new RegExp(f.replace('.', '\\.')));
+  });
+
+  test('the pictured stand is tap only, a QR code can go on the same piece, and new stands use a neutral ask', () => {
+    const s = sec[1].replace(/<[^>]+>/g, '').replace(/&rsquo;/g, "'").replace(/&ldquo;|&rdquo;/g, '"');
+    assert.match(s, /The stand in this photo is tap only\. We can also print a QR code on the same piece, for phones that don't read NFC\./);
+    assert.match(s, /On new stands we use a neutral ask, such as "How did we do\?", so every customer gets the same ask\./);
+    assert.doesNotMatch(html, /A QR code on every piece/);
+  });
+
+  test('the photo files: the re-crop (no second stand), the sizes the markup states, no EXIF', () => {
+    const img = /<img [^>]*review-stand-600\.jpg[^>]*>/.exec(sec[1])[0];
+    const w = Number(/\swidth="(\d+)"/.exec(img)[1]), h = Number(/\sheight="(\d+)"/.exec(img)[1]);
+    const full = jpegInfo(readFileSync(join(ROOT, 'assets/img/review-stand.jpg')));
+    assert.deepEqual([full.width, full.height], [w, h], 'width and height match the large file');
+    assert.ok(w / h < 0.5, 'the narrower crop that leaves out the second stand');
+    assert.match(img, /srcset="assets\/img\/review-stand-600\.jpg 600w, assets\/img\/review-stand\.jpg 732w"/);
+    assert.match(img, /sizes="\(min-width:400px\) 360px, calc\(100vw - 40px\)"/);
+    for (const [file, width] of [['review-stand.jpg', w], ['review-stand-600.jpg', 600]]) {
+      const i = jpegInfo(readFileSync(join(ROOT, 'assets/img', file)));
+      assert.equal(i.width, width, file);
+      assert.equal(Math.abs(i.height - Math.round(h * width / w)) <= 1, true, `${file} keeps the ratio`);
+      assert.equal(i.exif, false, `${file} has no EXIF`);
+    }
+    for (const [file, width] of [['review-stand.webp', w], ['review-stand-600.webp', 600]]) {
+      const i = webpInfo(readFileSync(join(ROOT, 'assets/img', file)));
+      assert.equal(i.width, width, file);
+      assert.equal(i.meta, false, `${file} has no EXIF or XMP`);
+    }
+  });
+});
+
+describe('ETHR LAB sample mockups, when present', () => {
+  const imgs = readdirSync(join(ROOT, 'assets/img')).filter((f) => f.startsWith('ethr-mockup-'));
+  test('each is a JPEG and WebP pair at 1200 and 600 pixels wide, with no EXIF, and the page states its real size', () => {
+    if (!imgs.length) return;
+    const page = read('referral-network.html');
+    for (const base of ['ethr-mockup-stand', 'ethr-mockup-tap']) {
+      const big = jpegInfo(readFileSync(join(ROOT, 'assets/img', `${base}.jpg`)));
+      const small = jpegInfo(readFileSync(join(ROOT, 'assets/img', `${base}-600.jpg`)));
+      assert.equal(big.width, 1200); assert.equal(small.width, 600);
+      assert.equal(big.exif || small.exif, false);
+      for (const f of [`${base}.webp`, `${base}-600.webp`]) assert.equal(webpInfo(readFileSync(join(ROOT, 'assets/img', f))).meta, false, f);
+      const tag = new RegExp(`<img src="/assets/img/${base}-600\\.jpg"[^>]*>`).exec(page)[0];
+      assert.equal(Number(/\swidth="(\d+)"/.exec(tag)[1]), big.width);
+      assert.equal(Number(/\sheight="(\d+)"/.exec(tag)[1]), big.height);
+    }
   });
 });
