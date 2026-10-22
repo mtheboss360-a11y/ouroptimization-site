@@ -19,13 +19,15 @@ const pages = readdirSync(ROOT).filter((f) => f.endsWith('.html')).sort();
 
 // The favicon block every page head carries. Root-absolute, so the 404 page works at any depth.
 // There is no SVG icon: browsers prefer an SVG over the PNG and ICO files, and the OWO mark ships as PNG and ICO only.
-// The ?v= token makes browsers fetch the icons again: they cache favicons by URL and ignore normal cache headers.
-// Bump it (here, on every page and in site.webmanifest) whenever the icon files change.
-const ICON_VERSION = 'owo2';
+// Browsers cache favicons by URL and ignore normal cache headers (Safari even across private windows, and it can
+// ignore a ?v= query), so the linked icons use OWO-specific file names no browser saw before the switch.
+// When the icon art changes again, give the files new names and update the links here, on every page and in the manifest.
 const FAVICON_LINKS = [
-  { rel: 'icon', href: `/favicon.ico?v=${ICON_VERSION}` },
-  { rel: 'apple-touch-icon', href: `/apple-touch-icon.png?v=${ICON_VERSION}` },
-  { rel: 'manifest', href: `/site.webmanifest?v=${ICON_VERSION}` }
+  { rel: 'icon', href: '/assets/owo-favicon.ico' },
+  { rel: 'icon', href: '/assets/owo-icon-32.png' },
+  { rel: 'icon', href: '/assets/owo-icon-16.png' },
+  { rel: 'apple-touch-icon', href: '/assets/owo-apple-touch-icon.png' },
+  { rel: 'manifest', href: '/site.webmanifest?v=owo3' }
 ];
 
 // Images that were removed. Nothing may link to them again: the AI hero, and the client stand photo
@@ -217,7 +219,7 @@ describe('favicon set', () => {
     const manifest = JSON.parse(read('site.webmanifest'));
     assert.ok(Array.isArray(manifest.icons) && manifest.icons.length >= 2);
     for (const icon of manifest.icons) {
-      assert.ok(icon.src.endsWith(`?v=${ICON_VERSION}`), `${icon.src} carries the icon version`);
+      assert.match(icon.src, /^\/assets\/owo-icon-\d+\.png$/, `${icon.src} is an OWO-named icon`);
       const path = localPath(icon.src);
       assert.ok(isFile(path), icon.src);
       const { width, height } = decodePng(readFileSync(join(ROOT, path)));
@@ -236,7 +238,9 @@ describe('favicon set', () => {
 
   const icons = [
     ['assets/favicon-16.png', 16], ['assets/favicon-32.png', 32], ['assets/favicon-48.png', 48],
-    ['assets/favicon-180.png', 180], ['apple-touch-icon.png', 180], ['assets/icon-192.png', 192], ['assets/icon-512.png', 512]
+    ['assets/favicon-180.png', 180], ['apple-touch-icon.png', 180], ['assets/icon-192.png', 192], ['assets/icon-512.png', 512],
+    ['assets/owo-icon-16.png', 16], ['assets/owo-icon-32.png', 32], ['assets/owo-apple-touch-icon.png', 180],
+    ['assets/owo-icon-192.png', 192], ['assets/owo-icon-512.png', 512]
   ];
   for (const [path, size] of icons) {
     test(`${path} is the ${size}px OWO mark on a cream tile, not a near-solid black square`, () => {
