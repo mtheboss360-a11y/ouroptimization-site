@@ -115,7 +115,7 @@ describe('thanks page', () => {
     assert.match(thanks, /<a href="tel:\+13312716851">331-271-6851<\/a>/);
     assert.match(thanks, /<a href="mailto:mustafa@ouroptimization\.com">mustafa@ouroptimization\.com<\/a>/);
     assert.match(thanks, /<a class="btn btn-primary" href="\/">Back to the home page<\/a>/);
-    assert.ok(links(thanks).some((l) => l.href === '/referral-network#process'), 'how the referral network works, on its own page');
+    assert.doesNotMatch(thanks, /class="btn btn-ghost"/, 'one way home, no "how it works" button (the owner, October 22, 2026)');
   });
 });
 

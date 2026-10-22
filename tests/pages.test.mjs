@@ -433,6 +433,7 @@ describe('/flyer-network', () => {
     assert.deepEqual([...tr.matchAll(/<figcaption class="pt-label">([^<]+)<\/figcaption>/g)].map((x) => x[1]), ['Every drop, in order', 'Month by month']);
     assert.deepEqual(tags(tr, 'img').map((t) => attr(t, 'src')), ['/assets/img/portal-timeline-800.jpg', '/assets/img/portal-months-800.jpg']);
     assert.doesNotMatch(tr, /pt-note|Open full size/);
+    assert.match(tr, /<p class="eyebrow pt-demo reveal">Client portal demo<\/p>\s*<div class="pt-stack reveal">/, 'the demo label sits right above the screens, so the made-up numbers never read as a real clinic\'s');
     const log = /<div class="fd-track-log">([\s\S]*?)<\/div>/.exec(tr)[1];
     assert.equal(text(/<h3>([\s\S]*?)<\/h3>/.exec(log)[1]), 'Your visit log');
     assert.match(text(log), /Within five business days of each field day, you get a visit log\. It lists every business visited, and for each one:/);
@@ -665,7 +666,7 @@ describe('the brand: Our Wellness Network', () => {
       assert.deepEqual(links(/<ul class="related">[\s\S]*?<\/ul>/.exec(main(file))[0]).map((l) => [l.text, l.href]),
         [['Referral network', '/referral-network'], ['Flyer network', '/flyer-network'], ['Patient network', '/patient-network'], ['Online search network', '/online-search-network']], file);
     }
-    assert.match(text(main('review-tags.html')), /Tags are a separate order from our referral, flyer and patient networks\./);
+    assert.doesNotMatch(main('review-tags.html'), /rt-ship|Tags are a separate order|Print ships/, 'the notes under "Planned with you" came off with the footnotes (October 22, 2026)');
   });
 });
 
