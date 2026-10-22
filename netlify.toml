@@ -1,4 +1,4 @@
-# OUR Optimization: static site, no build step.
+# Our Wellness Network (OUR Optimization LLC): static site, no build step.
 # Two Netlify Forms (data-netlify="true" in the static HTML): "dinner-call" on the contact
 # page (contact.html, #call, posts to /thanks) and "expo-vendor" on expo-vendors.html.
 # Submissions appear under Forms in the Netlify UI, and email alerts are set in
@@ -34,8 +34,8 @@
   force = true
 
 [[redirects]]
-  from = "/patient-dinners.html"
-  to = "/patient-dinners"
+  from = "/patient-network.html"
+  to = "/patient-network"
   status = 301
   force = true
 
@@ -46,14 +46,14 @@
   force = true
 
 [[redirects]]
-  from = "/flyer-drops.html"
-  to = "/flyer-drops"
+  from = "/flyer-network.html"
+  to = "/flyer-network"
   status = 301
   force = true
 
 [[redirects]]
-  from = "/google-ads.html"
-  to = "/google-ads"
+  from = "/online-search-network.html"
+  to = "/online-search-network"
   status = 301
   force = true
 
@@ -105,6 +105,46 @@
   status = 301
   force = true
 
+# --- Renamed service pages ---
+# On October 22, 2026 the service pages took their network names: /flyer-drops became /flyer-network,
+# /patient-dinners became /patient-network and /google-ads became /online-search-network. The old paths, with and
+# without .html, 301 straight to the new ones (their .html files are renamed, not kept).
+[[redirects]]
+  from = "/flyer-drops"
+  to = "/flyer-network"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/flyer-drops.html"
+  to = "/flyer-network"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/patient-dinners"
+  to = "/patient-network"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/patient-dinners.html"
+  to = "/patient-network"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/google-ads"
+  to = "/online-search-network"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/google-ads.html"
+  to = "/online-search-network"
+  status = 301
+  force = true
+
 # --- Old call links ---
 # The call form moved from the home page to /contact (October 22, 2026). Links such as
 # /?about=flyer-drops#call keep working: the about value carries over and prefills the message.
@@ -123,13 +163,13 @@
 # /how-it-works
 [[redirects]]
   from = "/how-it-works"
-  to = "/patient-dinners#how"
+  to = "/patient-network#how"
   status = 301
   force = true
 
 [[redirects]]
   from = "/how-it-works.html"
-  to = "/patient-dinners#how"
+  to = "/patient-network#how"
   status = 301
   force = true
 
@@ -175,13 +215,13 @@
 # /digital-marketing
 [[redirects]]
   from = "/digital-marketing"
-  to = "/google-ads"
+  to = "/online-search-network"
   status = 301
   force = true
 
 [[redirects]]
   from = "/digital-marketing.html"
-  to = "/google-ads"
+  to = "/online-search-network"
   status = 301
   force = true
 
@@ -240,52 +280,52 @@
 # /direct-mail
 [[redirects]]
   from = "/direct-mail"
-  to = "/flyer-drops"
+  to = "/flyer-network"
   status = 301
   force = true
 
 [[redirects]]
   from = "/direct-mail.html"
-  to = "/flyer-drops"
+  to = "/flyer-network"
   status = 301
   force = true
 
 # /events
 [[redirects]]
   from = "/events"
-  to = "/patient-dinners"
+  to = "/patient-network"
   status = 301
   force = true
 
 [[redirects]]
   from = "/events.html"
-  to = "/patient-dinners"
+  to = "/patient-network"
   status = 301
   force = true
 
 # /flyers
 [[redirects]]
   from = "/flyers"
-  to = "/flyer-drops"
+  to = "/flyer-network"
   status = 301
   force = true
 
 [[redirects]]
   from = "/flyers.html"
-  to = "/flyer-drops"
+  to = "/flyer-network"
   status = 301
   force = true
 
 # /marketing-kits
 [[redirects]]
   from = "/marketing-kits"
-  to = "/patient-dinners#handle"
+  to = "/patient-network#handle"
   status = 301
   force = true
 
 [[redirects]]
   from = "/marketing-kits.html"
-  to = "/patient-dinners#handle"
+  to = "/patient-network#handle"
   status = 301
   force = true
 
@@ -344,13 +384,13 @@
 # /tracking
 [[redirects]]
   from = "/tracking"
-  to = "/patient-dinners#handle"
+  to = "/patient-network#handle"
   status = 301
   force = true
 
 [[redirects]]
   from = "/tracking.html"
-  to = "/patient-dinners#handle"
+  to = "/patient-network#handle"
   status = 301
   force = true
 

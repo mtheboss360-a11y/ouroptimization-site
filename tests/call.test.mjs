@@ -53,7 +53,7 @@ describe('/contact: the call form', () => {
 
     const radios = by('dinner');
     // The referral network comes first (the owner's order: the steps, then the extras, then "Not sure yet").
-    assert.deepEqual(radios.map((t) => attr(t, 'value')), ['Referral network or flyer drops', 'Plus-One Dinner', 'VIP Night', 'Google Ads, review tags or a website', 'Not sure yet']);
+    assert.deepEqual(radios.map((t) => attr(t, 'value')), ['Referral or flyer network', 'Plus-One Dinner', 'VIP Night', 'Online search network, review tags or a website', 'Not sure yet']);
     assert.deepEqual([...form.matchAll(/<label><input type="radio" name="dinner" value="([^"]+)"[^>]*>([^<]+)<\/label>/g)].map((m) => m[1] === m[2]), [true, true, true, true, true], 'each label reads the same as its value');
     assert.ok(radios.every((t) => attr(t, 'type') === 'radio' && hasAttr(t, 'required')));
     assert.deepEqual(radios.map((t) => attr(t, 'value')), call.DINNERS, 'call.js knows the same five choices');
@@ -91,6 +91,7 @@ describe('/contact: the call form', () => {
     assert.match(form, /<button class="btn btn-primary" type="submit">Book my 15-minute call<\/button>/);
     assert.match(t, /Prefer to talk now\? Call or text Mustafa at 331-271-6851\./);
     assert.match(t, /We use these details to call you back about your request\./);
+    assert.match(t, /What fits your clinic: the referral network, the flyer network, a dinner or one of the extras/);
   });
 });
 
@@ -98,7 +99,7 @@ describe('thanks page', () => {
   test('noindex, canonical, favicon block and the site stylesheet', () => {
     assert.match(thanks, /<meta name="robots" content="noindex">/);
     assert.match(thanks, /<link rel="canonical" href="https:\/\/ouroptimization\.com\/thanks">/);
-    for (const link of ['<link rel="icon" href="/assets/owo-favicon.ico" sizes="16x16 32x32 48x48">', '<link rel="apple-touch-icon" href="/assets/owo-apple-touch-icon.png">', '<link rel="manifest" href="/site.webmanifest?v=owo3">']) {
+    for (const link of ['<link rel="icon" href="/assets/owo-favicon.ico" sizes="16x16 32x32 48x48">', '<link rel="apple-touch-icon" href="/assets/owo-apple-touch-icon.png">', '<link rel="manifest" href="/site.webmanifest?v=own1">']) {
       assert.ok(thanks.includes(link), link);
     }
     assert.match(thanks, /<link rel="stylesheet" href="\/assets\/site\.css">/);
@@ -146,8 +147,8 @@ describe('call.js: module shape', () => {
   test('a complete submission passes', () => {
     assert.deepEqual(call.validateAll(valid), []);
     assert.deepEqual(call.validateAll({ ...valid, email: 'jordan@example.com', message: 'Hello', dinner: 'VIP Night' }), []);
-    assert.deepEqual(call.validateAll({ ...valid, dinner: 'Referral network or flyer drops' }), []);
-    assert.deepEqual(call.validateAll({ ...valid, dinner: 'Google Ads, review tags or a website' }), []);
+    assert.deepEqual(call.validateAll({ ...valid, dinner: 'Referral or flyer network' }), []);
+    assert.deepEqual(call.validateAll({ ...valid, dinner: 'Online search network, review tags or a website' }), []);
   });
 
   test('an empty form lists the required fields, in order', () => {
@@ -206,10 +207,11 @@ describe('call.js: email (optional)', () => {
 });
 
 describe('call.js: what to talk about (required radio, field name "dinner")', () => {
-  for (const v of ['Referral network or flyer drops', 'Plus-One Dinner', 'VIP Night', 'Google Ads, review tags or a website', 'Not sure yet']) {
+  for (const v of ['Referral or flyer network', 'Plus-One Dinner', 'VIP Night', 'Online search network, review tags or a website', 'Not sure yet']) {
     test(`accepts ${v}`, () => assert.equal(errorFor('dinner', { dinner: v }), ''));
   }
-  for (const v of ['', 'Plus-One', 'vip night', 'Flyer drops', 'Flyer drops or referral network', 'Something else']) {
+  // The labels from before the rename (October 22, 2026) are no longer choices on the form.
+  for (const v of ['', 'Plus-One', 'vip night', 'Flyer drops', 'Flyer drops or referral network', 'Referral network or flyer drops', 'Google Ads, review tags or a website', 'referral or flyer network', 'Something else']) {
     test(`rejects ${JSON.stringify(v)}`, () => assert.notEqual(errorFor('dinner', { dinner: v }), ''));
   }
   test('the error names the question, not only dinners', () => {
@@ -226,16 +228,27 @@ describe('call.js: message (optional)', () => {
 });
 
 describe('call.js: ?about= prefill', () => {
+  // One key for each service page (named after its URL), plus the keys from before the pages were renamed
+  // (October 22, 2026), which keep working and prefill the same message as the new key.
   const KEYS = {
-    'patient-dinners': "I'm asking about the patient dinners.",
+    'patient-network': "I'm asking about the patient dinners.",
     'referral-network': "I'm asking about the referral network.",
-    'flyer-drops': "I'm asking about flyer drops.",
-    'google-ads': "I'm asking about Google Ads.",
+    'flyer-network': "I'm asking about flyer drops.",
+    'online-search-network': "I'm asking about Google Ads.",
     'review-tags': "I'm asking about review tags.",
-    'website-design': "I'm asking about a website redesign."
+    'website-design': "I'm asking about a website redesign.",
+    'patient-dinners': "I'm asking about the patient dinners.",
+    'flyer-drops': "I'm asking about flyer drops.",
+    'google-ads': "I'm asking about Google Ads."
   };
-  test('one key for each service page', () => {
+  test('one key for each service page, and the old keys still work', () => {
     assert.deepEqual(call.ABOUT, KEYS);
+    for (const [old, now] of [['patient-dinners', 'patient-network'], ['flyer-drops', 'flyer-network'], ['google-ads', 'online-search-network']]) {
+      assert.equal(call.prefillFor(`?about=${old}`, ''), call.prefillFor(`?about=${now}`, ''), `${old} and ${now} prefill the same message`);
+    }
+    for (const p of PAGES.filter((x) => x.tab && !['Home', 'About', 'FAQ', 'Contact'].includes(x.tab))) {
+      assert.ok(Object.hasOwn(KEYS, p.url.slice(1)), `${p.url} has a key`);
+    }
     for (const [key, message] of Object.entries(KEYS)) {
       assert.equal(call.aboutFromSearch(`?about=${key}`), key);
       assert.equal(call.prefillFor(`?about=${key}`, ''), message);

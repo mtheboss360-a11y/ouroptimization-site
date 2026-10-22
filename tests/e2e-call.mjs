@@ -108,7 +108,7 @@ await scenario('an empty submit is blocked: errors shown, fields marked, focus o
   assert.equal(await focusedId(page), 'call-name');
   const invalid = await invalidIds(page);
   for (const id of REQUIRED_IDS) assert.ok(invalid.includes(id), `${id} is aria-invalid`);
-  assert.ok(invalid.includes('dinner:Referral network or flyer drops') || invalid.some((x) => x.startsWith('dinner:')), 'the dinner radios are aria-invalid');
+  assert.ok(invalid.includes('dinner:Referral or flyer network') || invalid.some((x) => x.startsWith('dinner:')), 'the dinner radios are aria-invalid');
   assert.ok(!invalid.includes('call-email') && !invalid.includes('call-message'), 'optional fields are not flagged');
   const errs = await shownErrors(page);
   assert.deepEqual(errs.sort(), ['call-clinic-err', 'call-dinner-err', 'call-name-err', 'call-phone-err', 'call-time-err', 'call-town-err'].sort());
@@ -145,11 +145,11 @@ await scenario('only the topic missing: focus lands on the radio group', async (
   await page.click('#dinner-call button[type="submit"]');
   await page.waitForTimeout(150);
   assert.equal(posts.length, 0);
-  assert.equal(await focusedId(page), 'dinner:Referral network or flyer drops', 'the first choice is the referral network');
+  assert.equal(await focusedId(page), 'dinner:Referral or flyer network', 'the first choice is the referral network');
   assert.equal(await page.textContent('#call-dinner-err'), 'Choose what you would like to talk about, or Not sure yet.');
-  await page.check('input[name="dinner"][value="Referral network or flyer drops"]');
+  await page.check('input[name="dinner"][value="Referral or flyer network"]');
   assert.deepEqual(await invalidIds(page), [], 'choosing a topic clears the error');
-  assert.deepEqual(await page.$$eval('input[name="dinner"]', (r) => r.map((x) => x.value)), ['Referral network or flyer drops', 'Plus-One Dinner', 'VIP Night', 'Google Ads, review tags or a website', 'Not sure yet'], 'five choices, the referral network first');
+  assert.deepEqual(await page.$$eval('input[name="dinner"]', (r) => r.map((x) => x.value)), ['Referral or flyer network', 'Plus-One Dinner', 'VIP Night', 'Online search network, review tags or a website', 'Not sure yet'], 'five choices, the referral network first');
   await close();
 });
 
@@ -220,8 +220,12 @@ await scenario('an old /?about=flyer-drops link is redirected to /contact?about=
   await close();
 });
 
-await scenario('every service page key prefills on /contact', async () => {
-  for (const [key, message] of [['patient-dinners', "I'm asking about the patient dinners."], ['referral-network', "I'm asking about the referral network."], ['google-ads', "I'm asking about Google Ads."]]) {
+await scenario('every service page key prefills on /contact, and the keys from before the rename still work', async () => {
+  for (const [key, message] of [
+    ['referral-network', "I'm asking about the referral network."], ['flyer-network', "I'm asking about flyer drops."],
+    ['patient-network', "I'm asking about the patient dinners."], ['online-search-network', "I'm asking about Google Ads."],
+    ['patient-dinners', "I'm asking about the patient dinners."], ['flyer-drops', "I'm asking about flyer drops."], ['google-ads', "I'm asking about Google Ads."]
+  ]) {
     const s = await open({ path: `/contact?about=${key}` });
     assert.equal(await s.page.inputValue('#call-message'), message, key);
     await s.close();
@@ -229,7 +233,7 @@ await scenario('every service page key prefills on /contact', async () => {
 });
 
 await scenario('old home section links open their new page (/#faq, /#formats, /#who)', async () => {
-  for (const [from, to] of [['/#faq', '/faq'], ['/#formats', '/patient-dinners#formats'], ['/#who', '/about'], ['/#referrals', '/referral-network'], ['/#flyer-drops', '/flyer-drops']]) {
+  for (const [from, to] of [['/#faq', '/faq'], ['/#formats', '/patient-network#formats'], ['/#who', '/about'], ['/#referrals', '/referral-network'], ['/#flyer-drops', '/flyer-network']]) {
     const { page, jsErrors, close } = await open({ path: from });
     await page.waitForURL((u) => u.pathname !== '/', { timeout: 3000 });
     await page.waitForLoadState('load');
@@ -237,6 +241,46 @@ await scenario('old home section links open their new page (/#faq, /#formats, /#
     assert.deepEqual(jsErrors, []);
     await close();
   }
+});
+
+await scenario('the renamed service pages: each old path, with and without .html, 301s straight to its new page', async () => {
+  const RENAMED = [['/flyer-drops', '/flyer-network', 'Flyer Network'], ['/patient-dinners', '/patient-network', 'Patient Network'], ['/google-ads', '/online-search-network', 'Online Search Network']];
+  for (const [old, now, tab] of RENAMED) {
+    for (const path of [old, `${old}.html`]) {
+      const r = await fetch(`${BASE}${path}`, { redirect: 'manual' });
+      assert.equal(r.status, 301, `${path} status`);
+      assert.equal(r.headers.get('location'), now, `${path} goes straight to ${now}`);
+      const next = await fetch(`${BASE}${now}`, { redirect: 'manual' });
+      assert.equal(next.status, 200, `${now} is a page, not another redirect`);
+    }
+    const { page, jsErrors, missing, close } = await open({ path: `${old}#how` });
+    assert.equal(new URL(page.url()).pathname, now);
+    assert.equal(await page.$eval('#site-nav a[aria-current="page"]', (a) => a.textContent.trim()), tab);
+    assert.match(await page.title(), / \| Our Wellness Network$/);
+    assert.deepEqual(jsErrors, []);
+    assert.deepEqual(missing, [], 'every stylesheet, script, font and image loads');
+    await close();
+  }
+  // Older redirects that used to point at an old path go straight to the new page.
+  for (const [path, to] of [['/events', '/patient-network'], ['/flyers', '/flyer-network'], ['/digital-marketing', '/online-search-network'], ['/how-it-works', '/patient-network#how']]) {
+    const r = await fetch(`${BASE}${path}`, { redirect: 'manual' });
+    assert.equal(r.status, 301, path);
+    assert.equal(r.headers.get('location'), to, path);
+  }
+});
+
+await scenario('the header and footer show the Our Wellness Network logo, loaded and crisp', async () => {
+  const { page, close } = await open({ path: '/' });
+  const logos = await page.$$eval('img[src*="logo"]', (imgs) => imgs.map((i) => ({ src: i.getAttribute('src'), alt: i.alt, ok: i.complete && i.naturalWidth === 480, w: i.getBoundingClientRect().width })));
+  assert.equal(logos.length, 2);
+  for (const l of logos) {
+    assert.equal(l.src, '/assets/img/our-wellness-network-logo.png');
+    assert.equal(l.alt, 'Our Wellness Network');
+    assert.ok(l.w > 0 && l.w <= 240, `shown at ${l.w}px from a 480px file, so it stays sharp on 2x screens`);
+  }
+  await page.locator('footer img').scrollIntoViewIfNeeded();
+  await page.waitForFunction(() => [...document.querySelectorAll('img[src*="logo"]')].every((i) => i.complete && i.naturalWidth === 480));
+  await close();
 });
 
 await scenario('an old /review-tags#in-use link opens the NFC explainer, #nfc', async () => {

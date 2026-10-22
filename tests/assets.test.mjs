@@ -16,6 +16,10 @@ const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const read = (p) => readFileSync(join(ROOT, p), 'utf8');
 const isFile = (p) => existsSync(join(ROOT, p)) && statSync(join(ROOT, p)).isFile();
 const pages = readdirSync(ROOT).filter((f) => f.endsWith('.html')).sort();
+// SHA-256 of the Our Wellness Network logo and of the two share images re-rendered with it (October 22, 2026).
+const LOGO_SHA = 'e9449659d931e5100943919ed541bb7eab554da8758021dc0cc0d29b7e2abb6d';
+const OG_NEIGHBORS_SHA = '4c1a20f134c6bb06c614e753a3d391e8e77f90d73a657ddc3194e9968f215bf8';
+const OG_BEST_SHA = 'c0e4916dc272f15a5b669883d4b5315bbf8e69fc0905b237b942d9e5dc6cfe60';
 
 // The favicon block every page head carries. Root-absolute, so the 404 page works at any depth.
 // There is no SVG icon: browsers prefer an SVG over the PNG and ICO files, and the OWO mark ships as PNG and ICO only.
@@ -27,7 +31,7 @@ const FAVICON_LINKS = [
   { rel: 'icon', href: '/assets/owo-icon-32.png' },
   { rel: 'icon', href: '/assets/owo-icon-16.png' },
   { rel: 'apple-touch-icon', href: '/assets/owo-apple-touch-icon.png' },
-  { rel: 'manifest', href: '/site.webmanifest?v=owo3' }
+  { rel: 'manifest', href: '/site.webmanifest?v=own1' }
 ];
 
 // Images that were removed. Nothing may link to them again: the AI hero, and the client stand photo
@@ -36,24 +40,29 @@ const REMOVED = ['assets/img/hero-town.png', 'assets/img/hero-town.webp', 'asset
   'assets/img/review-stand.jpg', 'assets/img/review-stand.webp', 'assets/img/review-stand-600.jpg', 'assets/img/review-stand-600.webp'];
 
 // The pages of the site (the multi-page site of October 22, 2026), and the clean URL of each.
-const KEPT = ['404.html', 'about.html', 'contact.html', 'expo-vendors.html', 'faq.html', 'flyer-drops.html', 'google-ads.html', 'index.html',
-  'patient-dinners.html', 'privacy.html', 'referral-network.html', 'review-tags.html', 'terms.html', 'thanks.html', 'website-design.html'];
-const CLEAN = ['/', '/referral-network', '/flyer-drops', '/patient-dinners', '/google-ads', '/review-tags', '/website-design', '/about',
+const KEPT = ['404.html', 'about.html', 'contact.html', 'expo-vendors.html', 'faq.html', 'flyer-network.html', 'online-search-network.html', 'index.html',
+  'patient-network.html', 'privacy.html', 'referral-network.html', 'review-tags.html', 'terms.html', 'thanks.html', 'website-design.html'];
+const CLEAN = ['/', '/referral-network', '/flyer-network', '/patient-network', '/online-search-network', '/review-tags', '/website-design', '/about',
   '/faq', '/contact', '/privacy', '/terms', '/thanks', '/expo-vendors'];
 // The pages the sitemap lists: every page people should find from a search.
-const INDEXABLE = ['/', '/referral-network', '/flyer-drops', '/patient-dinners', '/google-ads', '/review-tags', '/website-design', '/about', '/faq', '/contact', '/privacy', '/terms'];
+const INDEXABLE = ['/', '/referral-network', '/flyer-network', '/patient-network', '/online-search-network', '/review-tags', '/website-design', '/about', '/faq', '/contact', '/privacy', '/terms'];
+
+// The service pages renamed on October 22, 2026, when the brand became Our Wellness Network: old path -> new path.
+const RENAMED = { 'flyer-drops': '/flyer-network', 'patient-dinners': '/patient-network', 'google-ads': '/online-search-network' };
 
 // Retired service pages and the page (or section) each one now 301s to, with and without .html.
 const RETIRED = {
-  'how-it-works': '/patient-dinners#how', services: '/#services', 'community-marketing': '/referral-network', 'custom-marketing': '/referral-network',
-  'digital-marketing': '/google-ads', industries: '/', examples: '/', estimate: '/contact', 'market-research': '/referral-network',
-  'direct-mail': '/flyer-drops', events: '/patient-dinners', flyers: '/flyer-drops', 'marketing-kits': '/patient-dinners#handle', seo: '/website-design',
-  'social-media': '/#services', groupon: '/#services', 'gift-cards': '/#services', tracking: '/patient-dinners#handle',
+  'how-it-works': '/patient-network#how', services: '/#services', 'community-marketing': '/referral-network', 'custom-marketing': '/referral-network',
+  'digital-marketing': '/online-search-network', industries: '/', examples: '/', estimate: '/contact', 'market-research': '/referral-network',
+  'direct-mail': '/flyer-network', events: '/patient-network', flyers: '/flyer-network', 'marketing-kits': '/patient-network#handle', seo: '/website-design',
+  'social-media': '/#services', groupon: '/#services', 'gift-cards': '/#services', tracking: '/patient-network#handle',
   'sample-advertisements': '/'
 };
 
-// Files deleted with the retired pages (the old strategy meeting form, its script and its tests), and the old SVG favicon.
-const DELETED = ['assets/estimate.js', 'tests/estimate.test.mjs', 'tests/e2e-estimate.mjs', 'assets/favicon.svg', ...Object.keys(RETIRED).map((n) => `${n}.html`)];
+// Files deleted with the retired pages (the old strategy meeting form, its script and its tests), the old SVG favicon,
+// the old logo (replaced by our-wellness-network-logo.png) and the old file names of the renamed pages.
+const DELETED = ['assets/estimate.js', 'tests/estimate.test.mjs', 'tests/e2e-estimate.mjs', 'assets/favicon.svg', 'assets/img/owo-logo.png',
+  ...Object.keys(RETIRED).map((n) => `${n}.html`), ...Object.keys(RENAMED).map((n) => `${n}.html`)];
 
 /* The [[redirects]] rules in netlify.toml, as { from, to, status, force, query }. query is null, or the
    Netlify query condition ({ about: ':about' }): such a rule only applies when the URL carries those keys. */
@@ -306,6 +315,33 @@ describe('retired pages', () => {
     });
   }
 
+  for (const [name, target] of Object.entries(RENAMED)) {
+    test(`renamed: /${name} and /${name}.html have a forced 301 straight to ${target}`, () => {
+      for (const path of [`/${name}`, `/${name}.html`]) {
+        const rule = ruleFor(path);
+        assert.ok(rule, `a redirect rule catches ${path}`);
+        assert.deepEqual([rule.from, rule.to, rule.status, rule.force], [path, target, 301, true], path);
+        assert.equal(ruleFor(pathOf(rule.to)), undefined, `${path} -> ${rule.to} is not a chain`);
+      }
+      assert.ok(isFile(`${target.slice(1)}.html`), `${target.slice(1)}.html exists`);
+      assert.ok(!isFile(`${name}.html`), `${name}.html is gone`);
+      assert.equal(ruleFor(target), undefined, `nothing redirects ${target}`);
+      // No rule anywhere still targets the old path.
+      for (const r of rules) assert.notEqual(pathOf(r.to), `/${name}`, `${r.from} still targets /${name}`);
+    });
+  }
+
+  test('no page, script, sitemap or manifest links an old service path', () => {
+    for (const file of [...pages, 'assets/site.js', 'sitemap.xml', 'site.webmanifest']) {
+      for (const [tag] of read(file).matchAll(/<a\b[^>]*>|<link\b[^>]*>|<loc>[^<]*<\/loc>|'\/[\w-]+(?:#[\w-]+)?'/gi)) {
+        const href = attr(tag, 'href') ?? tag.replace(/<\/?loc>|'/g, '');
+        const path = localPath(href);
+        if (path === null) continue;
+        assert.ok(!Object.hasOwn(RENAMED, path.replace(/\.html$/, '')), `${file} links ${href}, an old service path`);
+      }
+    }
+  });
+
   test('redirects go straight to their final target: no chains, no loops, no missing targets', () => {
     for (const r of rules.filter((x) => x.status === 301)) {
       const to = pathOf(r.to);
@@ -336,7 +372,7 @@ describe('retired pages', () => {
 
   test('no redirect catches a kept page, the assets or the site files', () => {
     const keep = [...CLEAN, '/404.html',
-      '/assets/site.css', '/assets/site.js', '/assets/call.js', '/assets/icon-192.png', '/assets/icon-512.png', '/assets/img/owo-logo.png',
+      '/assets/site.css', '/assets/site.js', '/assets/call.js', '/assets/icon-192.png', '/assets/icon-512.png', '/assets/img/our-wellness-network-logo.png',
       '/favicon.ico', '/apple-touch-icon.png', '/site.webmanifest', '/robots.txt', '/sitemap.xml'];
     for (const path of keep) {
       const rule = ruleFor(path);
@@ -388,31 +424,53 @@ describe('retired pages', () => {
 });
 
 describe('image folder', () => {
-  // og.jpg, og-community.jpg and og-dinners.jpg are kept only as byte-for-byte copies of the home page's
-  // current share image (og-neighbors.jpg), so links shared earlier (which still point at those names) show the new art.
-  const LEGACY_SHARE = ['og.jpg', 'og-community.jpg', 'og-dinners.jpg'];
+  // og.jpg, og-community.jpg, og-dinners.jpg and og-neighbors.jpg are kept only as byte-for-byte copies of the home page's
+  // current share image (og-network-neighbors.jpg), and og-best-patients.jpg as a copy of /patient-network's
+  // (og-network-best-patients.jpg), so links shared earlier (which still point at those names) show the new art.
+  // The new logo got new file names because platforms cache a preview image by its URL.
+  const LEGACY_SHARE = { 'og.jpg': 'og-network-neighbors.jpg', 'og-community.jpg': 'og-network-neighbors.jpg', 'og-dinners.jpg': 'og-network-neighbors.jpg', 'og-neighbors.jpg': 'og-network-neighbors.jpg', 'og-best-patients.jpg': 'og-network-best-patients.jpg' };
 
   test('assets/img holds only images a page, the stylesheet, a script or a site file uses', () => {
     const text = [...KEPT, 'assets/site.css', 'assets/site.js', 'assets/call.js', 'site.webmanifest', 'netlify.toml', 'sitemap.xml']
       .map((f) => read(f)).join('\n');
-    const unused = readdirSync(join(ROOT, 'assets/img')).filter((f) => !LEGACY_SHARE.includes(f) && !text.includes(f));
+    const unused = readdirSync(join(ROOT, 'assets/img')).filter((f) => !(f in LEGACY_SHARE) && !text.includes(f));
     assert.deepEqual(unused, [], 'unreferenced images in assets/img');
   });
 
-  test('the legacy share image names are copies of og-neighbors.jpg', () => {
-    const current = readFileSync(join(ROOT, 'assets/img/og-neighbors.jpg'));
-    for (const name of LEGACY_SHARE) assert.ok(readFileSync(join(ROOT, 'assets/img', name)).equals(current), `${name} matches og-neighbors.jpg`);
+  test('the legacy share image names are copies of the current share images', () => {
+    for (const [name, current] of Object.entries(LEGACY_SHARE)) assert.ok(readFileSync(join(ROOT, 'assets/img', name)).equals(readFileSync(join(ROOT, 'assets/img', current))), `${name} matches ${current}`);
   });
 
-  test('the share images: og-neighbors.jpg on the home page, og-best-patients.jpg on /patient-dinners, both 1200 x 630 with no EXIF', () => {
+  test('the share images: og-network-neighbors.jpg on the home page, og-network-best-patients.jpg on /patient-network, both 1200 x 630 with no EXIF', () => {
     const og = (page) => /<meta property="og:image" content="https:\/\/ouroptimization\.com\/assets\/img\/([^"]+)">/.exec(read(page))[1];
-    assert.equal(og('index.html'), 'og-neighbors.jpg');
-    assert.equal(og('patient-dinners.html'), 'og-best-patients.jpg');
-    for (const name of ['og-neighbors.jpg', 'og-best-patients.jpg']) {
+    assert.equal(og('index.html'), 'og-network-neighbors.jpg');
+    assert.equal(og('patient-network.html'), 'og-network-best-patients.jpg');
+    for (const name of ['og-network-neighbors.jpg', 'og-network-best-patients.jpg']) {
       const i = jpegInfo(readFileSync(join(ROOT, 'assets/img', name)));
       assert.deepEqual([i.width, i.height, i.exif], [1200, 630, false], name);
     }
     assert.match(read('index.html'), /<meta property="og:image:alt" content="[^"]*Your neighbors bring you new patients\.[^"]*">/);
+    // Re-rendered on October 22, 2026 with the Our Wellness Network logo (same layout, new file names).
+    const SHARE_SHA = { 'og-network-neighbors.jpg': OG_NEIGHBORS_SHA, 'og-network-best-patients.jpg': OG_BEST_SHA };
+    for (const [name, want] of Object.entries(SHARE_SHA)) assert.equal(createHash('sha256').update(readFileSync(join(ROOT, 'assets/img', name))).digest('hex'), want, `${name} is the share image with the new logo`);
+  });
+
+  test('the logo is the Our Wellness Network logo (the old one is deleted)', () => {
+    // The same mark and colors as before; only the last word changed, from the old name to "Network".
+    const file = 'assets/img/our-wellness-network-logo.png';
+    const buf = readFileSync(join(ROOT, file));
+    assert.equal(createHash('sha256').update(buf).digest('hex'), LOGO_SHA, `${file} is the new logo`);
+    const { width, height, pixels } = decodePng(buf);
+    assert.deepEqual([width, height], [480, 174], 'the size every page states');
+    const opaque = pixels.filter((p) => p[3] >= 128);
+    assert.ok(opaque.filter((p) => p[0] - p[2] > 50 && p[0] > 120).length / opaque.length > 0.2, 'the gold of the W and "Wellness"');
+    assert.ok(opaque.filter((p) => 0.2126 * p[0] + 0.7152 * p[1] + 0.0722 * p[2] < 60).length / opaque.length > 0.2, 'the dark loop and words');
+    assert.ok(!isFile('assets/img/owo-logo.png'), 'the old logo file is gone');
+    for (const page of pages) {
+      const logos = [...read(page).matchAll(/<img\b[^>]*>/g)].map(([t]) => attr(t, 'src')).filter((s) => /logo/.test(s));
+      assert.ok(logos.length >= 1, `${page} shows the logo`);
+      for (const src of logos) assert.equal(src.replace(/^\//, ''), file, `${page}: ${src}`);
+    }
   });
 });
 
@@ -495,7 +553,7 @@ describe('legal pages', () => {
     assert.match(t, /we see the replies guests send there/);
     assert.match(t, /any optional extras you tick/);
     assert.match(t, /form on our contact page is where a clinic asks us to call/);
-    assert.match(t, /What you would like to talk about: the referral network or flyer drops, the Plus-One Dinner, the VIP Night, Google Ads, review tags or a website, or not sure yet/);
+    assert.match(t, /What you would like to talk about: the referral or flyer network, the Plus-One Dinner, the VIP Night, the online search network, review tags or a website, or not sure yet/);
   });
 
   test('privacy describes the partner offer form: the fields, no health questions, the consent, and a copy to us', () => {
@@ -525,12 +583,14 @@ describe('legal pages', () => {
   });
 });
 
-describe('partner network and flyer drops in the terms', () => {
+describe('the referral network and the flyer network in the terms', () => {
   const t = read('terms.html').replace(/<[^>]+>/g, ' ').replace(/&rsquo;/g, "'").replace(/\s+/g, ' ');
   test('the service list, the clinic\'s duties and the tracking caveat cover the partner kit and the offer form', () => {
-    assert.match(t, /A referral network: .*one-page agreement between your clinic and each partner that says no payment is made for a referral; a partner kit for each partner \(referral cards with its own code, and flyers and a counter stand carrying an NFC tag and a QR code linked to that partner\)/);
-    assert.match(t, /Flyer drops: a representative visits, in person, the businesses you choose for each location on set field days each month, delivers and restocks your printed materials, and sends you a visit log within five business days of each field day/);
-    assert.match(t, /Flyer drops and the referral network have a flat monthly fee, set in advance\. It does not change with referrals, leads, bookings or revenue\./);
+    assert.match(t, /The referral network: .*one-page agreement between your clinic and each partner that says no payment is made for a referral; a partner kit for each partner \(referral cards with its own code, and flyers and a counter stand carrying an NFC tag and a QR code linked to that partner\)/);
+    assert.match(t, /The flyer network: a representative visits, in person, the businesses you choose for each location on set field days each month, delivers and restocks your printed materials, and sends you a visit log within five business days of each field day/);
+    assert.match(t, /The referral and flyer networks have a flat monthly fee, set in advance\. It does not change with referrals, leads, bookings or revenue\./);
+    assert.match(t, /The patient network, for each patient dinner \(the Plus-One Dinner or the VIP Night\): the restaurant and the food/);
+    assert.match(t, /The online search network: Google Ads, run in your clinic's own Google Ads account/);
     assert.match(t, /Your first-visit offer and any staff perk you give partner staff, and making sure both follow the rules that apply to your clinic, including rules on fee-splitting/);
     assert.match(t, /Calling and texting the people who claim your offer: only about the offer they asked about, within the consent they gave, and stopping as soon as anyone asks you to/);
     assert.match(t, /Sending us the bookings and first-visit revenue for the monthly partner report as totals for each partner/);
