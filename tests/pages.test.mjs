@@ -115,14 +115,14 @@ describe('every page: head, one h1, header tabs, breadcrumbs and footer', () => 
       assert.equal(bar[0], first[0], `${p.file}: the portal bar is identical on every page`);
     }
     assert.deepEqual(links(first[0]).map((l) => [l.href, l.text]), [
-      ['https://www.ournetworkportal.com', 'Client Portal'],
+      ['https://ournetworkportal.com', 'Client Portal'],
       ['https://sample.ournetworkportal.com', 'See a sample portal']
     ]);
     // The portal is a separate application on its own host, so these are the only off-site links.
     for (const p of PAGES) {
       const offsite = [...page[p.file].matchAll(/href="(https?:\/\/[^"]+)"/g)].map((m) => m[1])
         .filter((h) => !h.startsWith('https://ouroptimization.com'));
-      for (const href of offsite) assert.match(href, /^https:\/\/(www|sample)\.ournetworkportal\.com$/, `${p.file}: unexpected off-site link ${href}`);
+      for (const href of offsite) assert.match(href, /^https:\/\/(ournetworkportal\.com|sample\.ournetworkportal\.com)$/, `${p.file}: unexpected off-site link ${href}`);
     }
   });
 
