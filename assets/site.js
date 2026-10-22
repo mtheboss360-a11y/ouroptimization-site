@@ -34,7 +34,7 @@
   }
 
   /* Old links to retired pages 301 to a page or a section (/meeting to /contact). If a redirect carried
-     the old query string after the fragment (/#call?package=website), put the query back in front
+     the old query string after the fragment (/patient-network#how?ref=x), put the query back in front
      of the # and open the section, so the visitor still lands on it. */
   var stray = /^#([A-Za-z][\w-]*)\?(.*)$/.exec(window.location.hash);
   var strayTarget = stray && document.getElementById(stray[1]);

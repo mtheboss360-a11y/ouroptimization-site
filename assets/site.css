@@ -919,6 +919,7 @@ a[href^="tel:"],.nowrap{white-space:nowrap}
 .foot-pages ul{display:block;columns:2;column-gap:22px}
 .foot-pages li{margin-bottom:10px;break-inside:avoid}
 .foot-pages a{white-space:nowrap}
+@media (max-width:359.98px){.foot-pages ul{columns:1}}
 @media (min-width:1100px){.foot-top{grid-template-columns:1.3fr 1fr 1.4fr .8fr}}
 
 /* ---------- patient dinners: someone on site all evening ---------- */
@@ -1430,6 +1431,7 @@ table,.tnum{font-variant-numeric:tabular-nums}
 .cx-frame{display:block;border-radius:12px;cursor:zoom-in}
 .cx-frame img{display:block;width:100%;height:auto}
 .cx-links{margin-top:26px}
+.cx-links .textlink{white-space:normal;line-height:1.35}
 
 /* Client portal links. A slim utility bar above the header, on every page, so a client
    does not have to hunt for the login; plus the sample report under the home page map. */
@@ -1447,14 +1449,8 @@ table,.tnum{font-variant-numeric:tabular-nums}
 .hero-portal{margin-top:18px;display:flex;flex-direction:column;align-items:flex-start;gap:8px}
 .hero-portal span{font:400 .82rem/1.5 var(--sans);color:var(--ink-3);max-width:44ch}
 .btn-portal{min-height:46px}
-/* the home hero is the client portal: the headline, then the screens on the first screen */
-.pt-hero{padding:clamp(26px,4vw,52px) 0 clamp(64px,8vw,104px);background:linear-gradient(180deg,var(--ground) 0%,var(--paper) 100%)}
-.pt-hero-copy{max-width:880px;margin:0 auto clamp(30px,4vw,48px);text-align:center}
-.pt-hero h1{font-size:clamp(2.15rem,1.45rem + 3vw,3.9rem);text-wrap:balance}
-.pt-hero h1 em{color:var(--gold-lg)}
-.pt-hero .intro{margin:16px auto 0;max-width:62ch;text-wrap:pretty}
-.pt-hero .actions{justify-content:center;margin-top:24px}
-.pt-hero .pt-stage~.pt-note{text-align:left;margin-top:clamp(40px,6vw,92px)}
+/* the home portal band: the phone hangs below the browser, so the caption clears it */
+.pt-band .pt-stage~.pt-note{margin-top:clamp(40px,6vw,92px)}
 .sc-mini-run span:last-child{flex:none;white-space:nowrap}
 
 /* screens and contract pages open full size; a small cue says so, on every screen size */
