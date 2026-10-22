@@ -7,7 +7,7 @@ import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { createRequire } from 'node:module';
-import { read, PAGES, TABS, text, attr, tags, byId, mainOf, links, repoTextFiles, decode } from './html.mjs';
+import { read, PAGES, TABS, UTIL, text, attr, tags, byId, mainOf, links, repoTextFiles, decode } from './html.mjs';
 
 const require = createRequire(import.meta.url);
 const call = require('../assets/call.js');
@@ -83,9 +83,10 @@ describe('every page: head, one h1, header tabs, breadcrumbs and footer', () => 
       assert.match(h, /<a class="btn btn-primary btn-head" href="\/contact">Book a 15-minute call<\/a>/);
       // About, FAQ and Contact sit in the top row on desktops (and stay in the menu on phones); no phone number in the header.
       const util = links(/<nav class="head-util" aria-label="Company">[\s\S]*?<\/nav>/.exec(h)[0]);
-      assert.deepEqual(util.map((l) => [l.text, l.href]), TABS.slice(-3));
-      assert.deepEqual(util.filter((l) => /aria-current="page"/.test(l.tag)).map((l) => l.text), p.tab && TABS.slice(-3).some((t) => t[0] === p.tab) ? [p.tab] : []);
-      assert.deepEqual([...h.matchAll(/<li class="nav-util">/g)].length, 3, 'the same three stay in the menu for phones');
+      const top = TABS.filter((t) => UTIL.includes(t[1]));
+      assert.deepEqual(util.map((l) => [l.text, l.href]), top);
+      assert.deepEqual(util.filter((l) => /aria-current="page"/.test(l.tag)).map((l) => l.text), top.some((t) => t[0] === p.tab) ? [p.tab] : []);
+      assert.equal([...h.matchAll(/<li class="nav-util">/g)].length, top.length, 'the same pages stay in the menu for phones');
       assert.doesNotMatch(h, /tel:|331-271-6851|head-tel/, 'the phone number is in the footer, not the header');
     });
 
