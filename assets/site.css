@@ -1153,19 +1153,15 @@ table,.tnum{font-variant-numeric:tabular-nums}
 .tp-place{font-size:.72rem;font-weight:500}
 .fd-table thead th{font-size:.82rem}
 
-/* Client portal links. A slim utility bar above the header, on every page, so a client
-   does not have to hunt for the login; plus the sample report under the home page map. */
+/* Client portal link. A slim utility bar above the header, on every page, so a client
+   does not have to hunt for the login. */
 .portal-bar{background:var(--stone);border-bottom:1px solid var(--line)}
 .portal-bar .wrap{display:flex;align-items:center;justify-content:flex-end;gap:18px;min-height:38px;flex-wrap:wrap}
 .portal-bar-label{font:500 .78rem/1 var(--sans);color:var(--ink-3)}
 .portal-link{font:600 .8rem/1 var(--sans);color:var(--ink);text-decoration:none;padding:6px 0;white-space:nowrap;border-bottom:1px solid transparent;transition:color .2s ease,border-color .2s ease}
 .portal-link:hover{color:var(--gold-sm);border-bottom-color:var(--gold-sm)}
-.portal-link-sample{color:var(--ink-3);font-weight:500}
 @media (max-width:560px){
   .portal-bar .wrap{justify-content:center;gap:14px;min-height:34px}
   .portal-bar-label{display:none}
   .portal-link{font-size:.76rem}
 }
-.hero-portal{margin-top:18px;display:flex;flex-direction:column;align-items:flex-start;gap:8px}
-.hero-portal span{font:400 .82rem/1.5 var(--sans);color:var(--ink-3);max-width:44ch}
-.btn-portal{min-height:46px}

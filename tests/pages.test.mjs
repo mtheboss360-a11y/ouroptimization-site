@@ -105,7 +105,7 @@ describe('every page: head, one h1, header tabs, breadcrumbs and footer', () => 
     }
   }
 
-  test('every page carries the same portal bar: the client login and the sample, both off-site', () => {
+  test('every page carries the same portal bar: the client login, off-site', () => {
     const barOf = (src) => /<div class="portal-bar">[\s\S]*?<\/div>\s*<\/div>/.exec(src);
     const first = barOf(page['index.html']);
     assert.ok(first, 'the home page has a portal bar');
@@ -115,14 +115,13 @@ describe('every page: head, one h1, header tabs, breadcrumbs and footer', () => 
       assert.equal(bar[0], first[0], `${p.file}: the portal bar is identical on every page`);
     }
     assert.deepEqual(links(first[0]).map((l) => [l.href, l.text]), [
-      ['https://www.ournetworkportal.com', 'Client Portal'],
-      ['https://sample.ournetworkportal.com', 'See a sample portal']
+      ['https://ournetworkportal.com', 'Client Portal']
     ]);
     // The portal is a separate application on its own host, so these are the only off-site links.
     for (const p of PAGES) {
       const offsite = [...page[p.file].matchAll(/href="(https?:\/\/[^"]+)"/g)].map((m) => m[1])
         .filter((h) => !h.startsWith('https://ouroptimization.com'));
-      for (const href of offsite) assert.match(href, /^https:\/\/(www|sample)\.ournetworkportal\.com$/, `${p.file}: unexpected off-site link ${href}`);
+      for (const href of offsite) assert.match(href, /^https:\/\/ournetworkportal\.com$/, `${p.file}: unexpected off-site link ${href}`);
     }
   });
 
@@ -198,7 +197,7 @@ describe('home page', () => {
     assert.match(text(hero.slice(0, hero.indexOf('<h1'))), /Referral networks for independent med spas\s*$/);
     const lede = text(/<p class="lede">([\s\S]*?)<\/p>/.exec(hero)[1]);
     assert.equal(lede, 'The gym, the salon and the café down the street already know the people you want to meet. We find those businesses, sign them on as partners and keep your name at their front desk.');
-    assert.deepEqual(links(hero).map((l) => [l.href, l.text]), [['/contact?about=referral-network', 'Book a 15-minute call'], ['/referral-network', 'How the referral network works'], ['https://sample.ournetworkportal.com', 'See a sample client portal']]);
+    assert.deepEqual(links(hero).map((l) => [l.href, l.text]), [['/contact?about=referral-network', 'Book a 15-minute call'], ['/referral-network', 'How the referral network works']]);
     assert.doesNotMatch(hero, /hero-note|Mustafa|331-271-6851|tel:/, 'no name or number under the hero: the header carries the phone');
   });
 
