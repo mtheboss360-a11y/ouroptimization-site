@@ -16,6 +16,20 @@ Since October 22, 2026 it is a multi-page site: every service has its own page a
 
 Static HTML/CSS/JS, no build step, no dependencies, no third-party requests.
 
+## The client portal
+
+`/client-portal` is a page about the portal, not the portal itself. The portal is a separate
+application: a Node server with a SQLite database holding client accounts, sessions and campaign
+records, built in `~/our-wellness-client-portal`. **It cannot run on Netlify**, which serves static
+files and short-lived functions, so it needs its own host (Fly, Render, Railway, a small VPS) and
+its own subdomain.
+
+Until it is hosted, the page carries no sign-in link — there is nowhere to send a reader. When the
+portal goes up, add the link to the page's two calls to action and to the header, and say so here.
+
+The portal's sample data is a fictional clinic. The real ETHR LAB partner businesses are in the
+`NAME_HASHES` guard in `tests/pages.test.mjs` and must never appear on this site.
+
 ## Deploy
 
 Netlify site linked to this repo, branch `main`. No build command; publish directory `.` (set in `netlify.toml`). Pull requests get a Netlify deploy preview. Show the owner a deploy preview before anything goes to production.
@@ -39,6 +53,7 @@ Forms use **Netlify Forms** (no function, no secrets):
 | `online-search-network.html` | `/online-search-network` | An extra. The online search network: Google Ads as the cherry on top, from the site's existing wording only: why ads come last, your own account and budget, side by side with the flyer network. No features or results beyond that. |
 | `review-tags.html` | `/review-tags` | An extra. Tap-to-review NFC tags (a QR code on the same piece if wanted); in how it works (`#how`), a sample stand mockup beside "What is an NFC tag?" (`#nfc`) and the neutral ask; where tags go; the review rules. |
 | `website-design.html` | `/website-design` | An extra. Website redesign. |
+| `client-portal.html` | `/client-portal` | The client portal: what each network reports into it (`#networks`), the month-by-month report and what it breaks down to (`#month`), and the login itself (`#access`: one per clinic, its own records only). Describes the portal in words; no screenshots yet, because the portal is not hosted anywhere a reader could reach. |
 | `about.html` | `/about` | Who we are (the Grace Pediatrics photo, the "Your contact" box with Mustafa's name and email) and `#how-we-work`: six commitments from our written agreements. |
 | `faq.html` | `/faq` | Every FAQ entry, grouped, in this order: `#network-faq` (Referral network), `#flyer-drops-faq` (Flyer network, with "Can I track my flyer drops?"), `#dinners-faq` (Patient network) and `#working-faq`. The group ids kept their names through the rename, so older links still land. |
 | `contact.html` | `/contact` | The `dinner-call` form (`#call`) and the "On the call" aside. |
