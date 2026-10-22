@@ -210,7 +210,7 @@ describe('home page', () => {
     const hero = m.slice(m.indexOf('<section class="hero'), m.indexOf('</section>'));
     assert.equal(text(hero.slice(0, hero.indexOf('<h1'))).trim(), '', 'nothing above the headline (the owner took the eyebrow off, October 22, 2026)');
     const lede = text(/<p class="lede">([\s\S]*?)<\/p>/.exec(hero)[1]);
-    assert.equal(lede, "Let's leverage that with new geo-tracked business partnerships, monthly visits to those businesses and a way to monitor it all.");
+    assert.equal(lede, "Let's leverage that with service offers to employees in local and extended businesses, monthly visits to those businesses with quick appointment booking stands, physical marketing and a way to monitor and track it all.");
     assert.deepEqual(links(hero), [], 'no buttons and no sample portal: people scroll');
     assert.doesNotMatch(hero, /hero-note|Mustafa|331-271-6851|tel:/, 'no name or number under the hero: the header carries the phone');
   });
