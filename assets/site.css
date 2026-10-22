@@ -6,7 +6,6 @@
 
 @font-face{font-family:"Inter";font-style:normal;font-weight:100 900;font-display:swap;src:url("fonts/inter-latin-opsz-normal.woff2") format("woff2")}
 @font-face{font-family:"Playfair Display";font-style:normal;font-weight:400 900;font-display:swap;src:url("fonts/playfair-display-latin-wght-normal.woff2") format("woff2")}
-@font-face{font-family:"Playfair Display";font-style:italic;font-weight:400 900;font-display:swap;src:url("fonts/playfair-display-latin-wght-italic.woff2") format("woff2")}
 
 :root{
   /* Deep green with peony-pink accents. Every ratio below is measured against every
@@ -1131,11 +1130,18 @@ a[href^="tel:"],.nowrap{white-space:nowrap}
 @media (min-width:900px) and (max-width:1119.98px){.hero-town .actions{display:grid;grid-auto-columns:max-content;justify-content:start}.hero-town .actions .btn{min-width:0}}
 .svc-hero .page-head .intro{text-wrap:pretty}
 
-/* Type (October 22, 2026): Playfair Display for the page headline (h1) only, with its colored second line in italic.
-   Everything else, from section heads to numbers and tables, is set in Inter: plain, premium and easy to read. */
-h1,.hero h1,.page-head h1,.sent h1,.hero-town h1,.dn-sent h1,.pg-hero h1,.ct-head h1{font-family:var(--hero);font-weight:500;letter-spacing:-.012em}
-h1 em,.hero h1 em,.svc-hero h1 em,.hero-town h1 em,.dn-sent h1 em,.pg-hero h1 em,.ct-head h1 em{font-style:italic;font-weight:500}
-h2,h3{font-weight:600}
-h2{letter-spacing:-.022em}
+/* Type (October 22, 2026): Playfair Display, upright, for page headlines (h1) and section titles (h2); the colored
+   second line is the same face, weight and style as the first. Everything else (card titles, body, buttons, labels,
+   numbers, tables) is Inter. No italics anywhere, generous line spacing, and labels in sentence case without wide tracking. */
+h1,.hero h1,.page-head h1,.sent h1,.hero-town h1,.dn-sent h1,.pg-hero h1,.ct-head h1{font-family:var(--hero);font-weight:500;letter-spacing:-.01em;line-height:1.12}
+h2{font-family:var(--hero);font-weight:500;letter-spacing:-.008em;line-height:1.16}
+h1 em,h2 em,h3 em,.hero h1 em,.svc-hero h1 em,.hero-town h1 em,.dn-sent h1 em,.pg-hero h1 em,.ct-head h1 em{font-style:normal;font-weight:inherit}
+h3{font-weight:600;letter-spacing:-.012em}
 body{font-optical-sizing:auto}
 table,.tnum{font-variant-numeric:tabular-nums}
+.eyebrow,.card-cap,.foot-col h2,.tp-place,.tp-list b,.journey b,.dg-k,.dn-k,.dn-facts dt,.hm-also-h,.fd-table caption,.fd-table thead th,.fd-table td::before{text-transform:none;letter-spacing:.005em}
+.eyebrow{font-size:.9rem;font-weight:600}
+.card-cap,.dg-k,.dn-k,.hm-also-h,.fd-table caption{font-size:.84rem;font-weight:600}
+.foot-col h2{font-size:.9rem}
+.tp-place{font-size:.72rem;font-weight:500}
+.fd-table thead th{font-size:.82rem}
