@@ -1245,3 +1245,240 @@ table,.tnum{font-variant-numeric:tabular-nums}
 #online-search .dn-note{margin-top:28px}
 #dinners .related{margin-top:22px}
 #questions .faq{margin-inline:0}
+/* the portal tour on the home page: one screen per row, the copy beside it, sides alternating on desktops */
+.pt-tour{list-style:none;display:grid;gap:clamp(40px,6vw,84px)}
+.pt-row{display:grid;gap:16px;align-items:center}
+@media (min-width:900px){
+  .pt-row{grid-template-columns:minmax(0,.36fr) minmax(0,.64fr);gap:clamp(36px,4vw,56px)}
+  .pt-row:nth-child(even){grid-template-columns:minmax(0,.64fr) minmax(0,.36fr)}
+  .pt-row:nth-child(even) .pt-row-copy{order:2}
+}
+.pt-row-copy h3{font-size:clamp(1.3rem,1.15rem + .6vw,1.6rem);line-height:1.2}
+.pt-row-copy p{margin-top:10px;font-size:1.02rem;line-height:1.6;color:var(--ink-2);max-width:40ch;text-wrap:pretty}
+.pt-tour~.pt-note{margin-inline:0;margin-top:clamp(30px,4vw,44px)}
+
+/* ---------- sample contract (.sc-) ---------- */
+/* The key sheets of the flyer network agreement, set as white paper sheets on the stone band, with the
+   section head and a sheet index beside them on desktops. Every color is a :root token or #fff; the
+   shadows use the ink green at low alpha, as the rest of the site does. Inter throughout, Playfair only
+   for the sheet titles and the fee figures. */
+
+.sc-vh{position:absolute!important;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
+
+/* the band: head and index, then the sheets; side by side from 1000px */
+.sc-layout{display:grid;gap:clamp(28px,4vw,44px)}
+.sc-aside{min-width:0}
+.sc-aside .section-head{margin-bottom:0}
+@media (min-width:1000px){
+  .sc-layout{grid-template-columns:minmax(270px,1fr) minmax(0,720px);gap:clamp(40px,4.4vw,72px);align-items:start}
+  .sc-aside h2{font-size:clamp(1.9rem,.9rem + 1.9vw,2.6rem)}
+}
+
+/* the head and index stay beside the sheets only where the whole index fits on screen once stuck
+   (the index ends up to 696px below its top at 1000 to 1440px wide, plus the 92px offset, plus room) */
+@media (min-width:1000px) and (min-height:820px){.sc-aside{position:sticky;top:92px}}
+
+/* the sheet index: chips on phones and tablets, a ruled list beside the sheets on desktops */
+.sc-index{margin-top:24px}
+.sc-index ol{list-style:none;display:flex;flex-wrap:wrap;gap:8px}
+.sc-index a{display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:0 16px 0 12px;border-radius:999px;border:1px solid var(--line);background:#fff;font:600 .9rem/1.2 var(--sans);color:var(--ink);text-decoration:none;transition:border-color .25s ease,color .25s ease}
+.sc-index a:hover{border-color:var(--gold);color:var(--gold-sm)}
+.sc-index-n{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--blush);font:600 .78rem/1 var(--sans);color:var(--gold-sm);font-variant-numeric:tabular-nums}
+@media (min-width:1000px){
+  .sc-index{margin-top:32px}
+  .sc-index ol{display:grid;gap:0;border-top:1px solid var(--line)}
+  .sc-index a{display:flex;width:100%;min-height:54px;padding:0 4px;border:0;border-bottom:1px solid var(--line);border-radius:0;background:transparent;font-size:.97rem}
+  .sc-index a:hover{background:transparent}
+  /* the sheet in view (set by the fragment's small script) */
+  .sc-index a[aria-current="true"]{color:var(--gold-sm);box-shadow:inset 0 -2px 0 var(--gold)}
+  .sc-index a[aria-current="true"] .sc-index-n{background:var(--gold-sm);color:#fff}
+}
+
+/* ---------- a sheet ---------- */
+.sc-sheets{display:grid;gap:clamp(22px,3vw,36px);min-width:0}
+.sc-sheet{position:relative;isolation:isolate;overflow:hidden;container-type:inline-size;min-width:0;width:100%;max-width:720px;margin-inline:auto;padding:clamp(20px,4.6vw,56px) clamp(20px,5vw,60px) clamp(28px,5vw,60px);background:#fff;border-radius:6px;box-shadow:0 1px 2px rgba(28,58,44,.08),0 2px 6px -2px rgba(28,58,44,.06),0 30px 56px -38px rgba(28,58,44,.42);color:var(--ink-2);scroll-margin-top:96px}
+@media (min-width:1000px){.sc-sheet{margin-inline:0}}
+
+/* the faint diagonal watermark: behind the text, never in the way of it */
+.sc-mark{position:absolute;inset:0;z-index:-1;display:grid;place-items:center;pointer-events:none;-webkit-user-select:none;user-select:none;overflow:hidden}
+.sc-mark span{display:block;transform:rotate(-30deg);font:800 clamp(4rem,19cqi,8.5rem)/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--gold);opacity:.075;white-space:nowrap}
+
+/* running header and page number */
+.sc-run{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 16px;padding-bottom:12px;margin-bottom:clamp(26px,6cqi,42px);border-bottom:1px solid var(--line-soft);font:500 .8rem/1.4 var(--sans);color:var(--ink-3);font-variant-numeric:tabular-nums}
+
+.sc-kicker{font:600 .84rem/1.45 var(--sans);letter-spacing:.005em;color:var(--gold-sm);margin-bottom:8px}
+.sc-title{font:500 clamp(1.7rem,1.2rem + 3cqi,2.25rem)/1.12 var(--hero);letter-spacing:-.01em;color:var(--ink)}
+.sc-title-xl{font-size:clamp(2rem,1.3rem + 5cqi,3rem);line-height:1.08;max-width:12em}
+.sc-promise{margin-top:16px;max-width:30em;font:400 clamp(1.05rem,.98rem + .6cqi,1.2rem)/1.55 var(--sans);color:var(--ink-2);text-wrap:pretty}
+.sc-lead{margin-top:14px;max-width:38em;font-size:1rem;line-height:1.62;text-wrap:pretty}
+.sc-sub{display:block;margin-top:2px;font-size:.88rem;font-weight:400;line-height:1.45;color:var(--ink-3)}
+
+/* ---------- the cover summary ---------- */
+.sc-sum{width:100%;margin-top:clamp(26px,5cqi,40px);border-collapse:collapse;font-size:.97rem;line-height:1.5}
+.sc-sum caption{caption-side:top;text-align:left;padding-bottom:10px;font:600 .84rem/1.45 var(--sans);color:var(--gold-sm)}
+.sc-sum th,.sc-sum td{padding:13px 0;text-align:left;vertical-align:baseline;border-top:1px solid var(--line-soft)}
+.sc-sum tr:last-child>*{border-bottom:1px solid var(--line-soft)}
+.sc-sum th{width:34%;padding-right:20px;font:500 .9rem/1.5 var(--sans);color:var(--ink-3)}
+.sc-sum td{color:var(--ink);font-weight:500;text-wrap:pretty}
+.sc-sum-fee td{padding-block:16px}
+.sc-fig{display:block;font:500 clamp(1.9rem,1.5rem + 2cqi,2.35rem)/1.05 var(--hero);letter-spacing:-.01em;color:var(--ink);font-variant-numeric:lining-nums tabular-nums}
+.sc-sum-fee .sc-sub{margin-top:6px;font-size:.92rem;color:var(--ink-2);font-weight:500}
+@container (max-width:479.98px){
+  .sc-sum tr{display:block;padding:12px 0;border-top:1px solid var(--line-soft)}
+  .sc-sum tr:last-child{border-bottom:1px solid var(--line-soft)}
+  .sc-sum th,.sc-sum td{display:block;width:auto;padding:0;border:0}
+  .sc-sum tr:last-child>*{border-bottom:0}
+  .sc-sum th{margin-bottom:3px;font-size:.84rem}
+  .sc-sum-fee td{padding:0}
+}
+
+/* ---------- tables inside a sheet (schedule and fees) ---------- */
+.sc-tw{margin-top:clamp(22px,4cqi,30px);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.sc-tbl{width:100%;border-collapse:collapse;font-size:.95rem;line-height:1.45;font-variant-numeric:tabular-nums}
+.sc-tbl caption{caption-side:top;text-align:left;padding:14px 18px 10px;font:600 .84rem/1.45 var(--sans);color:var(--gold-sm);text-wrap:balance}
+.sc-tbl th,.sc-tbl td{padding:13px 18px;text-align:left;vertical-align:middle;border-top:1px solid var(--line-soft)}
+.sc-tbl thead th{padding-block:9px;font:600 .8rem/1.4 var(--sans);color:var(--ink-3);background:var(--paper)}
+.sc-tbl tbody th{font:600 .97rem/1.3 var(--sans);color:var(--ink)}
+.sc-tbl td{color:var(--ink)}
+/* a location carries its own dot, as on the flyer network page */
+.sc-loc{display:inline-flex;align-items:center;gap:9px;font-weight:600;color:var(--ink);white-space:nowrap}
+.sc-loc::before{content:"";width:9px;height:9px;border-radius:50%;flex:none;background:var(--gold)}
+.sc-loc.sc-l2::before{background:var(--slate-soft)}
+
+/* the fee table: figures right-aligned in Playfair, the total on a blush row */
+.sc-fees th:last-child,.sc-fees td.sc-amt{text-align:right;white-space:nowrap}
+.sc-amt{font:500 1.35rem/1.1 var(--hero);letter-spacing:-.005em;color:var(--ink);font-variant-numeric:lining-nums tabular-nums}
+.sc-fees tfoot th,.sc-fees tfoot td{background:var(--blush);border-top:1px solid var(--line)}
+.sc-fees tfoot th{font:600 .97rem/1.3 var(--sans);color:var(--ink)}
+.sc-fees tfoot td{font-weight:500}
+.sc-fees .sc-total{font-size:1.7rem}
+.sc-total span{display:block;margin-top:4px;font:500 .84rem/1.2 var(--sans);letter-spacing:0;color:var(--ink-2)}
+
+/* narrow sheets: each row becomes a small card. The column names stay in the hidden head, and the
+   tables carry explicit ARIA roles so they are still read as tables once the rows are grids. */
+@container (max-width:519.98px){
+  .sc-tbl thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap}
+  .sc-tbl caption{padding:14px 16px 8px}
+  .sc-tbl tr{display:grid;gap:6px 14px;padding:13px 16px;border-top:1px solid var(--line-soft)}
+  .sc-tbl th,.sc-tbl td{padding:0;border:0}
+  /* schedule: "Field day One" and the week on the first line, then the location and its businesses */
+  .sc-sched tr{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"day when" "loc loc" "biz biz"}
+  .sc-sched tbody th{grid-area:day;align-self:center}
+  .sc-sched tbody th::before{content:"Field day "}
+  .sc-sched td:nth-of-type(1){grid-area:loc}
+  .sc-sched td:nth-of-type(2){grid-area:biz;font-size:.92rem;color:var(--ink-2)}
+  .sc-sched td:nth-of-type(3){grid-area:when;align-self:center;font-size:.86rem;font-weight:600;color:var(--gold-sm)}
+  /* fees: location and amount on one line, what is included under it */
+  .sc-fees tr{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"loc amt" "inc inc"}
+  .sc-fees th{grid-area:loc;align-self:center}
+  .sc-fees td:not(.sc-amt){grid-area:inc;font-size:.9rem;color:var(--ink-2)}
+  .sc-fees td.sc-amt{grid-area:amt;align-self:center}
+  .sc-fees tfoot tr{background:var(--blush);border-top:1px solid var(--line)}
+  .sc-fees tfoot th,.sc-fees tfoot td{border:0}
+  .sc-fees .sc-total{font-size:1.5rem}
+  .sc-fees tfoot td:not(.sc-amt){text-wrap:balance}
+}
+
+/* ---------- lists and the boxed note ---------- */
+.sc-h4{margin-top:clamp(24px,4.5cqi,32px);font:600 1rem/1.4 var(--sans);color:var(--ink)}
+.sc-list{list-style:none;margin-top:14px;display:grid;gap:10px}
+.sc-tw+.sc-list{margin-top:clamp(20px,4cqi,26px)}
+.sc-list li{position:relative;padding-left:20px;font-size:.97rem;line-height:1.58;text-wrap:pretty}
+.sc-list li::before{content:"";position:absolute;left:2px;top:.66em;width:6px;height:6px;border-radius:50%;background:var(--gold)}
+.sc-box{margin-top:clamp(20px,4cqi,28px);padding:16px 18px;border-left:3px solid var(--gold);border-radius:0 10px 10px 0;background:var(--blush);font-size:.96rem;line-height:1.58;color:var(--ink-2);text-wrap:pretty}
+.sc-box b{color:var(--ink);font-weight:650}
+
+/* ---------- signatures ---------- */
+.sc-signs{display:grid;gap:clamp(26px,5cqi,34px);margin-top:clamp(26px,5cqi,36px)}
+.sc-sign{padding-top:clamp(20px,4cqi,26px);border-top:1px solid var(--line)}
+.sc-role{font:600 .84rem/1.45 var(--sans);color:var(--gold-sm)}
+.sc-signer{margin-top:4px;font:600 1.08rem/1.35 var(--sans);color:var(--ink)}
+.sc-signer .sc-sub{display:inline;margin-left:6px;font-size:.88rem}
+.sc-fields{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);gap:22px 18px;margin-top:6px}
+.sc-field{display:flex;flex-direction:column;gap:7px;padding-top:30px}
+.sc-line{display:block;height:0;border-bottom:1px solid var(--ink-3)}
+.sc-lbl{font:500 .8rem/1.3 var(--sans);color:var(--ink-3)}
+.sc-signer .sc-loc{display:inline;white-space:normal}
+.sc-signer .sc-loc::before{display:inline-block;margin-right:9px;vertical-align:.12em}
+.sc-eff{max-width:280px;margin-top:6px}
+.sc-note{margin-top:clamp(24px,4.5cqi,32px);padding-top:14px;border-top:1px solid var(--line-soft);font-size:.9rem;line-height:1.55;color:var(--ink-3);text-wrap:pretty}
+@container (max-width:399.98px){
+  .sc-fields{grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:18px 14px}
+  .sc-field{padding-top:26px}
+  .sc-signer .sc-sub{display:block;margin:2px 0 0}
+}
+
+/* ---------- in plain words ---------- */
+.sc-plain .section-head{margin-bottom:clamp(26px,3.4vw,40px)}
+.sc-plain-grid h3{font-size:1.12rem}
+
+/* =====================================================================
+   /pricing: the contract preview (.sc-pv)
+   Two mini sheets laid on a blush desk, the cover behind and the fees in front,
+   beside four lines on how the agreement works.
+   ===================================================================== */
+.sc-pv{display:grid;gap:clamp(26px,4vw,52px);align-items:center;margin-top:clamp(36px,5vw,56px)}
+@media (min-width:880px){.sc-pv{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+.sc-pv-art{margin:0 auto;width:100%;min-width:0;max-width:560px}
+@media (min-width:880px){.sc-pv-art{margin-inline:0}}
+.sc-pv-desk{position:relative;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));grid-template-rows:auto 58px auto;padding:clamp(26px,4vw,40px) clamp(18px,3vw,34px) clamp(30px,4.5vw,46px);border-radius:18px;background:var(--blush);overflow:hidden}
+.sc-mini{position:relative;isolation:isolate;overflow:hidden;container-type:inline-size;min-width:0;padding:16px 18px 18px;background:#fff;border-radius:5px;box-shadow:0 1px 2px rgba(28,58,44,.1),0 22px 36px -24px rgba(28,58,44,.42)}
+/* the cover spans rows 1 and 2, the fees rows 2 and 3: they overlap only across the fixed middle row,
+   which is the blank foot of the cover page */
+.sc-mini-cover{grid-column:1/span 11;grid-row:1/span 2;padding-bottom:76px;transform:rotate(-2.4deg);transform-origin:30% 40%}
+.sc-mini-fees{grid-column:2/-1;grid-row:2/span 2;transform:rotate(1.8deg);transform-origin:70% 30%;z-index:1}
+/* each mini sheet is drawn flat and then turned as one layer, so the cells of the blush total row meet without a seam */
+.sc-mini{will-change:transform}
+@media (max-width:399.98px){
+  .sc-pv-desk{padding:22px 12px 28px}
+  .sc-mini{padding:14px 14px 16px}
+  .sc-mini-cover{padding-bottom:76px}
+}
+@media (min-width:560px){
+  .sc-mini-cover{grid-column:1/span 9}
+  .sc-mini-fees{grid-column:5/-1}
+}
+.sc-mini .sc-mark span{font-size:clamp(2.6rem,21cqi,4.4rem);opacity:.08}
+.sc-mini-run{display:flex;justify-content:space-between;padding-bottom:7px;margin-bottom:12px;border-bottom:1px solid var(--line-soft);font:500 .7rem/1.3 var(--sans);color:var(--ink-3)}
+.sc-mini-title{font:500 1.18rem/1.15 var(--hero);letter-spacing:-.005em;color:var(--ink)}
+.sc-mini-tbl{width:100%;margin-top:10px;border-collapse:collapse;font-size:.78rem;line-height:1.35;font-variant-numeric:tabular-nums}
+.sc-mini-tbl th,.sc-mini-tbl td{padding:6px 0;text-align:left;vertical-align:baseline;border-top:1px solid var(--line-soft)}
+.sc-mini-tbl th{width:34%;padding-right:10px;font-weight:500;color:var(--ink-3)}
+.sc-mini-tbl td{font-weight:600;color:var(--ink)}
+.sc-mini-fee th{width:auto;font-weight:600;color:var(--ink)}
+.sc-mini-fee td{text-align:right;font:600 .86rem/1.2 var(--sans);white-space:nowrap;font-variant-numeric:lining-nums tabular-nums}
+.sc-mini-fee tfoot tr{background:var(--blush)}
+
+.sc-mini-fee tfoot th,.sc-mini-fee tfoot td{border-top:1px solid var(--line)}
+.sc-mini-fee tfoot th{padding-left:8px}
+.sc-mini-fee tfoot td{padding-right:8px;font:500 1.3rem/1.1 var(--hero);font-variant-numeric:lining-nums tabular-nums}
+.sc-mini-fee tfoot td span{font:500 .72rem/1 var(--sans);color:var(--ink-2)}
+.sc-mini .sc-loc{gap:7px;white-space:normal}
+/* a mini sheet narrower than 250px: tighter padding, and "a month" under the total */
+@container (max-width:249.98px){
+  .sc-mini-fee tfoot td span{display:block;margin-top:2px}
+}
+.sc-mini .sc-loc::before{width:7px;height:7px}
+.sc-pv-art .card-cap{margin-top:12px}
+
+.sc-pv-copy{min-width:0}
+.sc-pv-h{margin-top:8px;font-size:clamp(1.5rem,1.25rem + .9vw,1.95rem);line-height:1.15;letter-spacing:-.02em}
+.sc-pv-h em{font-style:normal;color:var(--gold-sm)}
+.sc-pv-list{list-style:none;margin-top:20px;border-top:1px solid var(--line-soft)}
+.sc-pv-list li{display:flex;align-items:flex-start;gap:11px;padding:12px 0;border-bottom:1px solid var(--line-soft);font-size:.97rem;line-height:1.5;text-wrap:pretty}
+.sc-pv-list svg{width:18px;height:18px;flex:none;margin-top:3px;color:var(--gold-sm)}
+.sc-pv-list b{color:var(--ink);font-weight:600}
+.sc-pv-copy .textlink{margin-top:24px}
+
+@media print{
+  .sc-sheet{box-shadow:none;border:1px solid var(--line);break-inside:avoid}
+  .sc-aside{position:static}
+}
+
+/* ---------- examples from the contract (.cx-): pages from the sample contract, on /flyer-network and /referral-network ---------- */
+.cx-pair{display:grid;gap:clamp(22px,3vw,36px);align-items:start}
+@media (min-width:760px){.cx-pair{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.cx-sheet{margin:0;min-width:0}
+.cx-frame{border-radius:12px;overflow:hidden;background:var(--stone);box-shadow:0 1px 2px rgba(28,58,44,.06),0 30px 50px -34px rgba(28,58,44,.45)}
+.cx-frame img{display:block;width:100%;height:auto}
+.cx-links{margin-top:26px}

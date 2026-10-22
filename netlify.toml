@@ -201,13 +201,13 @@
 # /services
 [[redirects]]
   from = "/services"
-  to = "/#services"
+  to = "/"
   status = 301
   force = true
 
 [[redirects]]
   from = "/services.html"
-  to = "/#services"
+  to = "/"
   status = 301
   force = true
 
@@ -370,39 +370,39 @@
 # /social-media
 [[redirects]]
   from = "/social-media"
-  to = "/#services"
+  to = "/"
   status = 301
   force = true
 
 [[redirects]]
   from = "/social-media.html"
-  to = "/#services"
+  to = "/"
   status = 301
   force = true
 
 # /groupon
 [[redirects]]
   from = "/groupon"
-  to = "/#services"
+  to = "/"
   status = 301
   force = true
 
 [[redirects]]
   from = "/groupon.html"
-  to = "/#services"
+  to = "/"
   status = 301
   force = true
 
 # /gift-cards
 [[redirects]]
   from = "/gift-cards"
-  to = "/#services"
+  to = "/"
   status = 301
   force = true
 
 [[redirects]]
   from = "/gift-cards.html"
-  to = "/#services"
+  to = "/"
   status = 301
   force = true
 
@@ -449,13 +449,13 @@
 # The old direct-mail ad landing page (retired in the 2026 cohesion pass); direct mail is now retired too.
 [[redirects]]
   from = "/landing"
-  to = "/#services"
+  to = "/"
   status = 301
   force = true
 
 [[redirects]]
   from = "/landing.html"
-  to = "/#services"
+  to = "/"
   status = 301
   force = true
 

@@ -54,10 +54,10 @@ const RENAMED = { 'flyer-drops': '/flyer-network', 'patient-dinners': '/patient-
 
 // Retired service pages and the page (or section) each one now 301s to, with and without .html.
 const RETIRED = {
-  'how-it-works': '/patient-network#how', services: '/#services', 'community-marketing': '/referral-network', 'custom-marketing': '/referral-network',
+  'how-it-works': '/patient-network#how', services: '/', 'community-marketing': '/referral-network', 'custom-marketing': '/referral-network',
   'digital-marketing': '/online-search-network', industries: '/', examples: '/', estimate: '/contact', 'market-research': '/referral-network',
   'direct-mail': '/flyer-network', events: '/patient-network', flyers: '/flyer-network', 'marketing-kits': '/patient-network#handle', seo: '/website-design',
-  'social-media': '/#services', groupon: '/#services', 'gift-cards': '/#services', tracking: '/patient-network#handle',
+  'social-media': '/', groupon: '/', 'gift-cards': '/', tracking: '/patient-network#handle',
   'sample-advertisements': '/', 'client-portal': '/#portal'
 };
 
@@ -538,7 +538,9 @@ describe('legal pages', () => {
   test('terms describe the dinners and today\'s forms, not the retired services', () => {
     const t = visible('terms.html');
     assert.doesNotMatch(t, /demographic|Digital Growth Package|Groupon|Meta\b|Strategy Meeting|direct.mail|across the United States/i);
-    assert.match(t, /Each dinner is quoted for your clinic, with the restaurant and food included\./);
+    assert.match(t, /Each dinner is one flat fee, quoted for your clinic per venue, with the restaurant and food included\./);
+    assert.match(t, /Our pricing page lists our current prices/);
+    assert.doesNotMatch(t, /\$\s?\d/, 'the figures stay on the pricing page');
     assert.match(t, /Chicago's western suburbs/);
     assert.match(t, /Book a 15-minute call/);
     assert.match(t, /Last updated: October 22, 2026/);

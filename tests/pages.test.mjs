@@ -140,7 +140,7 @@ describe('every page: head, one h1, header tabs, breadcrumbs and footer', () => 
   test('no page links an old home section or the old /?about= form links', () => {
     for (const p of PAGES) {
       for (const l of links(page[p.file])) {
-        assert.doesNotMatch(l.href || '', /^\/#(?!call$|services$|portal$)|^\/\?about=/, `${p.file} links ${l.href}`);
+        assert.doesNotMatch(l.href || '', /^\/#(?!call$|portal$|breakdown$)|^\/\?about=/, `${p.file} links ${l.href}`);
       }
     }
   });
@@ -189,7 +189,7 @@ describe('home page', () => {
 
   test('the home page says "referral network" before it says "dinner"', () => {
     const t = text(m);
-    assert.ok(t.search(/referral network/i) >= 0 && t.search(/referral network/i) < t.search(/dinner/i), 'referral network first');
+    assert.ok(t.search(/referral network/i) >= 0 && (t.search(/dinner/i) < 0 || t.search(/referral network/i) < t.search(/dinner/i)), 'referral network first');
   });
 
   test('the community map: the five places and their channels', () => {
@@ -199,53 +199,15 @@ describe('home page', () => {
     assert.equal(text(/<p class="tp-note">([\s\S]*?)<\/p>/.exec(html)[1]), 'Sponsored events are your patient dinners, at a restaurant near your clinic. Partner referrals come from your referral network.');
   });
 
-  test('"What we do": three numbered steps, the referral network first and largest, then the extras', () => {
-    const sec = byId(html, 'services');
-    const steps = /<ol class="hm-steps[^"]*"[^>]*>([\s\S]*?)<\/ol>/.exec(sec)[1];
-    const items = [...steps.matchAll(/<li class="(hm-step[^"]*)">([\s\S]*?)<\/li>\s*(?=<li class="hm-step|$)/g)].map((x) => ({ cls: x[1], html: x[2] }));
-    assert.equal(items.length, 3, 'three steps');
-    assert.deepEqual(items.map((i) => /<h3><a href="([^"]+)">([^<]+)<\/a><\/h3>/.exec(i.html).slice(1).reverse()), [['Referral Network', '/referral-network'], ['Flyer Network', '/flyer-network'], ['Patient Network', '/patient-network']]);
-    assert.deepEqual(items.map((i) => text(/<span class="hm-more"[^>]*>([\s\S]*?)<\/span>/.exec(i.html)[1])), ['How the referral network works', 'How the flyer network runs', 'See the patient network']);
-    assert.equal(text(/<p class="intro">([\s\S]*?)<\/p>/.exec(sec)[1]), 'Start with the referral network. Add the flyer network and the patient network when you are ready. Each step has its own page.');
-    assert.deepEqual(items.map((i) => text(/<span class="hm-step-n"[^>]*>([^<]+)<\/span>/.exec(i.html)[1])), ['1', '2', '3']);
-    assert.deepEqual(items.map((i) => text(/<span class="dn-k">([^<]+)<\/span>/.exec(i.html)[1])), ['Step 1 of 3', 'Step 2 of 3', 'Step 3 of 3']);
-    assert.equal(items[0].cls, 'hm-step hm-step-lead', 'the referral network is the large lead card');
-    assert.ok(items.slice(1).every((i) => i.cls === 'hm-step'));
-    assert.ok(/<ul class="hm-kit"/.test(items[0].html), 'only the referral network lists what each partner gets');
-    const build = items.map((i) => text(/<p class="hm-build">([\s\S]*?)<\/p>/.exec(i.html)[1]));
-    assert.deepEqual(build, [
-      'Start here: the businesses near you keep your name at their front desk.',
-      'Builds on step 1: more businesses you choose, on the same route as your partners.',
-      'Builds on steps 1 and 2: your best patients bring the next ones.'
-    ], 'each step says in one line how it builds on the last');
-    assert.match(text(steps), /We map 15 to 20 businesses near your clinic, aim to sign 5 to 10 as partners and give each one a partner kit, so every lead shows where it came from\./);
-    assert.match(text(steps), /A representative walks your flyers into 14 businesses you choose for each location, on two field days a month, and you get a visit log after each one\./);
-    assert.equal(text(/<p class="hm-track">([\s\S]*?)<\/p>/.exec(items[1].html)[1]), 'Track every drop: the log shows how many flyers went to each business.', 'one line on tracking, on the Flyer Network step');
-    assert.equal((steps.match(/class="hm-track"/g) || []).length, 1, 'the tracking line is on the Flyer Network step only');
-    assert.doesNotMatch(text(sec), /every two weeks, someone walks|As we go, we add new places|The dinner is the core/i, 'the old wording is gone');
-    const also = /<div class="hm-also[^"]*">([\s\S]*?)<\/div>/.exec(sec)[1];
-    assert.equal(text(/<h3 class="hm-also-h">([^<]+)<\/h3>/.exec(also)[1]), 'Also');
-    assert.deepEqual(links(also).map((l) => l.href), ['/online-search-network', '/review-tags', '/website-design'], 'the extras: Online Search Network, Review Tags, Website Design');
-    assert.deepEqual([...also.matchAll(/<b>([^<]+)<\/b>/g)].map((x) => x[1]), ['Online Search Network', 'Review Tags', 'Website Design']);
-    assert.ok(sec.indexOf('hm-also') > sec.indexOf('</ol>'), 'the extras come after the three steps');
-  });
-
-  test('"How we work": four cards in one row: fees set in advance, your words, reports in writing, month to month', () => {
-    const t = text(byId(html, 'how-we-work'));
-    assert.match(byId(html, 'how-we-work'), /<ul class="cardgrid c4 hm-how reveal">/);
-    assert.deepEqual([...byId(html, 'how-we-work').matchAll(/<h3>([\s\S]*?)<\/h3>/g)].map((x) => text(x[1])), ['Fees set in advance', 'Your call, your words', 'Reports in writing', 'Month to month'], 'four cards fill the four-column row');
-    assert.match(t, /Monthly services have a flat monthly fee, set in advance, that never moves with referrals\. Each dinner has one fixed quote\./);
-    assert.match(t, /You choose every business on your flyer drop list, and approve every word we use about your clinic\./);
-    assert.match(t, /A visit log within five business days of every field day, and a report on your referral network every month\./);
-    assert.match(t, /Monthly services run month to month, with 30 days' notice to end them\. Dinners have no monthly contract\./);
-    assert.match(byId(html, 'how-we-work'), /href="\/about#how-we-work"/);
-  });
-
-  test('who we are: what we do, in confident present tense, Grace Pediatrics, and the client portal', () => {
-    const who = byId(html, 'who-we-are');
-    assert.match(text(who), /Client work: Grace Pediatrics in Glendale Heights\. We ran its community marketing: flyers for local families, branded gift tins, an event table and QR codes that track every scan\./);
-    assert.match(text(who), /We're a local marketing company in Chicago's western suburbs\. We build referral networks around independent med spas, run flyer drops on set field days and plan private patient dinners, with the terms in writing before anything starts\. You deal with us directly, from the 15-minute call on\./);
-    assert.deepEqual(links(who).map((l) => [l.href, l.text]), [['/about', 'About us'], ['#portal', 'Your client portal']]);
+  test('after the hero, the page is the client portal: the portal, how each month breaks down, then the call band (October 22, 2026)', () => {
+    const order = [...m.matchAll(/<section\b[^>]*\sid="([^"]+)"/g)].map((x) => x[1]);
+    assert.deepEqual(order, ['portal', 'breakdown', 'call'], 'the three steps, "How we work" and "Who we are" are gone at the owner\'s request');
+    const tour = byId(html, 'breakdown');
+    assert.equal(text(/<h2 id="breakdown-h">([\s\S]*?)<\/h2>/.exec(tour)[1]), 'How every month breaks down.');
+    assert.deepEqual([...tour.matchAll(/<h3>([^<]+)<\/h3>/g)].map((x) => x[1]), ['Leads by neighborhood', 'Drop timeline', 'Your leads', 'Month by month']);
+    assert.deepEqual(tags(tour, 'img').map((t) => attr(t, 'src')), ['neighborhoods', 'timeline', 'leads', 'months'].map((n) => `/assets/img/portal-${n}-800.jpg`));
+    assert.ok(text(tour).includes('Screens from our sample account: a fictional clinic, with sample businesses, leads and numbers.'));
+    assert.doesNotMatch(m, /How the flyer network is tracked|Where referral leads show up/, 'the two links out of the portal section are gone');
   });
 
   test('#call is a call to action band that leads to /contact (old /#call links land on it)', () => {
@@ -435,7 +397,7 @@ describe('/flyer-network', () => {
     const tr = byId(html, 'track');
     assert.ok(tr, '#track exists');
     const order = [...main('flyer-network.html').matchAll(/<section\b[^>]*\sid="([^"]+)"/g)].map((x) => x[1]);
-    assert.deepEqual(order.slice(0, 4), ['schedule', 'visit', 'track', 'choose'], 'tracking comes right after each visit');
+    assert.deepEqual(order.slice(0, 5), ['contract', 'track', 'schedule', 'visit', 'choose'], 'under the hero: examples from the contract, then how we track it (the owner\'s order, October 22, 2026)');
     const k = text(tr);
     assert.equal(text(/<p class="eyebrow">([\s\S]*?)<\/p>/.exec(tr)[1]), 'Tracking');
     assert.equal(text(/<h2 id="track-h">([\s\S]*?)<\/h2>/.exec(tr)[1]), 'Track every drop, flyer by flyer.');
@@ -537,8 +499,8 @@ describe('/about', () => {
     assert.match(s, /We never pay anyone for referrals, or offer anything of value in exchange for sending patients\./);
     assert.match(s, /Either side can end them with 30 days' written notice, and email counts\./);
   });
-  test('Grace Pediatrics appears only on the home page and /about', () => {
-    for (const p of PAGES.filter((x) => !['index.html', 'about.html'].includes(x.file))) assert.doesNotMatch(main(p.file), /Grace/i, p.file);
+  test('Grace Pediatrics appears only on /about', () => {
+    for (const p of PAGES.filter((x) => !['about.html'].includes(x.file))) assert.doesNotMatch(main(p.file), /Grace/i, p.file);
   });
 });
 
@@ -670,7 +632,7 @@ describe('the brand: Our Wellness Network', () => {
       if (crumbs) assert.doesNotMatch(text(crumbs[1]), /Flyer Drops|Patient Dinners|Google Ads/, `${p.file}: breadcrumbs`);
     }
     // The activity and the products keep their plain words.
-    assert.match(text(main('index.html')), /Track every drop: the log shows how many flyers went to each business\./);
+    assert.match(text(main('flyer-network.html')), /Track every drop, flyer by flyer\./);
     assert.match(text(main('patient-network.html')), /The Plus-One Dinner and the VIP Night\./);
     assert.match(text(main('online-search-network.html')), /The ads run in your clinic's Google Ads account\./);
     // The related links on the extras pages.
@@ -686,21 +648,21 @@ describe('the brand: Our Wellness Network', () => {
 /* ---------- the client portal: real screens from its sample account (October 22, 2026) ---------- */
 describe('the client portal screens', () => {
   const NOTE = 'Screens from our sample account: a fictional clinic, with sample businesses, leads and numbers.';
-  test('the home page shows the portal right after the steps, with the overview, the phone and three points', () => {
+  test('the home page shows the portal right after the hero, with the overview, the phone and three points', () => {
     const html = page['index.html'];
-    const order = [...mainOf(html).matchAll(/<section\b[^>]*\sid="([^"]+)"/g)].map((x) => x[1]);
-    assert.equal(order[order.indexOf('services') + 1], 'portal');
+    const m = mainOf(html);
+    assert.ok(m.indexOf('id="portal"') > m.indexOf('<section class="hero') && m.indexOf('id="portal"') < m.indexOf('</section>', m.indexOf('<section class="hero')) + 400, 'the portal follows the hero');
     const pt = byId(html, 'portal');
-    assert.equal(text(/<h2 id="portal-h">([\s\S]*?)<\/h2>/.exec(pt)[1]), 'Every flyer and every lead, in one place.');
+    assert.equal(text(/<h2 id="portal-h">([\s\S]*?)<\/h2>/.exec(pt)[1]), 'Every marketing material you invest in, and every lead, in one place.');
     assert.deepEqual(tags(pt, 'img').map((t) => attr(t, 'src')), ['/assets/img/portal-overview-800.jpg', '/assets/img/portal-phone-390.jpg']);
     assert.deepEqual([...pt.matchAll(/<h3>([^<]+)<\/h3>/g)].map((x) => x[1]), ['Every drop, in order', 'Every lead, by name', 'Month by month']);
     assert.ok(text(pt).includes(NOTE));
-    assert.deepEqual(links(pt).map((l) => l.href), ['/flyer-network#track', '/referral-network#portal']);
+    assert.deepEqual(links(pt).map((l) => l.href), [], 'no links out of the portal section');
   });
-  test('the referral network shows where leads land, right after how the network is built', () => {
+  test('the referral network shows the contract, then where leads land, right after how the network is built', () => {
     const html = page['referral-network.html'];
     const order = [...mainOf(html).matchAll(/<section\b[^>]*\sid="([^"]+)"/g)].map((x) => x[1]);
-    assert.equal(order[order.indexOf('process') + 1], 'portal');
+    assert.deepEqual(order.slice(order.indexOf('process'), order.indexOf('process') + 3), ['process', 'contract', 'portal']);
     const pt = byId(html, 'portal');
     assert.deepEqual(tags(pt, 'img').map((t) => attr(t, 'src')), ['/assets/img/portal-leads-800.jpg', '/assets/img/portal-neighborhoods-800.jpg']);
     assert.ok(text(pt).includes(NOTE));
@@ -722,6 +684,18 @@ describe('the client portal screens', () => {
   test('the old /client-portal page is gone and its links point at the home section', () => {
     for (const p of PAGES) assert.doesNotMatch(page[p.file], /href="\/client-portal"/, p.file);
   });
+});
+
+describe('examples from the contract', () => {
+  for (const [file, imgs] of [['flyer-network.html', ['flyer-exhibit', 'flyer-schedule']], ['referral-network.html', ['referral-list', 'referral-agreement']]]) {
+    test(`${file}: two pages from the sample contract, with honest alt text and a link to the whole sample`, () => {
+      const cx = byId(page[file], 'contract');
+      assert.deepEqual(tags(cx, 'img').map((t) => attr(t, 'src')), imgs.map((n) => `/assets/img/contract-${n}-600.jpg`));
+      for (const t of tags(cx, 'img')) assert.match(attr(t, 'alt'), /^Sample contract page: /);
+      assert.ok(links(cx).some((l) => l.href === '/sample-contract'));
+      assert.doesNotMatch(text(cx), /\$|\d+\s?%/, 'no figures beside the examples');
+    });
+  }
 });
 
 /* ---------- copy rules, site-wide ---------- */

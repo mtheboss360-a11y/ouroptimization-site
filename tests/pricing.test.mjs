@@ -87,3 +87,25 @@ describe('pricing.html', () => {
     for (const l of calls) assert.equal(l.href, '/contact?about=pricing');
   });
 });
+
+describe('sample-contract.html', () => {
+  const sc = read('sample-contract.html');
+  const st = text(mainOf(sc));
+  test('four sheets from the flyer network agreement: the cover, the schedule, the fees and the signatures', () => {
+    assert.deepEqual([...sc.matchAll(/<h3 class="sc-title[^"]*" id="sc-t\d">([^<]+)<\/h3>/g)].map((m) => m[1]), ['Marketing Services Agreement', 'The schedule', 'Fees', 'Signatures']);
+    assert.match(st, /14 businesses for each location, 28 in all, across 4 field days a month/);
+    assert.match(st, /\$1,400/);
+    assert.equal((st.match(/\$700/g) || []).length >= 3, true, 'each location at $700');
+    assert.match(st, /Nobody is paid per patient\./);
+  });
+  test('no names: a sample practice with Location A and Location B, and no phone or email in the sheets', () => {
+    assert.match(st, /Sample practice/);
+    assert.doesNotMatch(st, /Vein|Med Spa and|331-271-6851|@|Mustafa/i);
+  });
+  test('the calls go to /contact with the sample contract question, and the page points to pricing', () => {
+    const calls = links(mainOf(sc)).filter((l) => /Book a 15-minute call/.test(l.text));
+    assert.equal(calls.length, 2);
+    for (const l of calls) assert.equal(l.href, '/contact?about=sample-contract');
+    assert.ok(links(mainOf(sc)).some((l) => l.href === '/pricing'));
+  });
+});
