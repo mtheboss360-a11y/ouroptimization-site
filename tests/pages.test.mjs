@@ -206,11 +206,11 @@ describe('home page', () => {
   });
 
   test('hero: the two-line h1 and the lede, with no eyebrow and no buttons', () => {
-    assert.equal(/<h1\b[^>]*>([\s\S]*?)<\/h1>/.exec(html)[1], 'Your neighbors bring you new patients. <em>Your best patients bring the next ones.</em>');
+    assert.equal(/<h1\b[^>]*>([\s\S]*?)<\/h1>/.exec(html)[1], 'Leverage your city&rsquo;s employees. <em>Honest referrals are the best form of marketing.</em>');
     const hero = m.slice(m.indexOf('<section class="hero'), m.indexOf('</section>'));
     assert.equal(text(hero.slice(0, hero.indexOf('<h1'))).trim(), '', 'nothing above the headline (the owner took the eyebrow off, October 22, 2026)');
     const lede = text(/<p class="lede">([\s\S]*?)<\/p>/.exec(hero)[1]);
-    assert.equal(lede, 'The gym, the salon and the café down the street already know the people you want to meet. We find those businesses, sign them on as partners and keep your name at their front desk.');
+    assert.equal(lede, "Let's leverage that with new geo-tracked business partnerships, monthly visits to those businesses and a way to monitor it all.");
     assert.deepEqual(links(hero), [], 'no buttons and no sample portal: people scroll');
     assert.doesNotMatch(hero, /hero-note|Mustafa|331-271-6851|tel:/, 'no name or number under the hero: the header carries the phone');
   });
