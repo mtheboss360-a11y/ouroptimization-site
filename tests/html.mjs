@@ -14,6 +14,7 @@ export const PAGES = [
   { file: 'online-search-network.html', url: '/online-search-network', tab: 'Online Search Network' },
   { file: 'review-tags.html', url: '/review-tags', tab: 'Review Tags' },
   { file: 'website-design.html', url: '/website-design', tab: 'Website Design' },
+  { file: 'pricing.html', url: '/pricing', tab: 'Pricing' },
   { file: 'about.html', url: '/about', tab: 'About' },
   { file: 'faq.html', url: '/faq', tab: 'FAQ' },
   { file: 'contact.html', url: '/contact', tab: 'Contact' },
@@ -22,7 +23,7 @@ export const PAGES = [
   { file: 'thanks.html', url: '/thanks', tab: null },
   { file: '404.html', url: null, tab: null }
 ];
-/* The header tabs, in order: Home, the three steps (Referral Network, Flyer Network, Patient Network), the extras, then About, FAQ and Contact. */
+/* The header tabs, in order: Home, the three steps (Referral Network, Flyer Network, Patient Network), the extras, Pricing, then About, FAQ and Contact. */
 export const TABS = PAGES.filter((p) => p.tab).map((p) => [p.tab, p.url]);
 
 const ENTITIES = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ', rsquo: "'", lsquo: "'", ldquo: '"', rdquo: '"', eacute: 'é', middot: '·', copy: '©', hellip: '…' };

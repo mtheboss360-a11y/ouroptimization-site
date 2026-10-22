@@ -13,7 +13,7 @@
   var ORDER = ['name', 'clinic', 'phone', 'email', 'town', 'best_time', 'dinner', 'message'];
   var MAX = { name: 120, clinic: 150, phone: 30, email: 254, town: 120, best_time: 60, message: 2000 };
 
-  /* Links from the other pages: /contact?about=patient-network, /contact?about=flyer-network and so on.
+  /* Links from the other pages: /contact?about=patient-network, /contact?about=flyer-network, /contact?about=pricing and so on.
      Old links (/?about=review-tags#call) are redirected to /contact?about=... by netlify.toml. The keys from
      before the pages were renamed (October 22, 2026: patient-dinners, flyer-drops, google-ads) keep working
      and prefill the same message as the new key. */
@@ -24,6 +24,7 @@
     'online-search-network': "I'm asking about Google Ads.",
     'review-tags': "I'm asking about review tags.",
     'website-design': "I'm asking about a website redesign.",
+    'pricing': "I'm asking about pricing.",
     'patient-dinners': "I'm asking about the patient dinners.",
     'flyer-drops': "I'm asking about flyer drops.",
     'google-ads': "I'm asking about Google Ads."

@@ -400,13 +400,19 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 .spec svg{color:var(--slate-soft)}
 .form-aside a{color:var(--ink);font-weight:600;text-underline-offset:3px}
 
-/* small desktops: the ten tabs keep one row */
-@media (min-width:1000px) and (max-width:1139.98px){
+/* desktops: the eleven tabs keep one row. The space between them comes from space-between, not a gap. */
+@media (min-width:1000px){
+  .site-nav ul{gap:0}
+  .site-nav a{padding:0 9px}
+  .site-nav a::after{left:9px;right:9px}
+}
+/* small desktops */
+@media (min-width:1000px) and (max-width:1199.98px){
   .site-nav a{padding:0 7px;font-size:.84rem}
   .site-nav a::after{left:7px;right:7px}
 }
 /* the longest tab ("Online Search Network") needs a little less room per tab just above the menu breakpoint */
-@media (min-width:1000px) and (max-width:1069.98px){
+@media (min-width:1000px) and (max-width:1099.98px){
   .site-nav a{padding:0 5px;font-size:.81rem;letter-spacing:0}
   .site-nav a::after{left:5px;right:5px}
 }
@@ -1152,3 +1158,49 @@ table,.tnum{font-variant-numeric:tabular-nums}
 .foot-col h2{font-size:.9rem}
 .tp-place{font-size:.72rem;font-weight:500}
 .fd-table thead th{font-size:.82rem}
+
+/* ---------- pricing page (/pricing) ---------- */
+/* The two plans side by side (the starter month, then the referral network), the three add-ons in a row,
+   and the price itself in Playfair with the period beside it in Inter. Prices appear on this page only. */
+.pr-plans{display:grid;gap:16px}
+@media (min-width:820px){.pr-plans{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.pr-plan,.pr-addon{display:flex;flex-direction:column;min-width:0;padding:clamp(24px,3vw,36px);border-radius:18px;background:#fff;border:1px solid var(--line);box-shadow:0 1px 2px rgba(28,58,44,.06),0 24px 44px -32px rgba(28,58,44,.34)}
+.pr-plan-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+.pr-plan-top svg{width:30px;height:30px;flex:none;color:var(--slate-soft)}
+.pr-plan h3{font-size:clamp(1.5rem,1.28rem + .8vw,1.9rem);line-height:1.12;letter-spacing:-.022em}
+.pr-amt{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;margin-top:14px}
+.pr-num{font:500 clamp(2.7rem,2.2rem + 1.8vw,3.5rem)/1 var(--hero);letter-spacing:-.02em;color:var(--ink);font-variant-numeric:lining-nums tabular-nums}
+.pr-num.pr-word{font-size:clamp(1.75rem,1.5rem + .9vw,2.2rem);line-height:1.1}
+.pr-per{font-size:.98rem;line-height:1.4;color:var(--ink-3)}
+.pr-list{list-style:none;margin-top:24px;border-top:1px solid var(--line-soft)}
+.pr-list li{display:flex;align-items:flex-start;gap:11px;padding:12px 0;border-bottom:1px solid var(--line-soft);font-size:.97rem;line-height:1.5;text-wrap:pretty}
+.pr-list svg{width:18px;height:18px;flex:none;margin-top:3px;color:var(--gold-sm)}
+.pr-list b{color:var(--ink);font-weight:600}
+.pr-feature{background:var(--ink);border-color:var(--ink);color:#C3D2C6;box-shadow:0 30px 60px -38px rgba(28,58,44,.6)}
+.pr-feature h3,.pr-feature .pr-num,.pr-feature .pr-list b{color:var(--ground)}
+.pr-feature .dn-k{color:var(--gold-bright)}
+.pr-feature .pr-plan-top svg,.pr-feature .pr-list svg{color:var(--gold-bright)}
+.pr-feature .pr-per{color:#C3D2C6}
+.pr-feature .pr-list{border-color:rgba(243,246,242,.16)}
+.pr-feature .pr-list li{border-color:rgba(243,246,242,.16);color:#DCE6DE}
+.pr-feature :focus-visible{outline-color:var(--gold-bright)}
+.pr-cta{margin-top:auto;padding-top:26px}
+.pr-cta .btn{width:100%}
+.pr-flat{display:flex;align-items:flex-start;gap:12px;max-width:760px;margin-top:26px;font-size:1rem;line-height:1.55;color:var(--ink-2)}
+.pr-flat svg{width:20px;height:20px;flex:none;margin-top:2px;color:var(--gold-sm)}
+.pr-flat b{color:var(--ink);font-weight:600}
+.pr-addons{list-style:none;display:grid;gap:16px}
+@media (min-width:960px){.pr-addons{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.pr-addon h3{font-size:1.22rem;line-height:1.3}
+.pr-addon .pr-amt{margin-top:12px}
+.pr-addon .pr-num{font-size:clamp(2.3rem,2rem + 1vw,2.8rem)}
+.pr-addon .pr-num.pr-word{font-size:clamp(1.6rem,1.45rem + .5vw,1.85rem)}
+.pr-addon>p:not(.pr-amt){margin:16px 0 24px;font-size:.96rem;line-height:1.6;text-wrap:pretty}
+.pr-addon .textlink{align-self:flex-start;margin-top:auto}
+.pr-why{margin-top:clamp(40px,5vw,60px);align-items:start}
+.pr-why-h{font-size:clamp(1.3rem,1.15rem + .6vw,1.6rem);line-height:1.25;margin-bottom:12px}
+.pr-why p{max-width:52ch;text-wrap:pretty}
+.pr-why .spec{margin-top:0}
+#online-search .dn-note{margin-top:28px}
+#dinners .related{margin-top:22px}
+#questions .faq{margin-inline:0}
