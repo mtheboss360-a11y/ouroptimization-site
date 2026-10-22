@@ -210,11 +210,6 @@ h3{font-size:1.28rem;line-height:1.25;font-weight:600;letter-spacing:-.012em}
 /* ---------- closing cta ---------- */
 .cta-inner{max-width:720px;margin-inline:auto;text-align:center}
 .cta-inner .actions{justify-content:center}
-.contact-name{margin-top:26px;font:600 clamp(1.5rem,1.2rem + 1.2vw,2rem)/1.2 var(--display);letter-spacing:-.02em;color:var(--ground)}
-.contact-name a{text-decoration:none;color:var(--ground);white-space:nowrap;display:inline-block;padding:8px 0;margin:-8px 0}
-.contact-name .dot{margin:0 .5em;color:var(--gold-bright)}
-.contact-email{margin-top:16px;font-size:.98rem;color:#C3D2C6}
-.contact-email a{color:var(--ground);text-underline-offset:4px;word-break:break-all}
 
 .area{margin-top:26px;font-size:.82rem;letter-spacing:.02em;color:#93A896}
 
@@ -574,10 +569,6 @@ a[href^="tel:"],.nowrap{white-space:nowrap}
 .intro{text-wrap:pretty}
 @media (max-width:420px){h1{letter-spacing:-.04em}h2{letter-spacing:-.03em}}
 
-/* the small note under the hero buttons */
-.hero-note{margin-top:14px;font-size:.92rem;color:var(--ink-3);text-wrap:pretty}
-.hero-note a{color:var(--ink);font-weight:600;white-space:nowrap;text-underline-offset:3px;text-decoration-color:var(--gold)}
-
 /* the line under the hero map that says what the Restaurants chip means */
 .tp-note{margin-top:-14px;font-size:.88rem;line-height:1.5;color:var(--ink-3);text-align:center;text-wrap:balance}
 @media (max-width:767.98px){.tp-note{margin-top:12px;text-align:left}}
@@ -747,7 +738,7 @@ a[href^="tel:"],.nowrap{white-space:nowrap}
   .dn-steps p{grid-column:1/-1;margin-top:10px}
 }
 
-/* ---------- #handle: the checklist and the patient list panel ---------- */
+/* ---------- #handle: the checklist and the rep panel ---------- */
 .dn-handle{display:grid;gap:clamp(34px,4.6vw,56px)}
 @media (min-width:960px){.dn-handle{grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);align-items:end}}
 .dn-checks{list-style:none;margin-top:clamp(28px,3.6vw,40px);display:grid;column-gap:32px;border-top:1px solid var(--line)}
@@ -758,12 +749,11 @@ a[href^="tel:"],.nowrap{white-space:nowrap}
 .dn-privacy>svg{display:block;width:34px;height:34px;margin-bottom:18px;color:var(--gold-sm)}
 .dn-privacy h3{font-size:clamp(1.4rem,1.22rem + .7vw,1.75rem);line-height:1.18;letter-spacing:-.022em}
 .dn-privacy p{margin-top:14px;font-size:.98rem;line-height:1.62;color:var(--ink-2)}
-.dn-privacy .dn-rep{margin-top:18px;padding-top:16px;border-top:1px solid #E6CDD5;color:var(--ink)}
 
 /* ---------- #who ---------- */
 .dn-who .spec{margin-top:0}
 .dn-who .spec li{font-size:1rem;line-height:1.55}
-.dn-who .spec li span{min-width:0}
+.dn-who .spec li>span{min-width:0;text-wrap:pretty}
 .dn-proof{margin:26px 0 0;display:grid;grid-template-columns:minmax(96px,34%) 1fr;gap:18px;align-items:start;padding:16px;border-radius:16px;background:var(--paper);border:1px solid var(--line)}
 @media (min-width:900px){.dn-proof{grid-template-columns:180px 1fr;max-width:520px}}
 .dn-proof-img img{display:block;width:100%;height:auto;border-radius:10px}
@@ -824,9 +814,6 @@ a[href^="tel:"],.nowrap{white-space:nowrap}
 .dn-radios label:has(input:checked){border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
 .dn-radios label:has(input[aria-invalid="true"]){border-color:#A3342B;background:#FCF6F5}
 .dn-radios label:has(input:focus-visible){outline:2px solid var(--gold-sm);outline-offset:2px}
-.dn-nopatient{display:flex;align-items:center;gap:8px;margin-bottom:9px;font:600 .86rem/1.45 var(--sans);color:var(--ink)}
-.dn-nopatient svg{width:17px;height:17px;flex:none;color:var(--gold-sm)}
-.field .help+.dn-nopatient{margin-top:-4px}
 .dn-submit .est-privacy{margin-top:16px}
 @media (max-width:479.98px){.dn-submit .btn{width:100%}}
 .dn-call-aside{background:var(--paper)}
@@ -943,6 +930,8 @@ a[href^="tel:"],.nowrap{white-space:nowrap}
 .hm-step p{margin-top:10px;font-size:.97rem;line-height:1.6;text-wrap:pretty}
 .hm-step .hm-build{font-size:1rem;line-height:1.5;font-weight:600;color:var(--ink)}
 .hm-step-main{display:flex;flex-direction:column;min-width:0;flex:1}
+.hm-step .hm-track{display:flex;align-items:flex-start;gap:10px;margin-top:12px;font-size:.95rem;line-height:1.5;color:var(--ink)}
+.hm-track svg{width:20px;height:20px;flex:none;margin-top:1px;color:var(--gold-sm)}
 /* step 1, the referral network: the largest card, in the deep green, with what each partner gets */
 .hm-step-lead{background:var(--ink);border-color:var(--ink);color:#C3D2C6}
 .hm-step-lead:focus-within{outline-color:var(--gold-sm)}
@@ -1027,8 +1016,6 @@ a[href^="tel:"],.nowrap{white-space:nowrap}
 .et-shot .shot{background:#2A2A2A;box-shadow:none}
 .et-shot figcaption{margin-top:10px;font-size:.86rem;line-height:1.5;color:var(--et-text);text-wrap:pretty}
 .et-ok{margin-top:14px;font-size:.95rem;line-height:1.5;color:var(--et-gold)}
-.et-status{margin-top:26px;font-size:.95rem;line-height:1.55;color:var(--et-text)}
-.et-status b{color:var(--et-gold);font-weight:700}
 
 /* ---------- flyer drops (.fd-) ---------- */
 .fd-table-wrap{border-radius:18px;border:1px solid var(--line);background:#fff;overflow:hidden;box-shadow:0 1px 2px rgba(28,58,44,.05),0 24px 44px -34px rgba(28,58,44,.3)}
@@ -1059,10 +1046,6 @@ a[href^="tel:"],.nowrap{white-space:nowrap}
 .fd-notes svg{width:22px;height:22px;flex:none;margin-top:1px;color:var(--gold-sm)}
 .fd-notes b{color:var(--ink);font-weight:650}
 .fd-notes a{color:var(--ink);font-weight:600;text-underline-offset:3px;text-decoration-color:var(--gold)}
-.fd-log{margin-top:clamp(24px,3vw,32px);max-width:520px;padding:clamp(22px,2.8vw,28px);border-radius:18px;background:var(--blush);border:1px solid #EBD6DD}
-.fd-log>svg{display:block;width:30px;height:30px;margin-bottom:14px;color:var(--gold-sm)}
-.fd-log h3{font-size:1.3rem;line-height:1.2}
-.fd-log p{margin-top:10px;font-size:.98rem;line-height:1.6;color:var(--ink-2)}
 .fd-chips{margin-top:22px}
 .fd-chips li{font-size:.84rem;padding:6px 12px}
 .fd-rules{margin-top:0}
@@ -1072,6 +1055,27 @@ a[href^="tel:"],.nowrap{white-space:nowrap}
 .fd-supply-card{padding:clamp(22px,3vw,32px);border-radius:18px;background:var(--paper);border:1px solid var(--line)}
 .fd-supply-card h3{font-size:1.35rem;line-height:1.2}
 .fd-supply-card .dn-checks{margin-top:14px;grid-template-columns:minmax(0,1fr)}
+/* Each visit: the four steps, two by two on wider screens. */
+@media (min-width:900px){.fd-visit-steps{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.fd-visit-steps>li{align-content:start}
+.section-head .intro a{color:var(--ink);font-weight:600;text-underline-offset:3px;text-decoration-color:var(--gold)}
+/* #track: the visit log beside month by month and the partner links. */
+.fd-track{display:grid;gap:16px}
+@media (min-width:900px){.fd-track{grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr)}}
+.fd-track-log{padding:clamp(24px,3vw,36px);border-radius:18px;background:var(--blush);border:1px solid #EBD6DD}
+.fd-track-log>svg{display:block;width:30px;height:30px;margin-bottom:16px;color:var(--gold-sm)}
+.fd-track-log h3{margin-top:6px;font-size:clamp(1.4rem,1.2rem + .6vw,1.7rem);line-height:1.18;letter-spacing:-.018em}
+.fd-track-log>p:not(.dn-k){margin-top:10px;font-size:1rem;line-height:1.6;color:var(--ink-2);max-width:34em;text-wrap:pretty}
+.fd-track-log .dn-checks{margin-top:18px;grid-template-columns:minmax(0,1fr);border-top-color:#E6CDD5}
+.fd-track-log .dn-checks li{border-bottom-color:#E6CDD5;font-weight:500}
+.fd-track-more{list-style:none;display:grid;gap:16px}
+@media (min-width:640px) and (max-width:899.98px){.fd-track-more{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (min-width:900px){.fd-track-more{grid-auto-rows:1fr}}
+.fd-track-more li{padding:clamp(22px,2.6vw,30px);border-radius:18px;background:var(--paper);border:1px solid var(--line)}
+.fd-track-more svg{display:block;width:28px;height:28px;margin-bottom:14px;color:var(--slate-soft)}
+.fd-track-more h3{font-size:1.22rem;line-height:1.25}
+.fd-track-more p{margin-top:8px;font-size:.97rem;line-height:1.6;text-wrap:pretty}
+.fd-track-more a{color:var(--ink);font-weight:600;text-underline-offset:3px;text-decoration-color:var(--gold)}
 
 /* ---------- Google Ads (.ga-) ---------- */
 .cardgrid>li.ga-cherry{background:var(--ink)}
@@ -1083,7 +1087,7 @@ a[href^="tel:"],.nowrap{white-space:nowrap}
 
 /* ---------- about (.ab-) ---------- */
 .ab-contact{margin-top:0;max-width:440px}
-.ab-contact-line{margin-top:8px;font-size:.96rem;line-height:1.55;color:var(--ink-2)}
+.ab-contact-line{margin-top:8px;font-size:.96rem;line-height:1.55;color:var(--ink-2);text-wrap:pretty}
 @media (min-width:960px){.ab-contact{justify-self:end;width:100%}}
 @media (min-width:1000px){.ab-commit{grid-template-columns:repeat(3,minmax(0,1fr))}}
 

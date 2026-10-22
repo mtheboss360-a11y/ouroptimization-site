@@ -6,21 +6,6 @@
   window.__owoReady = true;
   root.classList.add('js'); /* restore it if a slow load made the head script drop it */
 
-  /* Contact email — read from data-contact-email on <html>.
-     Empty means: no email line and no mailto link, anywhere. */
-  var EMAIL = (root.getAttribute('data-contact-email') || '').trim();
-  if (/^[^\s@<>"']+@[^\s@<>"']+\.[A-Za-z]{2,}$/.test(EMAIL)) {
-    document.querySelectorAll('[data-email-slot]').forEach(function (slot) {
-      var link = document.createElement('a');
-      link.href = 'mailto:' + EMAIL;
-      link.textContent = EMAIL;
-      /* The footer lists contact lines without labels, like the phone number. */
-      if (slot.classList.contains('foot-email')) slot.append(link);
-      else slot.append('Email · ', link);
-      slot.hidden = false;
-    });
-  }
-
   /* The home page used to hold every section. Old links to those sections now open their own page
      (/#faq opens /faq). #call stays on the home page, where it is the call to action band. */
   var MOVED = {

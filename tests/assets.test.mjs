@@ -480,7 +480,9 @@ describe('legal pages', () => {
   test('privacy describes the call form on /contact, the expo form, and what we see of guests\' RSVP replies', () => {
     const t = visible('privacy.html');
     assert.match(t, /Last updated: October 22, 2026/);
-    assert.match(t, /We never receive, see or keep your patient list\./);
+    assert.doesNotMatch(t, /patient list|never receive the clinic's patient records|Ask for Mustafa|Phone: 331/i);
+    assert.match(t, /You can reach us about privacy by email at mustafa@ouroptimization\.com\./);
+    assert.match(t, /We do not ask for payment details or health information anywhere on this site\./);
     assert.match(t, /Guests who reply to an invitation/);
     assert.match(t, /we see the replies guests send there/);
     assert.match(t, /any optional extras you tick/);
@@ -497,7 +499,7 @@ describe('legal pages', () => {
     assert.match(t, /It asks no health questions/);
     assert.match(t, /You tick a box to agree that the clinic can call or text you about the offer, and the form tells you that a copy comes to us\./);
     assert.match(t, /The partner business does not receive it\./);
-    assert.match(t, /The booking and first-visit revenue numbers in that report come from the clinic as totals for each partner, so we never receive the clinic's patient records\./);
+    assert.match(t, /The booking and first-visit revenue numbers in that report come from the clinic as totals for each partner\./);
     assert.match(t, /What you send goes to that clinic's front desk by email or text, with a copy to us\./);
     assert.match(t, /When you claim an offer at a partner, the clinic making the offer receives what you send/);
   });
@@ -523,8 +525,10 @@ describe('partner network and flyer drops in the terms', () => {
     assert.match(t, /Flyer drops and the referral network have a flat monthly fee, set in advance\. It does not change with referrals, leads, bookings or revenue\./);
     assert.match(t, /Your first-visit offer and any staff perk you give partner staff, and making sure both follow the rules that apply to your clinic, including rules on fee-splitting/);
     assert.match(t, /Calling and texting the people who claim your offer: only about the offer they asked about, within the consent they gave, and stopping as soon as anyone asks you to/);
-    assert.match(t, /Sending us the bookings and first-visit revenue for the monthly partner report as totals for each partner, never names or patient records/);
-    assert.match(t, /The bookings and first-visit revenue in the monthly partner report come from your clinic as totals for each partner\. Please never send us names or patient records for it\./);
+    assert.match(t, /Sending us the bookings and first-visit revenue for the monthly partner report as totals for each partner/);
+    assert.match(t, /The bookings and first-visit revenue in the monthly partner report come from your clinic as totals for each partner\./);
+    assert.doesNotMatch(t, /never names or patient records|Please never send us names or patient records|Contact Mustafa/);
+    assert.match(t, /Contact us at mustafa@ouroptimization\.com, or through https:\/\/ouroptimization\.com\./);
     assert.match(t, /how many local businesses agree to be partners/);
     assert.match(t, /the monthly partner report, and the codes and links on offer cards, referral cards and partner stands cannot capture every response/);
     assert.match(t, /postal, email or text delivery delays or failures/);

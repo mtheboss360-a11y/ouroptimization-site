@@ -82,10 +82,12 @@ describe('/contact: the call form', () => {
     }
   });
 
-  test('the patient information line, the submit button and the call-now line', () => {
+  test('the message help, the submit button and the call-now line, with no patient information line', () => {
     const t = text(byId(html, 'call'));
-    assert.match(t, /Please don't include any patient information\./);
-    assert.match(form, /aria-describedby="call-message-help call-message-note call-message-err"/);
+    assert.doesNotMatch(t, /patient information/i);
+    assert.doesNotMatch(form, /call-message-note/);
+    assert.match(form, /<p class="help" id="call-message-help">Anything you&rsquo;d like us to know before the call\.<\/p>/);
+    assert.match(form, /aria-describedby="call-message-help call-message-err"/);
     assert.match(form, /<button class="btn btn-primary" type="submit">Book my 15-minute call<\/button>/);
     assert.match(t, /Prefer to talk now\? Call or text Mustafa at 331-271-6851\./);
     assert.match(t, /We use these details to call you back about your request\./);
@@ -102,9 +104,13 @@ describe('thanks page', () => {
     assert.match(thanks, /<link rel="stylesheet" href="\/assets\/site\.css">/);
   });
 
-  test('says Mustafa will call at the time they picked, with his number, email and a way home', () => {
+  test('says we will call at the time they picked, with our number, email and a way home', () => {
     const t = text(thanks.slice(thanks.indexOf('<main'), thanks.indexOf('</main>')));
-    assert.match(t, /Mustafa will call you at the time you picked/);
+    assert.equal(text(/<h1\b[^>]*>([\s\S]*?)<\/h1>/.exec(thanks)[1]), "Thank you. We'll call you.");
+    assert.match(t, /We'll call you at the time you picked, to talk through what fits your clinic\./);
+    assert.match(t, /If that time stops working, or you'd rather talk sooner, call or text us at 331-271-6851\./);
+    assert.doesNotMatch(t, /Mustafa/, 'the page says "we"');
+    assert.doesNotMatch(t, /patient information/i);
     assert.match(thanks, /<a href="tel:\+13312716851">331-271-6851<\/a>/);
     assert.match(thanks, /<a href="mailto:mustafa@ouroptimization\.com">mustafa@ouroptimization\.com<\/a>/);
     assert.match(thanks, /<a class="btn btn-primary" href="\/">Back to the home page<\/a>/);

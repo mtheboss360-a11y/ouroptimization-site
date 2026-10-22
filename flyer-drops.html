@@ -44,7 +44,7 @@
 <symbol id="i-route" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="25" r="2.5"/><circle cx="25" cy="7" r="2.5"/><path d="M9.5 25H20a4.5 4.5 0 0 0 0-9h-8a4.5 4.5 0 0 1 0-9h10.5" stroke-dasharray="3 3"/></g></symbol>
 <symbol id="i-check" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
 <symbol id="i-heart" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 26.5S4.5 19.8 4.5 12.2A5.8 5.8 0 0 1 16 10a5.8 5.8 0 0 1 11.5 2.2C27.5 19.8 16 26.5 16 26.5z"/></g></symbol>
-<symbol id="i-lock" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="6.5" y="14" width="19" height="13.5" rx="2.5"/><path d="M10.5 14v-3.5a5.5 5.5 0 0 1 11 0V14"/><path d="M16 19v3.5"/></g></symbol>
+<symbol id="i-qr" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="8.5" height="8.5" rx="1"/><rect x="18.5" y="5" width="8.5" height="8.5" rx="1"/><rect x="5" y="18.5" width="8.5" height="8.5" rx="1"/><path d="M8.5 8.5h1.5v1.5H8.5zM22 8.5h1.5v1.5H22zM8.5 22h1.5v1.5H8.5z"/><path d="M18.5 18.5h3v3h-3zM27 18.5v3M18.5 27h3.5M25 25v2h2"/></g></symbol>
 <symbol id="i-arrow" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15M6 13.5l6 6 6-6"/></symbol>
 </svg>
 
@@ -93,7 +93,7 @@
       <ul>
         <li><svg aria-hidden="true"><use href="#i-pin"/></svg><span><b>14 businesses for each location,</b> and you choose every one.</span></li>
         <li><svg aria-hidden="true"><use href="#i-booking"/></svg><span><b>Two field days a month</b> for each location, seven businesses a day.</span></li>
-        <li><svg aria-hidden="true"><use href="#i-print"/></svg><span><b>A visit log</b> within five business days of each field day.</span></li>
+        <li><svg aria-hidden="true"><use href="#i-track"/></svg><span><b>Every drop tracked:</b> a visit log within five business days of each field day.</span></li>
         <li><svg aria-hidden="true"><use href="#i-offer"/></svg><span><b>A flat monthly fee,</b> month to month, with 30 days&rsquo; notice to end it.</span></li>
       </ul>
     </aside>
@@ -132,19 +132,14 @@
 
 <!-- ===== Each visit, and the visit log ===== -->
 <section class="section" aria-labelledby="visit-h" id="visit">
-  <div class="wrap dn-how">
-    <div class="dn-how-head reveal">
+  <div class="wrap">
+    <div class="section-head reveal">
       <div class="rule" aria-hidden="true"></div>
       <p class="eyebrow">Each visit</p>
       <h2 id="visit-h">The same people, <em class="dn-line">every month.</em></h2>
-      <p class="intro">At each visit our representative does four things, and you get a log of all of it.</p>
-      <div class="fd-log">
-        <svg aria-hidden="true"><use href="#i-track"/></svg>
-        <h3>Your visit log</h3>
-        <p>Within five business days of each field day you get a visit log: every business visited, who was spoken to, what was left, and any <span class="nowrap">follow-up</span> asked for.</p>
-      </div>
+      <p class="intro">At each visit our representative does four things, and every visit goes in your <a href="#track">visit log</a>.</p>
     </div>
-    <ol class="dn-steps reveal">
+    <ol class="dn-steps fd-visit-steps reveal">
       <li>
         <span class="dn-step-n" aria-hidden="true">01</span>
         <h3><svg aria-hidden="true"><use href="#i-print"/></svg>Deliver and restock</h3>
@@ -166,6 +161,43 @@
         <p>The next month, our representative returns to the same people, so the relationship builds instead of starting over.</p>
       </li>
     </ol>
+  </div>
+</section>
+
+<!-- ===== Track every drop ===== -->
+<section class="section bg-stone" aria-labelledby="track-h" id="track">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="rule" aria-hidden="true"></div>
+      <p class="eyebrow">Tracking</p>
+      <h2 id="track-h">Track every drop, <em class="dn-line">flyer by flyer.</em></h2>
+      <p class="intro">See exactly how many flyers you&rsquo;re dropping off, and at which businesses. It all comes to you in writing.</p>
+    </div>
+    <div class="fd-track reveal">
+      <div class="fd-track-log">
+        <svg aria-hidden="true"><use href="#i-track"/></svg>
+        <p class="dn-k">After every field day</p>
+        <h3>Your visit log</h3>
+        <p>Within five business days of each field day, you get a visit log. It lists every business visited, and for each one:</p>
+        <ul class="dn-checks" aria-label="What the visit log shows for each business">
+          <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>Who we spoke with</span></li>
+          <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>How many flyers we left there</span></li>
+          <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>Any <span class="nowrap">follow-up</span> they asked for</span></li>
+        </ul>
+      </div>
+      <ul class="fd-track-more">
+        <li>
+          <svg aria-hidden="true"><use href="#i-booking"/></svg>
+          <h3>Month by month</h3>
+          <p>Every log counts the flyers, so month by month you can see how many went out and where.</p>
+        </li>
+        <li>
+          <svg aria-hidden="true"><use href="#i-qr"/></svg>
+          <h3>Each partner, its own link</h3>
+          <p>With a <a href="/referral-network">referral network</a> too, each partner&rsquo;s QR code and NFC tag carry its own link, so every lead from it shows which partner it came from.</p>
+        </li>
+      </ul>
+    </div>
   </div>
 </section>
 
@@ -212,7 +244,7 @@
         <ul class="dn-checks">
           <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>The representative, the vehicle, the mileage and the time for every field day.</span></li>
           <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>The driving routes, planned around your list.</span></li>
-          <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>A visit log after every field day.</span></li>
+          <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>A visit log after every field day, with the flyers counted.</span></li>
         </ul>
       </div>
     </div>
@@ -230,7 +262,7 @@
     <ul class="cardgrid c4 reveal">
       <li><svg aria-hidden="true"><use href="#i-language"/></svg><h3>Approved words only</h3><p>Our representative talks about your clinic only in the words you approve. No medical claim, outcome, price or guarantee beyond your approved materials.</p></li>
       <li><svg aria-hidden="true"><use href="#i-heart"/></svg><h3>No medical advice</h3><p>No diagnosis, and no talk about anyone&rsquo;s treatment.</p></li>
-      <li><svg aria-hidden="true"><use href="#i-lock"/></svg><h3>No patient information</h3><p>We don&rsquo;t need or want protected health information, and none is required.</p></li>
+      <li><svg aria-hidden="true"><use href="#i-print"/></svg><h3>Yours to keep</h3><p>Your list, materials, photos, content and logos belong to your clinic, during and after.</p></li>
       <li><svg aria-hidden="true"><use href="#i-offer"/></svg><h3>A flat monthly fee</h3><p>Set in advance. It never moves with referrals, and no part of it goes to a business or anyone we visit. Month to month, with 30 days&rsquo; written notice to end it.</p></li>
     </ul>
   </div>
@@ -264,8 +296,6 @@
       <p class="eyebrow">Get started</p>
       <h2 id="cta-h">Let&rsquo;s talk about your list.</h2>
       <p class="intro">Tell us about your clinic and the businesses you want your name in front of. It starts with a <span class="nowrap">15-minute call</span>, and flyer drops are quoted for your clinic before they start.</p>
-      <p class="contact-name">Mustafa<span class="dot" aria-hidden="true">&middot;</span><a href="tel:+13312716851">331-271-6851</a></p>
-      <p class="contact-email" data-email-slot hidden></p>
       <div class="actions">
         <a class="btn btn-light" href="/contact?about=flyer-drops">Book a 15-minute call</a>
         <a class="btn btn-outline-light" href="/faq#flyer-drops-faq">Flyer drop questions</a>
@@ -283,7 +313,7 @@
         <p>Referral networks, flyer drops and patient dinners for independent med spas, from Chicago&rsquo;s western suburbs.</p>
       </div>
       <div class="foot-col">
-        <h2>Talk to Mustafa</h2>
+        <h2>Contact</h2>
         <ul>
           <li><a href="tel:+13312716851">Call or text 331-271-6851</a></li>
           <li><a class="foot-mail" href="mailto:mustafa@ouroptimization.com">mustafa@ouroptimization.com</a></li>

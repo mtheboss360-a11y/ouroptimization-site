@@ -300,7 +300,8 @@ await scenario('/estimate?package=website (a retired page) lands on /contact wit
 await scenario('/thanks loads on its own: noindex, the promise, and a way home', async () => {
   const { page, jsErrors, missing, close } = await open({ path: '/thanks' });
   assert.equal(await page.$eval('meta[name="robots"]', (m) => m.content), 'noindex');
-  assert.match(await page.textContent('main'), /Mustafa will call you at the time you picked/);
+  assert.match(await page.textContent('main'), /We’ll call you at the time you picked/);
+  assert.doesNotMatch(await page.textContent('main'), /Mustafa/);
   assert.equal(await page.$eval('main a[href^="tel:"]', (a) => a.getAttribute('href')), 'tel:+13312716851');
   assert.equal(await page.$eval('main a.btn-primary', (a) => a.getAttribute('href')), '/');
   assert.deepEqual(jsErrors, []);
