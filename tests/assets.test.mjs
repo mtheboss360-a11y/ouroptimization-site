@@ -34,13 +34,15 @@ const FAVICON_LINKS = [
   { rel: 'manifest', href: '/site.webmanifest?v=own1' }
 ];
 
-// Images that were removed. Nothing may link to them again: the AI hero, and the client stand photo
-// that /review-tags showed until October 22, 2026 (replaced by a sample stand mockup).
+// Images that were removed. Nothing may link to them again: the AI hero, the client stand photo
+// that /review-tags showed until October 22, 2026 (replaced by a sample stand mockup), and the ETHR LAB mockups
+// (the example came off /referral-network on October 22, 2026, at the owner's request).
 const REMOVED = ['assets/img/hero-town.png', 'assets/img/hero-town.webp', 'assets/img/hero-town-700.webp',
-  'assets/img/review-stand.jpg', 'assets/img/review-stand.webp', 'assets/img/review-stand-600.jpg', 'assets/img/review-stand-600.webp'];
+  'assets/img/review-stand.jpg', 'assets/img/review-stand.webp', 'assets/img/review-stand-600.jpg', 'assets/img/review-stand-600.webp',
+  ...['stand', 'tap'].flatMap((n) => [`assets/img/ethr-mockup-${n}.jpg`, `assets/img/ethr-mockup-${n}.webp`, `assets/img/ethr-mockup-${n}-600.jpg`, `assets/img/ethr-mockup-${n}-600.webp`])];
 
 // The pages of the site (the multi-page site of October 22, 2026), and the clean URL of each.
-const KEPT = ['404.html', 'about.html', 'contact.html', 'expo-vendors.html', 'faq.html', 'flyer-network.html', 'online-search-network.html', 'index.html',
+const KEPT = ['404.html', 'about.html', 'client-portal.html', 'contact.html', 'expo-vendors.html', 'faq.html', 'flyer-network.html', 'online-search-network.html', 'index.html',
   'patient-network.html', 'privacy.html', 'referral-network.html', 'review-tags.html', 'terms.html', 'thanks.html', 'website-design.html'];
 const CLEAN = ['/', '/referral-network', '/flyer-network', '/patient-network', '/online-search-network', '/review-tags', '/website-design', '/about',
   '/faq', '/contact', '/privacy', '/terms', '/thanks', '/expo-vendors'];
@@ -690,23 +692,5 @@ describe('review tags: the sample stand mockup and the NFC explainer', () => {
     for (const page of pages) assert.doesNotMatch(read(page), /\/review-tags#in-use/, page);
     for (const page of ['faq.html', 'referral-network.html']) assert.match(read(page), /href="\/review-tags#nfc"/, page);
     assert.match(read('assets/site.js'), /'#in-use'/, 'site.js sends old #in-use links to #nfc');
-  });
-});
-
-describe('ETHR LAB sample mockups, when present', () => {
-  const imgs = readdirSync(join(ROOT, 'assets/img')).filter((f) => f.startsWith('ethr-mockup-'));
-  test('each is a JPEG and WebP pair at 1200 and 600 pixels wide, with no EXIF, and the page states its real size', () => {
-    if (!imgs.length) return;
-    const page = read('referral-network.html');
-    for (const base of ['ethr-mockup-stand', 'ethr-mockup-tap']) {
-      const big = jpegInfo(readFileSync(join(ROOT, 'assets/img', `${base}.jpg`)));
-      const small = jpegInfo(readFileSync(join(ROOT, 'assets/img', `${base}-600.jpg`)));
-      assert.equal(big.width, 1200); assert.equal(small.width, 600);
-      assert.equal(big.exif || small.exif, false);
-      for (const f of [`${base}.webp`, `${base}-600.webp`]) assert.equal(webpInfo(readFileSync(join(ROOT, 'assets/img', f))).meta, false, f);
-      const tag = new RegExp(`<img src="/assets/img/${base}-600\\.jpg"[^>]*>`).exec(page)[0];
-      assert.equal(Number(/\swidth="(\d+)"/.exec(tag)[1]), big.width);
-      assert.equal(Number(/\sheight="(\d+)"/.exec(tag)[1]), big.height);
-    }
   });
 });

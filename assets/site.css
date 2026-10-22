@@ -83,8 +83,8 @@ strong{font-weight:600;color:var(--ink)}
 .site-nav a{display:flex;align-items:center;min-height:44px;padding:0 9px;white-space:nowrap;text-decoration:none;font-weight:500;font-size:.86rem;letter-spacing:.02em;color:var(--ink);border-radius:999px;transition:color .25s ease}
 .site-nav a:hover{color:var(--gold-sm)}
 .btn-head{min-height:44px;padding:0 18px;font-size:.84rem;order:2;white-space:nowrap}
-/* the phone line in the top row of the desktop header */
-.head-tel{display:none}
+/* About, FAQ and Contact sit in the top row of the desktop header, beside the button (the phone number is in the footer) */
+.head-util{display:none}
 
 @media (max-width:999.98px){
   .btn-head{padding:0 15px;gap:8px}
@@ -119,9 +119,12 @@ strong{font-weight:600;color:var(--ink)}
   .site-header{top:-70px}
   .header-row{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;grid-template-rows:70px auto;gap:0 22px;align-items:center;min-height:0}
   .brand{grid-row:1;grid-column:1}
-  .head-tel{grid-row:1;grid-column:3;display:inline-flex;align-items:center;gap:8px;min-height:44px;font:600 .9rem/1 var(--sans);color:var(--ink);text-decoration:none;white-space:nowrap;transition:color .25s ease}
-  .head-tel svg{width:18px;height:18px;flex:none;color:var(--gold-sm)}
-  .head-tel:hover{color:var(--gold-sm)}
+  .head-util{grid-row:1;grid-column:3;display:block}
+  .head-util ul{list-style:none;display:flex;align-items:center;gap:2px}
+  .head-util a{display:flex;align-items:center;min-height:44px;padding:0 12px;border-radius:999px;font:500 .9rem/1 var(--sans);color:var(--ink);text-decoration:none;white-space:nowrap;transition:color .25s ease}
+  .head-util a:hover{color:var(--gold-sm)}
+  .head-util a[aria-current="page"]{color:var(--gold-sm);font-weight:650}
+  .site-nav .nav-util{display:none}
   .btn-head{grid-row:1;grid-column:4}
   .site-nav{grid-row:2;grid-column:1/-1;border-top:1px solid var(--line-soft)}
   /* with a large default text size the tabs wrap to a second row instead of pushing the page sideways */
@@ -400,15 +403,10 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 .spec svg{color:var(--slate-soft)}
 .form-aside a{color:var(--ink);font-weight:600;text-underline-offset:3px}
 
-/* small desktops: the ten tabs keep one row */
+/* small desktops: the tabs keep one row */
 @media (min-width:1000px) and (max-width:1139.98px){
   .site-nav a{padding:0 7px;font-size:.84rem}
   .site-nav a::after{left:7px;right:7px}
-}
-/* the longest tab ("Online Search Network") needs a little less room per tab just above the menu breakpoint */
-@media (min-width:1000px) and (max-width:1069.98px){
-  .site-nav a{padding:0 5px;font-size:.81rem;letter-spacing:0}
-  .site-nav a::after{left:5px;right:5px}
 }
 
 /* ---------- service pages ---------- */
@@ -849,8 +847,8 @@ a[href^="tel:"],.nowrap{white-space:nowrap}
    to action band, and each page's own sections. Built on the system
    above (.section, .wrap, .rule, .eyebrow, .cardgrid, .spec, .media,
    .split, the dn- components); nothing above is restyled here.
-   Prefixes: pg- every page, hm- home, rn- referral network, et- the
-   ETHR LAB example, fd- flyer drops, ga- Google Ads, ab- about,
+   Prefixes: pg- every page, hm- home, rn- referral network,
+   fd- flyer drops, ga- Google Ads, ab- about,
    fq- FAQ, ct- contact.
    ===================================================================== */
 
@@ -993,37 +991,6 @@ a[href^="tel:"],.nowrap{white-space:nowrap}
   .rn-flow>li::before{position:absolute;display:inline;margin:0}
   .rn-flow>li+li::after{display:none}
 }
-
-/* ---------- the ETHR LAB example (.et-): the studio's own look, charcoal, gold and cream ---------- */
-.et-band{--et-ink:#1E1E1E;--et-gold:#C9A74B;--et-gold-sm:#7A5F1E;--et-cream:#F6F1E7;--et-text:#E4DDCD;background:var(--et-ink);color:var(--et-text)}
-.et-band .eyebrow{color:var(--et-gold)}
-.et-band h2{color:#FBF8F1}
-.et-band .intro{color:var(--et-text)}
-.et-band :focus-visible{outline-color:var(--et-gold)}
-.et-head{max-width:780px}
-.et-mark{display:flex;flex-direction:column;gap:8px;margin-bottom:28px}
-.et-word{font:400 clamp(1.7rem,1.35rem + 1.1vw,2.2rem)/1 var(--hero);letter-spacing:.22em;color:#FBF8F1}
-.et-sub{font:700 .68rem/1.4 var(--sans);letter-spacing:.26em;text-transform:uppercase;color:var(--et-gold)}
-.et-quote{margin:clamp(30px,4vw,44px) 0 0;padding:clamp(20px,2.6vw,28px) clamp(22px,3vw,32px);max-width:780px;border-left:2px solid var(--et-gold);border-radius:0 14px 14px 0;background:rgba(251,248,241,.05)}
-.et-quote p{font:400 clamp(1.3rem,1.08rem + 1vw,1.85rem)/1.3 var(--hero);color:#FBF8F1;text-wrap:balance}
-.et-quote footer{margin-top:12px;font:700 .7rem/1.45 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--et-gold)}
-.et-grid{margin-top:clamp(28px,3.6vw,40px);display:grid;gap:14px}
-/* two columns: the kit card takes the full row; three columns: it runs down two rows and the codes card spans two columns */
-@media (min-width:640px){.et-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.et-card-kit{grid-column:1/-1}}
-@media (min-width:1040px){.et-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.et-card-kit{grid-column:auto;grid-row:span 2}.et-card-wide{grid-column:span 2}}
-.et-card{min-width:0;padding:clamp(20px,2.4vw,26px);border-radius:14px;background:var(--et-cream);color:#3A362E}
-.et-k{font:700 .66rem/1.4 var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--et-gold-sm)}
-.et-card h3{margin-top:8px;font-size:1.15rem;line-height:1.28;letter-spacing:-.01em;color:#1E1E1E}
-.et-card p{margin-top:10px;font-size:.95rem;line-height:1.58;text-wrap:pretty}
-.et-card ul{list-style:none;margin-top:12px;display:grid;gap:9px}
-.et-card li{position:relative;padding-left:18px;font-size:.95rem;line-height:1.5}
-.et-card li::before{content:"";position:absolute;left:2px;top:.6em;width:6px;height:6px;border-radius:50%;background:var(--et-gold)}
-.et-shots{margin-top:clamp(28px,3.6vw,40px);display:grid;gap:16px}
-@media (min-width:760px){.et-shots{grid-template-columns:repeat(2,minmax(0,1fr))}}
-.et-shot{margin:0}
-.et-shot .shot{background:#2A2A2A;box-shadow:none}
-.et-shot figcaption{margin-top:10px;font-size:.86rem;line-height:1.5;color:var(--et-text);text-wrap:pretty}
-.et-ok{margin-top:14px;font-size:.95rem;line-height:1.5;color:var(--et-gold)}
 
 /* ---------- flyer drops (.fd-) ---------- */
 .fd-table-wrap{border-radius:18px;border:1px solid var(--line);background:#fff;overflow:hidden;box-shadow:0 1px 2px rgba(28,58,44,.05),0 24px 44px -34px rgba(28,58,44,.3)}
