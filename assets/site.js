@@ -7,11 +7,12 @@
   root.classList.add('js'); /* restore it if a slow load made the head script drop it */
 
   /* The home page used to hold every section. Old links to those sections now open their own page
-     (/#faq opens /faq). #call stays on the home page, where it is the call to action band. */
+     (/#faq opens /faq). The home page's call band came off on October 22, 2026, so /#call opens the
+     call form on /contact, with any old query (/#call?package=website) carried along. */
   var MOVED = {
     formats: '/patient-network#formats', how: '/patient-network#how', handle: '/patient-network#handle',
     who: '/about', 'add-ons': '/referral-network', referrals: '/referral-network',
-    'flyer-drops': '/flyer-network', faq: '/faq'
+    'flyer-drops': '/flyer-network', faq: '/faq', call: '/contact#call'
   };
   var old = /^#([A-Za-z][\w-]*)(?:\?(.*))?$/.exec(window.location.hash);
   if (old && (window.location.pathname === '/' || window.location.pathname === '/index.html') &&
@@ -33,7 +34,7 @@
   }
 
   /* Old links to retired pages 301 to a page or a section (/meeting to /contact). If a redirect carried
-     the old query string after the fragment (/#call?package=website), put the query back in front
+     the old query string after the fragment (/patient-network#how?ref=x), put the query back in front
      of the # and open the section, so the visitor still lands on it. */
   var stray = /^#([A-Za-z][\w-]*)\?(.*)$/.exec(window.location.hash);
   var strayTarget = stray && document.getElementById(stray[1]);

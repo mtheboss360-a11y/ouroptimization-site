@@ -115,7 +115,7 @@ describe('thanks page', () => {
     assert.match(thanks, /<a href="tel:\+13312716851">331-271-6851<\/a>/);
     assert.match(thanks, /<a href="mailto:mustafa@ouroptimization\.com">mustafa@ouroptimization\.com<\/a>/);
     assert.match(thanks, /<a class="btn btn-primary" href="\/">Back to the home page<\/a>/);
-    assert.ok(links(thanks).some((l) => l.href === '/referral-network#process'), 'how the referral network works, on its own page');
+    assert.doesNotMatch(thanks, /class="btn btn-ghost"/, 'one way home, no "how it works" button (the owner, October 22, 2026)');
   });
 });
 
@@ -228,7 +228,7 @@ describe('call.js: message (optional)', () => {
 });
 
 describe('call.js: ?about= prefill', () => {
-  // One key for each service page (named after its URL), plus the keys from before the pages were renamed
+  // One key for each service page and the pricing page (named after its URL), plus the keys from before the pages were renamed
   // (October 22, 2026), which keep working and prefill the same message as the new key.
   const KEYS = {
     'patient-network': "I'm asking about the patient dinners.",
@@ -237,6 +237,8 @@ describe('call.js: ?about= prefill', () => {
     'online-search-network': "I'm asking about Google Ads.",
     'review-tags': "I'm asking about review tags.",
     'website-design': "I'm asking about a website redesign.",
+    'pricing': "I'm asking about pricing.",
+    'sample-contract': "I'm asking about the sample contract.",
     'patient-dinners': "I'm asking about the patient dinners.",
     'flyer-drops': "I'm asking about flyer drops.",
     'google-ads': "I'm asking about Google Ads."

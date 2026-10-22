@@ -34,29 +34,31 @@ const FAVICON_LINKS = [
   { rel: 'manifest', href: '/site.webmanifest?v=own1' }
 ];
 
-// Images that were removed. Nothing may link to them again: the AI hero, and the client stand photo
-// that /review-tags showed until October 22, 2026 (replaced by a sample stand mockup).
+// Images that were removed. Nothing may link to them again: the AI hero, the client stand photo
+// that /review-tags showed until October 22, 2026 (replaced by a sample stand mockup), and the ETHR LAB mockups
+// (the example came off /referral-network on October 22, 2026, at the owner's request).
 const REMOVED = ['assets/img/hero-town.png', 'assets/img/hero-town.webp', 'assets/img/hero-town-700.webp',
-  'assets/img/review-stand.jpg', 'assets/img/review-stand.webp', 'assets/img/review-stand-600.jpg', 'assets/img/review-stand-600.webp'];
+  'assets/img/review-stand.jpg', 'assets/img/review-stand.webp', 'assets/img/review-stand-600.jpg', 'assets/img/review-stand-600.webp',
+  ...['stand', 'tap'].flatMap((n) => [`assets/img/ethr-mockup-${n}.jpg`, `assets/img/ethr-mockup-${n}.webp`, `assets/img/ethr-mockup-${n}-600.jpg`, `assets/img/ethr-mockup-${n}-600.webp`])];
 
 // The pages of the site (the multi-page site of October 22, 2026), and the clean URL of each.
 const KEPT = ['404.html', 'about.html', 'contact.html', 'expo-vendors.html', 'faq.html', 'flyer-network.html', 'online-search-network.html', 'index.html',
-  'patient-network.html', 'privacy.html', 'referral-network.html', 'review-tags.html', 'terms.html', 'thanks.html', 'website-design.html'];
-const CLEAN = ['/', '/referral-network', '/flyer-network', '/patient-network', '/online-search-network', '/review-tags', '/website-design', '/about',
+  'patient-network.html', 'pricing.html', 'privacy.html', 'referral-network.html', 'sample-contract.html', 'review-tags.html', 'terms.html', 'thanks.html', 'website-design.html'];
+const CLEAN = ['/', '/referral-network', '/flyer-network', '/patient-network', '/online-search-network', '/review-tags', '/website-design', '/pricing', '/sample-contract', '/about',
   '/faq', '/contact', '/privacy', '/terms', '/thanks', '/expo-vendors'];
 // The pages the sitemap lists: every page people should find from a search.
-const INDEXABLE = ['/', '/referral-network', '/flyer-network', '/patient-network', '/online-search-network', '/review-tags', '/website-design', '/about', '/faq', '/contact', '/privacy', '/terms'];
+const INDEXABLE = ['/', '/referral-network', '/flyer-network', '/patient-network', '/online-search-network', '/review-tags', '/website-design', '/pricing', '/sample-contract', '/about', '/faq', '/contact', '/privacy', '/terms'];
 
 // The service pages renamed on October 22, 2026, when the brand became Our Wellness Network: old path -> new path.
 const RENAMED = { 'flyer-drops': '/flyer-network', 'patient-dinners': '/patient-network', 'google-ads': '/online-search-network' };
 
 // Retired service pages and the page (or section) each one now 301s to, with and without .html.
 const RETIRED = {
-  'how-it-works': '/patient-network#how', services: '/#services', 'community-marketing': '/referral-network', 'custom-marketing': '/referral-network',
+  'how-it-works': '/patient-network#how', services: '/', 'community-marketing': '/referral-network', 'custom-marketing': '/referral-network',
   'digital-marketing': '/online-search-network', industries: '/', examples: '/', estimate: '/contact', 'market-research': '/referral-network',
   'direct-mail': '/flyer-network', events: '/patient-network', flyers: '/flyer-network', 'marketing-kits': '/patient-network#handle', seo: '/website-design',
-  'social-media': '/#services', groupon: '/#services', 'gift-cards': '/#services', tracking: '/patient-network#handle',
-  'sample-advertisements': '/'
+  'social-media': '/', groupon: '/', 'gift-cards': '/', tracking: '/patient-network#handle',
+  'sample-advertisements': '/', 'client-portal': '/#portal'
 };
 
 // Files deleted with the retired pages (the old strategy meeting form, its script and its tests), the old SVG favicon,
@@ -521,7 +523,8 @@ describe('every kept page', () => {
       const src = read(page);
       const shows = /Integrative Wellness/.test(src.replace(/<footer[\s\S]*<\/footer>/, ''));
       if (shows) {
-        assert.match(src, /class="sample-cap">Sample design\. Integrative Wellness is a sample brand we use to show our work, not a client\./, 'a caption under the sample');
+        // The owner took the caption under the picture and the full footer off (October 22, 2026); the alt text says it.
+        assert.doesNotMatch(src, /sample-cap/, 'no caption under the sample');
         for (const [tag] of src.matchAll(/<img\b[^>]*alt="[^"]*Integrative Wellness[^"]*"/g)) assert.match(tag, /a made-up brand/, 'the alt text says it is made up');
       } else {
         assert.doesNotMatch(src, /sample brand/i, `${page} shows no sample brand, so it needs no disclosure`);
@@ -536,7 +539,9 @@ describe('legal pages', () => {
   test('terms describe the dinners and today\'s forms, not the retired services', () => {
     const t = visible('terms.html');
     assert.doesNotMatch(t, /demographic|Digital Growth Package|Groupon|Meta\b|Strategy Meeting|direct.mail|across the United States/i);
-    assert.match(t, /Each dinner is quoted for your clinic, with the restaurant and food included\./);
+    assert.match(t, /Each dinner is one flat fee, quoted for your clinic per venue, with the restaurant and food included\./);
+    assert.match(t, /Our pricing page lists our current prices/);
+    assert.doesNotMatch(t, /\$\s?\d/, 'the figures stay on the pricing page');
     assert.match(t, /Chicago's western suburbs/);
     assert.match(t, /Book a 15-minute call/);
     assert.match(t, /Last updated: October 22, 2026/);
@@ -588,7 +593,7 @@ describe('the referral network and the flyer network in the terms', () => {
   test('the service list, the clinic\'s duties and the tracking caveat cover the partner kit and the offer form', () => {
     assert.match(t, /The referral network: .*one-page agreement between your clinic and each partner that says no payment is made for a referral; a partner kit for each partner \(referral cards with its own code, and flyers and a counter stand carrying an NFC tag and a QR code linked to that partner\)/);
     assert.match(t, /The flyer network: a representative visits, in person, the businesses you choose for each location on set field days each month, delivers and restocks your printed materials, and sends you a visit log within five business days of each field day/);
-    assert.match(t, /The referral and flyer networks have a flat monthly fee, set in advance\. It does not change with referrals, leads, bookings or revenue\./);
+    assert.match(t, /The referral, flyer and online search networks have a flat monthly fee, set in advance \(for the online search network, our fee only; your ad budget goes to Google from your own account\)\. It does not change with referrals, leads, bookings or revenue\./);
     assert.match(t, /The patient network, for each patient dinner \(the Plus-One Dinner or the VIP Night\): the restaurant and the food/);
     assert.match(t, /The online search network: Google Ads, run in your clinic's own Google Ads account/);
     assert.match(t, /Your first-visit offer and any staff perk you give partner staff, and making sure both follow the rules that apply to your clinic, including rules on fee-splitting/);
@@ -675,14 +680,14 @@ describe('review tags: the sample stand mockup and the NFC explainer', () => {
     }
   });
 
-  test('"What is an NFC tag?" (#nfc): plain, the QR code optional, and the neutral ask', () => {
+  test('"What is an NFC tag?" (#nfc): plain, and the QR code optional', () => {
     const nfc = /<div class="rt-nfc" id="nfc">([\s\S]*?)<\/div>/.exec(how);
     assert.ok(nfc, '#nfc is the explainer beside the mockup');
     assert.match(nfc[1], /<h3 class="rt-nfc-h">What is an NFC tag\?<\/h3>/);
     const t = nfc[1].replace(/<[^>]+>/g, '').replace(/&rsquo;/g, "'").replace(/&ldquo;|&rdquo;/g, '"');
     assert.match(t, /Hold the top of a phone near it and the page it carries opens, with no app to download\./);
     assert.match(t, /For phones that don't read NFC, a QR code printed on the same piece, if it has one, opens the same page\./);
-    assert.match(t, /We use a neutral ask, such as "How did we do\?", so every customer gets the same ask\./);
+    assert.doesNotMatch(nfc[1], /rt-note/, 'the note under the explainer came off with the other footnotes (October 22, 2026)');
     assert.doesNotMatch(html, /A QR code on every piece|tap only/);
   });
 
@@ -690,23 +695,5 @@ describe('review tags: the sample stand mockup and the NFC explainer', () => {
     for (const page of pages) assert.doesNotMatch(read(page), /\/review-tags#in-use/, page);
     for (const page of ['faq.html', 'referral-network.html']) assert.match(read(page), /href="\/review-tags#nfc"/, page);
     assert.match(read('assets/site.js'), /'#in-use'/, 'site.js sends old #in-use links to #nfc');
-  });
-});
-
-describe('ETHR LAB sample mockups, when present', () => {
-  const imgs = readdirSync(join(ROOT, 'assets/img')).filter((f) => f.startsWith('ethr-mockup-'));
-  test('each is a JPEG and WebP pair at 1200 and 600 pixels wide, with no EXIF, and the page states its real size', () => {
-    if (!imgs.length) return;
-    const page = read('referral-network.html');
-    for (const base of ['ethr-mockup-stand', 'ethr-mockup-tap']) {
-      const big = jpegInfo(readFileSync(join(ROOT, 'assets/img', `${base}.jpg`)));
-      const small = jpegInfo(readFileSync(join(ROOT, 'assets/img', `${base}-600.jpg`)));
-      assert.equal(big.width, 1200); assert.equal(small.width, 600);
-      assert.equal(big.exif || small.exif, false);
-      for (const f of [`${base}.webp`, `${base}-600.webp`]) assert.equal(webpInfo(readFileSync(join(ROOT, 'assets/img', f))).meta, false, f);
-      const tag = new RegExp(`<img src="/assets/img/${base}-600\\.jpg"[^>]*>`).exec(page)[0];
-      assert.equal(Number(/\swidth="(\d+)"/.exec(tag)[1]), big.width);
-      assert.equal(Number(/\sheight="(\d+)"/.exec(tag)[1]), big.height);
-    }
   });
 });
