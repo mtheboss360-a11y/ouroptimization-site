@@ -19,10 +19,13 @@ const pages = readdirSync(ROOT).filter((f) => f.endsWith('.html')).sort();
 
 // The favicon block every page head carries. Root-absolute, so the 404 page works at any depth.
 // There is no SVG icon: browsers prefer an SVG over the PNG and ICO files, and the OWO mark ships as PNG and ICO only.
+// The ?v= token makes browsers fetch the icons again: they cache favicons by URL and ignore normal cache headers.
+// Bump it (here, on every page and in site.webmanifest) whenever the icon files change.
+const ICON_VERSION = 'owo2';
 const FAVICON_LINKS = [
-  { rel: 'icon', href: '/favicon.ico' },
-  { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
-  { rel: 'manifest', href: '/site.webmanifest' }
+  { rel: 'icon', href: `/favicon.ico?v=${ICON_VERSION}` },
+  { rel: 'apple-touch-icon', href: `/apple-touch-icon.png?v=${ICON_VERSION}` },
+  { rel: 'manifest', href: `/site.webmanifest?v=${ICON_VERSION}` }
 ];
 
 // Images that were removed. Nothing may link to them again: the AI hero, and the client stand photo
@@ -214,6 +217,7 @@ describe('favicon set', () => {
     const manifest = JSON.parse(read('site.webmanifest'));
     assert.ok(Array.isArray(manifest.icons) && manifest.icons.length >= 2);
     for (const icon of manifest.icons) {
+      assert.ok(icon.src.endsWith(`?v=${ICON_VERSION}`), `${icon.src} carries the icon version`);
       const path = localPath(icon.src);
       assert.ok(isFile(path), icon.src);
       const { width, height } = decodePng(readFileSync(join(ROOT, path)));
