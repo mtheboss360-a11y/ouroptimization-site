@@ -70,12 +70,6 @@
   force = true
 
 [[redirects]]
-  from = "/client-portal.html"
-  to = "/client-portal"
-  status = 301
-  force = true
-
-[[redirects]]
   from = "/about.html"
   to = "/about"
   status = 301
@@ -166,6 +160,19 @@
 # The old community marketing service pages were retired in October 2026 (their .html files are
 # deleted). Each 301s, with and without .html, straight to the page that now covers it. Point new
 # rules at the final target, never at another redirected path, so there are no chains.
+# /client-portal (its own page from October 22, 2026; the portal now shows on the home page, the flyer network and the referral network)
+[[redirects]]
+  from = "/client-portal"
+  to = "/#portal"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/client-portal.html"
+  to = "/#portal"
+  status = 301
+  force = true
+
 # /how-it-works
 [[redirects]]
   from = "/how-it-works"
