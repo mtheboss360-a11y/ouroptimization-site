@@ -98,7 +98,7 @@ describe('thanks page', () => {
   test('noindex, canonical, favicon block and the site stylesheet', () => {
     assert.match(thanks, /<meta name="robots" content="noindex">/);
     assert.match(thanks, /<link rel="canonical" href="https:\/\/ouroptimization\.com\/thanks">/);
-    for (const link of ['<link rel="icon" href="/favicon.ico?v=owo2" sizes="32x32">', '<link rel="apple-touch-icon" href="/apple-touch-icon.png?v=owo2">', '<link rel="manifest" href="/site.webmanifest?v=owo2">']) {
+    for (const link of ['<link rel="icon" href="/assets/owo-favicon.ico" sizes="16x16 32x32 48x48">', '<link rel="apple-touch-icon" href="/assets/owo-apple-touch-icon.png">', '<link rel="manifest" href="/site.webmanifest?v=owo3">']) {
       assert.ok(thanks.includes(link), link);
     }
     assert.match(thanks, /<link rel="stylesheet" href="\/assets\/site\.css">/);
