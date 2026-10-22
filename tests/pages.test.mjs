@@ -106,11 +106,11 @@ describe('every page: head, one h1, header tabs, breadcrumbs and footer', () => 
   }
 
   test('the tabs run Home, the three steps, the extras, then About, FAQ and Contact', () => {
-    assert.deepEqual(TABS.map((t) => t[0]), ['Home', 'Referral Network', 'Flyer Network', 'Patient Network', 'Online Search Network', 'Review Tags', 'Website Design', 'About', 'FAQ', 'Contact']);
-    assert.deepEqual(TABS.map((t) => t[1]), ['/', '/referral-network', '/flyer-network', '/patient-network', '/online-search-network', '/review-tags', '/website-design', '/about', '/faq', '/contact']);
+    assert.deepEqual(TABS.map((t) => t[0]), ['Home', 'Referral Network', 'Flyer Network', 'Patient Network', 'Online Search Network', 'Review Tags', 'Website Design', 'Client Portal', 'About', 'FAQ', 'Contact']);
+    assert.deepEqual(TABS.map((t) => t[1]), ['/', '/referral-network', '/flyer-network', '/patient-network', '/online-search-network', '/review-tags', '/website-design', '/client-portal', '/about', '/faq', '/contact']);
     for (const p of PAGES) {
       const nav = links(/<nav class="site-nav"[\s\S]*?<\/nav>/.exec(page[p.file])[0]).map((l) => l.text);
-      assert.deepEqual(nav.slice(0, 10), TABS.map((t) => t[0]), `${p.file}: header order`);
+      assert.deepEqual(nav.slice(0, 11), TABS.map((t) => t[0]), `${p.file}: header order`);
     }
     const pages404 = links(/<ul class="pg-links"[\s\S]*?<\/ul>/.exec(page['404.html'])[0]).map((l) => l.text);
     assert.deepEqual(pages404, TABS.slice(1).map((t) => t[0]), '404.html: the page links follow the tabs');

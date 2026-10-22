@@ -14,6 +14,7 @@ export const PAGES = [
   { file: 'online-search-network.html', url: '/online-search-network', tab: 'Online Search Network' },
   { file: 'review-tags.html', url: '/review-tags', tab: 'Review Tags' },
   { file: 'website-design.html', url: '/website-design', tab: 'Website Design' },
+  { file: 'client-portal.html', url: '/client-portal', tab: 'Client Portal' },
   { file: 'about.html', url: '/about', tab: 'About' },
   { file: 'faq.html', url: '/faq', tab: 'FAQ' },
   { file: 'contact.html', url: '/contact', tab: 'Contact' },
