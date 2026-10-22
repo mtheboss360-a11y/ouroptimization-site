@@ -523,7 +523,9 @@ describe('every kept page', () => {
       const src = read(page);
       const shows = /Integrative Wellness/.test(src.replace(/<footer[\s\S]*<\/footer>/, ''));
       if (shows) {
-        assert.match(src, /class="sample-cap">Sample design\. Integrative Wellness is a sample brand we use to show our work, not a client\./, 'a caption under the sample');
+        // The owner took the caption under the picture off (October 22, 2026); the footer line and the alt text say it.
+        assert.doesNotMatch(src, /sample-cap/, 'no caption under the sample');
+        assert.match(/<footer[\s\S]*<\/footer>/.exec(src)[0], /<p>Integrative Wellness is a sample brand used to show our work\.<\/p>/, 'the footer says it is a sample brand');
         for (const [tag] of src.matchAll(/<img\b[^>]*alt="[^"]*Integrative Wellness[^"]*"/g)) assert.match(tag, /a made-up brand/, 'the alt text says it is made up');
       } else {
         assert.doesNotMatch(src, /sample brand/i, `${page} shows no sample brand, so it needs no disclosure`);
@@ -679,14 +681,14 @@ describe('review tags: the sample stand mockup and the NFC explainer', () => {
     }
   });
 
-  test('"What is an NFC tag?" (#nfc): plain, the QR code optional, and the neutral ask', () => {
+  test('"What is an NFC tag?" (#nfc): plain, and the QR code optional', () => {
     const nfc = /<div class="rt-nfc" id="nfc">([\s\S]*?)<\/div>/.exec(how);
     assert.ok(nfc, '#nfc is the explainer beside the mockup');
     assert.match(nfc[1], /<h3 class="rt-nfc-h">What is an NFC tag\?<\/h3>/);
     const t = nfc[1].replace(/<[^>]+>/g, '').replace(/&rsquo;/g, "'").replace(/&ldquo;|&rdquo;/g, '"');
     assert.match(t, /Hold the top of a phone near it and the page it carries opens, with no app to download\./);
     assert.match(t, /For phones that don't read NFC, a QR code printed on the same piece, if it has one, opens the same page\./);
-    assert.match(t, /We use a neutral ask, such as "How did we do\?", so every customer gets the same ask\./);
+    assert.doesNotMatch(nfc[1], /rt-note/, 'the note under the explainer came off with the other footnotes (October 22, 2026)');
     assert.doesNotMatch(html, /A QR code on every piece|tap only/);
   });
 

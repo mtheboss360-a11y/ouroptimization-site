@@ -56,7 +56,7 @@ describe('pricing.html', () => {
     assert.deepEqual([...byId(src, 'online-search').matchAll(/<li><span class="num">\d+<\/span><h3>([^<]+)<\/h3>/g)].map((m) => text(m[1])),
       ["Written to Google's rules", 'Built around your name', 'Your words, approved by you', 'One clear report']);
     assert.match(s, /We write yours to those policies from the first draft, before anything goes live\./);
-    assert.match(s, /Google and Google Ads are trademarks of Google LLC, and we are not affiliated with or endorsed by Google\./);
+    assert.doesNotMatch(src, /dn-note|trademarks of Google LLC/, 'the footnote came off with the others (October 22, 2026)');
     assert.doesNotMatch(s, /\d+\s?%|\bROAS\b|click-through|\bCTR\b|cost per|top of Google|first page|guarantee|approved by Google/i);
   });
 
@@ -98,13 +98,15 @@ describe('sample-contract.html', () => {
     assert.equal((st.match(/\$700/g) || []).length >= 3, true, 'each location at $700');
     assert.match(st, /Nobody is paid per patient\./);
   });
-  test('no names: a sample practice with Location A and Location B, and no phone or email in the sheets', () => {
-    assert.match(st, /Sample practice/);
+  test('no names: your practice with Location A and Location B, and no phone or email in the sheets', () => {
+    assert.match(st, /Your practice, two locations/);
+    assert.match(st, /Your practice, Location A[\s\S]*Your practice, Location B/);
+    assert.doesNotMatch(st, /Sample practice|Sample clinic/i, 'the sheets say "your practice" (the owner, October 22, 2026)');
     assert.doesNotMatch(st, /Vein|Med Spa and|331-271-6851|@|Mustafa/i);
   });
-  test('the calls go to /contact with the sample contract question, and the page points to pricing', () => {
+  test('the call at the end goes to /contact with the sample contract question, and the page points to pricing', () => {
     const calls = links(mainOf(sc)).filter((l) => /Book a 15-minute call/.test(l.text));
-    assert.equal(calls.length, 2);
+    assert.equal(calls.length, 1, 'only the closing band: the hero has no buttons');
     for (const l of calls) assert.equal(l.href, '/contact?about=sample-contract');
     assert.ok(links(mainOf(sc)).some((l) => l.href === '/pricing'));
   });
