@@ -1479,6 +1479,7 @@ table,.tnum{font-variant-numeric:tabular-nums}
 .cx-pair{display:grid;gap:clamp(22px,3vw,36px);align-items:start}
 @media (min-width:760px){.cx-pair{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .cx-sheet{margin:0;min-width:0}
-.cx-frame{border-radius:12px;overflow:hidden;background:var(--stone);box-shadow:0 1px 2px rgba(28,58,44,.06),0 30px 50px -34px rgba(28,58,44,.45)}
+/* the images carry the sheet's own shadow on a transparent ground; a tap opens the page full size */
+.cx-frame{display:block;border-radius:12px;cursor:zoom-in}
 .cx-frame img{display:block;width:100%;height:auto}
 .cx-links{margin-top:26px}
