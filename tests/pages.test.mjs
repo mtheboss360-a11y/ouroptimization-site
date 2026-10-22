@@ -105,12 +105,33 @@ describe('every page: head, one h1, header tabs, breadcrumbs and footer', () => 
     }
   }
 
+  test('every page carries the same portal bar: the client login and the sample, both off-site', () => {
+    const barOf = (src) => /<div class="portal-bar">[\s\S]*?<\/div>\s*<\/div>/.exec(src);
+    const first = barOf(page['index.html']);
+    assert.ok(first, 'the home page has a portal bar');
+    for (const p of PAGES) {
+      const bar = barOf(page[p.file]);
+      assert.ok(bar, `${p.file}: portal bar`);
+      assert.equal(bar[0], first[0], `${p.file}: the portal bar is identical on every page`);
+    }
+    assert.deepEqual(links(first[0]).map((l) => [l.href, l.text]), [
+      ['https://www.ournetworkportal.com', 'Client Portal'],
+      ['https://sample.ournetworkportal.com', 'See a sample portal']
+    ]);
+    // The portal is a separate application on its own host, so these are the only off-site links.
+    for (const p of PAGES) {
+      const offsite = [...page[p.file].matchAll(/href="(https?:\/\/[^"]+)"/g)].map((m) => m[1])
+        .filter((h) => !h.startsWith('https://ouroptimization.com'));
+      for (const href of offsite) assert.match(href, /^https:\/\/(www|sample)\.ournetworkportal\.com$/, `${p.file}: unexpected off-site link ${href}`);
+    }
+  });
+
   test('the tabs run Home, the three steps, the extras, then About, FAQ and Contact', () => {
-    assert.deepEqual(TABS.map((t) => t[0]), ['Home', 'Referral Network', 'Flyer Network', 'Patient Network', 'Online Search Network', 'Review Tags', 'Website Design', 'Client Portal', 'About', 'FAQ', 'Contact']);
-    assert.deepEqual(TABS.map((t) => t[1]), ['/', '/referral-network', '/flyer-network', '/patient-network', '/online-search-network', '/review-tags', '/website-design', '/client-portal', '/about', '/faq', '/contact']);
+    assert.deepEqual(TABS.map((t) => t[0]), ['Home', 'Referral Network', 'Flyer Network', 'Patient Network', 'Online Search Network', 'Review Tags', 'Website Design', 'About', 'FAQ', 'Contact']);
+    assert.deepEqual(TABS.map((t) => t[1]), ['/', '/referral-network', '/flyer-network', '/patient-network', '/online-search-network', '/review-tags', '/website-design', '/about', '/faq', '/contact']);
     for (const p of PAGES) {
       const nav = links(/<nav class="site-nav"[\s\S]*?<\/nav>/.exec(page[p.file])[0]).map((l) => l.text);
-      assert.deepEqual(nav.slice(0, 11), TABS.map((t) => t[0]), `${p.file}: header order`);
+      assert.deepEqual(nav.slice(0, 10), TABS.map((t) => t[0]), `${p.file}: header order`);
     }
     const pages404 = links(/<ul class="pg-links"[\s\S]*?<\/ul>/.exec(page['404.html'])[0]).map((l) => l.text);
     assert.deepEqual(pages404, TABS.slice(1).map((t) => t[0]), '404.html: the page links follow the tabs');
@@ -177,7 +198,7 @@ describe('home page', () => {
     assert.match(text(hero.slice(0, hero.indexOf('<h1'))), /Referral networks for independent med spas\s*$/);
     const lede = text(/<p class="lede">([\s\S]*?)<\/p>/.exec(hero)[1]);
     assert.equal(lede, 'The gym, the salon and the café down the street already know the people you want to meet. We find those businesses, sign them on as partners and keep your name at their front desk.');
-    assert.deepEqual(links(hero).map((l) => [l.href, l.text]), [['/contact?about=referral-network', 'Book a 15-minute call'], ['/referral-network', 'How the referral network works']]);
+    assert.deepEqual(links(hero).map((l) => [l.href, l.text]), [['/contact?about=referral-network', 'Book a 15-minute call'], ['/referral-network', 'How the referral network works'], ['https://sample.ournetworkportal.com', 'See a sample client portal']]);
     assert.doesNotMatch(hero, /hero-note|Mustafa|331-271-6851|tel:/, 'no name or number under the hero: the header carries the phone');
   });
 
