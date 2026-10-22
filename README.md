@@ -34,7 +34,7 @@ from 500 flyers a month), and the portal's own support number is blanked out of 
 taken from the sample build at 2x and saved as `assets/img/portal-*` (JPEG and WebP, 1600 and 800 px wide;
 the phone screen at 780 and 390). There is no Google Ads view in the portal yet, so the site shows none.
 
-`/client-portal` was its own page and tab for a few hours on October 22, 2026; the owner found it unnecessary,
+Every page also carries the slim portal bar above the header ("Already a client? Client Portal · See a sample portal", linking to https://www.ournetworkportal.com and https://sample.ournetworkportal.com, the only off-site links on the site; a test checks it), and the home hero has a "See a sample client portal" button. `/client-portal` was its own page and tab for a few hours on October 22, 2026; the owner found it unnecessary,
 so it 301s to `/#portal` and the screens live on the pages above. The real ETHR LAB partner businesses are in
 the `NAME_HASHES` guard in `tests/pages.test.mjs` and must never appear on this site.
 

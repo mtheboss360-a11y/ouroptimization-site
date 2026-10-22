@@ -24,7 +24,6 @@
     'online-search-network': "I'm asking about Google Ads.",
     'review-tags': "I'm asking about review tags.",
     'website-design': "I'm asking about a website redesign.",
-    'client-portal': "I'm asking about the client portal.",
     'pricing': "I'm asking about pricing.",
     'sample-contract': "I'm asking about the sample contract.",
     'patient-dinners': "I'm asking about the patient dinners.",
