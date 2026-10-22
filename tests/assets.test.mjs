@@ -45,7 +45,7 @@ const KEPT = ['404.html', 'about.html', 'contact.html', 'expo-vendors.html', 'fa
 const CLEAN = ['/', '/referral-network', '/flyer-network', '/patient-network', '/online-search-network', '/review-tags', '/website-design', '/about',
   '/faq', '/contact', '/privacy', '/terms', '/thanks', '/expo-vendors'];
 // The pages the sitemap lists: every page people should find from a search.
-const INDEXABLE = ['/', '/referral-network', '/flyer-network', '/patient-network', '/online-search-network', '/review-tags', '/website-design', '/client-portal', '/about', '/faq', '/contact', '/privacy', '/terms'];
+const INDEXABLE = ['/', '/referral-network', '/flyer-network', '/patient-network', '/online-search-network', '/review-tags', '/website-design', '/about', '/faq', '/contact', '/privacy', '/terms'];
 
 // The service pages renamed on October 22, 2026, when the brand became Our Wellness Network: old path -> new path.
 const RENAMED = { 'flyer-drops': '/flyer-network', 'patient-dinners': '/patient-network', 'google-ads': '/online-search-network' };
