@@ -1,4 +1,4 @@
-/* Patient dinner call form (home page, #call): validation and the ?about= prefill.
+/* The call form on /contact (#call): validation and the ?about= prefill.
    Classic script, loaded with defer. No dependencies and no network calls: a valid form
    submits the normal way to /thanks (Netlify form "dinner-call"). Without JavaScript the
    browser's own required checks apply and the form still posts.
@@ -7,15 +7,21 @@
 (function () {
   'use strict';
 
-  var DINNERS = ['Plus-One Dinner', 'VIP Night', 'Not sure yet'];
+  /* The "What would you like to talk about?" radios. The field keeps its original name, "dinner",
+     so Netlify keeps one column for it across old and new submissions. */
+  var DINNERS = ['Referral network or flyer drops', 'Plus-One Dinner', 'VIP Night', 'Google Ads, review tags or a website', 'Not sure yet'];
   var ORDER = ['name', 'clinic', 'phone', 'email', 'town', 'best_time', 'dinner', 'message'];
   var MAX = { name: 120, clinic: 150, phone: 30, email: 254, town: 120, best_time: 60, message: 2000 };
 
-  /* Links from other pages and sections: /?about=website-design#call, /?about=review-tags#call, /?about=flyer-drops#call */
+  /* Links from the other pages: /contact?about=patient-dinners, /contact?about=flyer-drops and so on.
+     Old links (/?about=review-tags#call) are redirected to /contact?about=... by netlify.toml. */
   var ABOUT = {
-    'website-design': "I'm asking about a website redesign.",
+    'patient-dinners': "I'm asking about the patient dinners.",
+    'referral-network': "I'm asking about the referral network.",
+    'flyer-drops': "I'm asking about flyer drops.",
+    'google-ads': "I'm asking about Google Ads.",
     'review-tags': "I'm asking about review tags.",
-    'flyer-drops': "I'm asking about flyer drops."
+    'website-design': "I'm asking about a website redesign."
   };
 
   function str(v) { return v == null ? '' : String(v); }
@@ -65,7 +71,7 @@
         if (tooLong(name, v)) return 'Pick one of the times in the list.';
         return '';
       case 'dinner':
-        if (DINNERS.indexOf(v) === -1) return 'Choose a dinner, or Not sure yet.';
+        if (DINNERS.indexOf(v) === -1) return 'Choose what you would like to talk about, or Not sure yet.';
         return '';
       case 'message':
         if (tooLong(name, v)) return 'Keep the message to ' + MAX.message + ' characters or fewer.';
