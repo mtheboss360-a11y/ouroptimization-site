@@ -255,7 +255,7 @@ describe('home page: sections', () => {
       'Who are you?',
       'How do flyer drops work?',
       "What if I don't have a referral network yet?",
-      'Do I have to book a dinner to get flyer drops?'
+      'Do I need a dinner or Google Ads to get flyer drops?'
     ]);
     const answers = [...faq.matchAll(/<div class="answer">([\s\S]*?)<\/div>/g)].map((m) => text(m[1]));
     assert.equal(answers.length, 10);
@@ -263,7 +263,7 @@ describe('home page: sections', () => {
     assert.match(answers[7], /If you don't have a referral network yet, we build one first\./);
     assert.ok(answers[8].startsWith('We build one with you.'), 'no network yet: we build one');
     assert.match(answers[8], /mapping software and local business data/);
-    assert.ok(answers[9].startsWith('No. The dinner is separate, and flyer drops can run without one.'), 'flyer drops do not require a dinner');
+    assert.ok(answers[9].startsWith('No. Flyer drops run on their own, with Google Ads, or alongside a dinner.'), 'flyer drops need neither a dinner nor Google Ads');
     assert.match(faq, /href="\/\?about=flyer-drops#call"/, 'the flyer FAQ links to the call form with the flyer prefill');
     assert.match(answers[7], /Flyer drops are quoted for your clinic before they start\./);
     assert.ok(answers[2].startsWith('Yes.'), 'the sales evening answer is a plain yes');
@@ -346,8 +346,9 @@ describe('home page: how flyer drops work', () => {
     assert.match(t, /every two weeks, walking your clinic's flyers into the places on the list, in person/);
     assert.match(t, /referral cards with its own code/);
     assert.match(t, /We never pay a place per patient\./);
-    assert.match(t, /If you also run Google Ads with us, the two work side by side\./);
-    assert.match(t, /The ad budget goes straight to Google from your own account/);
+    assert.match(t, /Flyer drops work on their own or with Google Ads\./);
+    assert.match(t, /If you add Google Ads, the two work side by side/);
+    assert.match(t, /the ad budget goes straight to Google from your own account/i);
     assert.doesNotMatch(t, /Nothing goes in the mail|into each place/, 'no unsupported promises');
   });
   test('no price and no promised results', () => {
