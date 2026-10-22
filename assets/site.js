@@ -1,4 +1,4 @@
-/* OUR Optimization — shared site behaviour.
+/* Our Wellness Network: shared site behaviour.
    Loaded with defer on every page. No dependencies, no third-party requests. */
 (function () {
   var root = document.documentElement;
@@ -9,9 +9,9 @@
   /* The home page used to hold every section. Old links to those sections now open their own page
      (/#faq opens /faq). #call stays on the home page, where it is the call to action band. */
   var MOVED = {
-    formats: '/patient-dinners#formats', how: '/patient-dinners#how', handle: '/patient-dinners#handle',
+    formats: '/patient-network#formats', how: '/patient-network#how', handle: '/patient-network#handle',
     who: '/about', 'add-ons': '/referral-network', referrals: '/referral-network',
-    'flyer-drops': '/flyer-drops', faq: '/faq'
+    'flyer-drops': '/flyer-network', faq: '/faq'
   };
   var old = /^#([A-Za-z][\w-]*)(?:\?(.*))?$/.exec(window.location.hash);
   if (old && (window.location.pathname === '/' || window.location.pathname === '/index.html') &&

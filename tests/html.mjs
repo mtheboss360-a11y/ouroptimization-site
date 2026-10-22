@@ -9,9 +9,9 @@ export const read = (p) => readFileSync(new URL(p, ROOT), 'utf8');
 export const PAGES = [
   { file: 'index.html', url: '/', tab: 'Home' },
   { file: 'referral-network.html', url: '/referral-network', tab: 'Referral Network' },
-  { file: 'flyer-drops.html', url: '/flyer-drops', tab: 'Flyer Drops' },
-  { file: 'patient-dinners.html', url: '/patient-dinners', tab: 'Patient Dinners' },
-  { file: 'google-ads.html', url: '/google-ads', tab: 'Google Ads' },
+  { file: 'flyer-network.html', url: '/flyer-network', tab: 'Flyer Network' },
+  { file: 'patient-network.html', url: '/patient-network', tab: 'Patient Network' },
+  { file: 'online-search-network.html', url: '/online-search-network', tab: 'Online Search Network' },
   { file: 'review-tags.html', url: '/review-tags', tab: 'Review Tags' },
   { file: 'website-design.html', url: '/website-design', tab: 'Website Design' },
   { file: 'about.html', url: '/about', tab: 'About' },
@@ -22,7 +22,7 @@ export const PAGES = [
   { file: 'thanks.html', url: '/thanks', tab: null },
   { file: '404.html', url: null, tab: null }
 ];
-/* The header tabs, in order: Home, the three steps (Referral Network, Flyer Drops, Patient Dinners), the extras, then About, FAQ and Contact. */
+/* The header tabs, in order: Home, the three steps (Referral Network, Flyer Network, Patient Network), the extras, then About, FAQ and Contact. */
 export const TABS = PAGES.filter((p) => p.tab).map((p) => [p.tab, p.url]);
 
 const ENTITIES = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ', rsquo: "'", lsquo: "'", ldquo: '"', rdquo: '"', eacute: 'é', middot: '·', copy: '©', hellip: '…' };

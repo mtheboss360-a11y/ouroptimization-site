@@ -9,19 +9,24 @@
 
   /* The "What would you like to talk about?" radios. The field keeps its original name, "dinner",
      so Netlify keeps one column for it across old and new submissions. */
-  var DINNERS = ['Referral network or flyer drops', 'Plus-One Dinner', 'VIP Night', 'Google Ads, review tags or a website', 'Not sure yet'];
+  var DINNERS = ['Referral or flyer network', 'Plus-One Dinner', 'VIP Night', 'Online search network, review tags or a website', 'Not sure yet'];
   var ORDER = ['name', 'clinic', 'phone', 'email', 'town', 'best_time', 'dinner', 'message'];
   var MAX = { name: 120, clinic: 150, phone: 30, email: 254, town: 120, best_time: 60, message: 2000 };
 
-  /* Links from the other pages: /contact?about=patient-dinners, /contact?about=flyer-drops and so on.
-     Old links (/?about=review-tags#call) are redirected to /contact?about=... by netlify.toml. */
+  /* Links from the other pages: /contact?about=patient-network, /contact?about=flyer-network and so on.
+     Old links (/?about=review-tags#call) are redirected to /contact?about=... by netlify.toml. The keys from
+     before the pages were renamed (October 22, 2026: patient-dinners, flyer-drops, google-ads) keep working
+     and prefill the same message as the new key. */
   var ABOUT = {
-    'patient-dinners': "I'm asking about the patient dinners.",
+    'patient-network': "I'm asking about the patient dinners.",
     'referral-network': "I'm asking about the referral network.",
-    'flyer-drops': "I'm asking about flyer drops.",
-    'google-ads': "I'm asking about Google Ads.",
+    'flyer-network': "I'm asking about flyer drops.",
+    'online-search-network': "I'm asking about Google Ads.",
     'review-tags': "I'm asking about review tags.",
-    'website-design': "I'm asking about a website redesign."
+    'website-design': "I'm asking about a website redesign.",
+    'patient-dinners': "I'm asking about the patient dinners.",
+    'flyer-drops': "I'm asking about flyer drops.",
+    'google-ads': "I'm asking about Google Ads."
   };
 
   function str(v) { return v == null ? '' : String(v); }
