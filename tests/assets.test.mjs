@@ -39,6 +39,7 @@ const FAVICON_LINKS = [
 // (the example came off /referral-network on October 22, 2026, at the owner's request).
 const REMOVED = ['assets/img/hero-town.png', 'assets/img/hero-town.webp', 'assets/img/hero-town-700.webp',
   'assets/img/review-stand.jpg', 'assets/img/review-stand.webp', 'assets/img/review-stand-600.jpg', 'assets/img/review-stand-600.webp',
+  'assets/img/hero-map.svg',
   ...['stand', 'tap'].flatMap((n) => [`assets/img/ethr-mockup-${n}.jpg`, `assets/img/ethr-mockup-${n}.webp`, `assets/img/ethr-mockup-${n}-600.jpg`, `assets/img/ethr-mockup-${n}-600.webp`])];
 
 // The pages of the site (the multi-page site of October 22, 2026), and the clean URL of each.
@@ -592,7 +593,7 @@ describe('the referral network and the flyer network in the terms', () => {
   test('the service list, the clinic\'s duties and the tracking caveat cover the partner kit and the offer form', () => {
     assert.match(t, /The referral network: .*one-page agreement between your clinic and each partner that says no payment is made for a referral; a partner kit for each partner \(referral cards with its own code, and flyers and a counter stand carrying an NFC tag and a QR code linked to that partner\)/);
     assert.match(t, /The flyer network: a representative visits, in person, the businesses you choose for each location on set field days each month, delivers and restocks your printed materials, and sends you a visit log within five business days of each field day/);
-    assert.match(t, /The referral and flyer networks have a flat monthly fee, set in advance\. It does not change with referrals, leads, bookings or revenue\./);
+    assert.match(t, /The referral, flyer and online search networks have a flat monthly fee, set in advance \(for the online search network, our fee only; your ad budget goes to Google from your own account\)\. It does not change with referrals, leads, bookings or revenue\./);
     assert.match(t, /The patient network, for each patient dinner \(the Plus-One Dinner or the VIP Night\): the restaurant and the food/);
     assert.match(t, /The online search network: Google Ads, run in your clinic's own Google Ads account/);
     assert.match(t, /Your first-visit offer and any staff perk you give partner staff, and making sure both follow the rules that apply to your clinic, including rules on fee-splitting/);
