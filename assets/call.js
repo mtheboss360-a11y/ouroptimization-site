@@ -9,7 +9,7 @@
 
   /* The "What would you like to talk about?" radios. The field keeps its original name, "dinner",
      so Netlify keeps one column for it across old and new submissions. */
-  var DINNERS = ['Plus-One Dinner', 'VIP Night', 'Flyer drops or referral network', 'Not sure yet'];
+  var DINNERS = ['Referral network or flyer drops', 'Plus-One Dinner', 'VIP Night', 'Google Ads, review tags or a website', 'Not sure yet'];
   var ORDER = ['name', 'clinic', 'phone', 'email', 'town', 'best_time', 'dinner', 'message'];
   var MAX = { name: 120, clinic: 150, phone: 30, email: 254, town: 120, best_time: 60, message: 2000 };
 

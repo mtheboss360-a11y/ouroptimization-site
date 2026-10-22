@@ -8,9 +8,9 @@ export const read = (p) => readFileSync(new URL(p, ROOT), 'utf8');
 /* Every page of the site, with its clean URL and its tab in the header (null: no tab). */
 export const PAGES = [
   { file: 'index.html', url: '/', tab: 'Home' },
-  { file: 'patient-dinners.html', url: '/patient-dinners', tab: 'Patient Dinners' },
   { file: 'referral-network.html', url: '/referral-network', tab: 'Referral Network' },
   { file: 'flyer-drops.html', url: '/flyer-drops', tab: 'Flyer Drops' },
+  { file: 'patient-dinners.html', url: '/patient-dinners', tab: 'Patient Dinners' },
   { file: 'google-ads.html', url: '/google-ads', tab: 'Google Ads' },
   { file: 'review-tags.html', url: '/review-tags', tab: 'Review Tags' },
   { file: 'website-design.html', url: '/website-design', tab: 'Website Design' },
@@ -22,7 +22,7 @@ export const PAGES = [
   { file: 'thanks.html', url: '/thanks', tab: null },
   { file: '404.html', url: null, tab: null }
 ];
-/* The header tabs, in order. */
+/* The header tabs, in order: Home, the three steps (Referral Network, Flyer Drops, Patient Dinners), the extras, then About, FAQ and Contact. */
 export const TABS = PAGES.filter((p) => p.tab).map((p) => [p.tab, p.url]);
 
 const ENTITIES = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ', rsquo: "'", lsquo: "'", ldquo: '"', rdquo: '"', eacute: 'é', middot: '·', copy: '©', hellip: '…' };

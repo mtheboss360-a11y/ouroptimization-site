@@ -52,9 +52,11 @@ describe('/contact: the call form', () => {
     assert.ok(!hasAttr(one('message'), 'required')); assert.match(one('message'), /^<textarea/);
 
     const radios = by('dinner');
-    assert.deepEqual(radios.map((t) => attr(t, 'value')), ['Plus-One Dinner', 'VIP Night', 'Flyer drops or referral network', 'Not sure yet']);
+    // The referral network comes first (the owner's order: the steps, then the extras, then "Not sure yet").
+    assert.deepEqual(radios.map((t) => attr(t, 'value')), ['Referral network or flyer drops', 'Plus-One Dinner', 'VIP Night', 'Google Ads, review tags or a website', 'Not sure yet']);
+    assert.deepEqual([...form.matchAll(/<label><input type="radio" name="dinner" value="([^"]+)"[^>]*>([^<]+)<\/label>/g)].map((m) => m[1] === m[2]), [true, true, true, true, true], 'each label reads the same as its value');
     assert.ok(radios.every((t) => attr(t, 'type') === 'radio' && hasAttr(t, 'required')));
-    assert.deepEqual(radios.map((t) => attr(t, 'value')), call.DINNERS, 'call.js knows the same four choices');
+    assert.deepEqual(radios.map((t) => attr(t, 'value')), call.DINNERS, 'call.js knows the same five choices');
     assert.match(form, /<legend>What would you like to talk about\?<\/legend>/);
 
     for (const t of controls) {
@@ -94,7 +96,7 @@ describe('thanks page', () => {
   test('noindex, canonical, favicon block and the site stylesheet', () => {
     assert.match(thanks, /<meta name="robots" content="noindex">/);
     assert.match(thanks, /<link rel="canonical" href="https:\/\/ouroptimization\.com\/thanks">/);
-    for (const link of ['<link rel="icon" href="/favicon.ico" sizes="32x32">', '<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">', '<link rel="apple-touch-icon" href="/apple-touch-icon.png">', '<link rel="manifest" href="/site.webmanifest">']) {
+    for (const link of ['<link rel="icon" href="/favicon.ico" sizes="32x32">', '<link rel="apple-touch-icon" href="/apple-touch-icon.png">', '<link rel="manifest" href="/site.webmanifest">']) {
       assert.ok(thanks.includes(link), link);
     }
     assert.match(thanks, /<link rel="stylesheet" href="\/assets\/site\.css">/);
@@ -106,7 +108,7 @@ describe('thanks page', () => {
     assert.match(thanks, /<a href="tel:\+13312716851">331-271-6851<\/a>/);
     assert.match(thanks, /<a href="mailto:mustafa@ouroptimization\.com">mustafa@ouroptimization\.com<\/a>/);
     assert.match(thanks, /<a class="btn btn-primary" href="\/">Back to the home page<\/a>/);
-    assert.ok(links(thanks).some((l) => l.href === '/patient-dinners#how'), 'how the evening works, on its own page');
+    assert.ok(links(thanks).some((l) => l.href === '/referral-network#process'), 'how the referral network works, on its own page');
   });
 });
 
@@ -138,7 +140,8 @@ describe('call.js: module shape', () => {
   test('a complete submission passes', () => {
     assert.deepEqual(call.validateAll(valid), []);
     assert.deepEqual(call.validateAll({ ...valid, email: 'jordan@example.com', message: 'Hello', dinner: 'VIP Night' }), []);
-    assert.deepEqual(call.validateAll({ ...valid, dinner: 'Flyer drops or referral network' }), []);
+    assert.deepEqual(call.validateAll({ ...valid, dinner: 'Referral network or flyer drops' }), []);
+    assert.deepEqual(call.validateAll({ ...valid, dinner: 'Google Ads, review tags or a website' }), []);
   });
 
   test('an empty form lists the required fields, in order', () => {
@@ -197,10 +200,10 @@ describe('call.js: email (optional)', () => {
 });
 
 describe('call.js: what to talk about (required radio, field name "dinner")', () => {
-  for (const v of ['Plus-One Dinner', 'VIP Night', 'Flyer drops or referral network', 'Not sure yet']) {
+  for (const v of ['Referral network or flyer drops', 'Plus-One Dinner', 'VIP Night', 'Google Ads, review tags or a website', 'Not sure yet']) {
     test(`accepts ${v}`, () => assert.equal(errorFor('dinner', { dinner: v }), ''));
   }
-  for (const v of ['', 'Plus-One', 'vip night', 'Flyer drops', 'Something else']) {
+  for (const v of ['', 'Plus-One', 'vip night', 'Flyer drops', 'Flyer drops or referral network', 'Something else']) {
     test(`rejects ${JSON.stringify(v)}`, () => assert.notEqual(errorFor('dinner', { dinner: v }), ''));
   }
   test('the error names the question, not only dinners', () => {

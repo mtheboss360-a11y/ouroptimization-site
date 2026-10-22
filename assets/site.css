@@ -123,8 +123,16 @@ strong{font-weight:600;color:var(--ink)}
   .head-tel:hover{color:var(--gold-sm)}
   .btn-head{grid-row:1;grid-column:4}
   .site-nav{grid-row:2;grid-column:1/-1;border-top:1px solid var(--line-soft)}
-  .site-nav ul{display:flex;justify-content:space-between;gap:2px}
+  /* with a large default text size the tabs wrap to a second row instead of pushing the page sideways */
+  .site-nav ul{display:flex;flex-wrap:wrap;justify-content:space-between;gap:0 2px}
 }
+/* The expo page keeps its own brand-only header (no tab bar): pinned, at its old size and width. */
+@media (min-width:1000px){
+  .site-header:not(:has(.site-nav)){top:0}
+  .site-header:not(:has(.site-nav)) .header-row{display:flex;min-height:84px;padding-block:8px;max-width:1240px}
+  .site-header:not(:has(.site-nav)) .brand img{width:190px}
+}
+@media (min-width:1360px){.site-header:not(:has(.site-nav)) .header-row{max-width:1400px}.site-header:not(:has(.site-nav)) .brand img{width:206px}}
 
 /* ---------- shared section bits ---------- */
 .section{position:relative;padding-block:clamp(68px,9vw,116px)}
@@ -217,7 +225,7 @@ h3{font-size:1.28rem;line-height:1.25;font-weight:600;letter-spacing:-.012em}
 .foot-brand img{width:180px;height:auto;margin-bottom:16px}
 .foot-brand p{max-width:26em;margin-bottom:20px}
 
-.foot-col h3{font:600 .72rem/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--ink);margin-bottom:16px}
+.foot-col h2{font:600 .72rem/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--ink);margin-bottom:16px}
 .foot-col ul{list-style:none;display:grid;gap:10px}
 .foot-col a{text-decoration:none;color:var(--ink-2);transition:color .25s ease}
 .foot-col a:hover{color:var(--gold-sm)}
@@ -412,11 +420,11 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 
 /* ---------- home hero: the illustrated community map ---------- */
 .hero-town{padding-top:clamp(28px,5vw,64px)}
-.hero-town h1{font-size:clamp(2.3rem,1.3rem + 3.8vw,3.9rem)}
-/* two-column hero: size the headline to its column so "targeted to your" holds one line on small desktops */
-@media (min-width:960px){.hero-town h1{font-size:clamp(2.9rem,5.9vw - .25rem,3.9rem)}}
-.hero-town h1 em{font-style:normal;color:var(--gold-lg)}
-/* two-column hero: "your community." stays on one line */
+/* The headline is two sentences, the second in peony on its own line. Sized to its column so the
+   longest line, "Your neighbors bring", always fits: four lines from 320px up, no word left alone. */
+.hero-town h1{font-size:clamp(1.75rem,10vw - .25rem,3.4rem);line-height:1.05}
+@media (min-width:960px){.hero-town h1{font-size:clamp(2.5rem,4.58vw - .23rem,3.15rem)}}
+.hero-town h1 em{display:block;font-style:normal;color:var(--gold-lg)}
 .hero-town .eyebrow{margin-bottom:18px}
 @media (min-width:960px){.hero-town .hero-grid{grid-template-columns:.95fr 1.05fr}.hero-town .hero-art{max-width:600px;width:100%;margin-right:0}}
 .town{position:relative}
@@ -541,7 +549,7 @@ fieldset.field legend{padding:0;font:600 .88rem/1.4 var(--sans);color:var(--ink)
 /* ===== Final audit fixes ===== */
 
 /* Footer on tablets: brand on its own row, three link columns share the width. */
-@media (min-width:720px) and (max-width:1099.98px){.foot-top{grid-template-columns:repeat(3,1fr)}.foot-brand{grid-column:1/-1}}
+@media (min-width:720px) and (max-width:1099.98px){.foot-top{grid-template-columns:1.25fr 1.4fr .75fr}.foot-brand{grid-column:1/-1}}
 /* Stacked hero buttons on small desktops line up at equal width. */
 @media (min-width:900px) and (max-width:1119.98px){.hero .actions .btn,.page-top .actions .btn{min-width:262px}}
 
@@ -568,6 +576,7 @@ a[href^="tel:"],.nowrap{white-space:nowrap}
 
 /* the small note under the hero buttons */
 .hero-note{margin-top:14px;font-size:.92rem;color:var(--ink-3);text-wrap:pretty}
+.hero-note a{color:var(--ink);font-weight:600;white-space:nowrap;text-underline-offset:3px;text-decoration-color:var(--gold)}
 
 /* the line under the hero map that says what the Restaurants chip means */
 .tp-note{margin-top:-14px;font-size:.88rem;line-height:1.5;color:var(--ink-3);text-align:center;text-wrap:balance}
@@ -603,9 +612,12 @@ a[href^="tel:"],.nowrap{white-space:nowrap}
 
 /* R: tap-to-review tags (/review-tags). Loaded only by review-tags.html. Prefix: rt- */
 .rt-art{margin:0}
-.rt-real{margin:0;max-width:360px;justify-self:center}
-.rt-nfc-h{margin-top:28px;font-size:1.3rem;line-height:1.25}
-.rt-nfc-h+p{margin-top:8px}
+/* how it works: the sample stand mockup beside "What is an NFC tag?" (#nfc) */
+.rt-show{margin-bottom:clamp(40px,5vw,60px)}
+.rt-shot{margin:0;width:100%;max-width:440px;justify-self:center}
+@media (min-width:900px){.rt-show{grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr)}.rt-shot{max-width:420px;justify-self:start}}
+.rt-nfc-h{font-size:clamp(1.45rem,1.2rem + 1vw,2rem);line-height:1.15;letter-spacing:-.02em}
+.rt-nfc p:not(.eyebrow){margin-top:14px;max-width:38em;text-wrap:pretty}
 
 /* where they go: five spots; the odd card spans the row at two columns */
 .rt-spots>li{display:flex;flex-direction:column}
@@ -890,6 +902,22 @@ a[href^="tel:"],.nowrap{white-space:nowrap}
 .pg-next .target-strip{margin-top:0}
 .target-strip h2{font-size:1.18rem;line-height:1.3;margin-bottom:9px;font-weight:600;letter-spacing:-.014em}
 
+/* "Next step" on the three step pages: one card that leads on to the following step */
+.pg-step-next{position:relative;display:grid;gap:18px;align-items:center;padding:clamp(24px,3vw,36px);border-radius:18px;background:#fff;border:1px solid var(--line);box-shadow:0 1px 2px rgba(28,58,44,.05),0 24px 44px -34px rgba(28,58,44,.3);transition:border-color .25s ease,box-shadow .25s ease}
+@media (min-width:760px){.pg-step-next{grid-template-columns:minmax(0,1fr) auto;gap:34px}}
+.pg-step-next:hover{border-color:var(--gold);box-shadow:0 26px 44px -30px rgba(28,58,44,.42)}
+.pg-step-next:focus-within{outline:2px solid var(--gold-sm);outline-offset:3px}
+.pg-step-next .eyebrow{margin-bottom:10px}
+.pg-step-next h2{font-size:clamp(1.45rem,1.2rem + 1vw,2rem);line-height:1.15;letter-spacing:-.02em}
+.pg-step-next h2 a{color:inherit;text-decoration:none}
+.pg-step-next h2 a::after{content:"";position:absolute;inset:0;border-radius:18px}
+.pg-step-next h2 a:focus-visible{outline:none}
+.pg-step-copy>p:not(.eyebrow){margin-top:10px;font-size:1rem;line-height:1.55;max-width:40em;text-wrap:pretty}
+.pg-step-go{display:inline-flex;align-items:center;gap:10px;font:600 .95rem/1 var(--sans);color:var(--ink);white-space:nowrap}
+.pg-step-go svg{width:16px;height:16px;transform:rotate(-90deg);color:var(--gold-sm);transition:transform .25s ease}
+.pg-step-next:hover .pg-step-go svg{transform:translateX(3px) rotate(-90deg)}
+.pg-next .target-strip+.pg-step-next{margin-top:18px}
+
 /* card headings that link to their page */
 .cardgrid h3 a{color:inherit;text-underline-offset:4px;text-decoration-color:var(--gold)}
 .cardgrid h3 a:hover{color:var(--gold-sm)}
@@ -897,30 +925,55 @@ a[href^="tel:"],.nowrap{white-space:nowrap}
 /* ---------- footer: every page in "On this site" ---------- */
 .foot-pages ul{display:block;columns:2;column-gap:22px}
 .foot-pages li{margin-bottom:10px;break-inside:avoid}
+.foot-pages a{white-space:nowrap}
 @media (min-width:1100px){.foot-top{grid-template-columns:1.3fr 1fr 1.4fr .8fr}}
 
-/* ---------- home (.hm-) ---------- */
-.hm-services{list-style:none;display:grid;gap:16px}
-@media (min-width:680px){.hm-services{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (min-width:1040px){.hm-services{grid-template-columns:repeat(3,minmax(0,1fr))}}
-.hm-svc{position:relative;display:flex;flex-direction:column;min-width:0;padding:clamp(22px,2.6vw,30px);border-radius:18px;background:#fff;border:1px solid var(--line);box-shadow:0 1px 2px rgba(28,58,44,.05);transition:border-color .25s ease,box-shadow .25s ease}
-.hm-svc:hover{border-color:var(--gold);box-shadow:0 26px 44px -30px rgba(28,58,44,.42)}
-.hm-svc:focus-within{outline:2px solid var(--gold-sm);outline-offset:3px}
-.hm-svc-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
-.hm-svc-top svg{width:30px;height:30px;flex:none;color:var(--slate-soft)}
-.hm-svc h3{font-size:clamp(1.3rem,1.15rem + .5vw,1.55rem);line-height:1.15;letter-spacing:-.018em}
-.hm-svc h3 a{color:inherit;text-decoration:none}
-.hm-svc h3 a::after{content:"";position:absolute;inset:0;border-radius:18px}
-.hm-svc h3 a:focus-visible{outline:none}
-.hm-svc p{margin-top:10px;font-size:.97rem;line-height:1.6;text-wrap:pretty}
+/* ---------- home (.hm-): "What we do" as three numbered steps, then the extras ---------- */
+.hm-steps{list-style:none;display:grid;gap:16px}
+@media (min-width:760px){.hm-steps{grid-template-columns:repeat(2,minmax(0,1fr))}.hm-step-lead{grid-column:1/-1}}
+.hm-step{position:relative;display:flex;flex-direction:column;min-width:0;padding:clamp(22px,2.6vw,30px);border-radius:18px;background:#fff;border:1px solid var(--line);box-shadow:0 1px 2px rgba(28,58,44,.05);transition:border-color .25s ease,box-shadow .25s ease}
+.hm-step:hover{border-color:var(--gold);box-shadow:0 26px 44px -30px rgba(28,58,44,.42)}
+.hm-step:focus-within{outline:2px solid var(--gold-sm);outline-offset:3px}
+.hm-step-top{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.hm-step-n{display:inline-grid;place-items:center;flex:none;width:44px;height:44px;border-radius:50%;border:1.5px solid var(--gold);font:650 1.3rem/1 var(--display);color:var(--gold-sm)}
+.hm-step h3{font-size:clamp(1.35rem,1.15rem + .6vw,1.65rem);line-height:1.15;letter-spacing:-.018em}
+.hm-step h3 a{color:inherit;text-decoration:none}
+.hm-step h3 a::after{content:"";position:absolute;inset:0;border-radius:18px}
+.hm-step h3 a:focus-visible{outline:none}
+.hm-step p{margin-top:10px;font-size:.97rem;line-height:1.6;text-wrap:pretty}
+.hm-step .hm-build{font-size:1rem;line-height:1.5;font-weight:600;color:var(--ink)}
+.hm-step-main{display:flex;flex-direction:column;min-width:0;flex:1}
+/* step 1, the referral network: the largest card, in the deep green, with what each partner gets */
+.hm-step-lead{background:var(--ink);border-color:var(--ink);color:#C3D2C6}
+.hm-step-lead:focus-within{outline-color:var(--gold-sm)}
+.hm-step-lead h3{color:var(--ground);font-size:clamp(1.75rem,1.3rem + 1.5vw,2.45rem);letter-spacing:-.025em}
+.hm-step-lead .dn-k{color:var(--gold-bright)}
+.hm-step-lead .hm-step-n{width:54px;height:54px;font-size:1.65rem;border-color:var(--gold-bright);color:var(--gold-bright)}
+.hm-step-lead .hm-build{font-size:1.08rem;color:var(--gold-bright)}
+.hm-step-lead p{max-width:36em}
+.hm-step-lead .hm-more{color:var(--ground)}
+.hm-step-lead .hm-more svg{color:var(--gold-bright)}
+.hm-kit{list-style:none;margin-top:24px;border-top:1px solid rgba(243,246,242,.16)}
+.hm-kit li{display:flex;align-items:flex-start;gap:12px;padding:13px 0;border-bottom:1px solid rgba(243,246,242,.16);font-size:.97rem;line-height:1.5;color:var(--ground);text-wrap:pretty}
+.hm-kit svg{width:22px;height:22px;flex:none;margin-top:1px;color:var(--gold-bright)}
+@media (min-width:960px){
+  .hm-step-lead{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(30px,4vw,60px);align-items:center;padding:clamp(32px,3.6vw,46px)}
+  .hm-kit{margin-top:0}
+}
 .hm-more{margin-top:auto;padding-top:20px;display:inline-flex;align-items:center;gap:9px;font:600 .9rem/1 var(--sans);color:var(--ink)}
 .hm-more svg{width:14px;height:14px;transform:rotate(-90deg);color:var(--gold-sm);transition:transform .25s ease}
-.hm-svc:hover .hm-more svg{transform:translateX(3px) rotate(-90deg)}
-.hm-svc-core{background:var(--ink);border-color:var(--ink);color:#C3D2C6}
-.hm-svc-core h3{color:var(--ground)}
-.hm-svc-core .dn-k,.hm-svc-core .hm-svc-top svg,.hm-svc-core .hm-more svg{color:var(--gold-bright)}
-.hm-svc-core .hm-more{color:var(--ground)}
-.hm-svc-core:focus-within{outline-color:var(--gold-sm)}
+.hm-step:hover .hm-more svg{transform:translateX(3px) rotate(-90deg)}
+/* the extras, smaller, after the three steps */
+.hm-also{margin-top:clamp(26px,3.4vw,38px);display:grid;gap:12px}
+@media (min-width:1000px){.hm-also{grid-template-columns:auto minmax(0,1fr);align-items:center;gap:26px}}
+.hm-also-h{font:700 .74rem/1.5 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--gold-sm)}
+.hm-also ul{list-style:none;display:grid;gap:10px}
+@media (min-width:700px){.hm-also ul{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.hm-also a{display:flex;align-items:flex-start;gap:12px;height:100%;padding:14px 16px;border-radius:14px;border:1px solid var(--line);background:var(--ground);text-decoration:none;color:var(--ink-2);font-size:.9rem;line-height:1.45;text-wrap:pretty;transition:border-color .25s ease}
+.hm-also a:hover{border-color:var(--gold)}
+.hm-also a:hover b{color:var(--gold-sm)}
+.hm-also svg{width:22px;height:22px;flex:none;margin-top:2px;color:var(--slate-soft)}
+.hm-also b{display:block;margin-bottom:3px;font:650 1.02rem/1.25 var(--display);color:var(--ink);transition:color .25s ease}
 .hm-how-link{margin-top:28px}
 .hm-who{align-items:center}
 .hm-who-link{margin-top:24px}
@@ -973,6 +1026,7 @@ a[href^="tel:"],.nowrap{white-space:nowrap}
 .et-shot{margin:0}
 .et-shot .shot{background:#2A2A2A;box-shadow:none}
 .et-shot figcaption{margin-top:10px;font-size:.86rem;line-height:1.5;color:var(--et-text);text-wrap:pretty}
+.et-ok{margin-top:14px;font-size:.95rem;line-height:1.5;color:var(--et-gold)}
 .et-status{margin-top:26px;font-size:.95rem;line-height:1.55;color:var(--et-text)}
 .et-status b{color:var(--et-gold);font-weight:700}
 
@@ -1048,7 +1102,7 @@ a[href^="tel:"],.nowrap{white-space:nowrap}
 .ct-area{display:flex;align-items:flex-start;gap:10px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line-soft);font-size:.9rem;line-height:1.5;color:var(--ink-3)}
 .ct-area svg{width:18px;height:18px;flex:none;margin-top:1px;color:var(--gold-sm)}
 
-/* /review-tags #in-use: the notes under the intro (the pictured stand is tap only; the neutral ask) */
+/* /review-tags #nfc: the note on the neutral ask */
 .rt-note{margin-top:12px;font-size:.98rem;line-height:1.6;max-width:40em;text-wrap:pretty}
 
 /* a row of page links, as on the 404 page */
@@ -1056,3 +1110,17 @@ a[href^="tel:"],.nowrap{white-space:nowrap}
 .pg-links a{display:inline-flex;align-items:center;min-height:40px;padding:0 15px;border-radius:999px;border:1px solid var(--line);background:var(--paper);font:600 .86rem/1 var(--sans);color:var(--ink);text-decoration:none;transition:border-color .25s ease,color .25s ease}
 .pg-links a:hover{border-color:var(--gold);color:var(--gold-sm)}
 @media (min-width:960px){.ab-who{align-items:center}}
+
+/* ---------- October 22, 2026 review fixes ---------- */
+/* Review Tags and Website Design use the older service hero: line their crumb, h1 and buttons up with the other tabs. */
+.page-top.svc-hero{padding-top:clamp(26px,3.6vw,48px)}
+@media (min-width:900px){.svc-hero .media{align-items:start}}
+@media (min-width:900px) and (max-width:1119.98px){.svc-hero .actions .btn{min-width:0}}
+/* No word left alone on the last line of short text blocks (the brief's seven FAQ entries keep their wrapping). */
+.fd-table caption,.fq-more summary{text-wrap:balance}
+.wd-notes span,.dn-proof figcaption,.hero-town .lede,.rn-flow span{text-wrap:pretty}
+/* The Grace Pediatrics card between 600 and 899px: a narrower photo, no empty block under the caption. */
+@media (min-width:600px) and (max-width:899.98px){.dn-proof{grid-template-columns:160px 1fr;max-width:560px}}
+/* Home hero on small desktops: the two buttons stack at one shared width. */
+@media (min-width:900px) and (max-width:1119.98px){.hero-town .actions{display:grid;grid-auto-columns:max-content;justify-content:start}.hero-town .actions .btn{min-width:0}}
+.svc-hero .page-head .intro{text-wrap:pretty}

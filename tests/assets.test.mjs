@@ -1,6 +1,6 @@
 // Guard tests for the site's static assets: every local file a page points at exists,
 // every page carries the favicon set, removed images and deleted files stay removed, the
-// favicons are real artwork (the old ones had decayed into near-solid black squares), and the
+// favicons are the OWO logo mark on a cream tile (no SVG icon: browsers prefer one over the PNGs), and the
 // retired service pages (October 2026) stay retired: each has a forced 301 in netlify.toml to the
 // page that now covers it, no kept page links to one, and the sitemap lists every indexable page.
 // Zero dependencies: node:test + node:assert + node:zlib. Run from the repo root: node --test
@@ -18,23 +18,25 @@ const isFile = (p) => existsSync(join(ROOT, p)) && statSync(join(ROOT, p)).isFil
 const pages = readdirSync(ROOT).filter((f) => f.endsWith('.html')).sort();
 
 // The favicon block every page head carries. Root-absolute, so the 404 page works at any depth.
+// There is no SVG icon: browsers prefer an SVG over the PNG and ICO files, and the OWO mark ships as PNG and ICO only.
 const FAVICON_LINKS = [
   { rel: 'icon', href: '/favicon.ico' },
-  { rel: 'icon', href: '/assets/favicon.svg' },
   { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
   { rel: 'manifest', href: '/site.webmanifest' }
 ];
 
-// AI-generated images that were removed. Nothing may link to them again.
-const REMOVED = ['assets/img/hero-town.png', 'assets/img/hero-town.webp', 'assets/img/hero-town-700.webp'];
+// Images that were removed. Nothing may link to them again: the AI hero, and the client stand photo
+// that /review-tags showed until October 22, 2026 (replaced by a sample stand mockup).
+const REMOVED = ['assets/img/hero-town.png', 'assets/img/hero-town.webp', 'assets/img/hero-town-700.webp',
+  'assets/img/review-stand.jpg', 'assets/img/review-stand.webp', 'assets/img/review-stand-600.jpg', 'assets/img/review-stand-600.webp'];
 
 // The pages of the site (the multi-page site of October 22, 2026), and the clean URL of each.
 const KEPT = ['404.html', 'about.html', 'contact.html', 'expo-vendors.html', 'faq.html', 'flyer-drops.html', 'google-ads.html', 'index.html',
   'patient-dinners.html', 'privacy.html', 'referral-network.html', 'review-tags.html', 'terms.html', 'thanks.html', 'website-design.html'];
-const CLEAN = ['/', '/patient-dinners', '/referral-network', '/flyer-drops', '/google-ads', '/review-tags', '/website-design', '/about',
+const CLEAN = ['/', '/referral-network', '/flyer-drops', '/patient-dinners', '/google-ads', '/review-tags', '/website-design', '/about',
   '/faq', '/contact', '/privacy', '/terms', '/thanks', '/expo-vendors'];
 // The pages the sitemap lists: every page people should find from a search.
-const INDEXABLE = ['/', '/patient-dinners', '/referral-network', '/flyer-drops', '/google-ads', '/review-tags', '/website-design', '/about', '/faq', '/contact', '/privacy', '/terms'];
+const INDEXABLE = ['/', '/referral-network', '/flyer-drops', '/patient-dinners', '/google-ads', '/review-tags', '/website-design', '/about', '/faq', '/contact', '/privacy', '/terms'];
 
 // Retired service pages and the page (or section) each one now 301s to, with and without .html.
 const RETIRED = {
@@ -45,8 +47,8 @@ const RETIRED = {
   'sample-advertisements': '/'
 };
 
-// Files deleted with the retired pages (the old strategy meeting form, its script and its tests).
-const DELETED = ['assets/estimate.js', 'tests/estimate.test.mjs', 'tests/e2e-estimate.mjs', ...Object.keys(RETIRED).map((n) => `${n}.html`)];
+// Files deleted with the retired pages (the old strategy meeting form, its script and its tests), and the old SVG favicon.
+const DELETED = ['assets/estimate.js', 'tests/estimate.test.mjs', 'tests/e2e-estimate.mjs', 'assets/favicon.svg', ...Object.keys(RETIRED).map((n) => `${n}.html`)];
 
 /* The [[redirects]] rules in netlify.toml, as { from, to, status, force, query }. query is null, or the
    Netlify query condition ({ about: ':about' }): such a rule only applies when the URL carries those keys. */
@@ -187,8 +189,15 @@ describe('favicon set', () => {
         assert.ok(links.some((l) => l.rel === want.rel && l.href === want.href), `<link rel="${want.rel}" href="${want.href}">`);
       }
       assert.ok(!links.some((l) => /icon/.test(l.rel || '') && !l.href.startsWith('/')), 'icon links are root-absolute');
+      assert.ok(!links.some((l) => /icon/.test(l.rel || '') && /\.svg$/i.test(l.href)), 'no SVG icon (a browser would prefer it over the OWO mark)');
+      assert.doesNotMatch(read(page), /favicon\.svg|type="image\/svg\+xml"/, 'favicon.svg is not linked');
     });
   }
+
+  test('assets/favicon.svg is not shipped', () => {
+    assert.ok(!isFile('assets/favicon.svg'), 'assets/favicon.svg is back');
+    for (const file of ['site.webmanifest', 'netlify.toml', 'assets/site.css', 'assets/site.js']) assert.doesNotMatch(read(file), /favicon\.svg/, file);
+  });
 
   test('the linked favicon files exist', () => {
     for (const { href } of FAVICON_LINKS) assert.ok(isFile(localPath(href)), href);
@@ -212,21 +221,13 @@ describe('favicon set', () => {
     }
   });
 
-  test('favicon.ico is an icon file with a 32x32 entry', () => {
+  test('favicon.ico is an icon file with 16, 32 and 48 px entries', () => {
     const ico = readFileSync(join(ROOT, 'favicon.ico'));
     assert.equal(ico.readUInt16LE(0), 0, 'reserved');
     assert.equal(ico.readUInt16LE(2), 1, 'type 1 (icon)');
     const count = ico.readUInt16LE(4);
     const sizes = Array.from({ length: count }, (_, i) => ico[6 + i * 16] || 256);
-    assert.ok(sizes.includes(32), `entries: ${sizes.join(', ')}`);
-  });
-
-  test('favicon.svg is the drawn mark: the ink tile and a light color, no raster', () => {
-    const svg = read('assets/favicon.svg');
-    assert.match(svg, /<svg\b[^>]*viewBox=/);
-    assert.match(svg, /#1C3A2C/i, 'ink tile');
-    assert.match(svg, /#(F9FBF8|EFBCCB|FFFFFF)/i, 'a light color for the mark');
-    assert.doesNotMatch(svg, /<image\b|base64/i, 'no embedded raster');
+    assert.deepEqual(sizes.sort((a, b) => a - b), [16, 32, 48], `entries: ${sizes.join(', ')}`);
   });
 
   const icons = [
@@ -234,13 +235,24 @@ describe('favicon set', () => {
     ['assets/favicon-180.png', 180], ['apple-touch-icon.png', 180], ['assets/icon-192.png', 192], ['assets/icon-512.png', 512]
   ];
   for (const [path, size] of icons) {
-    test(`${path} is a ${size}px mark, not a near-solid black square`, () => {
+    test(`${path} is the ${size}px OWO mark on a cream tile, not a near-solid black square`, () => {
       const { width, height, pixels } = decodePng(readFileSync(join(ROOT, path)));
       assert.equal(`${width}x${height}`, `${size}x${size}`);
       const t = tones(pixels);
       assert.ok(t.distinct > 1, 'more than one pixel value');
       assert.ok(t.nearBlack < 0.5, `near-black share ${t.nearBlack.toFixed(2)} (the broken icon was 1.00)`);
       assert.ok(t.light >= 0.05, `light share ${t.light.toFixed(2)}: the mark is visible`);
+      // The tile: the most common opaque colour is the cream of the logo (#F3F0EA).
+      const opaque = pixels.filter((p) => p[3] >= 128);
+      const counts = new Map();
+      for (const p of opaque) { const k = p.slice(0, 3).join(','); counts.set(k, (counts.get(k) || 0) + 1); }
+      const tile = [...counts.entries()].sort((a, b) => b[1] - a[1])[0][0].split(',').map(Number);
+      assert.ok(Math.abs(tile[0] - 0xF3) <= 12 && Math.abs(tile[1] - 0xF0) <= 12 && Math.abs(tile[2] - 0xEA) <= 12, `cream tile, got rgb(${tile})`);
+      // The mark: the gold W and the dark half of the infinity loop.
+      const gold = opaque.filter((p) => p[0] - p[2] > 50 && p[0] > 120).length / opaque.length;
+      const dark = opaque.filter((p) => 0.2126 * p[0] + 0.7152 * p[1] + 0.0722 * p[2] < 90).length / opaque.length;
+      assert.ok(gold > 0.015, `gold share ${gold.toFixed(3)}`);
+      assert.ok(dark > 0.008, `dark share ${dark.toFixed(3)}`);
     });
   }
 });
@@ -316,7 +328,7 @@ describe('retired pages', () => {
 
   test('no redirect catches a kept page, the assets or the site files', () => {
     const keep = [...CLEAN, '/404.html',
-      '/assets/site.css', '/assets/site.js', '/assets/call.js', '/assets/favicon.svg', '/assets/img/owo-logo.png',
+      '/assets/site.css', '/assets/site.js', '/assets/call.js', '/assets/icon-192.png', '/assets/icon-512.png', '/assets/img/owo-logo.png',
       '/favicon.ico', '/apple-touch-icon.png', '/site.webmanifest', '/robots.txt', '/sitemap.xml'];
     for (const path of keep) {
       const rule = ruleFor(path);
@@ -368,8 +380,8 @@ describe('retired pages', () => {
 });
 
 describe('image folder', () => {
-  // og.jpg, og-community.jpg and og-dinners.jpg are kept only as byte-for-byte copies of the current
-  // share image, so links shared earlier (which still point at those names) show the new art.
+  // og.jpg, og-community.jpg and og-dinners.jpg are kept only as byte-for-byte copies of the home page's
+  // current share image (og-neighbors.jpg), so links shared earlier (which still point at those names) show the new art.
   const LEGACY_SHARE = ['og.jpg', 'og-community.jpg', 'og-dinners.jpg'];
 
   test('assets/img holds only images a page, the stylesheet, a script or a site file uses', () => {
@@ -379,9 +391,20 @@ describe('image folder', () => {
     assert.deepEqual(unused, [], 'unreferenced images in assets/img');
   });
 
-  test('the legacy share image names are copies of og-best-patients.jpg', () => {
-    const current = readFileSync(join(ROOT, 'assets/img/og-best-patients.jpg'));
-    for (const name of LEGACY_SHARE) assert.ok(readFileSync(join(ROOT, 'assets/img', name)).equals(current), `${name} matches og-best-patients.jpg`);
+  test('the legacy share image names are copies of og-neighbors.jpg', () => {
+    const current = readFileSync(join(ROOT, 'assets/img/og-neighbors.jpg'));
+    for (const name of LEGACY_SHARE) assert.ok(readFileSync(join(ROOT, 'assets/img', name)).equals(current), `${name} matches og-neighbors.jpg`);
+  });
+
+  test('the share images: og-neighbors.jpg on the home page, og-best-patients.jpg on /patient-dinners, both 1200 x 630 with no EXIF', () => {
+    const og = (page) => /<meta property="og:image" content="https:\/\/ouroptimization\.com\/assets\/img\/([^"]+)">/.exec(read(page))[1];
+    assert.equal(og('index.html'), 'og-neighbors.jpg');
+    assert.equal(og('patient-dinners.html'), 'og-best-patients.jpg');
+    for (const name of ['og-neighbors.jpg', 'og-best-patients.jpg']) {
+      const i = jpegInfo(readFileSync(join(ROOT, 'assets/img', name)));
+      assert.deepEqual([i.width, i.height, i.exif], [1200, 630, false], name);
+    }
+    assert.match(read('index.html'), /<meta property="og:image:alt" content="[^"]*Your neighbors bring you new patients\.[^"]*">/);
   });
 });
 
@@ -462,7 +485,7 @@ describe('legal pages', () => {
     assert.match(t, /we see the replies guests send there/);
     assert.match(t, /any optional extras you tick/);
     assert.match(t, /form on our contact page is where a clinic asks us to call/);
-    assert.match(t, /What you would like to talk about: the Plus-One Dinner, the VIP Night, flyer drops or the referral network, or not sure yet/);
+    assert.match(t, /What you would like to talk about: the referral network or flyer drops, the Plus-One Dinner, the VIP Night, Google Ads, review tags or a website, or not sure yet/);
   });
 
   test('privacy describes the partner offer form: the fields, no health questions, the consent, and a copy to us', () => {
@@ -538,46 +561,63 @@ function webpInfo(buf) {
   return { ...size, meta };
 }
 
-describe('review tags: the stand in use', () => {
+describe('review tags: the sample stand mockup and the NFC explainer', () => {
   const html = read('review-tags.html');
-  const sec = /<section[^>]*id="in-use"[^>]*>([\s\S]*?)<\/section>/.exec(html);
-  test('the Pure Medical Spa photo, with permission caption, alt text and the plain NFC explanation', () => {
-    assert.ok(sec, 'the in-use section exists');
-    const s = sec[1];
-    assert.match(s, /<h3 class="rt-nfc-h">What is an NFC tag\?<\/h3>/);
-    assert.match(s, /Hold the top of a phone near it and the page it carries opens, with no app to download\./);
-    assert.match(s, /alt="A tap-to-review Google stand on a wooden base at the front desk of Pure Medical Spa\./);
-    assert.match(s, /<figcaption class="sample-cap">Our stand at Pure Medical Spa, shown with their permission\.<\/figcaption>/, 'the same caption style as the sample above it');
-    assert.match(s, /<figure class="rt-real">/, 'layout comes from site.css, not an inline style');
-    for (const f of ['review-stand.jpg', 'review-stand.webp', 'review-stand-600.jpg', 'review-stand-600.webp']) assert.match(s, new RegExp(f.replace('.', '\\.')));
+  const how = /<section[^>]*id="how"[^>]*>([\s\S]*?)<\/section>/.exec(html)[1];
+  const fig = /<figure class="rt-shot">([\s\S]*?)<\/figure>/.exec(how);
+
+  test('the stand photo section is gone, and no file in the repository names the spa it showed', () => {
+    assert.doesNotMatch(html, /id="in-use"|rt-real|On a real front desk/);
+    for (const f of REMOVED.filter((r) => r.includes('review-stand'))) assert.ok(!isFile(f), `${f} is back`);
+    const all = [...pages, 'README.md', 'assets/site.css', 'assets/site.js', 'assets/call.js', 'netlify.toml', 'sitemap.xml', 'site.webmanifest',
+      ...readdirSync(join(ROOT, 'tests')).map((f) => `tests/${f}`)];
+    // The name is put together here, so this file does not contain it either.
+    const spa = new RegExp(['pure', 'medical', 'spa'].join('\\s+'), 'i');
+    for (const file of all) assert.doesNotMatch(read(file), spa, file);
   });
 
-  test('the pictured stand is tap only, a QR code can go on the same piece, and new stands use a neutral ask', () => {
-    const s = sec[1].replace(/<[^>]+>/g, '').replace(/&rsquo;/g, "'").replace(/&ldquo;|&rdquo;/g, '"');
-    assert.match(s, /The stand in this photo is tap only\. We can also print a QR code on the same piece, for phones that don't read NFC\./);
-    assert.match(s, /On new stands we use a neutral ask, such as "How did we do\?", so every customer gets the same ask\./);
-    assert.doesNotMatch(html, /A QR code on every piece/);
-  });
-
-  test('the photo files: the re-crop (no second stand), the sizes the markup states, no EXIF', () => {
-    const img = /<img [^>]*review-stand-600\.jpg[^>]*>/.exec(sec[1])[0];
-    const w = Number(/\swidth="(\d+)"/.exec(img)[1]), h = Number(/\sheight="(\d+)"/.exec(img)[1]);
-    const full = jpegInfo(readFileSync(join(ROOT, 'assets/img/review-stand.jpg')));
-    assert.deepEqual([full.width, full.height], [w, h], 'width and height match the large file');
-    assert.ok(w / h < 0.5, 'the narrower crop that leaves out the second stand');
-    assert.match(img, /srcset="assets\/img\/review-stand-600\.jpg 600w, assets\/img\/review-stand\.jpg 732w"/);
-    assert.match(img, /sizes="\(min-width:400px\) 360px, calc\(100vw - 40px\)"/);
-    for (const [file, width] of [['review-stand.jpg', w], ['review-stand-600.jpg', 600]]) {
+  test('the mockup sits in how it works: lazy, honest alt text, the sizes the markup states', () => {
+    assert.ok(fig, 'the mockup figure is in #how');
+    const img = /<img [^>]*>/.exec(fig[1])[0];
+    assert.match(fig[1], /<source type="image\/webp" srcset="assets\/img\/review-stand-ai-600\.webp 600w, assets\/img\/review-stand-ai\.webp 1200w"/);
+    assert.equal(attr(img, 'src'), 'assets/img/review-stand-ai-600.jpg');
+    assert.equal(attr(img, 'srcset'), 'assets/img/review-stand-ai-600.jpg 600w, assets/img/review-stand-ai.jpg 1200w');
+    assert.equal(attr(img, 'loading'), 'lazy', 'below the fold');
+    const alt = attr(img, 'alt');
+    assert.match(alt, /^Mockup, not a real photo: /);
+    assert.match(alt, /Integrative Wellness, a made-up brand/);
+    assert.match(alt, /How did we do\? Review us on Google/);
+    assert.doesNotMatch(fig[1], /<figcaption/, 'the page caption and footer line about the sample brand cover it');
+    const w = Number(attr(img, 'width')), h = Number(attr(img, 'height'));
+    assert.equal(w, 1200, 'the width attribute is the large file\'s real width');
+    for (const [file, width] of [['review-stand-ai.jpg', 1200], ['review-stand-ai-600.jpg', 600]]) {
       const i = jpegInfo(readFileSync(join(ROOT, 'assets/img', file)));
       assert.equal(i.width, width, file);
-      assert.equal(Math.abs(i.height - Math.round(h * width / w)) <= 1, true, `${file} keeps the ratio`);
+      assert.equal(Math.abs(i.height - Math.round(h * width / w)) <= 1, true, `${file} keeps the ratio the markup states`);
       assert.equal(i.exif, false, `${file} has no EXIF`);
     }
-    for (const [file, width] of [['review-stand.webp', w], ['review-stand-600.webp', 600]]) {
+    for (const [file, width] of [['review-stand-ai.webp', 1200], ['review-stand-ai-600.webp', 600]]) {
       const i = webpInfo(readFileSync(join(ROOT, 'assets/img', file)));
       assert.equal(i.width, width, file);
       assert.equal(i.meta, false, `${file} has no EXIF or XMP`);
     }
+  });
+
+  test('"What is an NFC tag?" (#nfc): plain, the QR code optional, and the neutral ask', () => {
+    const nfc = /<div class="rt-nfc" id="nfc">([\s\S]*?)<\/div>/.exec(how);
+    assert.ok(nfc, '#nfc is the explainer beside the mockup');
+    assert.match(nfc[1], /<h3 class="rt-nfc-h">What is an NFC tag\?<\/h3>/);
+    const t = nfc[1].replace(/<[^>]+>/g, '').replace(/&rsquo;/g, "'").replace(/&ldquo;|&rdquo;/g, '"');
+    assert.match(t, /Hold the top of a phone near it and the page it carries opens, with no app to download\./);
+    assert.match(t, /For phones that don't read NFC, a QR code printed on the same piece, if it has one, opens the same page\./);
+    assert.match(t, /We use a neutral ask, such as "How did we do\?", so every customer gets the same ask\./);
+    assert.doesNotMatch(html, /A QR code on every piece|tap only/);
+  });
+
+  test('every link to the old #in-use section now points at #nfc', () => {
+    for (const page of pages) assert.doesNotMatch(read(page), /\/review-tags#in-use/, page);
+    for (const page of ['faq.html', 'referral-network.html']) assert.match(read(page), /href="\/review-tags#nfc"/, page);
+    assert.match(read('assets/site.js'), /'#in-use'/, 'site.js sends old #in-use links to #nfc');
   });
 });
 

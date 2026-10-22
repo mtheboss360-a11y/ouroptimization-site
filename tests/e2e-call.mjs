@@ -108,7 +108,7 @@ await scenario('an empty submit is blocked: errors shown, fields marked, focus o
   assert.equal(await focusedId(page), 'call-name');
   const invalid = await invalidIds(page);
   for (const id of REQUIRED_IDS) assert.ok(invalid.includes(id), `${id} is aria-invalid`);
-  assert.ok(invalid.includes('dinner:Plus-One Dinner') || invalid.some((x) => x.startsWith('dinner:')), 'the dinner radios are aria-invalid');
+  assert.ok(invalid.includes('dinner:Referral network or flyer drops') || invalid.some((x) => x.startsWith('dinner:')), 'the dinner radios are aria-invalid');
   assert.ok(!invalid.includes('call-email') && !invalid.includes('call-message'), 'optional fields are not flagged');
   const errs = await shownErrors(page);
   assert.deepEqual(errs.sort(), ['call-clinic-err', 'call-dinner-err', 'call-name-err', 'call-phone-err', 'call-time-err', 'call-town-err'].sort());
@@ -145,11 +145,11 @@ await scenario('only the topic missing: focus lands on the radio group', async (
   await page.click('#dinner-call button[type="submit"]');
   await page.waitForTimeout(150);
   assert.equal(posts.length, 0);
-  assert.equal(await focusedId(page), 'dinner:Plus-One Dinner');
+  assert.equal(await focusedId(page), 'dinner:Referral network or flyer drops', 'the first choice is the referral network');
   assert.equal(await page.textContent('#call-dinner-err'), 'Choose what you would like to talk about, or Not sure yet.');
-  await page.check('input[name="dinner"][value="Flyer drops or referral network"]');
+  await page.check('input[name="dinner"][value="Referral network or flyer drops"]');
   assert.deepEqual(await invalidIds(page), [], 'choosing a topic clears the error');
-  assert.equal(await page.$$eval('input[name="dinner"]', (r) => r.length), 4, 'four choices');
+  assert.deepEqual(await page.$$eval('input[name="dinner"]', (r) => r.map((x) => x.value)), ['Referral network or flyer drops', 'Plus-One Dinner', 'VIP Night', 'Google Ads, review tags or a website', 'Not sure yet'], 'five choices, the referral network first');
   await close();
 });
 
@@ -237,6 +237,16 @@ await scenario('old home section links open their new page (/#faq, /#formats, /#
     assert.deepEqual(jsErrors, []);
     await close();
   }
+});
+
+await scenario('an old /review-tags#in-use link opens the NFC explainer, #nfc', async () => {
+  const { page, jsErrors, close } = await open({ path: '/review-tags#in-use' });
+  await page.waitForFunction(() => location.hash === '#nfc', null, { timeout: 3000 });
+  assert.equal(await page.evaluate(() => location.pathname + location.hash), '/review-tags#nfc');
+  const top = await page.evaluate(() => document.getElementById('nfc').getBoundingClientRect().top);
+  assert.ok(top >= 0 && top < 400, `#nfc is in view (top ${Math.round(top)})`);
+  assert.deepEqual(jsErrors, []);
+  await close();
 });
 
 await scenario('without JavaScript the browser still blocks an empty form, and a valid one posts', async () => {

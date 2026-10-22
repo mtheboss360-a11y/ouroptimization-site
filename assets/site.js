@@ -38,6 +38,15 @@
     return;
   }
 
+  /* /review-tags#in-use (the stand photo section, removed October 22, 2026) now opens the NFC explainer, #nfc. */
+  if (/^\/review-tags(?:\.html)?$/.test(window.location.pathname) && window.location.hash === '#in-use' && !document.getElementById('in-use')) {
+    var nfc = document.getElementById('nfc');
+    if (nfc) {
+      try { window.history.replaceState(window.history.state, '', window.location.pathname + window.location.search + '#nfc'); } catch (e) { /* keep the URL as it is */ }
+      nfc.scrollIntoView();
+    }
+  }
+
   /* Old links to retired pages 301 to a page or a section (/meeting to /contact). If a redirect carried
      the old query string after the fragment (/#call?package=website), put the query back in front
      of the # and open the section, so the visitor still lands on it. */
