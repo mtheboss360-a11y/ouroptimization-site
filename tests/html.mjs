@@ -5,30 +5,37 @@ import { readFileSync, readdirSync } from 'node:fs';
 export const ROOT = new URL('../', import.meta.url);
 export const read = (p) => readFileSync(new URL(p, ROOT), 'utf8');
 
-/* Every page of the site, with its clean URL and its label (its breadcrumb and its name in the 404 page list; null: none). */
+/* Every page of the site, with its clean URL and its item in the main menu (null: not in the menu).
+   October 23, 2026: Our Wellness Connections. The flyer network folded into the referral routes
+   (/flyer-network 301s to /referral-network); the dinner page stays, reached from the home add-on card. */
 export const PAGES = [
-  { file: 'index.html', url: '/', tab: 'Home' },
-  { file: 'referral-network.html', url: '/referral-network', tab: 'Referral Network' },
-  { file: 'flyer-network.html', url: '/flyer-network', tab: 'Flyer Network' },
-  { file: 'patient-network.html', url: '/patient-network', tab: 'Patient Network' },
-  { file: 'online-search-network.html', url: '/online-search-network', tab: 'Online Search Network' },
-  { file: 'review-tags.html', url: '/review-tags', tab: 'Review Tags' },
-  { file: 'website-design.html', url: '/website-design', tab: 'Website Design' },
-  { file: 'pricing.html', url: '/pricing', tab: 'Pricing' },
-  { file: 'sample-contract.html', url: '/sample-contract', tab: 'Sample Contract' },
-  { file: 'client-experience.html', url: '/client-experience', tab: 'Client Experience' },
-  { file: 'about.html', url: '/about', tab: 'About' },
-  { file: 'faq.html', url: '/faq', tab: 'FAQ' },
-  { file: 'contact.html', url: '/contact', tab: 'Contact' },
-  { file: 'privacy.html', url: '/privacy', tab: null },
-  { file: 'terms.html', url: '/terms', tab: null },
-  { file: 'thanks.html', url: '/thanks', tab: null },
-  { file: '404.html', url: null, tab: null }
+  { file: 'index.html', url: '/', nav: 'Home' },
+  { file: 'referral-network.html', url: '/referral-network', nav: 'How it works' },
+  { file: 'pricing.html', url: '/pricing', nav: 'Pricing' },
+  { file: 'sample-contract.html', url: '/sample-contract', nav: 'Sample contract' },
+  { file: 'faq.html', url: '/faq', nav: 'FAQ' },
+  { file: 'about.html', url: '/about', nav: 'About' },
+  { file: 'contact.html', url: '/contact', nav: 'Contact' },
+  { file: 'patient-network.html', url: '/patient-network', nav: null },
+  { file: 'online-search-network.html', url: '/online-search-network', nav: null },
+  { file: 'review-tags.html', url: '/review-tags', nav: null },
+  { file: 'website-design.html', url: '/website-design', nav: null },
+  { file: 'expo-vendors.html', url: '/expo-vendors', nav: null, brandOnly: true },
+  { file: 'privacy.html', url: '/privacy', nav: null },
+  { file: 'terms.html', url: '/terms', nav: null },
+  { file: 'thanks.html', url: '/thanks', nav: null, noindex: true },
+  { file: 'updates-thanks.html', url: '/updates-thanks', nav: null, noindex: true },
+  { file: '404.html', url: null, nav: null, noindex: true }
 ];
-/* The page labels, in order: Home, the ways we execute, then pricing, the sample contract, the client experience and the company pages. */
-export const TABS = PAGES.filter((p) => p.tab).map((p) => [p.tab, p.url]);
-/* The main navigation of the Our Wellness Network header (October 23, 2026), the same on every page. */
-export const NAV = [['How it works', '/#approach'], ['What we do', '/#what-we-do'], ['Client experience', '/client-experience'], ['Pricing', '/pricing'], ['About', '/about']];
+/* The main menu, in order, then the Client Portal button. */
+export const NAV = [['Home', '/'], ['How it works', '/referral-network'], ['Pricing', '/pricing'], ['Sample contract', '/sample-contract'], ['FAQ', '/faq'], ['About', '/about'], ['Contact', '/contact']];
+export const PORTAL = 'https://www.ournetworkportal.com';
+export const ORIGIN = 'https://ouroptimization.com';
+/* Words that must never appear on the site, built from pieces so this file does not contain them. */
+export const FORBIDDEN = [
+  ['Our', 'Wellness', 'Network'].join(' '), '$' + '500 a month', '$' + '700', '$' + '1,400',
+  ['three', 'tap-to-sign-up', 'stands'].join(' '), ['signs made for you at no', 'extra cost'].join(' ')
+];
 
 const ENTITIES = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ', rsquo: "'", lsquo: "'", ldquo: '"', rdquo: '"', eacute: 'é', middot: '·', copy: '©', hellip: '…' };
 export const decode = (s) => s

@@ -67,7 +67,7 @@ async function open({ width = 1280, height = 900, path = '/contact', js = true }
   return { page, posts, jsErrors, missing, close: () => context.close() };
 }
 
-async function fillValid(page, { dinner = 'Local referral partners', time = 'Afternoon, 2 to 5 pm' } = {}) {
+async function fillValid(page, { dinner = 'VIP Night', time = 'Afternoon, 2 to 5 pm' } = {}) {
   for (const [sel, val] of Object.entries(VALID)) await page.fill(sel, val);
   await page.selectOption('#call-time', time);
   await page.check(`input[name="dinner"][value="${dinner}"]`);
@@ -108,7 +108,7 @@ await scenario('an empty submit is blocked: errors shown, fields marked, focus o
   assert.equal(await focusedId(page), 'call-name');
   const invalid = await invalidIds(page);
   for (const id of REQUIRED_IDS) assert.ok(invalid.includes(id), `${id} is aria-invalid`);
-  assert.ok(invalid.includes('dinner:A full growth plan') || invalid.some((x) => x.startsWith('dinner:')), 'the dinner radios are aria-invalid');
+  assert.ok(invalid.includes('dinner:Referral or flyer network') || invalid.some((x) => x.startsWith('dinner:')), 'the dinner radios are aria-invalid');
   assert.ok(!invalid.includes('call-email') && !invalid.includes('call-message'), 'optional fields are not flagged');
   const errs = await shownErrors(page);
   assert.deepEqual(errs.sort(), ['call-clinic-err', 'call-dinner-err', 'call-name-err', 'call-phone-err', 'call-time-err', 'call-town-err'].sort());
@@ -145,17 +145,17 @@ await scenario('only the topic missing: focus lands on the radio group', async (
   await page.click('#dinner-call button[type="submit"]');
   await page.waitForTimeout(150);
   assert.equal(posts.length, 0);
-  assert.equal(await focusedId(page), 'dinner:A full growth plan', 'the first choice is a full growth plan');
+  assert.equal(await focusedId(page), 'dinner:Referral or flyer network', 'the first choice is the referral network');
   assert.equal(await page.textContent('#call-dinner-err'), 'Choose what you would like to talk about, or Not sure yet.');
-  await page.check('input[name="dinner"][value="A full growth plan"]');
+  await page.check('input[name="dinner"][value="Referral or flyer network"]');
   assert.deepEqual(await invalidIds(page), [], 'choosing a topic clears the error');
-  assert.deepEqual(await page.$$eval('input[name="dinner"]', (r) => r.map((x) => x.value)), ['A full growth plan', 'Local referral partners', 'In-person outreach and flyer drops', 'Campaigns: online search, client dinners, review tags or a website', 'Not sure yet'], 'five choices, a full growth plan first');
+  assert.deepEqual(await page.$$eval('input[name="dinner"]', (r) => r.map((x) => x.value)), ['Referral or flyer network', 'Plus-One Dinner', 'VIP Night', 'Online search network, review tags or a website', 'Not sure yet'], 'five choices, the referral network first');
   await close();
 });
 
 await scenario('a valid form posts once to /thanks with every field and an empty honeypot', async () => {
   const { page, posts, close } = await open();
-  await fillValid(page, { dinner: 'Local referral partners' });
+  await fillValid(page, { dinner: 'VIP Night' });
   await Promise.all([
     page.waitForURL('**/thanks'),
     page.click('#dinner-call button[type="submit"]')
@@ -173,7 +173,7 @@ await scenario('a valid form posts once to /thanks with every field and an empty
   assert.equal(body.get('email'), 'jordan@example.com');
   assert.equal(body.get('town'), 'Naperville');
   assert.equal(body.get('best_time'), 'Afternoon, 2 to 5 pm');
-  assert.equal(body.get('dinner'), 'Local referral partners');
+  assert.equal(body.get('dinner'), 'VIP Night');
   assert.equal(body.get('message'), 'Thursday works best.');
   assert.deepEqual([...body.keys()].sort(), ['best_time', 'bot-field', 'clinic', 'dinner', 'email', 'form-name', 'message', 'name', 'phone', 'town']);
   assert.match(await page.textContent('h1'), /Thank you/);
@@ -182,7 +182,7 @@ await scenario('a valid form posts once to /thanks with every field and an empty
 
 await scenario('a double click does not post twice', async () => {
   const { page, posts, close } = await open();
-  await fillValid(page, { dinner: 'Campaigns: online search, client dinners, review tags or a website' });
+  await fillValid(page, { dinner: 'Plus-One Dinner' });
   await page.$eval('#dinner-call', (f) => { f.requestSubmit(); f.requestSubmit(); });
   await page.waitForURL('**/thanks');
   await page.waitForTimeout(200);
@@ -256,7 +256,7 @@ await scenario('the renamed service pages: each old path, with and without .html
     }
     const { page, jsErrors, missing, close } = await open({ path: `${old}#how` });
     assert.equal(new URL(page.url()).pathname, now);
-    assert.equal(await page.$eval('.pg-crumbs [aria-current="page"]', (a) => a.textContent.trim()), tab);
+    assert.equal(await page.$eval('#site-nav a[aria-current="page"]', (a) => a.textContent.trim()), tab);
     assert.match(await page.title(), / \| Our Wellness Network$/);
     assert.deepEqual(jsErrors, []);
     assert.deepEqual(missing, [], 'every stylesheet, script, font and image loads');
@@ -270,46 +270,16 @@ await scenario('the renamed service pages: each old path, with and without .html
   }
 });
 
-await scenario('the header and the footer show the Our Wellness Network logo, loaded and crisp', async () => {
+await scenario('the header shows the Our Wellness Network logo, loaded and crisp (the footer is one legal line)', async () => {
   const { page, close } = await open({ path: '/' });
-  await page.locator('footer img').scrollIntoViewIfNeeded();
   const logos = await page.$$eval('img[src*="logo"]', (imgs) => imgs.map((i) => ({ src: i.getAttribute('src'), alt: i.alt, ok: i.complete && i.naturalWidth === 480, w: i.getBoundingClientRect().width })));
-  assert.equal(logos.length, 2);
+  assert.equal(logos.length, 1);
   for (const l of logos) {
     assert.equal(l.src, '/assets/img/our-wellness-network-logo.png');
     assert.equal(l.alt, 'Our Wellness Network');
     assert.ok(l.w > 0 && l.w <= 240, `shown at ${l.w}px from a 480px file, so it stays sharp on 2x screens`);
   }
   await page.waitForFunction(() => [...document.querySelectorAll('img[src*="logo"]')].every((i) => i.complete && i.naturalWidth === 480));
-  await close();
-});
-
-await scenario('keyboard: below 1160px, Tab from the open Menu button walks the panel links in order', async () => {
-  for (const width of [390, 1024]) {
-    const { page, jsErrors, close } = await open({ path: '/', width, height: 800 });
-    await page.focus('.rw-menu');
-    await page.keyboard.press('Enter');
-    assert.equal(await page.getAttribute('.rw-menu', 'aria-expanded'), 'true');
-    const seen = [];
-    for (let i = 0; i < 4; i++) {
-      await page.keyboard.press('Tab');
-      seen.push(await page.evaluate(() => document.activeElement.textContent.trim()));
-    }
-    assert.deepEqual(seen, ['How it works', 'What we do', 'Client experience', 'Pricing'], `at ${width}px`);
-    assert.equal(await page.getAttribute('.rw-menu', 'aria-expanded'), 'true', 'the panel stays open while focus is in it');
-    const box = await page.$eval('.rw-menu', (b) => b.getBoundingClientRect().left);
-    const cta = await page.$eval('.rw-head-cta', (b) => b.getBoundingClientRect());
-    if (cta.width) assert.ok(box > cta.left, 'the Menu button still shows to the right of the header button');
-    assert.deepEqual(jsErrors, []);
-    await close();
-  }
-});
-
-await scenario('at 1440px an anchor lands below the sticky header (/review-tags#nfc)', async () => {
-  const { page, close } = await open({ path: '/review-tags#nfc', width: 1440, height: 900 });
-  await page.waitForTimeout(300);
-  const r = await page.evaluate(() => ({ head: document.querySelector('.rw-header').getBoundingClientRect().bottom, top: document.getElementById('nfc').getBoundingClientRect().top }));
-  assert.ok(r.top >= r.head, `#nfc starts at ${Math.round(r.top)}, below the header at ${Math.round(r.head)}`);
   await close();
 });
 
@@ -346,7 +316,7 @@ await scenario('phone width (390px): no sideways scroll, the form and the call-n
   const btn = await page.$eval('#dinner-call button[type="submit"]', (b) => b.getBoundingClientRect().width);
   assert.ok(btn > 300, 'submit button spans the card');
   assert.match(await page.textContent('#call'), /Prefer to talk now\?\s*Call or text Mustafa at 331-271-6851\./);
-  await fillValid(page, { dinner: 'Campaigns: online search, client dinners, review tags or a website' });
+  await fillValid(page, { dinner: 'Plus-One Dinner' });
   await Promise.all([page.waitForURL('**/thanks'), page.click('#dinner-call button[type="submit"]')]);
   assert.equal(posts.length, 1);
   await close();

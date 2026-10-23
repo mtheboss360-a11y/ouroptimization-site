@@ -22,7 +22,7 @@ describe('/contact: the call form', () => {
     }
     assert.match(byId(html, 'call'), /<form name="dinner-call"/);
     assert.match(html, /<script src="\/assets\/call\.js" defer><\/script>/);
-    assert.equal(/<h1\b[^>]*>([\s\S]*?)<\/h1>/.exec(html)[1], 'Book a <em class="dn-keep">Growth Consultation.</em>');
+    assert.equal(/<h1\b[^>]*>([\s\S]*?)<\/h1>/.exec(html)[1], 'Book a <em class="dn-keep">15-minute call.</em>');
   });
 
   test('Netlify form: name, method, action, detection and honeypot', () => {
@@ -53,7 +53,7 @@ describe('/contact: the call form', () => {
 
     const radios = by('dinner');
     // The referral network comes first (the owner's order: the steps, then the extras, then "Not sure yet").
-    assert.deepEqual(radios.map((t) => attr(t, 'value')), ['A full growth plan', 'Local referral partners', 'In-person outreach and flyer drops', 'Campaigns: online search, client dinners, review tags or a website', 'Not sure yet']);
+    assert.deepEqual(radios.map((t) => attr(t, 'value')), ['Referral or flyer network', 'Plus-One Dinner', 'VIP Night', 'Online search network, review tags or a website', 'Not sure yet']);
     assert.deepEqual([...form.matchAll(/<label><input type="radio" name="dinner" value="([^"]+)"[^>]*>([^<]+)<\/label>/g)].map((m) => m[1] === m[2]), [true, true, true, true, true], 'each label reads the same as its value');
     assert.ok(radios.every((t) => attr(t, 'type') === 'radio' && hasAttr(t, 'required')));
     assert.deepEqual(radios.map((t) => attr(t, 'value')), call.DINNERS, 'call.js knows the same five choices');
@@ -91,10 +91,7 @@ describe('/contact: the call form', () => {
     assert.match(form, /<button class="btn btn-primary" type="submit">Book my 15-minute call<\/button>/);
     assert.match(t, /Prefer to talk now\? Call or text Mustafa at 331-271-6851\./);
     assert.match(t, /We use these details to call you back about your request\./);
-    assert.match(t, /Your practice, your community and your growth goals/);
-    assert.match(t, /Which parts of a growth plan fit your clinic, and the businesses near you/);
-    assert.match(t, /We work with clinics in Chicago and the surrounding suburbs\./);
-    assert.doesNotMatch(t, /western suburbs|a dinner or one of the extras/);
+    assert.match(t, /What fits your clinic: the referral network, the flyer network, a dinner or one of the extras/);
   });
 });
 
@@ -130,7 +127,7 @@ const valid = Object.freeze({
   email: '',
   town: 'Naperville',
   best_time: 'Afternoon, 2 to 5 pm',
-  dinner: 'A full growth plan',
+  dinner: 'Plus-One Dinner',
   message: ''
 });
 const errorFor = (name, patch) => call.validateField(name, { ...valid, ...patch });
@@ -149,9 +146,9 @@ describe('call.js: module shape', () => {
 
   test('a complete submission passes', () => {
     assert.deepEqual(call.validateAll(valid), []);
-    assert.deepEqual(call.validateAll({ ...valid, email: 'jordan@example.com', message: 'Hello', dinner: 'Local referral partners' }), []);
-    assert.deepEqual(call.validateAll({ ...valid, dinner: 'In-person outreach and flyer drops' }), []);
-    assert.deepEqual(call.validateAll({ ...valid, dinner: 'Campaigns: online search, client dinners, review tags or a website' }), []);
+    assert.deepEqual(call.validateAll({ ...valid, email: 'jordan@example.com', message: 'Hello', dinner: 'VIP Night' }), []);
+    assert.deepEqual(call.validateAll({ ...valid, dinner: 'Referral or flyer network' }), []);
+    assert.deepEqual(call.validateAll({ ...valid, dinner: 'Online search network, review tags or a website' }), []);
   });
 
   test('an empty form lists the required fields, in order', () => {
@@ -210,12 +207,11 @@ describe('call.js: email (optional)', () => {
 });
 
 describe('call.js: what to talk about (required radio, field name "dinner")', () => {
-  for (const v of ['A full growth plan', 'Local referral partners', 'In-person outreach and flyer drops', 'Campaigns: online search, client dinners, review tags or a website', 'Not sure yet']) {
+  for (const v of ['Referral or flyer network', 'Plus-One Dinner', 'VIP Night', 'Online search network, review tags or a website', 'Not sure yet']) {
     test(`accepts ${v}`, () => assert.equal(errorFor('dinner', { dinner: v }), ''));
   }
-  // Older labels are no longer choices on the form: the products listed before October 23, 2026,
-  // and the ones from before the rename (October 22, 2026).
-  for (const v of ['', 'Referral or flyer network', 'Plus-One Dinner', 'VIP Night', 'Online search network, review tags or a website', 'Plus-One', 'vip night', 'Flyer drops', 'Flyer drops or referral network', 'Referral network or flyer drops', 'Google Ads, review tags or a website', 'a full growth plan', 'Something else']) {
+  // The labels from before the rename (October 22, 2026) are no longer choices on the form.
+  for (const v of ['', 'Plus-One', 'vip night', 'Flyer drops', 'Flyer drops or referral network', 'Referral network or flyer drops', 'Google Ads, review tags or a website', 'referral or flyer network', 'Something else']) {
     test(`rejects ${JSON.stringify(v)}`, () => assert.notEqual(errorFor('dinner', { dinner: v }), ''));
   }
   test('the error names the question, not only dinners', () => {
@@ -252,7 +248,7 @@ describe('call.js: ?about= prefill', () => {
     for (const [old, now] of [['patient-dinners', 'patient-network'], ['flyer-drops', 'flyer-network'], ['google-ads', 'online-search-network']]) {
       assert.equal(call.prefillFor(`?about=${old}`, ''), call.prefillFor(`?about=${now}`, ''), `${old} and ${now} prefill the same message`);
     }
-    for (const p of PAGES.filter((x) => x.tab && !['Home', 'About', 'FAQ', 'Contact', 'Client Experience'].includes(x.tab))) {
+    for (const p of PAGES.filter((x) => x.tab && !['Home', 'About', 'FAQ', 'Contact'].includes(x.tab))) {
       assert.ok(Object.hasOwn(KEYS, p.url.slice(1)), `${p.url} has a key`);
     }
     for (const [key, message] of Object.entries(KEYS)) {

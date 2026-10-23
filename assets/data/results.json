@@ -1,0 +1,4 @@
+{
+  "_format": "One entry per clinic in clinics. town and type are text (for example \"Oakbrook Terrace\" and \"Recovery clinic\"). signups60 and bookedFirstVisits60 are whole numbers: tracked sign-ups and booked first visits in the clinic's first 60 days. referenceCalls is true when the owner takes reference calls. Real, tracked numbers only. While clinics is empty, the home page shows the 'first routes are running now' message.",
+  "clinics": []
+}

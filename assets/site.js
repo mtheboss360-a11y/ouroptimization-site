@@ -1,4 +1,4 @@
-/* Our Wellness Network: shared site behaviour.
+/* Our Wellness Connections: shared site behaviour.
    Loaded with defer on every page. No dependencies, no third-party requests. */
 (function () {
   var root = document.documentElement;
@@ -8,12 +8,11 @@
 
   /* The home page used to hold every section. Old links to those sections now open their own page
      (/#faq opens /faq). The home page's call band came off on October 22, 2026, so /#call opens the
-     call form on /contact, with any old query (/#call?package=website) carried along. The portal tour
-     (/#breakdown) moved to /client-experience on October 23, 2026. */
+     call form on /contact, with any old query (/#call?package=website) carried along. */
   var MOVED = {
     formats: '/patient-network#formats', how: '/patient-network#how', handle: '/patient-network#handle',
-    who: '/about', 'add-ons': '/referral-network', referrals: '/referral-network',
-    'flyer-drops': '/flyer-network', faq: '/faq', call: '/contact#call', breakdown: '/client-experience#breakdown'
+    who: '/about', 'add-ons': '/pricing', referrals: '/referral-network',
+    'flyer-drops': '/referral-network', faq: '/faq', call: '/contact#call'
   };
   var old = /^#([A-Za-z][\w-]*)(?:\?(.*))?$/.exec(window.location.hash);
   if (old && (window.location.pathname === '/' || window.location.pathname === '/index.html') &&
@@ -46,15 +45,55 @@
     strayTarget.scrollIntoView();
   }
 
+  /* The home page's portal sections became #dashboard (October 23, 2026): /#portal and /#breakdown open it. */
+  var ALIAS = { portal: 'dashboard', breakdown: 'dashboard' };
+  var alias = /^#([A-Za-z][\w-]*)$/.exec(window.location.hash);
+  if (alias && ALIAS[alias[1]] && !document.getElementById(alias[1])) {
+    var aliasTarget = document.getElementById(ALIAS[alias[1]]);
+    if (aliasTarget) {
+      try { window.history.replaceState(window.history.state, '', window.location.pathname + window.location.search + '#' + ALIAS[alias[1]]); } catch (e) { /* keep the URL */ }
+      aliasTarget.scrollIntoView();
+    }
+  }
+
+  /* Site switches from /assets/site-config.js: an element with data-flag="name" stays hidden until that switch is true. */
+  var config = window.OWC_CONFIG || {};
+  document.querySelectorAll('[data-flag]').forEach(function (el) {
+    if (config[el.getAttribute('data-flag')] === true) el.hidden = false;
+  });
+
+  /* Home hero: the van video. It loads after the page (the still is the first paint), plays muted and looped,
+     and fades in over the still once it is actually playing. Missing file, a failed load or reduced motion:
+     the element is removed and the still stays. */
+  var heroVideo = document.querySelector('.owc-hero-video');
+  if (heroVideo) {
+    var reduce = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : { matches: false };
+    var dropVideo = function () { if (heroVideo.parentNode) heroVideo.parentNode.removeChild(heroVideo); };
+    if (reduce.matches || !heroVideo.getAttribute('data-src') || typeof heroVideo.play !== 'function') {
+      dropVideo();
+    } else {
+      var startVideo = function () {
+        heroVideo.addEventListener('playing', function () { heroVideo.parentNode && heroVideo.parentNode.classList.add('is-playing'); }, { once: true });
+        heroVideo.addEventListener('error', dropVideo, { once: true });
+        heroVideo.muted = true;
+        heroVideo.src = heroVideo.getAttribute('data-src');
+        var played = heroVideo.play();
+        if (played && played.catch) played.catch(function () { /* autoplay refused: the still stays */ });
+      };
+      if (document.readyState === 'complete') startVideo(); else window.addEventListener('load', startVideo, { once: true });
+      if (reduce.addEventListener) reduce.addEventListener('change', function (e) { if (e.matches) { heroVideo.pause && heroVideo.pause(); dropVideo(); } });
+    }
+  }
+
   /* Header: hairline once the page scrolls; mobile menu. */
-  var header = document.querySelector('.rw-header, .site-header');
+  var header = document.querySelector('.site-header');
   if (header) {
     var onScroll = function () { header.classList.toggle('is-scrolled', window.scrollY > 8); };
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
   }
 
-  var menuBtn = document.querySelector('.rw-menu, .menu-btn');
+  var menuBtn = document.querySelector('.menu-btn');
   var nav = document.getElementById('site-nav');
   if (menuBtn && nav) {
     var setMenu = function (open) {

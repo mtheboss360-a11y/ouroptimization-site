@@ -8,9 +8,8 @@
   'use strict';
 
   /* The "What would you like to talk about?" radios. The field keeps its original name, "dinner",
-     so Netlify keeps one column for it across old and new submissions. Since October 23, 2026 the
-     choices are the parts of one growth plan rather than a list of products. */
-  var DINNERS = ['A full growth plan', 'Local referral partners', 'In-person outreach and flyer drops', 'Campaigns: online search, client dinners, review tags or a website', 'Not sure yet'];
+     so Netlify keeps one column for it across old and new submissions. */
+  var DINNERS = ['Referral or flyer network', 'Plus-One Dinner', 'VIP Night', 'Online search network, review tags or a website', 'Not sure yet'];
   var ORDER = ['name', 'clinic', 'phone', 'email', 'town', 'best_time', 'dinner', 'message'];
   var MAX = { name: 120, clinic: 150, phone: 30, email: 254, town: 120, best_time: 60, message: 2000 };
 
