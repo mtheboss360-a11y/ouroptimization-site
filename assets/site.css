@@ -1034,8 +1034,6 @@ table{font-variant-numeric:tabular-nums}
 .owc-geo-google{position:absolute;inset:0;width:100%;height:100%;opacity:0;transition:opacity .5s ease}
 .owc-geo-svg{position:absolute;inset:0;z-index:1;width:100%;height:100%;overflow:visible}
 .owc-geo-dots circle{fill:#E3EDE4;opacity:.55}
-.owc-geo-lots{fill:rgba(239,188,203,.5);stroke:#EFBCCB;stroke-width:.8}
-.owc-geo-lot-home{fill:rgba(243,246,242,.55);stroke:#F3F6F2;stroke-width:.8}
 .owc-geo-route-glow{fill:none;stroke:rgba(239,188,203,.26);stroke-width:7;stroke-linecap:round;stroke-linejoin:round}
 .owc-geo-route{fill:none;stroke:#EFBCCB;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:7 6;animation:owc-geo-flow 40s linear infinite paused}
 .owc-geo-rings circle{fill:none;stroke:rgba(239,188,203,.75);stroke-width:1.2;opacity:0;transform-box:fill-box;transform-origin:center;animation:owc-geo-ping 3.6s ease-out infinite paused}
@@ -1048,16 +1046,21 @@ table{font-variant-numeric:tabular-nums}
 /* Each spot stands up on the tilted map. Chrome clips a 3D-transformed box to its own bounds, so the portrait sits
    inside the spot's box: the building takes the lower left, the portrait the top right corner. */
 .owc-geo-spot{position:absolute;z-index:2;left:var(--x);top:var(--y);width:11.3%;transform:translate(-42%,-100%) rotateX(calc(-1 * var(--tilt)));transform-origin:42% 100%}
-.owc-geo-stack{position:relative;padding-top:22%}
+/* 12px of room above and right of the portrait, inside the box, so its ring, its lit state and the focus outline are
+   never cut off. */
+.owc-geo-stack{position:relative;padding-top:calc(22% + 12px)}
 .owc-geo-pin{display:block;width:84%;height:auto;margin-bottom:-5.5%;filter:drop-shadow(0 12px 14px rgba(0,0,0,.5));pointer-events:none}
 .owc-geo-spot--home{width:12.5%;transform:translate(-50%,-100%) rotateX(calc(-1 * var(--tilt)));transform-origin:50% 100%}
 .owc-geo-spot--home .owc-geo-stack{padding-top:0}
 .owc-geo-spot--home .owc-geo-pin{width:100%;margin-bottom:-6.6%}
-/* The owner's portrait links to the owner's card below the map. */
-.owc-geo-face{position:absolute;right:0;top:0;width:40%;aspect-ratio:1;border-radius:50%;overflow:hidden;background:#F3F6F2;
-  box-shadow:0 0 0 2px #EFBCCB,0 0 0 5px rgba(239,188,203,.25),0 8px 16px rgba(0,0,0,.45);transition:transform .2s ease,box-shadow .2s ease}
-.owc-geo-face img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 15%}
-.owc-geo-face:hover,.owc-geo-spot.is-active .owc-geo-face{transform:scale(1.12);box-shadow:0 0 0 3px #fff,0 0 0 8px rgba(239,188,203,.75),0 10px 22px rgba(0,0,0,.5)}
+/* The owner's portrait links to the owner's card below the map. The link reaches 11px past the picture on every side,
+   so it is a comfortable target even when the map is small. */
+.owc-geo-face{position:absolute;right:12px;top:12px;width:40%;aspect-ratio:1;border-radius:50%;transition:transform .2s ease}
+.owc-geo-face::before{content:"";position:absolute;inset:-11px;border-radius:50%}
+.owc-geo-face img{display:block;width:100%;height:100%;border-radius:50%;object-fit:cover;object-position:50% 15%;background:#F3F6F2;
+  box-shadow:0 0 0 2px #EFBCCB,0 0 0 5px rgba(239,188,203,.25),0 8px 16px rgba(0,0,0,.45);transition:box-shadow .2s ease}
+.owc-geo-face:hover,.owc-geo-spot.is-active .owc-geo-face{transform:scale(1.12)}
+.owc-geo-face:hover img,.owc-geo-spot.is-active .owc-geo-face img{box-shadow:0 0 0 3px #fff,0 0 0 8px rgba(239,188,203,.75),0 10px 22px rgba(0,0,0,.5)}
 .owc-geo-face:focus-visible{outline:3px solid #fff;outline-offset:3px}
 .owc-geo-credit{position:absolute;z-index:5;right:10px;bottom:9px;padding:2px 9px;border-radius:999px;background:rgba(11,28,19,.78);font-size:.72rem;line-height:1.6;color:#C3D2C6}
 .owc-geo-credit a{color:inherit;text-underline-offset:2px}
@@ -1073,19 +1076,22 @@ table{font-variant-numeric:tabular-nums}
   .owc-geo:not(.is-google) .owc-geo-canvas{right:auto;left:50%;width:149.88%;transform:translateX(-50%) translateY(-2%) rotateX(var(--tilt)) scale(1.08)}
   .owc-geo-credit{right:8px;bottom:7px;font-size:.66rem}
   .owc-geo-spot{width:11.9%}.owc-geo-spot--home{width:13%}
+  .owc-geo-face{width:46%}
 }
 /* The owners on the route: a swipe row on phones, five across on wide screens. */
 .owc-owners-wrap{margin-top:clamp(26px,3.6vw,40px)}
 .owc-owners-h{font:600 clamp(1.3rem,1.1rem + .8vw,1.7rem)/1.2 var(--hero);color:var(--ground);text-align:center;letter-spacing:-.01em}
-.owc-owners{list-style:none;margin:18px 0 0;padding:0;display:grid;grid-auto-flow:column;grid-auto-columns:minmax(240px,78%);gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;padding-bottom:6px;scrollbar-width:thin}
-.owc-owner{scroll-snap-align:center;display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:18px;background:rgba(243,246,242,.06);border:1px solid rgba(239,188,203,.18);transition:border-color .2s ease,background-color .2s ease}
+.owc-owners-scroll{margin-top:18px;overflow-x:auto;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;padding-bottom:6px;scrollbar-width:thin;border-radius:18px}
+.owc-owners-scroll:focus-visible{outline:3px solid var(--gold-bright);outline-offset:4px}
+.owc-owners{list-style:none;margin:0;padding:0;display:grid;grid-auto-flow:column;grid-auto-columns:minmax(240px,78%);gap:12px}
+.owc-owner{position:relative;scroll-snap-align:center;display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:18px;background:rgba(243,246,242,.06);border:1px solid rgba(239,188,203,.18);transition:border-color .2s ease,background-color .2s ease}
 .owc-owner:focus{outline:none}
-.owc-owner.is-active,.owc-owner:target{border-color:#EFBCCB;background:rgba(239,188,203,.1)}
+.owc-owner.is-active,html:not(.js) .owc-owner:target{border-color:#EFBCCB;background:rgba(239,188,203,.1)}
 .owc-owner-face{flex:none;width:64px;height:64px;border-radius:50%;background:#F3F6F2;box-shadow:0 0 0 2px #EFBCCB;object-fit:cover;object-position:50% 15%}
-.owc-owner-role{font:650 1.02rem/1.25 var(--display);color:var(--ground);letter-spacing:-.01em}
-.owc-owner-meta{margin-top:3px;font-size:.84rem;color:var(--gold-bright)}
+.owc-owner-role{margin:0;font:650 1.02rem/1.25 var(--display);color:var(--ground);letter-spacing:-.01em}
+.bg-ink .owc-owner-meta{margin-top:3px;font-size:.84rem;color:var(--gold-bright)}
 .bg-ink .owc-owner-why{margin-top:6px;font-size:.92rem;line-height:1.5;color:#C3D2C6}
-@media (min-width:1000px){.owc-owners{grid-auto-flow:row;grid-template-columns:repeat(5,minmax(0,1fr));overflow:visible}.owc-owner{flex-direction:column}.owc-owner-face{width:72px;height:72px}}
+@media (min-width:1000px){.owc-owners-scroll{overflow:visible}.owc-owners{grid-auto-flow:row;grid-template-columns:repeat(5,minmax(0,1fr))}.owc-owner{flex-direction:column}.owc-owner-face{width:72px;height:72px}}
 @media (prefers-reduced-motion:reduce){.owc-geo-route,.owc-geo-rings circle{animation:none}.owc-geo-rings,.owc-geo-comet{display:none}}
 /* c. courtesy */
 .owc-courtesy-text{font-size:clamp(1.06rem,1rem + .3vw,1.2rem);line-height:1.7;color:var(--ink);text-wrap:pretty}

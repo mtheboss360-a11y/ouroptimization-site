@@ -77,9 +77,14 @@ describe('home: the sections', () => {
     const cards = [...s.matchAll(/<li class="owc-owner" id="owner-([a-z]+)"[\s\S]*?<\/li>/g)];
     assert.deepEqual(faces.map((f) => f.href).sort(), cards.map((c) => '#owner-' + c[1]).sort(), 'every portrait links to its card');
     for (const f of faces) assert.match(attr(f.tag, 'aria-label'), /owner: see the profile$/);
+    // Each portrait sits in the spot of the same owner (site.js reads the owner from the spot that holds the link).
+    for (const m of fig.matchAll(/<div class="owc-geo-spot" data-owner="([a-z]+)"[\s\S]*?<a class="owc-geo-face" href="([^"]+)"/g)) assert.equal(m[2], '#owner-' + m[1]);
+    assert.equal([...fig.matchAll(/<div class="owc-geo-spot" data-owner=/g)].length, 5);
+    assert.doesNotMatch(fig, /owc-geo-lots|owc-geo-lot-home/, 'no real building is highlighted as one of the businesses');
+    assert.match(s, /<div class="owc-owners-scroll[^"]*" tabindex="0" role="region" aria-labelledby="owners-h">/, 'the swipe row can be scrolled from the keyboard');
     for (const [card] of cards) {
       const t = text(card);
-      assert.match(t, /^(Salon|Gym|Boutique|Studio|Caf\u00e9) owner\s*\d min walk/, 'a role and a real walking time, no name');
+      assert.match(t, /^(Salon|Gym|Boutique|Studio|Caf\u00e9) owner\s*\d min walk from your clinic/, 'a role and a real walking time, no name');
       const img = tags(card, 'img')[0];
       assert.match(attr(img, 'alt'), /^Illustration of a /, 'an illustration, never a photo of a real person');
       for (const src of [attr(img, 'src'), ...attr(img, 'srcset').split(',').map((x) => x.trim().split(' ')[0])]) assert.ok(existsSync(new URL('.' + src, ROOT)), src);

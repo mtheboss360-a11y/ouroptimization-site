@@ -506,16 +506,41 @@ await scenario('home: a refused Google Maps key leaves our own map in place', as
 });
 
 await scenario('home: an owner portrait on the map lights up its card below and moves focus there; without JavaScript it is a plain link', async () => {
-  let s = await open({ path: '/', width: 390, motion: 'reduce' });
-  await showMap(s.page);
-  await s.page.click('.owc-geo-spot[data-owner="boutique"] .owc-geo-face');
-  await s.page.waitForFunction(() => document.activeElement && document.activeElement.id === 'owner-boutique', null, { timeout: 3000 });
-  assert.deepEqual(await s.page.$$eval('.is-active', (l) => l.map((e) => e.getAttribute('data-owner'))), ['boutique', 'boutique'], 'the spot and the card, nothing else');
-  assert.equal(await s.page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true);
-  assert.deepEqual(s.jsErrors, []);
+  for (const motion of ['reduce', 'no-preference']) {
+    for (const width of [390, 1280]) {
+      const s = await open({ path: '/', width, motion });
+      await showMap(s.page);
+      const before = await s.page.evaluate(() => history.length);
+      await s.page.click('.owc-geo-spot[data-owner="boutique"] .owc-geo-face');
+      await s.page.waitForFunction(() => document.activeElement && document.activeElement.id === 'owner-boutique', null, { timeout: 3000 });
+      await s.page.waitForTimeout(motion === 'reduce' ? 50 : 900);
+      const after = await s.page.evaluate(() => {
+        const map = document.querySelector('.owc-geo').getBoundingClientRect();
+        const card = document.getElementById('owner-boutique').getBoundingClientRect();
+        return { hash: location.hash, history: history.length, mapVisible: map.bottom > 0 && map.top < innerHeight, cardVisible: card.top < innerHeight && card.bottom > 0,
+          lit: [...document.querySelectorAll('.is-active')].map((e) => e.getAttribute('data-owner')) };
+      });
+      assert.equal(after.hash, '', `${width}/${motion}: the script handles the click, the browser does not jump`);
+      assert.equal(after.history, before, 'no history entry');
+      assert.ok(after.mapVisible, 'the lit portrait stays on screen');
+      assert.ok(after.cardVisible, 'the card is on screen');
+      assert.deepEqual(after.lit, ['boutique', 'boutique'], 'the spot and the card, nothing else');
+      assert.equal(await s.page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true);
+      assert.deepEqual(s.jsErrors, []);
+      await s.close();
+    }
+  }
+  // A shared link to a card lights that card and its spot.
+  let s = await open({ path: '/#owner-gym' });
+  assert.deepEqual(await s.page.$$eval('.is-active', (l) => l.map((e) => e.getAttribute('data-owner'))), ['gym', 'gym']);
   await s.close();
+  // Without JavaScript each portrait is a link to its card, and the card shows which one was picked.
   s = await open({ path: '/', js: false });
   assert.deepEqual(await s.page.$$eval('.owc-geo-face', (l) => l.map((a) => a.getAttribute('href'))).then((h) => h.sort()), ['#owner-boutique', '#owner-cafe', '#owner-gym', '#owner-salon', '#owner-studio']);
+  await s.page.evaluate(() => document.querySelector('.owc-geo').scrollIntoView({ block: 'center', behavior: 'instant' }));
+  await s.page.click('.owc-geo-spot[data-owner="studio"] .owc-geo-face');
+  assert.equal(await s.page.evaluate(() => location.hash), '#owner-studio');
+  assert.equal(await s.page.$eval('#owner-studio', (c) => getComputedStyle(c).borderTopColor), 'rgb(239, 188, 203)');
   await s.close();
 });
 

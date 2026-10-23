@@ -145,10 +145,17 @@
         el.classList.toggle('is-active', el.getAttribute('data-owner') === key);
       });
     };
+    var fromHash = function () {
+      var m = /^#owner-([a-z]+)$/.exec(window.location.hash);
+      if (m && document.getElementById('owner-' + m[1])) light(m[1]);
+    };
+    fromHash();
+    window.addEventListener('hashchange', fromHash);
     geo.querySelectorAll('.owc-geo-face').forEach(function (link) {
       link.addEventListener('click', function (e) {
-        var key = link.parentNode.getAttribute('data-owner');
-        var card = document.getElementById('owner-' + key);
+        var spot = link.closest('.owc-geo-spot');
+        var key = spot && spot.getAttribute('data-owner');
+        var card = key && document.getElementById('owner-' + key);
         if (!card) return;
         e.preventDefault();
         light(key);
