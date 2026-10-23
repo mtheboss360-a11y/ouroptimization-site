@@ -546,7 +546,7 @@ describe('legal pages', () => {
 
   test('privacy describes the call form on /contact, the expo form, and what we see of guests\' RSVP replies', () => {
     const t = visible('privacy.html');
-    assert.match(t, /Last updated: October 22, 2026/);
+    assert.match(t, /Last updated: October 23, 2026/);
     assert.doesNotMatch(t, /patient list|never receive the clinic's patient records|Ask for Mustafa|Phone: 331/i);
     assert.match(t, /You can reach us about privacy by email at mustafa@ouroptimization\.com\./);
     assert.match(t, /We do not ask for payment details or health information anywhere on this site\./);
@@ -554,7 +554,7 @@ describe('legal pages', () => {
     assert.match(t, /we see the replies guests send there/);
     assert.match(t, /any optional extras you tick/);
     assert.match(t, /form on our contact page is where a clinic asks us to call/);
-    assert.match(t, /What you would like to talk about: the referral or flyer network, the Plus-One Dinner, the VIP Night, the online search network, review tags or a website, or not sure yet/);
+    assert.match(t, /What you would like to talk about: a full growth plan, local referral partners, in-person outreach and flyer drops, campaigns \(online search, client dinners, review tags or a website\), or not sure yet/);
   });
 
   test('privacy describes the partner offer form: the fields, no health questions, the consent, and a copy to us', () => {

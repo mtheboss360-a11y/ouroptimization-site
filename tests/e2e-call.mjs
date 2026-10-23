@@ -67,7 +67,7 @@ async function open({ width = 1280, height = 900, path = '/contact', js = true }
   return { page, posts, jsErrors, missing, close: () => context.close() };
 }
 
-async function fillValid(page, { dinner = 'VIP Night', time = 'Afternoon, 2 to 5 pm' } = {}) {
+async function fillValid(page, { dinner = 'Local referral partners', time = 'Afternoon, 2 to 5 pm' } = {}) {
   for (const [sel, val] of Object.entries(VALID)) await page.fill(sel, val);
   await page.selectOption('#call-time', time);
   await page.check(`input[name="dinner"][value="${dinner}"]`);
@@ -108,7 +108,7 @@ await scenario('an empty submit is blocked: errors shown, fields marked, focus o
   assert.equal(await focusedId(page), 'call-name');
   const invalid = await invalidIds(page);
   for (const id of REQUIRED_IDS) assert.ok(invalid.includes(id), `${id} is aria-invalid`);
-  assert.ok(invalid.includes('dinner:Referral or flyer network') || invalid.some((x) => x.startsWith('dinner:')), 'the dinner radios are aria-invalid');
+  assert.ok(invalid.includes('dinner:A full growth plan') || invalid.some((x) => x.startsWith('dinner:')), 'the dinner radios are aria-invalid');
   assert.ok(!invalid.includes('call-email') && !invalid.includes('call-message'), 'optional fields are not flagged');
   const errs = await shownErrors(page);
   assert.deepEqual(errs.sort(), ['call-clinic-err', 'call-dinner-err', 'call-name-err', 'call-phone-err', 'call-time-err', 'call-town-err'].sort());
@@ -145,17 +145,17 @@ await scenario('only the topic missing: focus lands on the radio group', async (
   await page.click('#dinner-call button[type="submit"]');
   await page.waitForTimeout(150);
   assert.equal(posts.length, 0);
-  assert.equal(await focusedId(page), 'dinner:Referral or flyer network', 'the first choice is the referral network');
+  assert.equal(await focusedId(page), 'dinner:A full growth plan', 'the first choice is a full growth plan');
   assert.equal(await page.textContent('#call-dinner-err'), 'Choose what you would like to talk about, or Not sure yet.');
-  await page.check('input[name="dinner"][value="Referral or flyer network"]');
+  await page.check('input[name="dinner"][value="A full growth plan"]');
   assert.deepEqual(await invalidIds(page), [], 'choosing a topic clears the error');
-  assert.deepEqual(await page.$$eval('input[name="dinner"]', (r) => r.map((x) => x.value)), ['Referral or flyer network', 'Plus-One Dinner', 'VIP Night', 'Online search network, review tags or a website', 'Not sure yet'], 'five choices, the referral network first');
+  assert.deepEqual(await page.$$eval('input[name="dinner"]', (r) => r.map((x) => x.value)), ['A full growth plan', 'Local referral partners', 'In-person outreach and flyer drops', 'Campaigns: online search, client dinners, review tags or a website', 'Not sure yet'], 'five choices, a full growth plan first');
   await close();
 });
 
 await scenario('a valid form posts once to /thanks with every field and an empty honeypot', async () => {
   const { page, posts, close } = await open();
-  await fillValid(page, { dinner: 'VIP Night' });
+  await fillValid(page, { dinner: 'Local referral partners' });
   await Promise.all([
     page.waitForURL('**/thanks'),
     page.click('#dinner-call button[type="submit"]')
@@ -173,7 +173,7 @@ await scenario('a valid form posts once to /thanks with every field and an empty
   assert.equal(body.get('email'), 'jordan@example.com');
   assert.equal(body.get('town'), 'Naperville');
   assert.equal(body.get('best_time'), 'Afternoon, 2 to 5 pm');
-  assert.equal(body.get('dinner'), 'VIP Night');
+  assert.equal(body.get('dinner'), 'Local referral partners');
   assert.equal(body.get('message'), 'Thursday works best.');
   assert.deepEqual([...body.keys()].sort(), ['best_time', 'bot-field', 'clinic', 'dinner', 'email', 'form-name', 'message', 'name', 'phone', 'town']);
   assert.match(await page.textContent('h1'), /Thank you/);
@@ -182,7 +182,7 @@ await scenario('a valid form posts once to /thanks with every field and an empty
 
 await scenario('a double click does not post twice', async () => {
   const { page, posts, close } = await open();
-  await fillValid(page, { dinner: 'Plus-One Dinner' });
+  await fillValid(page, { dinner: 'Campaigns: online search, client dinners, review tags or a website' });
   await page.$eval('#dinner-call', (f) => { f.requestSubmit(); f.requestSubmit(); });
   await page.waitForURL('**/thanks');
   await page.waitForTimeout(200);
@@ -317,7 +317,7 @@ await scenario('phone width (390px): no sideways scroll, the form and the call-n
   const btn = await page.$eval('#dinner-call button[type="submit"]', (b) => b.getBoundingClientRect().width);
   assert.ok(btn > 300, 'submit button spans the card');
   assert.match(await page.textContent('#call'), /Prefer to talk now\?\s*Call or text Mustafa at 331-271-6851\./);
-  await fillValid(page, { dinner: 'Plus-One Dinner' });
+  await fillValid(page, { dinner: 'Campaigns: online search, client dinners, review tags or a website' });
   await Promise.all([page.waitForURL('**/thanks'), page.click('#dinner-call button[type="submit"]')]);
   assert.equal(posts.length, 1);
   await close();

@@ -1597,6 +1597,8 @@ table,.tnum{font-variant-numeric:tabular-nums}
 .rw-demo .pt-stage{max-width:none}
 .rw-demo-tag{display:inline-flex;align-items:center;gap:8px;margin-bottom:14px;padding:6px 12px;border-radius:999px;background:rgba(243,246,242,.1);border:1px solid rgba(243,246,242,.22);font:600 .78rem/1 var(--sans);color:var(--ground)}
 .rw-demo-tag::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--gold-bright)}
+.rw-demo-tag-light{margin:18px 0 0;background:var(--paper);border-color:var(--line);color:var(--ink)}
+.rw-demo-tag-light::before{background:var(--gold-sm)}
 @media (min-width:1000px){.rw-portal-grid{grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr)}}
 
 /* ---------- 7. who we work with ---------- */
