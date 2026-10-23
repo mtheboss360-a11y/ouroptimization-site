@@ -5,7 +5,7 @@ import { readFileSync, readdirSync } from 'node:fs';
 export const ROOT = new URL('../', import.meta.url);
 export const read = (p) => readFileSync(new URL(p, ROOT), 'utf8');
 
-/* Every page of the site, with its clean URL and its tab in the header (null: no tab). */
+/* Every page of the site, with its clean URL and its label (its breadcrumb and its name in the 404 page list; null: none). */
 export const PAGES = [
   { file: 'index.html', url: '/', tab: 'Home' },
   { file: 'referral-network.html', url: '/referral-network', tab: 'Referral Network' },
@@ -16,6 +16,7 @@ export const PAGES = [
   { file: 'website-design.html', url: '/website-design', tab: 'Website Design' },
   { file: 'pricing.html', url: '/pricing', tab: 'Pricing' },
   { file: 'sample-contract.html', url: '/sample-contract', tab: 'Sample Contract' },
+  { file: 'client-experience.html', url: '/client-experience', tab: 'Client Experience' },
   { file: 'about.html', url: '/about', tab: 'About' },
   { file: 'faq.html', url: '/faq', tab: 'FAQ' },
   { file: 'contact.html', url: '/contact', tab: 'Contact' },
@@ -24,10 +25,10 @@ export const PAGES = [
   { file: 'thanks.html', url: '/thanks', tab: null },
   { file: '404.html', url: null, tab: null }
 ];
-/* The header tabs, in order: Home, the three steps (Referral Network, Flyer Network, Patient Network), the extras, then About, FAQ and Contact. */
+/* The page labels, in order: Home, the ways we execute, then pricing, the sample contract, the client experience and the company pages. */
 export const TABS = PAGES.filter((p) => p.tab).map((p) => [p.tab, p.url]);
-/* The pages in the top row of the desktop header, beside the button (they stay in the menu on phones). */
-export const UTIL = ['/pricing', '/sample-contract', '/about', '/faq', '/contact'];
+/* The main navigation of the R Wellness Network header (October 23, 2026), the same on every page. */
+export const NAV = [['How it works', '/#approach'], ['What we do', '/#what-we-do'], ['Client experience', '/client-experience'], ['Pricing', '/pricing'], ['About', '/about']];
 
 const ENTITIES = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ', rsquo: "'", lsquo: "'", ldquo: '"', rdquo: '"', eacute: 'é', middot: '·', copy: '©', hellip: '…' };
 export const decode = (s) => s

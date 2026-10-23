@@ -82,7 +82,7 @@ describe('pricing.html', () => {
   });
 
   test('every call link on the page prefills the pricing question, and none sits in the hero', () => {
-    const calls = links(main).filter((l) => /Book a 15-minute call/.test(l.text));
+    const calls = links(main).filter((l) => /Book a Growth Consultation/.test(l.text));
     assert.equal(calls.length, 2, 'the referral network card and the closing band');
     for (const l of calls) assert.equal(l.href, '/contact?about=pricing');
   });

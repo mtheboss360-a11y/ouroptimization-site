@@ -1,4 +1,4 @@
-# Our Wellness Network (OUR Optimization LLC): static site, no build step.
+# R Wellness Network (OUR Optimization LLC): static site, no build step.
 # Two Netlify Forms (data-netlify="true" in the static HTML): "dinner-call" on the contact
 # page (contact.html, #call, posts to /thanks) and "expo-vendor" on expo-vendors.html.
 # Submissions appear under Forms in the Netlify UI, and email alerts are set in
@@ -88,6 +88,12 @@
   force = true
 
 [[redirects]]
+  from = "/client-experience.html"
+  to = "/client-experience"
+  status = 301
+  force = true
+
+[[redirects]]
   from = "/faq.html"
   to = "/faq"
   status = 301
@@ -172,16 +178,16 @@
 # The old community marketing service pages were retired in October 2026 (their .html files are
 # deleted). Each 301s, with and without .html, straight to the page that now covers it. Point new
 # rules at the final target, never at another redirected path, so there are no chains.
-# /client-portal (its own page from October 22, 2026; the portal now shows on the home page, the flyer network and the referral network)
+# /client-portal (its own page on October 22, 2026; since October 23, 2026 the portal tour lives on /client-experience)
 [[redirects]]
   from = "/client-portal"
-  to = "/#portal"
+  to = "/client-experience"
   status = 301
   force = true
 
 [[redirects]]
   from = "/client-portal.html"
-  to = "/#portal"
+  to = "/client-experience"
   status = 301
   force = true
 

@@ -22,7 +22,7 @@ describe('/contact: the call form', () => {
     }
     assert.match(byId(html, 'call'), /<form name="dinner-call"/);
     assert.match(html, /<script src="\/assets\/call\.js" defer><\/script>/);
-    assert.equal(/<h1\b[^>]*>([\s\S]*?)<\/h1>/.exec(html)[1], 'Book a <em class="dn-keep">15-minute call.</em>');
+    assert.equal(/<h1\b[^>]*>([\s\S]*?)<\/h1>/.exec(html)[1], 'Book a <em class="dn-keep">Growth Consultation.</em>');
   });
 
   test('Netlify form: name, method, action, detection and honeypot', () => {
@@ -248,7 +248,7 @@ describe('call.js: ?about= prefill', () => {
     for (const [old, now] of [['patient-dinners', 'patient-network'], ['flyer-drops', 'flyer-network'], ['google-ads', 'online-search-network']]) {
       assert.equal(call.prefillFor(`?about=${old}`, ''), call.prefillFor(`?about=${now}`, ''), `${old} and ${now} prefill the same message`);
     }
-    for (const p of PAGES.filter((x) => x.tab && !['Home', 'About', 'FAQ', 'Contact'].includes(x.tab))) {
+    for (const p of PAGES.filter((x) => x.tab && !['Home', 'About', 'FAQ', 'Contact', 'Client Experience'].includes(x.tab))) {
       assert.ok(Object.hasOwn(KEYS, p.url.slice(1)), `${p.url} has a key`);
     }
     for (const [key, message] of Object.entries(KEYS)) {

@@ -1,4 +1,4 @@
-/* Our Wellness Network: shared site behaviour.
+/* R Wellness Network: shared site behaviour.
    Loaded with defer on every page. No dependencies, no third-party requests. */
 (function () {
   var root = document.documentElement;
@@ -8,11 +8,12 @@
 
   /* The home page used to hold every section. Old links to those sections now open their own page
      (/#faq opens /faq). The home page's call band came off on October 22, 2026, so /#call opens the
-     call form on /contact, with any old query (/#call?package=website) carried along. */
+     call form on /contact, with any old query (/#call?package=website) carried along. The portal tour
+     (/#breakdown) moved to /client-experience on October 23, 2026. */
   var MOVED = {
     formats: '/patient-network#formats', how: '/patient-network#how', handle: '/patient-network#handle',
     who: '/about', 'add-ons': '/referral-network', referrals: '/referral-network',
-    'flyer-drops': '/flyer-network', faq: '/faq', call: '/contact#call'
+    'flyer-drops': '/flyer-network', faq: '/faq', call: '/contact#call', breakdown: '/client-experience#breakdown'
   };
   var old = /^#([A-Za-z][\w-]*)(?:\?(.*))?$/.exec(window.location.hash);
   if (old && (window.location.pathname === '/' || window.location.pathname === '/index.html') &&
@@ -46,14 +47,14 @@
   }
 
   /* Header: hairline once the page scrolls; mobile menu. */
-  var header = document.querySelector('.site-header');
+  var header = document.querySelector('.rw-header, .site-header');
   if (header) {
     var onScroll = function () { header.classList.toggle('is-scrolled', window.scrollY > 8); };
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
   }
 
-  var menuBtn = document.querySelector('.menu-btn');
+  var menuBtn = document.querySelector('.rw-menu, .menu-btn');
   var nav = document.getElementById('site-nav');
   if (menuBtn && nav) {
     var setMenu = function (open) {
