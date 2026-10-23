@@ -136,6 +136,33 @@
     if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       new IntersectionObserver(function (entries) { setLive(entries[0].isIntersecting); }).observe(geo);
     }
+
+    /* The owners: a portrait on the map and its card below light up together. Without this script the portrait is
+       a plain link to its card. */
+    var owners = document.querySelectorAll('.owc-owner[data-owner]');
+    var light = function (key) {
+      document.querySelectorAll('.owc-geo-spot[data-owner], .owc-owner[data-owner]').forEach(function (el) {
+        el.classList.toggle('is-active', el.getAttribute('data-owner') === key);
+      });
+    };
+    geo.querySelectorAll('.owc-geo-face').forEach(function (link) {
+      link.addEventListener('click', function (e) {
+        var key = link.parentNode.getAttribute('data-owner');
+        var card = document.getElementById('owner-' + key);
+        if (!card) return;
+        e.preventDefault();
+        light(key);
+        var smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        card.scrollIntoView({ block: 'nearest', inline: 'center', behavior: smooth ? 'smooth' : 'auto' });
+        card.focus({ preventScroll: true });
+      });
+    });
+    owners.forEach(function (card) {
+      var key = card.getAttribute('data-owner');
+      // pointermove, not mouseenter: when a portrait click scrolls the cards under a still mouse, that is not a hover.
+      card.addEventListener('pointermove', function (e) { if (e.pointerType === 'mouse' && !card.classList.contains('is-active')) light(key); });
+      card.addEventListener('focusin', function () { light(key); });
+    });
   }
 
   /* Header: hairline once the page scrolls; mobile menu. */

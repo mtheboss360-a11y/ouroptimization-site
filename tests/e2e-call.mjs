@@ -505,6 +505,20 @@ await scenario('home: a refused Google Maps key leaves our own map in place', as
   await s.close();
 });
 
+await scenario('home: an owner portrait on the map lights up its card below and moves focus there; without JavaScript it is a plain link', async () => {
+  let s = await open({ path: '/', width: 390, motion: 'reduce' });
+  await showMap(s.page);
+  await s.page.click('.owc-geo-spot[data-owner="boutique"] .owc-geo-face');
+  await s.page.waitForFunction(() => document.activeElement && document.activeElement.id === 'owner-boutique', null, { timeout: 3000 });
+  assert.deepEqual(await s.page.$$eval('.is-active', (l) => l.map((e) => e.getAttribute('data-owner'))), ['boutique', 'boutique'], 'the spot and the card, nothing else');
+  assert.equal(await s.page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true);
+  assert.deepEqual(s.jsErrors, []);
+  await s.close();
+  s = await open({ path: '/', js: false });
+  assert.deepEqual(await s.page.$$eval('.owc-geo-face', (l) => l.map((a) => a.getAttribute('href'))).then((h) => h.sort()), ['#owner-boutique', '#owner-cafe', '#owner-gym', '#owner-salon', '#owner-studio']);
+  await s.close();
+});
+
 await browser.close();
 const passed = results.filter((r) => r.ok).length;
 const failed = results.length - passed;

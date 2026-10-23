@@ -61,13 +61,30 @@ describe('home: the sections', () => {
     assert.match(attr(base, 'alt'), /real streets/);
     const pins = tags(fig, 'img').filter((t) => /owc-geo-pin/.test(t));
     assert.equal(pins.length, 6, 'the clinic and five businesses');
-    assert.equal(pins.filter((t) => /owc-geo-pin--home/.test(t)).length, 1);
+    assert.equal(tags(fig, 'div').filter((t) => /class="owc-geo-spot owc-geo-spot--home"/.test(t)).length, 1, 'one clinic');
     for (const t of pins) {
       assert.equal(attr(t, 'alt'), '');
       assert.ok(existsSync(new URL('.' + attr(t, 'src'), ROOT)), attr(t, 'src'));
     }
     assert.match(fig, /<path class="owc-geo-route" pathLength="1000" d="M[\d. ]+"/);
     assert.ok(links(fig).some((l) => l.href === 'https://www.openstreetmap.org/copyright'), 'the OpenStreetMap credit');
+  });
+  test('b. the owners on the route: an illustrated portrait on each business, linked to a card with no names', () => {
+    const s = sec('matching');
+    const fig = /<figure class="owc-geo[\s\S]*?<\/figure>/.exec(s)[0];
+    const faces = links(fig).filter((l) => /class="owc-geo-face"/.test(l.tag));
+    assert.equal(faces.length, 5, 'the five businesses, not the clinic');
+    const cards = [...s.matchAll(/<li class="owc-owner" id="owner-([a-z]+)"[\s\S]*?<\/li>/g)];
+    assert.deepEqual(faces.map((f) => f.href).sort(), cards.map((c) => '#owner-' + c[1]).sort(), 'every portrait links to its card');
+    for (const f of faces) assert.match(attr(f.tag, 'aria-label'), /owner: see the profile$/);
+    for (const [card] of cards) {
+      const t = text(card);
+      assert.match(t, /^(Salon|Gym|Boutique|Studio|Caf\u00e9) owner\s*\d min walk/, 'a role and a real walking time, no name');
+      const img = tags(card, 'img')[0];
+      assert.match(attr(img, 'alt'), /^Illustration of a /, 'an illustration, never a photo of a real person');
+      for (const src of [attr(img, 'src'), ...attr(img, 'srcset').split(',').map((x) => x.trim().split(' ')[0])]) assert.ok(existsSync(new URL('.' + src, ROOT)), src);
+    }
+    assert.doesNotMatch(text(s), /\d+\s?(stars?|reviews?)|rated|testimonial/i);
   });
   test('b. the Google Maps option: off until a key is set, then a styled static image under the same overlays', () => {
     const cfg = read('assets/site-config.js');

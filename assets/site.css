@@ -1045,22 +1045,47 @@ table{font-variant-numeric:tabular-nums}
 .owc-geo.is-live .owc-geo-route,.owc-geo.is-live .owc-geo-rings circle{animation-play-state:running}
 @keyframes owc-geo-flow{to{stroke-dashoffset:-1000}}
 @keyframes owc-geo-ping{0%{transform:scale(.25);opacity:.9}100%{transform:scale(2.6);opacity:0}}
-.owc-geo-pin{position:absolute;z-index:2;left:var(--x);top:var(--y);width:9.5%;height:auto;transform:translate(-50%,-92%) rotateX(calc(-1 * var(--tilt)));transform-origin:50% 100%;filter:drop-shadow(0 12px 14px rgba(0,0,0,.5));pointer-events:none}
-.owc-geo-pin--home{width:12.5%}
+/* Each spot stands up on the tilted map. Chrome clips a 3D-transformed box to its own bounds, so the portrait sits
+   inside the spot's box: the building takes the lower left, the portrait the top right corner. */
+.owc-geo-spot{position:absolute;z-index:2;left:var(--x);top:var(--y);width:11.3%;transform:translate(-42%,-100%) rotateX(calc(-1 * var(--tilt)));transform-origin:42% 100%}
+.owc-geo-stack{position:relative;padding-top:22%}
+.owc-geo-pin{display:block;width:84%;height:auto;margin-bottom:-5.5%;filter:drop-shadow(0 12px 14px rgba(0,0,0,.5));pointer-events:none}
+.owc-geo-spot--home{width:12.5%;transform:translate(-50%,-100%) rotateX(calc(-1 * var(--tilt)));transform-origin:50% 100%}
+.owc-geo-spot--home .owc-geo-stack{padding-top:0}
+.owc-geo-spot--home .owc-geo-pin{width:100%;margin-bottom:-6.6%}
+/* The owner's portrait links to the owner's card below the map. */
+.owc-geo-face{position:absolute;right:0;top:0;width:40%;aspect-ratio:1;border-radius:50%;overflow:hidden;background:#F3F6F2;
+  box-shadow:0 0 0 2px #EFBCCB,0 0 0 5px rgba(239,188,203,.25),0 8px 16px rgba(0,0,0,.45);transition:transform .2s ease,box-shadow .2s ease}
+.owc-geo-face img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 15%}
+.owc-geo-face:hover,.owc-geo-spot.is-active .owc-geo-face{transform:scale(1.12);box-shadow:0 0 0 3px #fff,0 0 0 8px rgba(239,188,203,.75),0 10px 22px rgba(0,0,0,.5)}
+.owc-geo-face:focus-visible{outline:3px solid #fff;outline-offset:3px}
 .owc-geo-credit{position:absolute;z-index:5;right:10px;bottom:9px;padding:2px 9px;border-radius:999px;background:rgba(11,28,19,.78);font-size:.72rem;line-height:1.6;color:#C3D2C6}
 .owc-geo-credit a{color:inherit;text-underline-offset:2px}
 .owc-geo.is-google .owc-geo-google{opacity:1}
 /* Google's map is shown as delivered: flat, uncropped, its logo and attribution in view */
 .owc-geo.is-google .owc-geo-canvas{transform:none}
-.owc-geo.is-google .owc-geo-pin{transform:translate(-50%,-92%)}
+.owc-geo.is-google .owc-geo-spot{transform:translate(-42%,-100%)}
+.owc-geo.is-google .owc-geo-spot--home{transform:translate(-50%,-100%)}
 .owc-geo.is-google .owc-geo-credit,.owc-geo.is-google .owc-geo-view::after{display:none}
 @media (max-width:759.98px){
   .owc-geo{--tilt:26deg}
   .owc-geo:not(.is-google) .owc-geo-view{aspect-ratio:1/1}
   .owc-geo:not(.is-google) .owc-geo-canvas{right:auto;left:50%;width:149.88%;transform:translateX(-50%) translateY(-2%) rotateX(var(--tilt)) scale(1.08)}
   .owc-geo-credit{right:8px;bottom:7px;font-size:.66rem}
-  .owc-geo-pin{width:10%}.owc-geo-pin--home{width:13%}
+  .owc-geo-spot{width:11.9%}.owc-geo-spot--home{width:13%}
 }
+/* The owners on the route: a swipe row on phones, five across on wide screens. */
+.owc-owners-wrap{margin-top:clamp(26px,3.6vw,40px)}
+.owc-owners-h{font:600 clamp(1.3rem,1.1rem + .8vw,1.7rem)/1.2 var(--hero);color:var(--ground);text-align:center;letter-spacing:-.01em}
+.owc-owners{list-style:none;margin:18px 0 0;padding:0;display:grid;grid-auto-flow:column;grid-auto-columns:minmax(240px,78%);gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;padding-bottom:6px;scrollbar-width:thin}
+.owc-owner{scroll-snap-align:center;display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:18px;background:rgba(243,246,242,.06);border:1px solid rgba(239,188,203,.18);transition:border-color .2s ease,background-color .2s ease}
+.owc-owner:focus{outline:none}
+.owc-owner.is-active,.owc-owner:target{border-color:#EFBCCB;background:rgba(239,188,203,.1)}
+.owc-owner-face{flex:none;width:64px;height:64px;border-radius:50%;background:#F3F6F2;box-shadow:0 0 0 2px #EFBCCB;object-fit:cover;object-position:50% 15%}
+.owc-owner-role{font:650 1.02rem/1.25 var(--display);color:var(--ground);letter-spacing:-.01em}
+.owc-owner-meta{margin-top:3px;font-size:.84rem;color:var(--gold-bright)}
+.bg-ink .owc-owner-why{margin-top:6px;font-size:.92rem;line-height:1.5;color:#C3D2C6}
+@media (min-width:1000px){.owc-owners{grid-auto-flow:row;grid-template-columns:repeat(5,minmax(0,1fr));overflow:visible}.owc-owner{flex-direction:column}.owc-owner-face{width:72px;height:72px}}
 @media (prefers-reduced-motion:reduce){.owc-geo-route,.owc-geo-rings circle{animation:none}.owc-geo-rings,.owc-geo-comet{display:none}}
 /* c. courtesy */
 .owc-courtesy-text{font-size:clamp(1.06rem,1rem + .3vw,1.2rem);line-height:1.7;color:var(--ink);text-wrap:pretty}
