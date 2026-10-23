@@ -13,7 +13,7 @@
     X-Content-Type-Options = "nosniff"
     X-Frame-Options = "SAMEORIGIN"
     Referrer-Policy = "strict-origin-when-cross-origin"
-    Content-Security-Policy = "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; font-src 'self'; form-action 'self'; frame-ancestors 'self'; base-uri 'self'"
+    Content-Security-Policy = "default-src 'self'; img-src 'self' data: https://maps.googleapis.com; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; font-src 'self'; form-action 'self'; frame-ancestors 'self'; base-uri 'self'"
 
 # Favicon set (linked from every page head): pin the content types.
 [[headers]]

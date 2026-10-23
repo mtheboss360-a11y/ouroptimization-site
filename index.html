@@ -36,7 +36,6 @@
 
 <svg class="sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
 <symbol id="i-arrow" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15M6 13.5l6 6 6-6"/></symbol>
-<symbol id="i-check" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
 <symbol id="i-dinner" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="16" r="7"/><circle cx="16" cy="16" r="3.8"/><path d="M3.5 5v6a2 2 0 0 0 4 0V5M5.5 5v22"/><path d="M28 27V5c-2.4 1.6-3.5 4.6-3.5 8.6 0 1.2.9 1.9 2 1.9H28"/></g></symbol>
 <symbol id="i-doc" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 4.5h11l4 4v19h-15z"/><path d="M19.5 4.5v4h4"/><path d="M11.5 14h9M11.5 18h9M11.5 22h6"/></g></symbol>
 <symbol id="i-pen" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22.5 4.5 27.5 9.5 11 26l-6.5 1.5L6 21z"/><path d="m19.5 7.5 5 5M6 21l5 5"/></g></symbol>
@@ -72,10 +71,6 @@
       <h1 id="hero-h">Your Organic Growth Team.</h1>
       <p class="owc-hero-sub">We put your brand into the community.</p>
       <p class="lede">We get your clinic recommended by the staff of the gyms, salons and boutiques near you, and show you every lead and booking that comes from it.</p>
-      <div class="actions">
-        <a class="btn btn-primary" href="/contact">Book a 15-minute call</a>
-        <a class="btn btn-ghost" href="#dashboard">See a sample dashboard</a>
-      </div>
     </div>
     <div class="owc-hero-art">
       <div class="owc-hero-media">
@@ -90,47 +85,63 @@
   </div>
 </section>
 
-<!-- ===== a. How it works ===== -->
-<section class="section bg-paper" aria-labelledby="how-h" id="how-it-works">
+<!-- ===== Business matching: real streets (OpenStreetMap, or Google Maps once a key is set in site-config.js) with the matched businesses on them ===== -->
+<section class="section bg-ink owc-geo-band" aria-labelledby="match-h" id="matching">
   <div class="wrap">
-    <div class="section-head reveal">
+    <div class="section-head center reveal">
       <div class="rule" aria-hidden="true"></div>
-      <p class="eyebrow">How it works</p>
-      <h2 id="how-h">From the shops next door <em class="dn-line">to your front desk.</em></h2>
+      <p class="eyebrow">Business matching</p>
+      <h2 id="match-h">We map the businesses <em class="dn-line">around your clinic.</em></h2>
     </div>
-    <ol class="steps owc-steps reveal">
-      <li><span class="num">01</span><h3>We match you.</h3><p>Our business matching software maps the businesses around your clinic and ranks the non-competing ones that share your customers, including ones you don&rsquo;t already know. You approve the list before any visit, and we skip any business you already work with unless you ask.</p></li>
-      <li><span class="num">02</span><h3>We run your routes.</h3><p>A rep visits a route of 5 matched businesses and introduces your clinic to their staff.</p></li>
-      <li><span class="num">03</span><h3>Every staff member gets a code.</h3><p>Each staff member we meet gets a personal tap-and-scan code (NFC tag and QR). A tap opens your first-visit offer, tagged with who sent it.</p></li>
-      <li><span class="num">04</span><h3>Every lead lands in your dashboard.</h3><p>Each sign-up appears in your client portal right away: name, phone, the service they asked about, and which business and staff member sent them, ready for your front desk to call.</p></li>
-    </ol>
-    <p class="owc-more reveal"><a class="textlink" href="/referral-network">How a route works, step by step<svg aria-hidden="true"><use href="#i-arrow"/></svg></a></p>
+    <figure class="owc-geo reveal" data-geo-lat="41.7935" data-geo-lng="-88.0105" data-geo-zoom="16" data-geo-size="640x427">
+      <div class="owc-geo-view">
+        <div class="owc-geo-canvas">
+          <picture>
+            <source type="image/avif" srcset="/assets/img/map-base-800.avif 800w, /assets/img/map-base-1200.avif 1200w, /assets/img/map-base-1800.avif 1800w, /assets/img/map-base-2400.avif 2400w" sizes="(min-width:1240px) 1180px, (min-width:760px) calc(100vw - 80px), 150vw">
+            <source type="image/webp" srcset="/assets/img/map-base-800.webp 800w, /assets/img/map-base-1200.webp 1200w, /assets/img/map-base-1800.webp 1800w, /assets/img/map-base-2400.webp 2400w" sizes="(min-width:1240px) 1180px, (min-width:760px) calc(100vw - 80px), 150vw">
+            <img class="owc-geo-base" src="/assets/img/map-base-1200.jpg" srcset="/assets/img/map-base-800.jpg 800w, /assets/img/map-base-1200.jpg 1200w, /assets/img/map-base-1800.jpg 1800w, /assets/img/map-base-2400.jpg 2400w" sizes="(min-width:1240px) 1180px, (min-width:760px) calc(100vw - 80px), 150vw" width="2400" height="1601" alt="A map of real streets in a downtown in Chicago&rsquo;s western suburbs, with every business on it marked: your clinic in the middle, five matched businesses around it (a caf&eacute;, a salon, a gym, a boutique and a studio) and the route between them along the streets." loading="lazy" decoding="async">
+          </picture>
+          <svg class="owc-geo-svg" viewBox="0 0 640 427" preserveAspectRatio="none" aria-hidden="true" focusable="false"><g class="owc-geo-dots"><circle cx="469.8" cy="274.1" r="1.5"/><circle cx="318.3" cy="123.9" r="1.5"/><circle cx="394.6" cy="334.3" r="1.5"/><circle cx="335.8" cy="147.1" r="1.5"/><circle cx="296.2" cy="3.9" r="1.5"/><circle cx="313.0" cy="56.9" r="1.5"/><circle cx="330.3" cy="52.4" r="1.5"/><circle cx="341.0" cy="242.1" r="1.5"/><circle cx="338.0" cy="213.8" r="1.5"/><circle cx="378.2" cy="146.1" r="1.5"/><circle cx="335.5" cy="122.2" r="1.5"/><circle cx="352.9" cy="186.8" r="1.5"/><circle cx="336.4" cy="166.1" r="1.5"/><circle cx="361.9" cy="46.3" r="1.5"/><circle cx="382.8" cy="66.0" r="1.5"/><circle cx="312.6" cy="43.5" r="1.5"/><circle cx="299.3" cy="13.3" r="1.5"/><circle cx="343.1" cy="315.1" r="1.5"/><circle cx="399.1" cy="126.3" r="1.5"/><circle cx="323.6" cy="228.6" r="1.5"/><circle cx="323.5" cy="222.5" r="1.5"/><circle cx="355.2" cy="122.4" r="1.5"/><circle cx="347.8" cy="122.3" r="1.5"/><circle cx="317.0" cy="144.9" r="1.5"/><circle cx="336.7" cy="179.0" r="1.5"/><circle cx="337.3" cy="188.5" r="1.5"/><circle cx="319.1" cy="161.4" r="1.5"/><circle cx="344.5" cy="323.0" r="1.5"/><circle cx="328.8" cy="322.3" r="1.5"/><circle cx="346.0" cy="354.5" r="1.5"/><circle cx="343.3" cy="307.5" r="1.5"/><circle cx="328.4" cy="317.3" r="1.5"/><circle cx="339.8" cy="233.5" r="1.5"/><circle cx="338.7" cy="226.7" r="1.5"/><circle cx="338.2" cy="222.5" r="1.5"/><circle cx="301.6" cy="191.1" r="1.5"/><circle cx="328.0" cy="299.7" r="1.5"/><circle cx="334.5" cy="136.7" r="1.5"/><circle cx="335.1" cy="141.6" r="1.5"/><circle cx="299.4" cy="9.1" r="1.5"/><circle cx="440.6" cy="189.4" r="1.5"/><circle cx="319.5" cy="165.8" r="1.5"/><circle cx="319.9" cy="170.6" r="1.5"/><circle cx="320.5" cy="179.0" r="1.5"/><circle cx="320.8" cy="183.3" r="1.5"/><circle cx="321.1" cy="192.7" r="1.5"/><circle cx="329.6" cy="363.9" r="1.5"/><circle cx="320.5" cy="209.9" r="1.5"/><circle cx="335.5" cy="159.4" r="1.5"/><circle cx="327.3" cy="334.3" r="1.5"/><circle cx="328.9" cy="327.7" r="1.5"/><circle cx="327.9" cy="308.7" r="1.5"/><circle cx="282.7" cy="258.0" r="1.5"/><circle cx="378.4" cy="197.3" r="1.5"/><circle cx="379.9" cy="179.3" r="1.5"/><circle cx="339.2" cy="206.3" r="1.5"/><circle cx="343.0" cy="51.7" r="1.5"/><circle cx="355.3" cy="51.1" r="1.5"/><circle cx="337.6" cy="51.9" r="1.5"/><circle cx="304.2" cy="57.4" r="1.5"/><circle cx="383.1" cy="53.5" r="1.5"/><circle cx="367.0" cy="425.3" r="1.5"/><circle cx="409.0" cy="191.3" r="1.5"/><circle cx="402.1" cy="192.5" r="1.5"/><circle cx="355.5" cy="200.8" r="1.5"/><circle cx="405.0" cy="192.1" r="1.5"/><circle cx="318.3" cy="150.9" r="1.5"/><circle cx="317.9" cy="127.8" r="1.5"/><circle cx="300.6" cy="122.6" r="1.5"/><circle cx="295.6" cy="122.6" r="1.5"/><circle cx="373.9" cy="197.5" r="1.5"/><circle cx="316.0" cy="253.8" r="1.5"/><circle cx="350.7" cy="261.9" r="1.5"/><circle cx="277.8" cy="168.3" r="1.5"/><circle cx="435.2" cy="156.3" r="1.5"/><circle cx="339.7" cy="105.2" r="1.5"/><circle cx="237.9" cy="206.8" r="1.5"/><circle cx="377.4" cy="203.4" r="1.5"/><circle cx="347.3" cy="72.2" r="1.5"/></g><path class="owc-geo-lots" d="M173.8 120.5 188.4 120.2 188.3 117.6 204.2 117.3 204.7 135.3 198.2 135.4 198.2 132.7 183.9 133.1 183.9 135.6 167.5 136.0 167.1 118.3 173.8 118.1 173.8 120.5ZM442.1 142.0 445.5 158.0 441.0 158.9 442.8 167.7 429.8 170.5 427.7 160.2 424.3 161.0 421.3 146.3 442.1 142.0ZM472.0 272.1 470.7 269.4 468.8 270.3 467.3 267.1 469.4 266.2 469.0 265.5 476.5 262.0 479.6 268.6 472.0 272.1ZM329.2 315.0 329.6 324.8 320.3 325.1 320.1 320.8 322.7 320.7 322.6 317.8 324.4 317.7 324.3 315.2 329.2 315.0ZM154.2 262.2 154.7 271.7 145.5 272.1 145.7 277.1 147.2 277.0 148.4 276.9 148.3 274.8 157.0 274.5 157.2 279.3 160.2 279.2 162.8 279.1 162.7 277.4 170.4 277.0 170.5 278.2 178.1 277.8 177.5 263.5 174.2 263.6 174.1 261.3 154.2 262.2Z"/><path class="owc-geo-lot-home" d="M324.8 219.2 324.0 205.3 310.6 206.0 310.7 207.6 308.8 208.2 309.4 219.4 311.2 218.8 311.3 220.2 312.0 219.9 324.8 219.2Z"/><path class="owc-geo-route-glow" d="M309.9 199.4 323.0 199.3 330.0 198.9 339.2 197.7 358.8 194.2 360.4 193.9 392.0 188.0 413.2 184.2 419.7 182.9 420.8 182.7 452.4 176.7 450.3 141.7 452.4 176.7 454.1 208.8 454.6 217.3 454.9 222.2 455.0 224.9 455.3 229.9 456.7 256.8 457.0 263.6 457.3 270.4 458.0 286.3 459.2 292.2 437.1 302.8 434.5 304.1 421.3 310.6 419.0 311.6 409.8 316.0 397.1 322.1 368.7 335.8 365.8 337.2 353.4 343.2 338.6 350.3 337.9 337.5 336.5 313.5 335.9 302.9 335.0 286.2 308.9 286.8 306.5 286.8 303.0 286.9 290.7 287.2 278.2 287.5 239.6 288.4 229.6 288.7 217.2 289.0 181.1 289.9 148.4 290.6 144.7 284.3 137.9 272.9 135.4 268.6 132.7 262.2 132.5 261.2 125.5 227.6 117.6 190.1 116.4 183.8 116.1 182.2 109.4 148.6 148.4 147.8 179.9 147.1 213.5 146.5 251.8 145.7 246.0 194.6 255.1 195.9 276.5 197.7 297.9 198.8 309.9 199.4"/><path class="owc-geo-route" pathLength="1000" d="M309.9 199.4 323.0 199.3 330.0 198.9 339.2 197.7 358.8 194.2 360.4 193.9 392.0 188.0 413.2 184.2 419.7 182.9 420.8 182.7 452.4 176.7 450.3 141.7 452.4 176.7 454.1 208.8 454.6 217.3 454.9 222.2 455.0 224.9 455.3 229.9 456.7 256.8 457.0 263.6 457.3 270.4 458.0 286.3 459.2 292.2 437.1 302.8 434.5 304.1 421.3 310.6 419.0 311.6 409.8 316.0 397.1 322.1 368.7 335.8 365.8 337.2 353.4 343.2 338.6 350.3 337.9 337.5 336.5 313.5 335.9 302.9 335.0 286.2 308.9 286.8 306.5 286.8 303.0 286.9 290.7 287.2 278.2 287.5 239.6 288.4 229.6 288.7 217.2 289.0 181.1 289.9 148.4 290.6 144.7 284.3 137.9 272.9 135.4 268.6 132.7 262.2 132.5 261.2 125.5 227.6 117.6 190.1 116.4 183.8 116.1 182.2 109.4 148.6 148.4 147.8 179.9 147.1 213.5 146.5 251.8 145.7 246.0 194.6 255.1 195.9 276.5 197.7 297.9 198.8 309.9 199.4"/><g class="owc-geo-rings" transform="translate(314.7 214.4)"><circle r="26"/><circle r="26"/><circle r="26"/></g><circle class="owc-geo-comet" r="3"><animateMotion dur="16s" repeatCount="indefinite" path="M309.9 199.4 323.0 199.3 330.0 198.9 339.2 197.7 358.8 194.2 360.4 193.9 392.0 188.0 413.2 184.2 419.7 182.9 420.8 182.7 452.4 176.7 450.3 141.7 452.4 176.7 454.1 208.8 454.6 217.3 454.9 222.2 455.0 224.9 455.3 229.9 456.7 256.8 457.0 263.6 457.3 270.4 458.0 286.3 459.2 292.2 437.1 302.8 434.5 304.1 421.3 310.6 419.0 311.6 409.8 316.0 397.1 322.1 368.7 335.8 365.8 337.2 353.4 343.2 338.6 350.3 337.9 337.5 336.5 313.5 335.9 302.9 335.0 286.2 308.9 286.8 306.5 286.8 303.0 286.9 290.7 287.2 278.2 287.5 239.6 288.4 229.6 288.7 217.2 289.0 181.1 289.9 148.4 290.6 144.7 284.3 137.9 272.9 135.4 268.6 132.7 262.2 132.5 261.2 125.5 227.6 117.6 190.1 116.4 183.8 116.1 182.2 109.4 148.6 148.4 147.8 179.9 147.1 213.5 146.5 251.8 145.7 246.0 194.6 255.1 195.9 276.5 197.7 297.9 198.8 309.9 199.4"/></circle></svg>
+          <img class="owc-geo-pin" src="/assets/img/map-cafe-280.webp" srcset="/assets/img/map-cafe-140.webp 140w, /assets/img/map-cafe-280.webp 280w" sizes="(min-width:760px) 12vw, 15vw" style="--x:28.91%;--y:29.56%" width="280" height="226" alt="" loading="lazy" decoding="async">
+          <img class="owc-geo-pin" src="/assets/img/map-salon-280.webp" srcset="/assets/img/map-salon-140.webp 140w, /assets/img/map-salon-280.webp 280w" sizes="(min-width:760px) 12vw, 15vw" style="--x:68.0%;--y:36.6%" width="280" height="238" alt="" loading="lazy" decoding="async">
+          <img class="owc-geo-pin owc-geo-pin--home" src="/assets/img/map-clinic-360.webp" srcset="/assets/img/map-clinic-180.webp 180w, /assets/img/map-clinic-360.webp 360w" sizes="(min-width:760px) 15vw, 20vw" style="--x:49.18%;--y:50.2%" width="360" height="317" alt="" loading="lazy" decoding="async">
+          <img class="owc-geo-pin" src="/assets/img/map-gym-280.webp" srcset="/assets/img/map-gym-140.webp 140w, /assets/img/map-gym-280.webp 280w" sizes="(min-width:760px) 12vw, 15vw" style="--x:73.7%;--y:62.79%" width="280" height="227" alt="" loading="lazy" decoding="async">
+          <img class="owc-geo-pin" src="/assets/img/map-studio-280.webp" srcset="/assets/img/map-studio-140.webp 140w, /assets/img/map-studio-280.webp 280w" sizes="(min-width:760px) 12vw, 15vw" style="--x:25.02%;--y:63.91%" width="280" height="233" alt="" loading="lazy" decoding="async">
+          <img class="owc-geo-pin" src="/assets/img/map-boutique-280.webp" srcset="/assets/img/map-boutique-140.webp 140w, /assets/img/map-boutique-280.webp 280w" sizes="(min-width:760px) 12vw, 15vw" style="--x:50.74%;--y:74.74%" width="280" height="232" alt="" loading="lazy" decoding="async">
+        </div>
+      </div>
+      <figcaption class="owc-geo-credit">Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors</figcaption>
+    </figure>
   </div>
 </section>
 
-<!-- ===== b. Business matching ===== -->
-<section class="section" aria-labelledby="match-h" id="matching">
-  <div class="wrap media owc-match">
-    <div class="reveal">
+<!-- ===== d. Your dashboard (real screens from the portal's sample account) ===== -->
+<section class="section pt-band" aria-labelledby="dashboard-h" id="dashboard">
+  <div class="wrap">
+    <div class="section-head center reveal">
       <div class="rule" aria-hidden="true"></div>
-      <p class="eyebrow">Business matching</p>
-      <h2 id="match-h">Business matching, <em class="dn-line">built for your clinic.</em></h2>
-      <p class="intro">We map the gyms, salons, boutiques and studios around you and rank the ones whose customers are already yours to win, without competing with you. Some will be places you walk past every day. Others you won&rsquo;t know yet.</p>
-      <ul class="spec">
-        <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>You see the list and approve it before anyone visits.</span></li>
-        <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>We skip any business you already work with, unless you ask.</span></li>
-        <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>On the call, we show you your matched businesses.</span></li>
-      </ul>
+      <p class="eyebrow">Your dashboard</p>
+      <h2 id="dashboard-h">Every lead, <em class="dn-line">and where it came from.</em></h2>
+      <p class="intro">Your client portal shows routes completed, businesses visited, codes active, the leads list, and leads and bookings by source, month by month.</p>
     </div>
-    <figure class="owc-map reveal">
-      <span class="owc-tag owc-map-tag">Example</span>
-      <picture>
-        <source type="image/avif" srcset="/assets/img/matching-map-480.avif 480w, /assets/img/matching-map-800.avif 800w, /assets/img/matching-map-1200.avif 1200w, /assets/img/matching-map-1677.avif 1677w" sizes="(min-width:1180px) 560px, (min-width:900px) 46vw, calc(100vw - 40px)">
-        <source type="image/webp" srcset="/assets/img/matching-map-480.webp 480w, /assets/img/matching-map-800.webp 800w, /assets/img/matching-map-1200.webp 1200w, /assets/img/matching-map-1677.webp 1677w" sizes="(min-width:1180px) 560px, (min-width:900px) 46vw, calc(100vw - 40px)">
-        <img src="/assets/img/matching-map-800.jpg" srcset="/assets/img/matching-map-480.jpg 480w, /assets/img/matching-map-800.jpg 800w, /assets/img/matching-map-1200.jpg 1200w, /assets/img/matching-map-1677.jpg 1677w" sizes="(min-width:1180px) 560px, (min-width:900px) 46vw, calc(100vw - 40px)" width="1677" height="938" alt="Example of a matched neighborhood: a clinic in the centre and five nearby businesses around it, a caf&eacute;, a salon, a gym, a boutique and a studio, joined by a dashed route." loading="lazy" decoding="async">
-      </picture>
-      <figcaption>Example: your clinic in the centre, five matched businesses around it, and the route between them.</figcaption>
-    </figure>
+    <div class="pt-stage reveal">
+      <figure class="pt-browser"><div class="pt-bar" aria-hidden="true"><span></span><span></span><span></span></div><picture><source type="image/webp" srcset="/assets/img/portal-overview-800.webp 800w, /assets/img/portal-overview.webp 1600w" sizes="(min-width:1180px) 960px, (min-width:760px) calc(100vw - 220px), calc(100vw - 40px)"><img src="/assets/img/portal-overview-800.jpg" srcset="/assets/img/portal-overview-800.jpg 800w, /assets/img/portal-overview.jpg 1600w" sizes="(min-width:1180px) 960px, (min-width:760px) calc(100vw - 220px), calc(100vw - 40px)" width="1600" height="708" alt="Screenshot of the client portal&rsquo;s overview, sample account for a fictional clinic: the month&rsquo;s materials dropped, the leads collected and the business that sent the most." loading="lazy" decoding="async"></picture></figure>
+      <figure class="pt-phone"><picture><source type="image/webp" srcset="/assets/img/portal-phone-390.webp 390w, /assets/img/portal-phone.webp 780w" sizes="(min-width:760px) 230px, 270px"><img src="/assets/img/portal-phone-390.jpg" srcset="/assets/img/portal-phone-390.jpg 390w, /assets/img/portal-phone.jpg 780w" sizes="(min-width:760px) 230px, 270px" width="780" height="1502" alt="Screenshot of the client portal on a phone, sample account for a fictional clinic: the same overview, stacked." loading="lazy" decoding="async"></picture></figure>
+    </div>
+    <ol class="pt-tour owc-tour reveal">
+      <li class="pt-row">
+        <div class="pt-row-copy"><h3>Your leads</h3><p>Name, phone, email, the service they asked about, where they came from and when. Ready for your front desk to call.</p></div>
+        <div class="pt-frame"><picture><source type="image/webp" srcset="/assets/img/portal-leads-800.webp 800w, /assets/img/portal-leads.webp 1600w" sizes="(min-width:1180px) 680px, (min-width:900px) calc(62vw - 60px), calc(100vw - 40px)"><img src="/assets/img/portal-leads-800.jpg" srcset="/assets/img/portal-leads-800.jpg 800w, /assets/img/portal-leads.jpg 1600w" sizes="(min-width:1180px) 680px, (min-width:900px) calc(62vw - 60px), calc(100vw - 40px)" width="1600" height="951" alt="Screenshot of the leads list in the sample account: each lead with a name, a phone number, an email, the service they asked about, the business it came from and the date it arrived." loading="lazy" decoding="async"></picture></div>
+      </li>
+      <li class="pt-row">
+        <div class="pt-row-copy"><h3>Month by month</h3><p>What went out and what came back for every month, side by side.</p></div>
+        <div class="pt-frame"><picture><source type="image/webp" srcset="/assets/img/portal-months-800.webp 800w, /assets/img/portal-months.webp 1600w" sizes="(min-width:1180px) 680px, (min-width:900px) calc(62vw - 60px), calc(100vw - 40px)"><img src="/assets/img/portal-months-800.jpg" srcset="/assets/img/portal-months-800.jpg 800w, /assets/img/portal-months.jpg 1600w" sizes="(min-width:1180px) 680px, (min-width:900px) calc(62vw - 60px), calc(100vw - 40px)" width="1600" height="954" alt="Screenshot of the month by month table in the sample account: field days, materials and leads for each month, with the response rate for each." loading="lazy" decoding="async"></picture></div>
+      </li>
+    </ol>
+    <div class="owc-dash-foot reveal">
+      <p><svg aria-hidden="true"><use href="#i-doc"/></svg><span>After every field day you also get a written visit log within 5 business days.</span></p>
+      <a class="btn btn-ghost" href="https://www.ournetworkportal.com">Client Portal</a>
+    </div>
   </div>
 </section>
 
@@ -145,37 +156,6 @@
     <div class="reveal">
       <p class="owc-courtesy-text">For your trial the default courtesy is a complimentary consultation, which costs you only a few minutes and often turns into a booking itself. You can choose something else, like a complimentary add-on or a product sample, and you set a cap, for example up to 3 staff per business, so a route means at most 15 courtesies. It&rsquo;s the same for every staff member and is given whether or not they ever send anyone, which keeps it a courtesy and not a payment for referrals.</p>
       <p class="owc-more"><a class="textlink" href="/faq#courtesy">Questions about the courtesy<svg aria-hidden="true"><use href="#i-arrow"/></svg></a></p>
-    </div>
-  </div>
-</section>
-
-<!-- ===== d. Your dashboard (real screens from the portal's sample account) ===== -->
-<section class="section pt-band" aria-labelledby="dashboard-h" id="dashboard">
-  <div class="wrap">
-    <div class="section-head center reveal">
-      <div class="rule" aria-hidden="true"></div>
-      <p class="eyebrow">Your dashboard</p>
-      <h2 id="dashboard-h">Every lead, <em class="dn-line">and where it came from.</em></h2>
-      <p class="intro">Your client portal shows routes completed, businesses visited, codes active, the leads list, and leads and bookings by source, month by month.</p>
-      <p class="owc-tag owc-dash-tag">Sample account, fictional clinic</p>
-    </div>
-    <div class="pt-stage reveal">
-      <figure class="pt-browser"><div class="pt-bar" aria-hidden="true"><span></span><span></span><span></span></div><picture><source type="image/webp" srcset="/assets/img/portal-overview-800.webp 800w, /assets/img/portal-overview.webp 1600w" sizes="(min-width:1180px) 960px, (min-width:760px) calc(100vw - 220px), calc(100vw - 40px)"><img src="/assets/img/portal-overview-800.jpg" srcset="/assets/img/portal-overview-800.jpg 800w, /assets/img/portal-overview.jpg 1600w" sizes="(min-width:1180px) 960px, (min-width:760px) calc(100vw - 220px), calc(100vw - 40px)" width="1600" height="708" alt="Screenshot of the client portal&rsquo;s overview, sample account for a fictional clinic: the month&rsquo;s materials dropped, the leads collected and the business that sent the most." loading="lazy" decoding="async"></picture></figure>
-      <figure class="pt-phone"><picture><source type="image/webp" srcset="/assets/img/portal-phone-390.webp 390w, /assets/img/portal-phone.webp 780w" sizes="(min-width:760px) 230px, 270px"><img src="/assets/img/portal-phone-390.jpg" srcset="/assets/img/portal-phone-390.jpg 390w, /assets/img/portal-phone.jpg 780w" sizes="(min-width:760px) 230px, 270px" width="780" height="1502" alt="Screenshot of the client portal on a phone, sample account for a fictional clinic: the same overview, stacked." loading="lazy" decoding="async"></picture></figure>
-    </div>
-    <ol class="pt-tour owc-tour reveal">
-      <li class="pt-row">
-        <div class="pt-row-copy"><span class="owc-tag">Sample account, fictional clinic</span><h3>Your leads</h3><p>Name, phone, email, the service they asked about, where they came from and when. Ready for your front desk to call.</p></div>
-        <div class="pt-frame"><picture><source type="image/webp" srcset="/assets/img/portal-leads-800.webp 800w, /assets/img/portal-leads.webp 1600w" sizes="(min-width:1180px) 680px, (min-width:900px) calc(62vw - 60px), calc(100vw - 40px)"><img src="/assets/img/portal-leads-800.jpg" srcset="/assets/img/portal-leads-800.jpg 800w, /assets/img/portal-leads.jpg 1600w" sizes="(min-width:1180px) 680px, (min-width:900px) calc(62vw - 60px), calc(100vw - 40px)" width="1600" height="951" alt="Screenshot of the leads list in the sample account: each lead with a name, a phone number, an email, the service they asked about, the business it came from and the date it arrived." loading="lazy" decoding="async"></picture></div>
-      </li>
-      <li class="pt-row">
-        <div class="pt-row-copy"><span class="owc-tag">Sample account, fictional clinic</span><h3>Month by month</h3><p>What went out and what came back for every month, side by side.</p></div>
-        <div class="pt-frame"><picture><source type="image/webp" srcset="/assets/img/portal-months-800.webp 800w, /assets/img/portal-months.webp 1600w" sizes="(min-width:1180px) 680px, (min-width:900px) calc(62vw - 60px), calc(100vw - 40px)"><img src="/assets/img/portal-months-800.jpg" srcset="/assets/img/portal-months-800.jpg 800w, /assets/img/portal-months.jpg 1600w" sizes="(min-width:1180px) 680px, (min-width:900px) calc(62vw - 60px), calc(100vw - 40px)" width="1600" height="954" alt="Screenshot of the month by month table in the sample account: field days, materials and leads for each month, with the response rate for each." loading="lazy" decoding="async"></picture></div>
-      </li>
-    </ol>
-    <div class="owc-dash-foot reveal">
-      <p><svg aria-hidden="true"><use href="#i-doc"/></svg><span>After every field day you also get a written visit log within 5 business days.</span></p>
-      <a class="btn btn-ghost" href="https://www.ournetworkportal.com">Client Portal</a>
     </div>
   </div>
 </section>
@@ -237,23 +217,6 @@
     </ul>
     <p class="owc-attorney" data-flag="attorneyReviewed" data-flag-text="attorneyReviewedText" hidden><svg aria-hidden="true"><use href="#i-shield"/></svg><span></span></p>
     <p class="owc-more reveal"><a class="textlink" href="/sample-contract">Read the sample contract<svg aria-hidden="true"><use href="#i-arrow"/></svg></a></p>
-  </div>
-</section>
-
-<!-- ===== h. Who we are ===== -->
-<section class="section" aria-labelledby="who-h" id="who">
-  <div class="wrap split owc-who">
-    <div class="reveal">
-      <div class="rule" aria-hidden="true"></div>
-      <p class="eyebrow">Who we are</p>
-      <h2 id="who-h">A local company <em class="dn-line">in Chicago&rsquo;s western suburbs.</em></h2>
-      <p class="intro">You deal with the owner directly by phone or text.</p>
-      <p class="owc-more"><a class="textlink" href="/about">More about us<svg aria-hidden="true"><use href="#i-arrow"/></svg></a></p>
-    </div>
-    <figure class="dn-proof owc-proof reveal">
-      <div class="dn-proof-img"><picture><source type="image/webp" srcset="/assets/img/kit-tins-640.webp 640w, /assets/img/kit-tins.webp 1000w" sizes="(min-width:900px) 180px, 34vw"><img src="/assets/img/kit-tins-640.jpg" srcset="/assets/img/kit-tins-640.jpg 640w, /assets/img/kit-tins.jpg 1000w" sizes="(min-width:900px) 180px, 34vw" width="1000" height="1250" alt="Square gift tins in pink, red and navy blue with round white Grace Pediatrics labels, packed in an open cardboard box." loading="lazy" decoding="async"></picture></div>
-      <figcaption><strong>Client work: Grace Pediatrics in Glendale Heights.</strong> Community marketing for a pediatric clinic, with flyers, gift tins, an event table and QR codes that tracked every scan.</figcaption>
-    </figure>
   </div>
 </section>
 

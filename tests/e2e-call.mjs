@@ -6,7 +6,8 @@
 //
 // Runs against a LOCAL server only and refuses anything else. Every request that is not a
 // GET or HEAD is intercepted with route.fulfill and answered here, so no submission ever
-// reaches a server. Requests to any other origin are aborted.
+// reaches a server. Requests to any other origin are aborted, except Google Static Maps when a
+// scenario asks for it, which is answered here too (never sent).
 // Not part of `node --test` (it needs a browser and a running server).
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
@@ -45,17 +46,26 @@ const REQUIRED_IDS = ['call-name', 'call-clinic', 'call-phone', 'call-town', 'ca
 const browser = await chromium.launch();
 const results = [];
 
-async function open({ width = 1280, height = 900, path = '/contact', js = true, motion = 'reduce', stub = {} } = {}) {
+/* A 1x1 PNG standing in for a Google Static Maps image. */
+const PNG_1PX = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=', 'base64');
+
+async function open({ width = 1280, height = 900, path = '/contact', js = true, motion = 'reduce', stub = {}, google = null } = {}) {
   const context = await browser.newContext({ viewport: { width, height }, javaScriptEnabled: js, reducedMotion: motion });
   const page = await context.newPage();
   const posts = [];
   const jsErrors = [];
   const missing = [];
+  const maps = [];
   page.on('pageerror', (e) => jsErrors.push(String(e)));
   page.on('response', (r) => { if (r.status() >= 400) missing.push(`${r.status()} ${r.url()}`); });
   await context.route('**/*', async (route) => {
     const req = route.request();
     const url = new URL(req.url());
+    if (url.origin === 'https://maps.googleapis.com') {
+      maps.push(req.url());
+      if (google === 'ok') return route.fulfill({ status: 200, contentType: 'image/png', body: PNG_1PX });
+      if (google === 'refuse') return route.fulfill({ status: 403, contentType: 'text/plain', body: 'The provided API key is invalid.' });
+    }
     if (url.origin !== baseUrl.origin) return route.abort();
     if (req.method() === 'GET' && Object.hasOwn(stub, url.pathname)) {
       const s = stub[url.pathname];
@@ -68,7 +78,7 @@ async function open({ width = 1280, height = 900, path = '/contact', js = true, 
     return route.continue();
   });
   await page.goto(`${BASE}${path}`, { waitUntil: 'load' });
-  return { page, posts, jsErrors, missing, close: () => context.close() };
+  return { page, posts, jsErrors, missing, maps, close: () => context.close() };
 }
 
 async function fillValid(page, { dinner = 'Referral routes', time = 'Afternoon, 2 to 5 pm' } = {}) {
@@ -425,6 +435,72 @@ await scenario('home: the hero still shows without a video; with motion allowed 
   await s.page.waitForFunction(() => !document.querySelector('.owc-hero-video') || document.querySelector('.owc-hero-media').classList.contains('is-playing'), null, { timeout: 5000 });
   assert.equal(await s.page.$('.owc-hero-video'), null, 'no van-route.mp4 yet: the slot removes itself after the failed load');
   assert.ok(await s.page.$eval('.owc-hero-media img', (i) => i.complete && i.naturalWidth > 0), 'the still stays');
+  assert.deepEqual(s.jsErrors, []);
+  await s.close();
+});
+
+const withKey = (key) => ({ '/assets/site-config.js': { type: 'text/javascript', body: `window.OWC_CONFIG = { attorneyReviewed: false, googleMapsKey: '${key}', googleMapText: 'The map comes from Google Maps.' };` } });
+const showMap = (page) => page.evaluate(() => document.querySelector('#matching .owc-geo').scrollIntoView({ block: 'center', behavior: 'instant' }));
+
+await scenario('home: the business map shows real streets, the clinic, five businesses and the route, with no request to Google while there is no key', async () => {
+  for (const width of [1280, 390]) {
+    const s = await open({ path: '/', width, motion: 'no-preference' });
+    await showMap(s.page);
+    await s.page.waitForFunction(() => [...document.querySelectorAll('.owc-geo img')].every((i) => i.complete && i.naturalWidth > 0), null, { timeout: 5000 });
+    assert.equal(await s.page.$$eval('.owc-geo-pin', (l) => l.length), 6);
+    assert.equal(await s.page.$eval('.owc-geo', (f) => f.classList.contains('is-live')), true, 'on screen: the route moves');
+    assert.equal(await s.page.$eval('.owc-geo', (f) => f.classList.contains('is-google')), false);
+    assert.ok(await s.page.$eval('.owc-geo-credit', (c) => c.offsetWidth > 0), 'the OpenStreetMap credit shows');
+    assert.equal(await s.page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true, `${width}px: no sideways scroll`);
+    assert.deepEqual(s.maps, [], 'no key: nothing is asked of Google');
+    assert.deepEqual(s.jsErrors, []);
+    await s.page.evaluate(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'instant' }));
+    await s.page.waitForFunction(() => !document.querySelector('.owc-geo').classList.contains('is-live'), null, { timeout: 3000 }); // off screen: it stops
+    await s.close();
+  }
+  const s = await open({ path: '/', motion: 'reduce' });
+  await showMap(s.page);
+  assert.equal(await s.page.$eval('.owc-geo-comet', (c) => getComputedStyle(c).display), 'none', 'reduced motion: nothing travels the route');
+  assert.equal(await s.page.$eval('.owc-geo-route', (c) => getComputedStyle(c).animationName), 'none');
+  await s.close();
+});
+
+await scenario('home: with a Google Maps key the styled Google map goes under the same overlays, and the privacy policy says so', async () => {
+  let s = await open({ path: '/', google: 'ok', stub: withKey('TEST-KEY') });
+  await showMap(s.page);
+  await s.page.waitForFunction(() => document.querySelector('.owc-geo').classList.contains('is-google'), null, { timeout: 5000 });
+  assert.equal(s.maps.length, 1, 'one image request');
+  const u = new URL(s.maps[0]);
+  assert.equal(u.pathname, '/maps/api/staticmap');
+  assert.equal(u.searchParams.get('center'), '41.7935,-88.0105');
+  assert.equal(u.searchParams.get('zoom'), '16');
+  assert.equal(u.searchParams.get('size'), '640x427');
+  assert.equal(u.searchParams.get('scale'), '2');
+  assert.equal(u.searchParams.get('key'), 'TEST-KEY');
+  assert.ok(u.searchParams.getAll('style').includes('feature:poi|visibility:off'), 'no business names from Google on the map');
+  const layers = await s.page.$$eval('.owc-geo-canvas > *', (l) => l.slice(0, 3).map((e) => e.tagName === 'PICTURE' ? 'picture' : e.getAttribute('class')));
+  assert.deepEqual(layers, ['picture', 'owc-geo-google', 'owc-geo-svg'], 'our map, then Google\'s on top of it, then the overlays');
+  assert.equal(await s.page.$eval('.owc-geo-credit', (c) => getComputedStyle(c).display), 'none', 'Google carries its own attribution');
+  assert.equal(await s.page.$eval('.owc-geo-canvas', (c) => getComputedStyle(c).transform), 'none', 'Google\'s map is shown flat, as delivered');
+  assert.deepEqual(s.jsErrors, []);
+  await s.close();
+  s = await open({ path: '/privacy', stub: withKey('TEST-KEY') });
+  assert.equal(await s.page.$eval('[data-flag="googleMap"]', (p) => p.hidden), false);
+  assert.equal(await s.page.$eval('[data-flag="googleMap"]', (p) => p.textContent), 'The map comes from Google Maps.');
+  await s.close();
+  s = await open({ path: '/privacy' });
+  assert.equal(await s.page.$eval('[data-flag="googleMap"]', (p) => p.hidden), true, 'no key: no Google line');
+  await s.close();
+});
+
+await scenario('home: a refused Google Maps key leaves our own map in place', async () => {
+  const s = await open({ path: '/', google: 'refuse', stub: withKey('BAD-KEY') });
+  await showMap(s.page);
+  await s.page.waitForFunction(() => !document.querySelector('.owc-geo-google'), null, { timeout: 5000 });
+  assert.equal(s.maps.length, 1);
+  assert.equal(await s.page.$eval('.owc-geo', (f) => f.classList.contains('is-google')), false);
+  assert.ok(await s.page.$eval('.owc-geo-base', (i) => i.complete && i.naturalWidth > 0));
+  assert.ok(await s.page.$eval('.owc-geo-credit', (c) => c.offsetWidth > 0));
   assert.deepEqual(s.jsErrors, []);
   await s.close();
 });

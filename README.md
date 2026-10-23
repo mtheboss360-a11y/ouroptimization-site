@@ -14,7 +14,7 @@ Netlify site "ouroptimization", linked to this repo, branch `main`. No build com
 
 | URL | File | In the menu | Notes |
 | --- | --- | --- | --- |
-| `/` | `index.html` | Home | Hero, how it works, business matching, the staff courtesy, the dashboard, results, the pricing teaser, compliance, who we are, the dinner add-on, the closing call (with the phone number). |
+| `/` | `index.html` | Home | Hero (no buttons), the business map, the dashboard, the staff courtesy, results, the pricing teaser, compliance (with the sample contract link), the dinner add-on, the closing call (with the phone number). |
 | `/referral-network` | `referral-network.html` | How it works | Referral routes end to end. The old flyer network is folded in here. |
 | `/pricing` | `pricing.html` | Pricing | The trial ($250), Starter ($250/mo), Growth ($400/mo), Reach ($800/mo), the two trial guarantees, terms, who supplies what, add-ons priced on a call. The one page with a closing call band. |
 | `/sample-contract` | `sample-contract.html` | Sample contract | A sample referral-route agreement. |
@@ -53,6 +53,16 @@ The home page's results section reads this file. While `clinics` is empty it sho
 ## Switches (`assets/site-config.js`)
 
 - `attorneyReviewed` (default `false`): shows "The partner agreement and the courtesy terms have been reviewed by a healthcare attorney." in the home page's compliance section. Turn it on only once that review is done.
+- `googleMapsKey` (default empty): puts Google's map under the home page's business map (see below) and shows `googleMapText` in the privacy policy's "Who else sees it" section.
+
+## The business map (home, `#matching`)
+
+Real streets of a downtown in Chicago's western suburbs, tipped back like a 3D view, with every business on the map as a dot, your clinic in the middle, five matched businesses as small 3D buildings, and the route between them along the streets.
+
+- **Base map:** our own render of OpenStreetMap data (`assets/img/map-base-{800,1200,1800,2400}.{avif,webp,jpg}`), styled in the brand greens. OpenStreetMap's licence (ODbL) requires the credit "© OpenStreetMap contributors", shown in the corner of the map; keep it.
+- **Overlays:** the dots, the highlighted lots, the route and the rings are inline SVG in the page, drawn in a 640 x 427 frame at zoom 16 around 41.7935, -88.0105 (the `data-geo-*` attributes on the figure). The six buildings (`assets/img/map-*.webp`) were made with Higgsfield in the hero's style.
+- **Motion:** the route flows, a light travels it and rings pulse from the clinic, only while the map is on screen, and never for visitors who ask for reduced motion.
+- **Google Maps instead of our base:** in Google Cloud, create a key with only the **Maps Static API** enabled, restrict it to the websites `ouroptimization.com/*`, `www.ouroptimization.com/*` and `*.netlify.app/*`, and put it in `googleMapsKey` in `assets/site-config.js`. The page then asks Google for one styled image of the same frame and lays the same overlays on it; Google's map is shown flat and uncropped so its logo and attribution stay visible (their terms). If the key is refused, our map stays. Static Maps is billed per image after Google's monthly free allowance. The CSP already allows `https://maps.googleapis.com` for images.
 
 ## Hero video
 
@@ -64,8 +74,9 @@ The home hero shows a still (`assets/img/hero-van-{480,768,1080,1344}.{avif,webp
 - The mark alone: `assets/img/owc-mark-light.{webp,png}` for light backgrounds, `assets/img/owc-mark-on-dark.{webp,png}` for dark ones (the closing band).
 - Favicons (the mark on a cream square): `favicon.ico`, `apple-touch-icon.png`, `assets/owo-favicon.ico`, `assets/owo-icon-{16,32,192,512}.png`, `assets/owo-apple-touch-icon.png`, `assets/favicon-*.png`, `assets/icon-*.png`; the manifest is `site.webmanifest`.
 - Share image: `assets/img/og-connections.jpg` (1200 x 630). The old share images and the old logo 301 to the new ones.
-- Business matching illustration: `assets/img/matching-map-*` (always labelled "Example").
-- Portal screenshots: `assets/img/portal-*`, from the portal's sample account (a fictional clinic), always labelled "Sample account, fictional clinic".
+- Business matching illustration: `assets/img/matching-map-*` (on `/referral-network`, labelled "Example").
+- Business map: `assets/img/map-base-*` and `assets/img/map-{clinic,cafe,salon,gym,boutique,studio}.webp` (see above).
+- Portal screenshots: `assets/img/portal-*`, from the portal's sample account (a fictional clinic, 555 phone numbers, `.invalid` emails, made-up partner names). On the home page they carry no label (the owner's call); their alt text says they are the sample account.
 
 Fonts are self-hosted (Playfair Display and Inter, SIL Open Font License, licences in `assets/fonts/`).
 
@@ -95,7 +106,7 @@ node --test
 ```
 
 - `tests/site.test.mjs`: every page's head (title, description, canonical, Open Graph, Twitter, icons, one h1), the LocalBusiness data, the header and footer, the retired words, dashes, where the phone number may appear, internal links and anchors, images, the redirects (flyer paths, no chains, blocked files), the sitemap, the three forms (the expo form pinned byte for byte) and the favicon set.
-- `tests/home.test.mjs`: the home page section by section against the brief (order, hero, the four steps, the courtesy, the dashboard, results and `results.json`, the pricing teaser, compliance and the switch, who we are, the add-on, the closing call) and the pricing page's offer.
+- `tests/home.test.mjs`: the home page section by section (order, hero, the business map and the Google Maps switch, the courtesy, the dashboard, results and `results.json`, the pricing teaser, compliance and the switch, the add-on, the closing call) and the pricing page's offer.
 - `tests/call.test.mjs`: the call form and `assets/call.js` (validation rules and `?about=` prefills).
 - `tests/html.mjs`: shared helpers and the page list (not a test file).
 
@@ -105,7 +116,7 @@ Browser tests (Playwright, against a local server that applies the `netlify.toml
 E2E_BASE_URL=http://localhost:8770 node tests/e2e-call.mjs
 ```
 
-They cover the call form end to end, the `?about=` prefills, the old links and redirects, the logo, the results section (empty and with a stubbed entry), the results-updates form and its consent, the attorney switch and the hero video slot (reduced motion and a missing video).
+They cover the call form end to end, the `?about=` prefills, the old links and redirects, the logo, the results section (empty and with a stubbed entry), the results-updates form and its consent, the attorney switch, the hero video slot (reduced motion and a missing video) and the business map (no request to Google without a key; with a key, Google's image under the overlays and the privacy line; a refused key).
 
 ## The client portal
 

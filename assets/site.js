@@ -10,7 +10,7 @@
      (/#faq opens /faq). The home page's call band came off on October 22, 2026, so /#call opens the
      call form on /contact, with any old query (/#call?package=website) carried along. */
   var MOVED = {
-    formats: '/patient-network#formats', how: '/referral-network', handle: '/patient-network#handle',
+    formats: '/patient-network#formats', how: '/referral-network', 'how-it-works': '/referral-network', handle: '/patient-network#handle',
     who: '/about', 'add-ons': '/pricing', referrals: '/referral-network',
     'flyer-drops': '/referral-network', faq: '/faq', call: '/contact#call'
   };
@@ -60,6 +60,8 @@
      true. With data-flag-text="key", its text comes from that config value, so the sentence is not in the page
      while the switch is off. */
   var config = window.OWC_CONFIG || {};
+  var mapsKey = typeof config.googleMapsKey === 'string' ? config.googleMapsKey.trim() : '';
+  config.googleMap = mapsKey !== '';
   document.querySelectorAll('[data-flag]').forEach(function (el) {
     if (config[el.getAttribute('data-flag')] !== true) return;
     var key = el.getAttribute('data-flag-text');
@@ -94,6 +96,45 @@
       };
       if (document.readyState === 'complete') startVideo(); else window.addEventListener('load', startVideo, { once: true });
       if (reduce.addEventListener) reduce.addEventListener('change', function (e) { if (e.matches) { heroVideo.pause && heroVideo.pause(); dropVideo(); } });
+    }
+  }
+
+  /* Home business map. The base is our own render of OpenStreetMap data. With googleMapsKey set in site-config.js,
+     a styled Google Static Maps image of the same frame (center, zoom, size) goes on top of it, under the same
+     overlays; a refused or failed request leaves our map. The route and the rings only move while the map is on screen. */
+  var geo = document.querySelector('.owc-geo');
+  if (geo) {
+    var geoSvg = geo.querySelector('.owc-geo-svg');
+    if (mapsKey) {
+      var styles = [
+        'element:geometry|color:0x0b1c13', 'element:labels|visibility:off', 'feature:administrative|visibility:off',
+        'feature:poi|visibility:off', 'feature:poi.park|element:geometry|visibility:on|color:0x123222',
+        'feature:landscape.man_made|element:geometry|color:0x18311f', 'feature:road|element:geometry|color:0x28473a',
+        'feature:road.arterial|element:geometry|color:0x3a6150', 'feature:road.highway|element:geometry|color:0x6a9a80',
+        'feature:transit|visibility:off', 'feature:transit.line|element:geometry|visibility:on|color:0x7c9a86',
+        'feature:water|element:geometry|color:0x0b2b31'
+      ];
+      var gmap = document.createElement('img');
+      gmap.className = 'owc-geo-google';
+      gmap.alt = '';
+      gmap.width = 1280;
+      gmap.height = 854;
+      gmap.loading = 'lazy';
+      gmap.decoding = 'async';
+      gmap.addEventListener('load', function () { geo.classList.add('is-google'); }, { once: true });
+      gmap.addEventListener('error', function () { if (gmap.parentNode) gmap.parentNode.removeChild(gmap); }, { once: true });
+      gmap.src = 'https://maps.googleapis.com/maps/api/staticmap?center=' + geo.getAttribute('data-geo-lat') + ',' + geo.getAttribute('data-geo-lng') +
+        '&zoom=' + geo.getAttribute('data-geo-zoom') + '&size=' + geo.getAttribute('data-geo-size') + '&scale=2&format=png&maptype=roadmap' +
+        styles.map(function (s) { return '&style=' + encodeURIComponent(s); }).join('') + '&key=' + encodeURIComponent(mapsKey);
+      if (geoSvg) geoSvg.parentNode.insertBefore(gmap, geoSvg);
+    }
+    var setLive = function (on) {
+      geo.classList.toggle('is-live', on);
+      if (geoSvg && geoSvg.pauseAnimations) { if (on) geoSvg.unpauseAnimations(); else geoSvg.pauseAnimations(); }
+    };
+    setLive(false);
+    if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      new IntersectionObserver(function (entries) { setLive(entries[0].isIntersecting); }).observe(geo);
     }
   }
 
