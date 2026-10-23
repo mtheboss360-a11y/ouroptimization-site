@@ -476,6 +476,14 @@
 
 # Repository-only files are not part of the public site.
 # --- October 23, 2026: Our Wellness Connections ---
+# The home hero's video slot asks for /assets/video/van-route.mp4 after the page loads. Until that file is
+# deployed, this rewrite answers with a small text file (not a video), so the slot fails quietly, keeps the
+# still and logs no 404. It is not forced: once the real van-route.mp4 is deployed, Netlify serves the file.
+[[redirects]]
+  from = "/assets/video/van-route.mp4"
+  to = "/assets/video/placeholder.txt"
+  status = 200
+
 # The results-updates confirmation page has a clean URL like the others.
 [[redirects]]
   from = "/updates-thanks.html"
