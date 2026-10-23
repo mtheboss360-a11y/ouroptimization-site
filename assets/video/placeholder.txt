@@ -1,0 +1,2 @@
+Not a video. Until assets/video/van-route.mp4 is deployed, netlify.toml answers requests for it with this file,
+so the home page's video slot fails quietly and keeps the still. Deploy the real van-route.mp4 and Netlify serves it instead.
