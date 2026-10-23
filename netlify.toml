@@ -1,4 +1,4 @@
-# Our Wellness Network (OUR Optimization LLC): static site, no build step.
+# Our Wellness Connections (OUR Optimization LLC): static site, no build step.
 # Two Netlify Forms (data-netlify="true" in the static HTML): "dinner-call" on the contact
 # page (contact.html, #call, posts to /thanks) and "expo-vendor" on expo-vendors.html.
 # Submissions appear under Forms in the Netlify UI, and email alerts are set in
@@ -47,7 +47,7 @@
 
 [[redirects]]
   from = "/flyer-network.html"
-  to = "/flyer-network"
+  to = "/referral-network"
   status = 301
   force = true
 
@@ -123,13 +123,13 @@
 # without .html, 301 straight to the new ones (their .html files are renamed, not kept).
 [[redirects]]
   from = "/flyer-drops"
-  to = "/flyer-network"
+  to = "/referral-network"
   status = 301
   force = true
 
 [[redirects]]
   from = "/flyer-drops.html"
-  to = "/flyer-network"
+  to = "/referral-network"
   status = 301
   force = true
 
@@ -305,13 +305,13 @@
 # /direct-mail
 [[redirects]]
   from = "/direct-mail"
-  to = "/flyer-network"
+  to = "/referral-network"
   status = 301
   force = true
 
 [[redirects]]
   from = "/direct-mail.html"
-  to = "/flyer-network"
+  to = "/referral-network"
   status = 301
   force = true
 
@@ -331,13 +331,13 @@
 # /flyers
 [[redirects]]
   from = "/flyers"
-  to = "/flyer-network"
+  to = "/referral-network"
   status = 301
   force = true
 
 [[redirects]]
   from = "/flyers.html"
-  to = "/flyer-network"
+  to = "/referral-network"
   status = 301
   force = true
 
@@ -495,5 +495,12 @@
 [[redirects]]
   from = "/vendors"
   to = "/expo-vendors"
+  status = 301
+  force = true
+
+# Referral routes replace the former flyer service.
+[[redirects]]
+  from = "/flyer-network"
+  to = "/referral-network"
   status = 301
   force = true
