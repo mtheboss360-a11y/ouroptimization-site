@@ -10,7 +10,7 @@
      (/#faq opens /faq). The home page's call band came off on October 22, 2026, so /#call opens the
      call form on /contact, with any old query (/#call?package=website) carried along. */
   var MOVED = {
-    formats: '/patient-network#formats', how: '/patient-network#how', handle: '/patient-network#handle',
+    formats: '/patient-network#formats', how: '/referral-network', handle: '/patient-network#handle',
     who: '/about', 'add-ons': '/pricing', referrals: '/referral-network',
     'flyer-drops': '/referral-network', faq: '/faq', call: '/contact#call'
   };
@@ -56,10 +56,19 @@
     }
   }
 
-  /* Site switches from /assets/site-config.js: an element with data-flag="name" stays hidden until that switch is true. */
+  /* Site switches from /assets/site-config.js: an element with data-flag="name" stays hidden until that switch is
+     true. With data-flag-text="key", its text comes from that config value, so the sentence is not in the page
+     while the switch is off. */
   var config = window.OWC_CONFIG || {};
   document.querySelectorAll('[data-flag]').forEach(function (el) {
-    if (config[el.getAttribute('data-flag')] === true) el.hidden = false;
+    if (config[el.getAttribute('data-flag')] !== true) return;
+    var key = el.getAttribute('data-flag-text');
+    if (key) {
+      var slot = el.querySelector('span') || el;
+      if (typeof config[key] !== 'string' || !config[key]) return;
+      slot.textContent = config[key];
+    }
+    el.hidden = false;
   });
 
   /* Home hero: the van video. It loads after the page (the still is the first paint), plays muted and looped,
@@ -76,6 +85,9 @@
         heroVideo.addEventListener('playing', function () { heroVideo.parentNode && heroVideo.parentNode.classList.add('is-playing'); }, { once: true });
         heroVideo.addEventListener('error', dropVideo, { once: true });
         heroVideo.muted = true;
+        /* the poster is the still already on screen (its responsive size, from the cache), never a second download */
+        var still = document.querySelector('.owc-hero-media img');
+        if (still && still.currentSrc) heroVideo.poster = still.currentSrc;
         heroVideo.src = heroVideo.getAttribute('data-src');
         var played = heroVideo.play();
         if (played && played.catch) played.catch(function () { /* autoplay refused: the still stays */ });

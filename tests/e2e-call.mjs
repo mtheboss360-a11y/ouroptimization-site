@@ -268,7 +268,7 @@ await scenario('the renamed service pages: each old path, with and without .html
     await close();
   }
   // Older redirects that used to point at an old path go straight to the new page.
-  for (const [path, to] of [['/events', '/patient-network'], ['/flyers', '/referral-network'], ['/direct-mail', '/referral-network'], ['/digital-marketing', '/online-search-network'], ['/how-it-works', '/patient-network#how']]) {
+  for (const [path, to] of [['/events', '/patient-network'], ['/flyers', '/referral-network'], ['/direct-mail', '/referral-network'], ['/digital-marketing', '/online-search-network'], ['/how-it-works', '/referral-network'], ['/tracking', '/#dashboard']]) {
     const r = await fetch(`${BASE}${path}`, { redirect: 'manual' });
     assert.equal(r.status, 301, path);
     assert.equal(r.headers.get('location'), to, path);
@@ -402,10 +402,12 @@ await scenario('home: the results-updates form needs a number and the consent bo
 await scenario('home: the attorney line stays hidden until its one switch is turned on', async () => {
   let s = await open({ path: '/' });
   assert.equal(await s.page.$eval('[data-flag="attorneyReviewed"]', (p) => p.hidden), true);
+  assert.doesNotMatch(await s.page.content(), /reviewed by a healthcare attorney/i, 'off: the sentence is not in the page');
   await s.close();
-  s = await open({ path: '/', stub: { '/assets/site-config.js': { type: 'text/javascript', body: 'window.OWC_CONFIG = { attorneyReviewed: true };' } } });
+  s = await open({ path: '/', stub: { '/assets/site-config.js': { type: 'text/javascript', body: "window.OWC_CONFIG = { attorneyReviewed: true, attorneyReviewedText: 'Reviewed by counsel.' };" } } });
   await s.page.waitForTimeout(200);
   assert.equal(await s.page.$eval('[data-flag="attorneyReviewed"]', (p) => p.hidden), false);
+  assert.equal(await s.page.$eval('[data-flag="attorneyReviewed"]', (p) => p.textContent.trim()), 'Reviewed by counsel.');
   assert.deepEqual(s.jsErrors, []);
   await s.close();
 });

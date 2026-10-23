@@ -196,13 +196,13 @@
 # /how-it-works
 [[redirects]]
   from = "/how-it-works"
-  to = "/patient-network#how"
+  to = "/referral-network"
   status = 301
   force = true
 
 [[redirects]]
   from = "/how-it-works.html"
-  to = "/patient-network#how"
+  to = "/referral-network"
   status = 301
   force = true
 
@@ -352,13 +352,13 @@
 # /marketing-kits
 [[redirects]]
   from = "/marketing-kits"
-  to = "/patient-network#handle"
+  to = "/referral-network"
   status = 301
   force = true
 
 [[redirects]]
   from = "/marketing-kits.html"
-  to = "/patient-network#handle"
+  to = "/referral-network"
   status = 301
   force = true
 
@@ -417,13 +417,13 @@
 # /tracking
 [[redirects]]
   from = "/tracking"
-  to = "/patient-network#handle"
+  to = "/#dashboard"
   status = 301
   force = true
 
 [[redirects]]
   from = "/tracking.html"
-  to = "/patient-network#handle"
+  to = "/#dashboard"
   status = 301
   force = true
 

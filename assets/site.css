@@ -994,6 +994,9 @@ table{font-variant-numeric:tabular-nums}
 .hiw-tour .owc-tag{margin-bottom:14px}
 .hiw-portal{margin-top:clamp(30px,4vw,46px)}
 
+/* keep "sign-up" whole inside the flow cards (the live .rn-flow span rule would otherwise wrap it) */
+.hiw-codes .rn-flow .nowrap{white-space:nowrap}
+
 /* --- home --- */
 /* Home (.owc-): the hero with its video slot, the matching map, the courtesy, the dashboard, results, the compliance cards, the add-on and the closing band */
 /* The hero is its own blending group on the page colour, so the still (transparent) and a future video with a
@@ -1085,6 +1088,12 @@ table{font-variant-numeric:tabular-nums}
 .owc-final .intro{color:#D5E1D8}
 .owc-final .actions{margin-top:26px}
 .owc-final-note{margin-top:16px;font-size:.92rem;color:#C3D2C6}
+
+/* review fixes: sample tags on the tour rows, the hidden empty results list, the phone hint, the compliance cards on tablets */
+.owc-tour .owc-tag{margin-bottom:14px}
+.owc-results-list[hidden]{display:none}
+.owc-updates-hint{margin-top:6px;font-size:.86rem;color:var(--ink-3)}
+@media (min-width:640px) and (max-width:899.98px){.owc-comply>li:last-child{grid-column:1/-1}}
 
 /* --- prc --- */
 /* ---------- /pricing (prefix prc-): the trial, the plans, the guarantees, the terms, the add-ons ---------- */
@@ -1195,6 +1204,9 @@ table{font-variant-numeric:tabular-nums}
 
 /* the SAMPLE watermark is drawn by CSS, so it is decoration and not page text */
 .sc-mark span::before{content:attr(data-mark)}
+
+/* hyphenated words in the contract tables keep normal hyphens (tabular figures stay on the amounts) */
+.scr-page table{font-variant-numeric:normal}
 
 /* --- wd --- */
 /* /website-design: "An add-on, priced on a call" line under the hero intro */

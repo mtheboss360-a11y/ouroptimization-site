@@ -39,7 +39,8 @@ describe('home: order and hero', () => {
     assert.equal(attr(video, 'data-src'), '/assets/video/van-route.mp4');
     for (const a of ['muted', 'loop', 'playsinline']) assert.ok(hasAttr(video, a), a);
     assert.equal(attr(video, 'preload'), 'none');
-    assert.ok(existsSync(new URL(attr(video, 'poster').slice(1), ROOT)), 'the still is the poster');
+    assert.ok(!hasAttr(video, 'poster'), 'no poster in the markup: phones never download the largest still twice');
+    assert.match(read('assets/site.js'), /heroVideo\.poster = still\.currentSrc/, 'the still on screen becomes the poster');
     assert.ok(!hasAttr(video, 'src'), 'the video is attached by site.js after load, never in the markup');
     const js = read('assets/site.js');
     assert.match(js, /prefers-reduced-motion: reduce/);
@@ -98,9 +99,11 @@ describe('home: sections a to j', () => {
     assert.ok(t.includes('Every partner business signs a one-page agreement: mutual promotion, nobody is paid per referral or per patient, no patient records are shared.'));
     assert.ok(t.includes('We send it and the courtesy terms to your medical director before you sign anything.'));
     assert.ok(t.includes("We never describe your treatments in words you haven't approved, and we make no medical claims."));
-    const flagged = /<p class="owc-attorney" data-flag="attorneyReviewed" hidden>/.test(sec('compliance'));
-    assert.ok(flagged, 'the attorney line is hidden by default');
-    assert.match(read('assets/site-config.js'), /attorneyReviewed: false/);
+    const flagged = /<p class="owc-attorney" data-flag="attorneyReviewed" data-flag-text="attorneyReviewedText" hidden>/.test(sec('compliance'));
+    assert.ok(flagged, 'the attorney line is an empty, hidden slot by default');
+    assert.doesNotMatch(html, /reviewed by a healthcare attorney/i, 'the claim is not in the page while the switch is off');
+    assert.match(read('assets/site-config.js'), /attorneyReviewed: false,/);
+    assert.match(read('assets/site-config.js'), /attorneyReviewedText: 'The partner agreement and the courtesy terms have been reviewed by a healthcare attorney\.'/);
     assert.match(html, /<script src="\/assets\/site-config\.js" defer><\/script>\n<script src="\/assets\/results\.js" defer><\/script>\n<script src="\/assets\/site\.js" defer>/);
   });
   test('h. who we are, with the Grace Pediatrics client work', () => {

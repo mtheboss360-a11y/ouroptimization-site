@@ -62,6 +62,8 @@ describe('every page: head', () => {
       assert.equal(meta(src, 'property', 'og:image:height'), '630');
       assert.ok(meta(src, 'property', 'og:image:alt'));
       assert.equal(meta(src, 'name', 'twitter:card'), 'summary_large_image');
+      // the raw attribute holds single-escaped entities (&rsquo;); a double escape (&amp;rsquo;) would show as text in previews
+      for (const t of tags(headOf(src), 'meta')) assert.doesNotMatch(attr(t, 'content') || '', /&amp;(?:[a-z]+|#\d+);/i, `${p.file}: double-escaped text in ${t.slice(0, 60)}`);
       assert.match(src, /<link rel="icon" href="\/assets\/owo-favicon\.ico"/);
       assert.match(src, /<link rel="apple-touch-icon" href="\/assets\/owo-apple-touch-icon\.png">/);
       assert.match(src, /<link rel="manifest" href="\/site\.webmanifest\?v=owc1">/);
@@ -78,6 +80,7 @@ describe('every page: head', () => {
       assert.equal(d.legalName, 'OUR Optimization LLC');
       assert.equal(d.telephone, '+1-331-271-6851');
       assert.match(d.areaServed.name, /^Chicago's western suburbs/);
+      assert.deepEqual([d.address.addressRegion, d.address.addressCountry], ['IL', 'US'], 'region and country only: no invented street address');
       assert.equal(d.url, ORIGIN + '/');
       assert.ok(existsSync(new URL(d.logo.replace(ORIGIN + '/', ''), ROOT)), 'the logo file exists');
     });
@@ -259,7 +262,8 @@ describe('forms (Netlify detects them from the static HTML)', () => {
     assert.ok(hasAttr(consent, 'required'));
     assert.ok(!hasAttr(consent, 'checked'), 'never pre-ticked');
     assert.match(text(form), /Yes, text me results updates from Our Wellness Connections at this number\./);
-    assert.match(text(form), /Reply STOP/);
+    assert.match(text(form), /Message frequency varies\./);
+    assert.match(text(form), /Reply HELP for help, STOP to stop\./);
     assert.ok(existsSync(new URL('updates-thanks.html', ROOT)));
   });
   test('expo-vendor on /expo-vendors: the form and its script are byte-for-byte the live ones', () => {
