@@ -1,4 +1,4 @@
-# R Wellness Network (OUR Optimization LLC): static site, no build step.
+# Our Wellness Network (OUR Optimization LLC): static site, no build step.
 # Two Netlify Forms (data-netlify="true" in the static HTML): "dinner-call" on the contact
 # page (contact.html, #call, posts to /thanks) and "expo-vendor" on expo-vendors.html.
 # Submissions appear under Forms in the Netlify UI, and email alerts are set in

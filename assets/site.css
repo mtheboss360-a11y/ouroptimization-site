@@ -1,4 +1,4 @@
-/* R Wellness Network: the organic growth team for independently owned med spas.
+/* Our Wellness Network: the organic community relationships team for independently owned med spas.
    Static site: no build step, no framework, no external requests.
    Fonts are self-hosted variable fonts (SIL Open Font License 1.1, licences in assets/fonts/):
    Playfair Display for headlines and section titles, Inter for everything else. No italic is shipped,
@@ -320,7 +320,7 @@ h3{font-size:1.28rem;line-height:1.25;font-weight:600;letter-spacing:-.012em}
   --brass:#9C7A3C;       /* from the logo mark — decoration only */
 }
 
-/* ---------- brand: the full R Wellness Network lockup ---------- */
+/* ---------- brand: the full Our Wellness Network lockup ---------- */
 .brand img{width:clamp(140px,38vw,160px)}
 @media (min-width:1000px){.brand img{width:172px}}
 /* The wordmark's "O" starts 45/480 into the logo file; shift the image so "Our" sits on the content edge. */
@@ -1396,7 +1396,7 @@ table,.tnum{font-variant-numeric:tabular-nums}
 .sc-signer{text-wrap:balance}
 
 /* ==========================================================================
-   R Wellness Network (October 23, 2026): the shared header and footer, and the
+   Our Wellness Network (October 23, 2026): the shared header and footer, and the
    home page. Prefix rw-. Built on the same tokens, fonts and buttons as above.
    ========================================================================== */
 
@@ -1405,7 +1405,7 @@ table,.tnum{font-variant-numeric:tabular-nums}
 .rw-header.is-scrolled{border-bottom-color:var(--line)}
 .rw-head-row{display:flex;align-items:center;gap:12px;min-height:72px}
 .rw-header .brand{margin-right:auto}
-.rw-header .brand img,.rw-foot-logo img{transform:translateX(-11.5%)}
+.rw-header .brand img,.rw-foot-logo img{transform:translateX(-9.375%)}
 .rw-header .brand img{width:clamp(150px,40vw,176px)}
 .rw-nav ul{list-style:none}
 .rw-nav a{display:flex;align-items:center;min-height:44px;padding:0 12px;border-radius:999px;font:500 .92rem/1 var(--sans);color:var(--ink);text-decoration:none;white-space:nowrap;transition:color .25s ease}
@@ -1473,9 +1473,9 @@ table,.tnum{font-variant-numeric:tabular-nums}
 .rw-head.center .rw-kicker::before{display:none}
 
 /* ---------- 1. hero ---------- */
-.rw-hero{position:relative;overflow:hidden;padding-block:clamp(36px,6vw,80px) clamp(64px,8vw,104px);background:radial-gradient(120% 90% at 85% 10%,#FFFFFF 0%,rgba(255,255,255,0) 60%),linear-gradient(180deg,var(--paper) 0%,var(--ground) 100%)}
+.rw-hero{position:relative;overflow:hidden;padding-block:clamp(28px,4vw,60px) clamp(64px,8vw,104px);background:radial-gradient(120% 90% at 85% 10%,#FFFFFF 0%,rgba(255,255,255,0) 60%),linear-gradient(180deg,var(--paper) 0%,var(--ground) 100%)}
 .rw-hero-grid{display:grid;gap:clamp(40px,5vw,56px);align-items:center}
-.rw-hero h1{font:600 clamp(2.7rem,1.6rem + 5vw,5.2rem)/.98 var(--hero);letter-spacing:-.03em;color:var(--ink);text-wrap:balance}
+.rw-hero h1{font:600 clamp(2.45rem,1.3rem + 3.2vw,4rem)/1.0 var(--hero);letter-spacing:-.03em;color:var(--ink);text-wrap:balance}
 .rw-hero-sub{margin-top:clamp(14px,1.8vw,22px);font:500 clamp(1.45rem,1.1rem + 1.6vw,2.3rem)/1.15 var(--hero);letter-spacing:-.012em;color:var(--gold-sm);text-wrap:balance}
 .rw-hero .lede{margin-top:clamp(20px,2.4vw,28px);max-width:34em;font-size:clamp(1.05rem,.98rem + .35vw,1.2rem);line-height:1.66;color:var(--ink-2);text-wrap:pretty}
 .rw-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:clamp(26px,3vw,34px)}

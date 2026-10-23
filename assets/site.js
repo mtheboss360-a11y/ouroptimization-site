@@ -1,4 +1,4 @@
-/* R Wellness Network: shared site behaviour.
+/* Our Wellness Network: shared site behaviour.
    Loaded with defer on every page. No dependencies, no third-party requests. */
 (function () {
   var root = document.documentElement;

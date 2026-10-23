@@ -68,10 +68,10 @@ describe('every page: head, one h1, header tabs, breadcrumbs and footer', () => 
       assert.equal(meta('name', 'twitter:title'), title);
       assert.equal(meta('property', 'og:description'), meta('name', 'description'));
       assert.equal(meta('name', 'twitter:description'), meta('name', 'description'));
-      // One share image for the R Wellness Network site (October 23, 2026).
-      assert.equal(meta('property', 'og:image'), `${SITE}/assets/img/og-rwn.jpg`);
-      assert.equal(meta('property', 'og:site_name'), 'R Wellness Network');
-      assert.match(meta('property', 'og:image:alt'), /^R Wellness Network logo with the words /);
+      // One share image for the Our Wellness Network site (October 23, 2026).
+      assert.equal(meta('property', 'og:image'), `${SITE}/assets/img/og-community-team.jpg`);
+      assert.equal(meta('property', 'og:site_name'), 'Our Wellness Network');
+      assert.match(meta('property', 'og:image:alt'), /^Our Wellness Network logo with the words /);
       assert.equal(meta('name', 'twitter:card'), 'summary_large_image');
     });
 
@@ -96,8 +96,8 @@ describe('every page: head, one h1, header tabs, breadcrumbs and footer', () => 
       assert.deepEqual(col('foot-growth'), [['How it works', '/#approach'], ['What we do', '/#what-we-do'], ['Client experience', '/client-experience'], ['Pricing', '/pricing'], ['Sample contract', '/sample-contract']]);
       assert.deepEqual(col('foot-ways'), [['Referral network', '/referral-network'], ['Flyer network', '/flyer-network'], ['Patient network', '/patient-network'], ['Online search network', '/online-search-network'], ['Review tags', '/review-tags'], ['Website design', '/website-design']]);
       assert.deepEqual(col('foot-company'), [['About', '/about'], ['FAQ', '/faq'], ['Book a Growth Consultation', '/contact'], ['mustafa@ouroptimization.com', 'mailto:mustafa@ouroptimization.com'], ['Client login', PORTAL]]);
-      assert.equal(text(/<p class="rw-foot-tag">([\s\S]*?)<\/p>/.exec(f)[1]), 'Your Organic Growth Team.');
-      assert.equal(text(/<div class="rw-foot-bottom">\s*<p>([\s\S]*?)<\/p>/.exec(f)[1]), '© 2026 OUR Optimization LLC. R Wellness Network is a brand of OUR Optimization LLC.');
+      assert.equal(text(/<p class="rw-foot-tag">([\s\S]*?)<\/p>/.exec(f)[1]), 'Your Organic Community Relationships Team.');
+      assert.equal(text(/<div class="rw-foot-bottom">\s*<p>([\s\S]*?)<\/p>/.exec(f)[1]), '© 2026 OUR Optimization LLC. Our Wellness Network is a brand of OUR Optimization LLC.');
       assert.deepEqual(links(/<div class="rw-foot-bottom">[\s\S]*<\/div>/.exec(f)[0]).map((l) => l.href), ['/privacy', '/terms']);
       assert.doesNotMatch(f, /<h3>|tel:|331-271-6851|Mustafa/, 'h2 headings only, and no phone number or name in the footer');
     });
@@ -130,7 +130,7 @@ describe('every page: head, one h1, header tabs, breadcrumbs and footer', () => 
   });
 
   test('no buttons in the hero of the inner pages: people scroll and find out (the owner, October 22, 2026)', () => {
-    // The home hero carries the two calls to action of the R Wellness Network brief (October 23, 2026).
+    // The home hero carries the two calls to action of the Our Wellness Network brief (October 23, 2026).
     for (const p of PAGES.filter((x) => !['index.html', 'contact.html', 'thanks.html', '404.html'].includes(x.file))) {
       const m = mainOf(page[p.file]);
       const hero = m.slice(0, m.indexOf('</section>'));
@@ -174,25 +174,25 @@ describe('every page: head, one h1, header tabs, breadcrumbs and footer', () => 
   });
 });
 
-/* ---------- home: R Wellness Network, your organic growth team (October 23, 2026) ---------- */
+/* ---------- home: Our Wellness Network, your organic growth team (October 23, 2026) ---------- */
 describe('home page', () => {
   const html = page['index.html'];
   const m = main('index.html');
   const sec = (id) => byId(html, id);
 
-  test('title, description, share image and JSON-LD: R Wellness Network, the organic growth team', () => {
-    assert.match(html, /<title>Your Organic Growth Team for Med Spas \| R Wellness Network<\/title>/);
+  test('title, description, share image and JSON-LD: Our Wellness Network, the organic community relationships team', () => {
+    assert.match(html, /<title>Organic Community Relationships Team for Med Spas \| Our Wellness Network<\/title>/);
     const desc = decode(attr(tags(html, 'meta').find((t) => attr(t, 'name') === 'description'), 'content'));
-    assert.ok(desc.startsWith('R Wellness Network is the organic growth team for independently owned med spas in Chicago and the surrounding suburbs.'), desc);
+    assert.ok(desc.startsWith('Our Wellness Network is the organic community relationships team for independently owned med spas in Chicago and the surrounding suburbs.'), desc);
     const data = JSON.parse(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/.exec(html)[1]);
     assert.equal(data['@type'], 'ProfessionalService');
-    assert.equal(data.name, 'R Wellness Network');
+    assert.equal(data.name, 'Our Wellness Network');
     assert.equal(data.legalName, 'OUR Optimization LLC');
-    assert.equal(data.slogan, 'Your Organic Growth Team.');
+    assert.equal(data.slogan, 'Your Organic Community Relationships Team.');
     assert.equal(data.telephone, '+1-331-271-6851');
     assert.equal(data.email, 'mustafa@ouroptimization.com');
     assert.equal(data.areaServed, 'Chicago and the surrounding suburbs, Illinois');
-    assert.equal(data.logo, 'https://ouroptimization.com/assets/img/r-wellness-network-logo.png');
+    assert.equal(data.logo, 'https://ouroptimization.com/assets/img/our-wellness-network-logo.png');
     assert.doesNotMatch(JSON.stringify(data), /price|offers|rating|review/i);
     for (const p of PAGES.filter((x) => x.file !== 'index.html')) assert.doesNotMatch(page[p.file], /application\/ld\+json/, `JSON-LD only on the home page (${p.file})`);
   });
@@ -204,9 +204,9 @@ describe('home page', () => {
 
   test('hero: the headline, the supporting line, the body copy and the two calls to action', () => {
     const hero = m.slice(m.indexOf('<section class="rw-hero"'), m.indexOf('</section>'));
-    assert.equal(text(/<h1 id="hero-h">([\s\S]*?)<\/h1>/.exec(hero)[1]), 'Your Organic Growth Team.');
+    assert.equal(text(/<h1 id="hero-h">([\s\S]*?)<\/h1>/.exec(hero)[1]), 'Your Organic Community Relationships Team.');
     assert.equal(text(/<p class="rw-hero-sub">([\s\S]*?)<\/p>/.exec(hero)[1]), 'We put your brand into the community.');
-    assert.equal(text(/<p class="lede">([\s\S]*?)<\/p>/.exec(hero)[1]), 'R Wellness Network helps independent med spas grow through local relationships, referral networks, and hands-on customer-acquisition initiatives. Our team represents your brand on the ground, builds valuable connections, and creates opportunities for your business to grow.');
+    assert.equal(text(/<p class="lede">([\s\S]*?)<\/p>/.exec(hero)[1]), 'Our Wellness Network helps independent med spas grow through local relationships, referral networks, and hands-on customer-acquisition initiatives. Our team represents your brand on the ground, builds valuable connections, and creates opportunities for your business to grow.');
     assert.deepEqual(links(hero).map((l) => [l.text, l.href]), [['Book a Growth Consultation', '/contact'], ['See How It Works', '#approach']]);
     assert.deepEqual([...hero.matchAll(/<li>([^<]+)<\/li>/g)].map((x) => x[1]), ['Local relationships.', 'Real execution.', 'Measurable growth.']);
     assert.doesNotMatch(hero, /<p class="eyebrow">|Mustafa|331-271-6851|tel:/, 'no eyebrow above the headline, and no name or number');
@@ -224,7 +224,7 @@ describe('home page', () => {
 
   test('the problem: growth should not depend on the owner doing everything', () => {
     assert.equal(text(/<h2 id="problem-h">([\s\S]*?)<\/h2>/.exec(sec('problem'))[1]), "Growth shouldn't depend on the owner doing everything.");
-    assert.match(text(sec('problem')), /R Wellness Network gives you a dedicated team for the growth activities you agree on\./);
+    assert.match(text(sec('problem')), /Our Wellness Network gives you a dedicated team for the growth activities you agree on\./);
     assert.doesNotMatch(text(sec('problem')), /losing|falling behind|before it's too late|competitors are/i, 'no fear-based messaging');
   });
 
@@ -539,7 +539,7 @@ describe('/about', () => {
   const html = page['about.html'];
   const t = text(main('about.html'));
   test('who we are: what we do, Grace Pediatrics, the client portal, and the contact box', () => {
-    assert.match(t, /R Wellness Network is an organic growth team for independently owned med spas in Chicago and the surrounding suburbs\. We build local relationships and referral networks, represent your brand in person and coordinate the campaigns around them, with the terms in writing before anything starts\./);
+    assert.match(t, /Our Wellness Network is an organic community relationships team for independently owned med spas in Chicago and the surrounding suburbs\. We build local relationships and referral networks, represent your brand in person and coordinate the campaigns around them, with the terms in writing before anything starts\./);
     assert.match(t, /Client work: Grace Pediatrics in Glendale Heights\./);
     const who = text(byId(html, 'who'));
     assert.match(who, /^Our work Real work, for a real clinic\./);
@@ -584,7 +584,7 @@ describe('/faq', () => {
     assert.match(d, /Yes\. You give a short talk and make an offer you have approved, and guests can book on the night\. We say so plainly, because that is the point of the evening\./);
     assert.match(d, /Keep them\. If your Allergan or Galderma rep sponsors events, we plan the dinner with them\./);
     assert.match(d, /It depends on the dinner, the number of guests and the restaurant\. The restaurant and food are included\. We quote it for your clinic after the 15-minute call, the price is fixed in writing before you commit, and there is no monthly contract\./);
-    assert.match(d, /R Wellness Network, an organic growth team for independently owned med spas, based in Chicago's western suburbs\. We run marketing for a wellness clinic nearby, and your flyer drops and partner stands report into your client portal\./);
+    assert.match(d, /Our Wellness Network, an organic community relationships team for independently owned med spas, based in Chicago's western suburbs\. We run marketing for a wellness clinic nearby, and your flyer drops and partner stands report into your client portal\./);
     assert.deepEqual(links(/<div class="faq dn-faq">([\s\S]*)<\/div>/.exec(byId(html, 'dinners-faq'))[1]).map((l) => l.href), ['/client-experience', '/about']);
     assert.doesNotMatch(d, /Mustafa|331-271-6851|being held|first case stud|can't promise/i);
   });
@@ -628,36 +628,34 @@ describe('/faq', () => {
   });
 });
 
-/* ---------- the brand: R Wellness Network (renamed October 23, 2026, from the name before it) ---------- */
-describe('the brand: R Wellness Network', () => {
-  // Put together here, so this file does not contain the old names either.
+/* ---------- the brand: Our Wellness Network (renamed October 22, 2026; tagline "Your Organic Community Relationships Team." since October 23, 2026) ---------- */
+describe('the brand: Our Wellness Network', () => {
+  // Put together here, so this file does not contain the old name either.
   const OLD = new RegExp(['wellness', 'optimization'].join('[\\s\\u00a0]+'), 'i');
-  const PREV = new RegExp(['our', 'wellness', 'network'].join('[\\s\\u00a0]+'), 'i');
-  const LOGO = '/assets/img/r-wellness-network-logo.png';
+  const LOGO = '/assets/img/our-wellness-network-logo.png';
 
-  test('the old brand names are gone from every page, script, stylesheet, test, the manifest, netlify.toml and the sitemap', () => {
+  test('the old brand name is gone from every page, script, stylesheet, test, the manifest, netlify.toml and the sitemap', () => {
     for (const file of repoTextFiles().filter((f) => f !== 'README.md')) {
       const src = decode(read(file));
-      for (const re of [OLD, PREV]) {
-        const hit = re.exec(src);
-        assert.equal(hit, null, `${file}: ${hit && src.slice(Math.max(0, hit.index - 40), hit.index + 40)}`);
-      }
+      const hit = OLD.exec(src);
+      assert.equal(hit, null, `${file}: ${hit && src.slice(Math.max(0, hit.index - 40), hit.index + 40)}`);
     }
+    // A one-day typo of the brand (a single letter for "Our") never reached the public site.
+    const TYPO = [new RegExp('\\b' + ['R', 'Wellness', 'Network'].join(' ') + '\\b'), new RegExp('(^|[^u])' + ['r', 'wellness', 'network', 'logo'].join('-'))];
+    for (const file of repoTextFiles()) for (const re of TYPO) assert.doesNotMatch(read(file), re, file);
   });
 
-  test('README names the old brands only where it explains the renames', () => {
-    for (const re of [OLD, PREV]) {
-      const lines = read('README.md').split('\n').filter((l) => re.test(l));
-      assert.ok(lines.length <= 1, `${lines.length} README lines name an old brand`);
-      for (const l of lines) assert.match(l, /renamed/i, `README: "${l.slice(0, 120)}"`);
-    }
-    assert.match(read('README.md'), /^R Wellness Network \(a brand of OUR Optimization LLC\)/m);
+  test('README names the old brand only where it explains the rename', () => {
+    const lines = read('README.md').split('\n').filter((l) => OLD.test(l));
+    assert.ok(lines.length <= 1, `${lines.length} README lines name the old brand`);
+    for (const l of lines) assert.match(l, /renamed/i, `README: "${l.slice(0, 120)}"`);
+    assert.match(read('README.md'), /^Our Wellness Network \(a brand of OUR Optimization LLC\)/m);
   });
 
   test('the manifest carries the new name', () => {
     const m = JSON.parse(read('site.webmanifest'));
-    assert.equal(m.name, 'R Wellness Network');
-    assert.equal(m.short_name, 'R Wellness Network');
+    assert.equal(m.name, 'Our Wellness Network');
+    assert.equal(m.short_name, 'Our Wellness Network');
   });
 
   for (const p of PAGES) {
@@ -665,36 +663,36 @@ describe('the brand: R Wellness Network', () => {
       const src = page[p.file];
       const brand = /<a aria-label="([^"]+)" class="brand" href="\/">\s*(<img [^>]+>)\s*<\/a>/.exec(headerOf(src));
       assert.ok(brand, 'the header brand link');
-      assert.equal(brand[1], 'R Wellness Network home');
-      const foot = /<a class="rw-foot-logo" href="\/" aria-label="R Wellness Network home">(<img [^>]+>)<\/a>/.exec(footerOf(src));
+      assert.equal(brand[1], 'Our Wellness Network home');
+      const foot = /<a class="rw-foot-logo" href="\/" aria-label="Our Wellness Network home">(<img [^>]+>)<\/a>/.exec(footerOf(src));
       assert.ok(foot, 'the footer brand link');
       for (const img of [brand[2], foot[1]]) {
         assert.equal(attr(img, 'src'), LOGO);
-        assert.equal(attr(img, 'alt'), 'R Wellness Network');
+        assert.equal(attr(img, 'alt'), 'Our Wellness Network');
         assert.equal(attr(img, 'width'), '480');
         assert.equal(attr(img, 'height'), '174');
       }
       assert.equal(tags(src, 'img').filter((t) => /logo/.test(attr(t, 'src') || '')).length, 2, 'the logo appears twice: header and footer');
       const title = decode(/<title>([^<]+)<\/title>/.exec(src)[1]);
-      assert.match(title, / \| R Wellness Network$/, title);
+      assert.match(title, / \| Our Wellness Network$/, title);
     });
   }
 
   test('the expo page: the new logo in its own header, the new name in its footer, its form untouched', () => {
     const src = read('expo-vendors.html');
     const brand = /<a aria-label="([^"]+)" class="brand" href="\/">\s*(<img [^>]+>)\s*<\/a>/.exec(src);
-    assert.equal(brand[1], 'R Wellness Network home');
+    assert.equal(brand[1], 'Our Wellness Network home');
     assert.equal(attr(brand[2], 'src'), LOGO.slice(1), 'the expo page keeps its relative logo path');
-    assert.equal(attr(brand[2], 'alt'), 'R Wellness Network');
-    assert.match(text(src), /Organized by R Wellness Network, a brand of OUR Optimization LLC\./);
+    assert.equal(attr(brand[2], 'alt'), 'Our Wellness Network');
+    assert.match(text(src), /Organized by Our Wellness Network, a brand of OUR Optimization LLC\./);
   });
 
   test('the legal entity, the domain and the email stay the same', () => {
-    assert.match(text(page['privacy.html']), /This website is operated by OUR Optimization LLC \(trading as R Wellness Network\)\./);
-    assert.match(text(page['privacy.html']), /OUR Optimization LLC \(trading as R Wellness Network\) is responsible for the information described in this policy\. Our website is https:\/\/ouroptimization\.com\./);
-    assert.match(text(page['terms.html']), /R Wellness Network is the customer-facing brand of OUR Optimization LLC\./);
-    assert.match(text(page['terms.html']), /"We", "us" and "our" mean OUR Optimization LLC, operating as R Wellness Network\./);
-    assert.match(text(page['terms.html']), /R Wellness Network, a brand of OUR Optimization LLC\. Contact us at mustafa@ouroptimization\.com, or through https:\/\/ouroptimization\.com\./);
+    assert.match(text(page['privacy.html']), /This website is operated by OUR Optimization LLC \(trading as Our Wellness Network\)\./);
+    assert.match(text(page['privacy.html']), /OUR Optimization LLC \(trading as Our Wellness Network\) is responsible for the information described in this policy\. Our website is https:\/\/ouroptimization\.com\./);
+    assert.match(text(page['terms.html']), /Our Wellness Network is the customer-facing brand of OUR Optimization LLC\./);
+    assert.match(text(page['terms.html']), /"We", "us" and "our" mean OUR Optimization LLC, operating as Our Wellness Network\./);
+    assert.match(text(page['terms.html']), /Our Wellness Network, a brand of OUR Optimization LLC\. Contact us at mustafa@ouroptimization\.com, or through https:\/\/ouroptimization\.com\./);
     for (const file of ['contact.html', 'about.html']) assert.match(page[file], /mailto:mustafa@ouroptimization\.com/, file);
     for (const file of ['privacy.html', 'terms.html']) assert.match(text(page[file]), /mustafa@ouroptimization\.com/, file);
   });
@@ -722,7 +720,7 @@ describe('the brand: R Wellness Network', () => {
 /* ---------- the client portal: real screens from its demonstration account ---------- */
 describe('the client portal screens', () => {
   // The screens come from the portal's demonstration account (a fictional clinic), re-shot on October 23, 2026
-  // with the R Wellness Network logo. Every place that shows them says so, so the made-up numbers never read
+  // with the Our Wellness Network logo. Every place that shows them says so, so the made-up numbers never read
   // as a real clinic's results.
   test('the home page: the portal after the partnership, real features only, demonstration data labeled, the client login kept', () => {
     const html = page['index.html'];

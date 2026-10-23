@@ -27,7 +27,7 @@ export const PAGES = [
 ];
 /* The page labels, in order: Home, the ways we execute, then pricing, the sample contract, the client experience and the company pages. */
 export const TABS = PAGES.filter((p) => p.tab).map((p) => [p.tab, p.url]);
-/* The main navigation of the R Wellness Network header (October 23, 2026), the same on every page. */
+/* The main navigation of the Our Wellness Network header (October 23, 2026), the same on every page. */
 export const NAV = [['How it works', '/#approach'], ['What we do', '/#what-we-do'], ['Client experience', '/client-experience'], ['Pricing', '/pricing'], ['About', '/about']];
 
 const ENTITIES = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ', rsquo: "'", lsquo: "'", ldquo: '"', rdquo: '"', eacute: 'é', middot: '·', copy: '©', hellip: '…' };

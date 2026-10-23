@@ -16,9 +16,9 @@ const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const read = (p) => readFileSync(join(ROOT, p), 'utf8');
 const isFile = (p) => existsSync(join(ROOT, p)) && statSync(join(ROOT, p)).isFile();
 const pages = readdirSync(ROOT).filter((f) => f.endsWith('.html')).sort();
-// SHA-256 of the R Wellness Network logo and of the share image rendered with it (October 23, 2026).
-const LOGO_SHA = '150fc336c4c61d5d7dea6288b5487be49685ea93748aa7b29b0bbe35f7685d85';
-const OG_RWN_SHA = '9fcccba22974b1605e5cb8b1d67b73ae3125d75ae28f89988dbe9345a25c343e';
+// SHA-256 of the Our Wellness Network logo and of the share image rendered with it (October 23, 2026).
+const LOGO_SHA = 'e9449659d931e5100943919ed541bb7eab554da8758021dc0cc0d29b7e2abb6d';
+const OG_SHA = 'b27dc11f898deb8bf33cd4a8c1f8cd066ec5c7c08d3138a8ee343d63b804857a';
 
 // The favicon block every page head carries. Root-absolute, so the 404 page works at any depth.
 // There is no SVG icon: browsers prefer an SVG over the PNG and ICO files, and the OWO mark ships as PNG and ICO only.
@@ -62,8 +62,8 @@ const RETIRED = {
 };
 
 // Files deleted with the retired pages (the old strategy meeting form, its script and its tests), the old SVG favicon,
-// the old logos (replaced by r-wellness-network-logo.png on October 23, 2026) and the old file names of the renamed pages.
-const DELETED = ['assets/estimate.js', 'tests/estimate.test.mjs', 'tests/e2e-estimate.mjs', 'assets/favicon.svg', 'assets/img/owo-logo.png', 'assets/img/our-wellness-network-logo.png',
+// the old logo (replaced by our-wellness-network-logo.png) and the old file names of the renamed pages.
+const DELETED = ['assets/estimate.js', 'tests/estimate.test.mjs', 'tests/e2e-estimate.mjs', 'assets/favicon.svg', 'assets/img/owo-logo.png',
   ...Object.keys(RETIRED).map((n) => `${n}.html`), ...Object.keys(RENAMED).map((n) => `${n}.html`)];
 
 /* The [[redirects]] rules in netlify.toml, as { from, to, status, force, query }. query is null, or the
@@ -374,7 +374,7 @@ describe('retired pages', () => {
 
   test('no redirect catches a kept page, the assets or the site files', () => {
     const keep = [...CLEAN, '/404.html',
-      '/assets/site.css', '/assets/site.js', '/assets/call.js', '/assets/icon-192.png', '/assets/icon-512.png', '/assets/img/r-wellness-network-logo.png',
+      '/assets/site.css', '/assets/site.js', '/assets/call.js', '/assets/icon-192.png', '/assets/icon-512.png', '/assets/img/our-wellness-network-logo.png',
       '/favicon.ico', '/apple-touch-icon.png', '/site.webmanifest', '/robots.txt', '/sitemap.xml'];
     for (const path of keep) {
       const rule = ruleFor(path);
@@ -427,8 +427,8 @@ describe('retired pages', () => {
 
 describe('image folder', () => {
   // Every share image name used before October 23, 2026 is kept only as a byte-for-byte copy of the current one
-  // (og-rwn.jpg), so links shared earlier (which still point at those names) show the R Wellness Network art.
-  const LEGACY_SHARE = Object.fromEntries(['og.jpg', 'og-community.jpg', 'og-dinners.jpg', 'og-neighbors.jpg', 'og-best-patients.jpg', 'og-network-neighbors.jpg', 'og-network-best-patients.jpg'].map((n) => [n, 'og-rwn.jpg']));
+  // (og-community-team.jpg), so links shared earlier (which still point at those names) show the Our Wellness Network art.
+  const LEGACY_SHARE = Object.fromEntries(['og.jpg', 'og-community.jpg', 'og-dinners.jpg', 'og-neighbors.jpg', 'og-best-patients.jpg', 'og-network-neighbors.jpg', 'og-network-best-patients.jpg'].map((n) => [n, 'og-community-team.jpg']));
 
   test('assets/img holds only images a page, the stylesheet, a script or a site file uses', () => {
     const text = [...KEPT, 'assets/site.css', 'assets/site.js', 'assets/call.js', 'site.webmanifest', 'netlify.toml', 'sitemap.xml']
@@ -441,21 +441,21 @@ describe('image folder', () => {
     for (const [name, current] of Object.entries(LEGACY_SHARE)) assert.ok(readFileSync(join(ROOT, 'assets/img', name)).equals(readFileSync(join(ROOT, 'assets/img', current))), `${name} matches ${current}`);
   });
 
-  test('the share image: og-rwn.jpg on every page, 1200 x 630 with no EXIF', () => {
+  test('the share image: og-community-team.jpg on every page, 1200 x 630 with no EXIF', () => {
     for (const page of KEPT.filter((p) => p !== 'expo-vendors.html')) {
       const og = /<meta property="og:image" content="https:\/\/ouroptimization\.com\/assets\/img\/([^"]+)">/.exec(read(page));
-      assert.equal(og && og[1], 'og-rwn.jpg', page);
+      assert.equal(og && og[1], 'og-community-team.jpg', page);
     }
-    const i = jpegInfo(readFileSync(join(ROOT, 'assets/img', 'og-rwn.jpg')));
+    const i = jpegInfo(readFileSync(join(ROOT, 'assets/img', 'og-community-team.jpg')));
     assert.deepEqual([i.width, i.height, i.exif], [1200, 630, false]);
-    assert.match(read('index.html'), /<meta property="og:image:alt" content="[^"]*Your Organic Growth Team\.[^"]*">/);
-    // Rendered on October 23, 2026: the R Wellness Network logo, the tagline and the neighborhood map.
-    assert.equal(createHash('sha256').update(readFileSync(join(ROOT, 'assets/img', 'og-rwn.jpg'))).digest('hex'), OG_RWN_SHA, 'og-rwn.jpg is the R Wellness Network share image');
+    assert.match(read('index.html'), /<meta property="og:image:alt" content="[^"]*Your Organic Community Relationships Team\.[^"]*">/);
+    // Rendered on October 23, 2026: the Our Wellness Network logo, the tagline and the neighborhood map.
+    assert.equal(createHash('sha256').update(readFileSync(join(ROOT, 'assets/img', 'og-community-team.jpg'))).digest('hex'), OG_SHA, 'og-community-team.jpg is the Our Wellness Network share image');
   });
 
-  test('the logo is the R Wellness Network logo (the old ones are deleted)', () => {
-    // The same infinity W mark, pixel for pixel; the words under it now read "R Wellness Network", with "Wellness" in gold.
-    const file = 'assets/img/r-wellness-network-logo.png';
+  test('the logo is the Our Wellness Network logo (the old one is deleted)', () => {
+    // The same mark and colors as before; only the last word changed, from the old name to "Network".
+    const file = 'assets/img/our-wellness-network-logo.png';
     const buf = readFileSync(join(ROOT, file));
     assert.equal(createHash('sha256').update(buf).digest('hex'), LOGO_SHA, `${file} is the new logo`);
     const { width, height, pixels } = decodePng(buf);
@@ -463,7 +463,6 @@ describe('image folder', () => {
     const opaque = pixels.filter((p) => p[3] >= 128);
     assert.ok(opaque.filter((p) => p[0] - p[2] > 50 && p[0] > 120).length / opaque.length > 0.2, 'the gold of the W and "Wellness"');
     assert.ok(opaque.filter((p) => 0.2126 * p[0] + 0.7152 * p[1] + 0.0722 * p[2] < 60).length / opaque.length > 0.2, 'the dark loop and words');
-    assert.ok(!isFile('assets/img/our-wellness-network-logo.png'), 'the previous logo file is gone');
     assert.ok(!isFile('assets/img/owo-logo.png'), 'the old logo file is gone');
     for (const page of pages) {
       const logos = [...read(page).matchAll(/<img\b[^>]*>/g)].map(([t]) => attr(t, 'src')).filter((s) => /logo/.test(s));

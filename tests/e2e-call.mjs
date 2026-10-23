@@ -257,7 +257,7 @@ await scenario('the renamed service pages: each old path, with and without .html
     const { page, jsErrors, missing, close } = await open({ path: `${old}#how` });
     assert.equal(new URL(page.url()).pathname, now);
     assert.equal(await page.$eval('.pg-crumbs [aria-current="page"]', (a) => a.textContent.trim()), tab);
-    assert.match(await page.title(), / \| R Wellness Network$/);
+    assert.match(await page.title(), / \| Our Wellness Network$/);
     assert.deepEqual(jsErrors, []);
     assert.deepEqual(missing, [], 'every stylesheet, script, font and image loads');
     await close();
@@ -270,14 +270,14 @@ await scenario('the renamed service pages: each old path, with and without .html
   }
 });
 
-await scenario('the header and the footer show the R Wellness Network logo, loaded and crisp', async () => {
+await scenario('the header and the footer show the Our Wellness Network logo, loaded and crisp', async () => {
   const { page, close } = await open({ path: '/' });
   await page.locator('footer img').scrollIntoViewIfNeeded();
   const logos = await page.$$eval('img[src*="logo"]', (imgs) => imgs.map((i) => ({ src: i.getAttribute('src'), alt: i.alt, ok: i.complete && i.naturalWidth === 480, w: i.getBoundingClientRect().width })));
   assert.equal(logos.length, 2);
   for (const l of logos) {
-    assert.equal(l.src, '/assets/img/r-wellness-network-logo.png');
-    assert.equal(l.alt, 'R Wellness Network');
+    assert.equal(l.src, '/assets/img/our-wellness-network-logo.png');
+    assert.equal(l.alt, 'Our Wellness Network');
     assert.ok(l.w > 0 && l.w <= 240, `shown at ${l.w}px from a 480px file, so it stays sharp on 2x screens`);
   }
   await page.waitForFunction(() => [...document.querySelectorAll('img[src*="logo"]')].every((i) => i.complete && i.naturalWidth === 480));
