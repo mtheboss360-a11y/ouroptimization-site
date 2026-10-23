@@ -284,6 +284,35 @@ await scenario('the header and the footer show the Our Wellness Network logo, lo
   await close();
 });
 
+await scenario('keyboard: below 1160px, Tab from the open Menu button walks the panel links in order', async () => {
+  for (const width of [390, 1024]) {
+    const { page, jsErrors, close } = await open({ path: '/', width, height: 800 });
+    await page.focus('.rw-menu');
+    await page.keyboard.press('Enter');
+    assert.equal(await page.getAttribute('.rw-menu', 'aria-expanded'), 'true');
+    const seen = [];
+    for (let i = 0; i < 4; i++) {
+      await page.keyboard.press('Tab');
+      seen.push(await page.evaluate(() => document.activeElement.textContent.trim()));
+    }
+    assert.deepEqual(seen, ['How it works', 'What we do', 'Client experience', 'Pricing'], `at ${width}px`);
+    assert.equal(await page.getAttribute('.rw-menu', 'aria-expanded'), 'true', 'the panel stays open while focus is in it');
+    const box = await page.$eval('.rw-menu', (b) => b.getBoundingClientRect().left);
+    const cta = await page.$eval('.rw-head-cta', (b) => b.getBoundingClientRect());
+    if (cta.width) assert.ok(box > cta.left, 'the Menu button still shows to the right of the header button');
+    assert.deepEqual(jsErrors, []);
+    await close();
+  }
+});
+
+await scenario('at 1440px an anchor lands below the sticky header (/review-tags#nfc)', async () => {
+  const { page, close } = await open({ path: '/review-tags#nfc', width: 1440, height: 900 });
+  await page.waitForTimeout(300);
+  const r = await page.evaluate(() => ({ head: document.querySelector('.rw-header').getBoundingClientRect().bottom, top: document.getElementById('nfc').getBoundingClientRect().top }));
+  assert.ok(r.top >= r.head, `#nfc starts at ${Math.round(r.top)}, below the header at ${Math.round(r.head)}`);
+  await close();
+});
+
 await scenario('an old /review-tags#in-use link opens the NFC explainer, #nfc', async () => {
   const { page, jsErrors, close } = await open({ path: '/review-tags#in-use' });
   await page.waitForFunction(() => location.hash === '#nfc', null, { timeout: 3000 });

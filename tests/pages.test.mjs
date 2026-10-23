@@ -86,6 +86,8 @@ describe('every page: head, one h1, header tabs, breadcrumbs and footer', () => 
       assert.match(h, /<a class="rw-login rw-head-login" href="https:\/\/www\.ournetworkportal\.com">[\s\S]*?Client login<\/a>/);
       assert.match(h, /<a class="btn btn-primary rw-head-cta" href="\/contact">Book a Growth Consultation<\/a>/);
       assert.match(h, /<button class="rw-menu" type="button" aria-expanded="false" aria-controls="site-nav">/);
+      // The menu button comes directly before the panel it opens, so Tab from the open button walks the links in order (October 23, 2026).
+      assert.match(h, /<button class="rw-menu"[^>]*>[\s\S]*?<\/button>\s*<nav class="rw-nav" id="site-nav"/);
       assert.doesNotMatch(h, /tel:|331-271-6851/, 'no phone number in the header');
     });
 
@@ -97,6 +99,7 @@ describe('every page: head, one h1, header tabs, breadcrumbs and footer', () => 
       assert.deepEqual(col('foot-ways'), [['Referral network', '/referral-network'], ['Flyer network', '/flyer-network'], ['Patient network', '/patient-network'], ['Online search network', '/online-search-network'], ['Review tags', '/review-tags'], ['Website design', '/website-design']]);
       assert.deepEqual(col('foot-company'), [['About', '/about'], ['FAQ', '/faq'], ['Book a Growth Consultation', '/contact'], ['mustafa@ouroptimization.com', 'mailto:mustafa@ouroptimization.com'], ['Client login', PORTAL]]);
       assert.equal(text(/<p class="rw-foot-tag">([\s\S]*?)<\/p>/.exec(f)[1]), 'Your Organic Community Relationships Team.');
+      assert.match(f, /<a href="mailto:mustafa@ouroptimization\.com">mustafa@<wbr>ouroptimization\.com<\/a>/, 'the email can break after the @, never inside the domain');
       assert.equal(text(/<div class="rw-foot-bottom">\s*<p>([\s\S]*?)<\/p>/.exec(f)[1]), '© 2026 OUR Optimization LLC. Our Wellness Network is a brand of OUR Optimization LLC.');
       assert.deepEqual(links(/<div class="rw-foot-bottom">[\s\S]*<\/div>/.exec(f)[0]).map((l) => l.href), ['/privacy', '/terms']);
       assert.doesNotMatch(f, /<h3>|tel:|331-271-6851|Mustafa/, 'h2 headings only, and no phone number or name in the footer');
@@ -903,7 +906,7 @@ describe('copy rules across the site', () => {
       // lives on /contact and /thanks only. The footer carries the email, as the contact the brief asks for.
       assert.doesNotMatch(headerOf(src), /331-271-6851|tel:/, `${p.file}: no phone in the header`);
       assert.doesNotMatch(footerOf(src), /331-271-6851|tel:|Mustafa/, `${p.file}: no phone or name in the footer`);
-      assert.match(footerOf(src), /<a href="mailto:mustafa@ouroptimization\.com">mustafa@ouroptimization\.com<\/a>/, `${p.file}: the email in the footer`);
+      assert.match(footerOf(src), /<a href="mailto:mustafa@ouroptimization\.com">mustafa@<wbr>ouroptimization\.com<\/a>/, `${p.file}: the email in the footer`);
       // The call to action bands carry no name, number or email.
       for (const band of [...src.matchAll(/<section class="section bg-ink pg-cta"[\s\S]*?<\/section>/g)].map((x) => x[0])) {
         assert.doesNotMatch(band, /Mustafa|331-271-6851|tel:|mailto:|@ouroptimization|contact-name|data-email-slot/, `${p.file}: the call to action band`);
