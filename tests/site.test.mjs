@@ -39,7 +39,7 @@ describe('every page: head', () => {
       assert.match(src, /^<!doctype html>\n<html lang="en"/);
       const title = text(/<title>([\s\S]*?)<\/title>/.exec(src)[1]);
       assert.ok(title.length >= 15 && title.length <= 70, `title length ${title.length}: ${title}`);
-      assert.match(title, /Our Wellness Connections/);
+      if (!p.brandOnly) assert.match(title, /Our Wellness Connections/); // the expo page keeps its own event title
       assert.ok(!titles.has(title), `title also used by ${titles.get(title)}`);
       titles.set(title, p.file);
       const desc = meta(src, 'name', 'description');
@@ -139,7 +139,9 @@ describe('words and claims', () => {
   test('no testimonials, reviews, ratings or scores', () => {
     for (const p of PAGES) {
       const t = text(mainOf(page[p.file]));
-      assert.doesNotMatch(t, /testimonial|★|\b\d(\.\d)? out of 5\b|five[- ]star/i, p.file);
+      // the legal pages may name testimonial text among the materials a clinic hands us; no page shows one
+      const legal = ['privacy.html', 'terms.html', 'sample-contract.html'].includes(p.file);
+      assert.doesNotMatch(t, legal ? /★|\b\d(\.\d)? out of 5\b|five[- ]star/i : /testimonial|★|\b\d(\.\d)? out of 5\b|five[- ]star/i, p.file);
       assert.doesNotMatch(page[p.file], /AggregateRating|"review"/, p.file);
     }
   });

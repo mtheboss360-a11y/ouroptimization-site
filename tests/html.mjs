@@ -20,7 +20,7 @@ export const PAGES = [
   { file: 'online-search-network.html', url: '/online-search-network', nav: null },
   { file: 'review-tags.html', url: '/review-tags', nav: null },
   { file: 'website-design.html', url: '/website-design', nav: null },
-  { file: 'expo-vendors.html', url: '/expo-vendors', nav: null, brandOnly: true },
+  { file: 'expo-vendors.html', url: '/expo-vendors', nav: null, brandOnly: true, noindex: true },
   { file: 'privacy.html', url: '/privacy', nav: null },
   { file: 'terms.html', url: '/terms', nav: null },
   { file: 'thanks.html', url: '/thanks', nav: null, noindex: true },
