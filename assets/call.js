@@ -9,7 +9,7 @@
 
   /* The "What would you like to talk about?" radios. The field keeps its original name, "dinner",
      so Netlify keeps one column for it across old and new submissions. */
-  var DINNERS = ['Referral or flyer network', 'Plus-One Dinner', 'VIP Night', 'Online search network, review tags or a website', 'Not sure yet'];
+  var DINNERS = ["Referral network (routes)", "Online search / review tags / website", "Patient dinner", "Not sure yet"];
   var ORDER = ['name', 'clinic', 'phone', 'email', 'town', 'best_time', 'dinner', 'message'];
   var MAX = { name: 120, clinic: 150, phone: 30, email: 254, town: 120, best_time: 60, message: 2000 };
 
@@ -20,14 +20,14 @@
   var ABOUT = {
     'patient-network': "I'm asking about the patient dinners.",
     'referral-network': "I'm asking about the referral network.",
-    'flyer-network': "I'm asking about flyer drops.",
+    'flyer-network': "I'm asking about referral network routes.",
     'online-search-network': "I'm asking about Google Ads.",
     'review-tags': "I'm asking about review tags.",
     'website-design': "I'm asking about a website redesign.",
     'pricing': "I'm asking about pricing.",
     'sample-contract': "I'm asking about the sample contract.",
     'patient-dinners': "I'm asking about the patient dinners.",
-    'flyer-drops': "I'm asking about flyer drops.",
+    'flyer-drops': "I'm asking about referral network routes.",
     'google-ads': "I'm asking about Google Ads."
   };
 
