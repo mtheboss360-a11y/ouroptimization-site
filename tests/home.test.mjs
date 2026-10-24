@@ -163,19 +163,21 @@ describe('pricing page: the offer', () => {
   });
 });
 
-describe('growth team page', () => {
-  const gt = read('growth-team.html');
-  test('the owner\'s two lines, and the treats framed like the courtesy', () => {
-    assert.equal(text(/<h1 id="pg-h">([\s\S]*?)<\/h1>/.exec(gt)[1]), 'Your Organic Growth Team.');
-    assert.equal(text(/<p class="gt-sub">([\s\S]*?)<\/p>/.exec(gt)[1]), 'The boots on the ground maintaining your relationships.');
+describe('boots on the ground page (was the growth team page)', () => {
+  const gt = read('boots-on-the-ground.html');
+  test('the headline and one line, nothing repeated above them; the treats framed like the courtesy', () => {
+    assert.equal(text(/<h1 id="pg-h">([\s\S]*?)<\/h1>/.exec(gt)[1]), 'In person, every month.');
+    assert.equal(text(/<p class="gt-sub">([\s\S]*?)<\/p>/.exec(gt)[1]), 'Deliveries, drop-offs and every stop tracked in your portal.');
+    assert.doesNotMatch(gt, /pg-crumbs/, 'no breadcrumb');
     assert.match(text(gt), /Fresh-baked treats and warm coffee for the people who work there, the same for everyone, whether or not they ever send anyone\./);
-    assert.match(text(gt), /Even if a trial guarantee gives you your \$250 back, you keep your partner relationships\./, 'the promise as the Terms word it');
+    assert.match(text(gt), /Even if a trial guarantee gives you your \$450 back, you keep your partner relationships\./, 'the promise as the Terms word it');
     assert.doesNotMatch(text(gt), /month after month|whether or not you stay/);
   });
-  test('the illustration: AVIF and WebP, never wider than its 560px box below 960px', () => {
-    const sizes = tags(gt, 'source').concat(tags(gt, 'img')).map((t) => attr(t, 'sizes')).filter(Boolean);
+  test('the illustration: the clay team visit, AVIF and WebP, never wider than its 560px box below 960px', () => {
+    const hero = /<section class="pg-hero[\s\S]*?<\/section>/.exec(gt)[0];
+    const sizes = tags(hero, 'source').concat(tags(hero, 'img')).map((t) => attr(t, 'sizes')).filter(Boolean);
     assert.ok(sizes.length >= 2);
-    for (const v of sizes) assert.equal(v, '(min-width:1180px) 470px, (min-width:960px) 40vw, (min-width:600px) 560px, calc(100vw - 40px)');
-    for (const t of tags(gt, 'img')) assert.ok(existsSync(new URL('.' + attr(t, 'src'), ROOT)), attr(t, 'src'));
+    for (const v of sizes) assert.equal(v, '(min-width:1180px) 520px, (min-width:960px) 44vw, (min-width:600px) 560px, calc(100vw - 40px)');
+    for (const t of tags(hero, 'img')) { assert.match(attr(t, 'src'), /team-visit-/); assert.ok(existsSync(new URL('.' + attr(t, 'src'), ROOT)), attr(t, 'src')); }
   });
 });

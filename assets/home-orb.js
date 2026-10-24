@@ -157,31 +157,62 @@
     ctx.globalAlpha = 1;
 
     if (open > 0.01) {
+      // The network builds in front of you: your clinic first, then each partner on a steady beat,
+      // sweeping around the orb. A line draws out from the clinic, the owner pops in where it lands,
+      // their name settles in, and only when every link is made do referrals start flowing back.
       const [qx, qy] = at(clinic);
-      const t = (now - openedAt) / 1000;
-      partners.forEach((p, i) => {
-        if (p.hidden) return;
+      const t = reduce ? 99 : (now - openedAt) / 1000;
+      const ease = (v) => v < .5 ? 4 * v * v * v : 1 - Math.pow(-2 * v + 2, 3) / 2;          // in-out, for the lines
+      const back = (v) => 1 + 2.2 * Math.pow(v - 1, 3) + 1.2 * Math.pow(v - 1, 2);            // a soft overshoot, for the pops
+      const clamp = (v) => Math.max(0, Math.min(1, v));
+      const ripple = (x, y, start, from, to, alpha) => {
+        const k = clamp((t - start) / .9); if (k <= 0 || k >= 1) return;
+        ctx.strokeStyle = colors.rose; ctx.lineWidth = 1.5; ctx.globalAlpha = open * alpha * (1 - k);
+        ctx.beginPath(); ctx.arc(x, y, from + (to - from) * ease(k), 0, 6.283); ctx.stroke();
+      };
+      const LEAD = .85, BEAT = .62, DRAW = .44, POP = .4;
+      const shown = partners.filter((p) => !p.hidden);
+      const done = LEAD + (shown.length - 1) * BEAT + DRAW + POP;
+
+      shown.forEach((p, i) => {
         const [x, y] = at(p);
-        const grow = reduce ? 1 : Math.max(0, Math.min(1, (t - i * 0.12) / 0.6)) * open;
-        if (grow <= 0) return;
-        // link draws from partner toward the clinic
+        const start = LEAD + i * BEAT;
+        const draw = ease(clamp((t - start) / DRAW));
+        if (draw <= 0) return;
+        const tipX = qx + (x - qx) * draw, tipY = qy + (y - qy) * draw;
+        // the link, drawn outward from your clinic, with a bright tip while it travels
         ctx.strokeStyle = colors.lit; ctx.globalAlpha = 0.55 * open; ctx.lineWidth = 1.4;
-        ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + (qx - x) * grow, y + (qy - y) * grow); ctx.stroke();
-        // referral pulse travelling to the clinic once the link is drawn
-        if (grow >= 1 && !reduce) {
-          const f = ((t * 0.45 + i * 0.37) % 1);
-          ctx.globalAlpha = open * (1 - Math.abs(f - .5) * 1.2);
+        ctx.beginPath(); ctx.moveTo(qx, qy); ctx.lineTo(tipX, tipY); ctx.stroke();
+        if (draw < 1) { ctx.fillStyle = colors.lit; ctx.globalAlpha = open; ctx.beginPath(); ctx.arc(tipX, tipY, 3.4, 0, 6.283); ctx.fill(); return; }
+        // the owner pops in where the line lands, with a small ripple
+        const landed = start + DRAW;
+        ripple(x, y, landed, 14, 34, .5);
+        const pop = clamp((t - landed) / POP);
+        ctx.globalAlpha = open * Math.min(1, pop * 2.2);
+        owner(x, y, p, Math.max(.01, back(pop)));
+        // the name settles in just after
+        const name = ease(clamp((t - landed - .16) / .34));
+        if (name > 0) { ctx.globalAlpha = open * name; pill(x, y - 12 + (1 - name) * 8, p.label, false); }
+        // once the whole network is built, referrals flow back to your clinic
+        if (!reduce && t > done) {
+          const f = (((t - done) * 0.45 + i * 0.37) % 1);
+          ctx.globalAlpha = open * (1 - Math.abs(f - .5) * 1.2) * clamp((t - done) / .6);
           ctx.fillStyle = colors.lit; ctx.beginPath(); ctx.arc(x + (qx - x) * f, y + (qy - y) * f, 3.2, 0, 6.283); ctx.fill();
         }
-        ctx.globalAlpha = open * Math.min(1, grow * 1.4);
-        owner(x, y, p, 0.55 + 0.45 * Math.min(1, grow * 1.4));
-        pill(x, y - 12, p.label, false);
       });
-      ctx.globalAlpha = open;
-      ctx.fillStyle = colors.rose; ctx.beginPath(); ctx.arc(qx, qy, 11, 0, 6.283); ctx.fill();
-      ctx.strokeStyle = colors.rose; ctx.lineWidth = 2; ctx.globalAlpha = open * (0.35 + 0.25 * Math.sin(t * 3));
-      ctx.beginPath(); ctx.arc(qx, qy, 19, 0, 6.283); ctx.stroke();
-      ctx.globalAlpha = open; pill(qx, qy - 6, clinic.label, true);
+
+      // your clinic: first on the orb, with a ripple as it arrives and a soft one each time a partner connects
+      ripple(qx, qy, 0, 11, 52, .7);
+      shown.forEach((p, i) => ripple(qx, qy, LEAD + i * BEAT + DRAW, 12, 30, .35));
+      const c = clamp(t / .55);
+      ctx.globalAlpha = open; ctx.fillStyle = colors.rose;
+      ctx.beginPath(); ctx.arc(qx, qy, 11 * Math.max(.01, back(c)), 0, 6.283); ctx.fill();
+      if (t > done) {
+        ctx.strokeStyle = colors.rose; ctx.lineWidth = 2; ctx.globalAlpha = open * (0.35 + 0.25 * Math.sin(t * 3)) * clamp((t - done) / .6);
+        ctx.beginPath(); ctx.arc(qx, qy, 19, 0, 6.283); ctx.stroke();
+      }
+      const label = ease(clamp((t - .3) / .4));
+      if (label > 0) { ctx.globalAlpha = open * label; pill(qx, qy - 6 + (1 - label) * 6, clinic.label, true); }
       ctx.globalAlpha = 1;
     }
     requestAnimationFrame(frame);
@@ -194,7 +225,7 @@
   addEventListener('resize', resize);
   resize();
   // Phones and reduced motion: show the network on its own; desktop waits for hover.
-  if (stuck) { target = 1; open = 1; openedAt = performance.now() - 5000; hint.classList.add('gone'); }
+  if (stuck) { target = 1; open = 1; openedAt = performance.now() - 60000; hint.classList.add('gone'); }
   else if (touch || reduce) setTimeout(() => setOpen(1), reduce ? 0 : 1800);
   requestAnimationFrame(frame);
   document.fonts && document.fonts.ready.then(() => { readColors(); layout(); });
