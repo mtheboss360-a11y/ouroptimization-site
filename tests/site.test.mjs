@@ -223,7 +223,7 @@ describe('sitemap and robots', () => {
     const want = PAGES.filter((p) => !p.noindex).map((p) => ORIGIN + p.url).sort();
     assert.deepEqual([...locs].sort(), want);
     assert.equal(new Set(locs).size, locs.length);
-    assert.equal((sm.match(/<lastmod>2026-10-23<\/lastmod>/g) || []).length, locs.length);
+    assert.equal((sm.match(/<lastmod>2026-10-24<\/lastmod>/g) || []).length, locs.length);
   });
   test('robots.txt points at the sitemap', () => assert.match(read('robots.txt'), /Sitemap: https:\/\/ouroptimization\.com\/sitemap\.xml/));
 });
@@ -244,28 +244,6 @@ describe('forms (Netlify detects them from the static HTML)', () => {
     assert.match(text(form), /Please don't include any patient information\./);
     for (const name of ['name', 'clinic', 'phone', 'email', 'town', 'best_time', 'message']) assert.match(form, new RegExp(`name="${name}"`), name);
   });
-  test('results-updates on the home page: a phone and an explicit, required consent to texts', () => {
-    const src = page['index.html'];
-    const form = /<form\b[^>]*name="results-updates"[\s\S]*?<\/form>/.exec(src)[0];
-    const open = /<form\b[^>]*>/.exec(form)[0];
-    assert.equal(attr(open, 'method'), 'POST');
-    assert.equal(attr(open, 'action'), '/updates-thanks');
-    assert.equal(attr(open, 'data-netlify'), 'true');
-    assert.equal(attr(open, 'netlify-honeypot'), 'bot-field');
-    assert.match(form, /<input type="hidden" name="form-name" value="results-updates">/);
-    const inputs = tags(form, 'input');
-    const phone = inputs.find((t) => attr(t, 'name') === 'phone');
-    assert.equal(attr(phone, 'type'), 'tel');
-    assert.ok(hasAttr(phone, 'required'));
-    const consent = inputs.find((t) => attr(t, 'name') === 'text_consent');
-    assert.equal(attr(consent, 'type'), 'checkbox');
-    assert.ok(hasAttr(consent, 'required'));
-    assert.ok(!hasAttr(consent, 'checked'), 'never pre-ticked');
-    assert.match(text(form), /Yes, text me results updates from Our Wellness Connections at this number\./);
-    assert.match(text(form), /Message frequency varies\./);
-    assert.match(text(form), /Reply HELP for help, STOP to stop\./);
-    assert.ok(existsSync(new URL('updates-thanks.html', ROOT)));
-  });
   test('expo-vendor on /expo-vendors: the form and its script are byte-for-byte the live ones', () => {
     const src = page['expo-vendors.html'];
     const form = /<form\b[^>]*name="expo-vendor"[\s\S]*?<\/form>/.exec(src)[0];
@@ -273,9 +251,9 @@ describe('forms (Netlify detects them from the static HTML)', () => {
     const inline = [...src.matchAll(/<script>[\s\S]*?<\/script>/g)].map((m) => m[0]).filter((s) => /expo/i.test(s) || /getElementById/.test(s));
     assert.ok(inline.some((s) => createHash('sha256').update(s).digest('hex') === 'f530f0a4ae2fbdd10d37e2bdc9056f2e217ac406d57dfb18336d85a82cf213bf'), 'the inline form script is unchanged');
   });
-  test('only these three forms exist on the site', () => {
+  test('only these two forms exist on the site', () => {
     const names = PAGES.flatMap((p) => [...page[p.file].matchAll(/<form\b[^>]*name="([^"]+)"/g)].map((m) => m[1]));
-    assert.deepEqual(names.sort(), ['dinner-call', 'expo-vendor', 'results-updates']);
+    assert.deepEqual(names.sort(), ['dinner-call', 'expo-vendor']);
   });
 });
 

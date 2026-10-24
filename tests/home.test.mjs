@@ -13,16 +13,18 @@ const sec = (id) => {
 };
 
 describe('home: order and hero', () => {
-  test('the sections, in the owner\'s order: the map, then the dashboard, then the courtesy', () => {
+  test('the sections, in the owner\'s order: the dashboard on the green band, then the courtesy; no map, no results', () => {
     const ids = [...main.matchAll(/<section\b[^>]*\sid="([^"]+)"/g)].map((m) => m[1]);
-    assert.deepEqual(ids, ['matching', 'dashboard', 'courtesy', 'results', 'try', 'compliance', 'dinner', 'book']);
-    assert.ok(main.indexOf('owc-hero') < main.indexOf('id="matching"'), 'the hero comes first');
+    assert.deepEqual(ids, ['dashboard', 'courtesy', 'try', 'compliance', 'dinner', 'book']);
+    assert.ok(main.indexOf('owc-hero') < main.indexOf('id="dashboard"'), 'the hero comes first');
   });
   test('headline, sub and line, with no buttons', () => {
     const hero = /<section class="hero owc-hero"[\s\S]*?<\/section>/.exec(main)[0];
     assert.equal(text(/<h1 id="hero-h">([\s\S]*?)<\/h1>/.exec(hero)[1]), 'Your Organic Growth Team.');
-    assert.match(text(hero), /We put your brand into the community\./);
-    assert.match(text(hero), /We get your clinic recommended by the staff of the gyms, salons and boutiques near you, and show you every lead and booking that comes from it\./);
+    assert.equal(text(/<p class="owc-hero-sub">([\s\S]*?)<\/p>/.exec(hero)[1]), 'We put your community into the brand.');
+    assert.equal(text(/<p class="lede">([\s\S]*?)<\/p>/.exec(hero)[1]),
+      'We get your clinic recommended by the staff of businesses near you. Our people are the boots on the ground, passing out fresh-baked treats and warm coffee.');
+    assert.doesNotMatch(text(hero), /gyms|salons|boutiques/, 'no list of business types (the owner\'s call)');
     assert.deepEqual(links(hero), [], 'no buttons or links in the hero');
   });
   test('the hero visual: responsive AVIF and WebP, first-screen priority, and a video slot that works without a video', () => {
@@ -48,44 +50,39 @@ describe('home: order and hero', () => {
 });
 
 describe('home: the sections', () => {
-  test('b. business matching: one line, a real map with the five businesses and the route, no numbers', () => {
-    const s = sec('matching');
-    assert.equal(text(/<h2 id="match-h">([\s\S]*?)<\/h2>/.exec(s)[1]), 'We map the businesses around your clinic.');
-    assert.doesNotMatch(text(s), /Example|software/i, 'no Example label, nothing about the software');
-    assert.doesNotMatch(text(s), /\d+\s?%|score/i);
-    const fig = /<figure class="owc-geo[\s\S]*?<\/figure>/.exec(s)[0];
-    assert.equal(attr(tags(fig, 'figure')[0], 'data-geo-zoom'), '16');
-    assert.equal(attr(tags(fig, 'figure')[0], 'data-geo-size'), '640x427', 'the Google Static Maps frame the overlays are drawn in');
-    assert.deepEqual(tags(fig, 'source').map((t) => attr(t, 'type')), ['image/avif', 'image/webp']);
-    const base = tags(fig, 'img').find((t) => /owc-geo-base/.test(t));
-    assert.match(attr(base, 'alt'), /real streets/);
-    const pins = tags(fig, 'img').filter((t) => /owc-geo-pin/.test(t));
-    assert.equal(pins.length, 6, 'the clinic and five businesses');
-    assert.equal(pins.filter((t) => /owc-geo-pin--home/.test(t)).length, 1);
-    for (const t of pins) {
-      assert.equal(attr(t, 'alt'), '');
-      assert.ok(existsSync(new URL('.' + attr(t, 'src'), ROOT)), attr(t, 'src'));
-    }
-    assert.match(fig, /<path class="owc-geo-route" pathLength="1000" d="M[\d. ]+"/);
-    assert.ok(links(fig).some((l) => l.href === 'https://www.openstreetmap.org/copyright'), 'the OpenStreetMap credit');
-  });
-  test('b. the Google Maps option: off until a key is set, then a styled static image under the same overlays', () => {
-    const cfg = read('assets/site-config.js');
-    assert.match(cfg, /googleMapsKey: '',/, 'no key in the repo');
+  test('b. the dashboard on the green band: the screens lie tipped back and stand up flat as you scroll', () => {
+    const s = sec('dashboard');
+    assert.match(main, /<section class="section bg-ink owc-dash-band" aria-labelledby="dashboard-h" id="dashboard">/, 'on the green band');
+    assert.equal(text(/<h2 id="dashboard-h">([\s\S]*?)<\/h2>/.exec(s)[1]), 'Every lead and booking, and where it came from.');
+    assert.match(s, /<p class="owc-scroll-cue" aria-hidden="true"><span>Scroll<\/span>/, 'the scroll cue is decoration only');
+    const stage = /<div class="owc-tilt" data-tilt>\s*<div class="pt-stage">/.exec(s);
+    assert.ok(stage, 'the screens sit in the tilt wrapper');
+    assert.doesNotMatch(s, /class="pt-stage reveal"/, 'no reveal transform fighting the tilt');
+    const css = read('assets/site.css');
+    assert.match(css, /\.owc-dash-band\{--p:1;/, 'flat by default: no JS means flat screens');
+    assert.match(css, /\.owc-tilt \.pt-stage\{transform:rotateX\(calc\(\(1 - var\(--p\)\) \* 26deg\)\) scale\(calc\(\.86 \+ \.14 \* var\(--p\)\)\)/);
+    assert.match(css, /\.owc-scroll-cue\{display:none;/, 'the cue shows only while the screens can move');
+    assert.match(css, /@media \(prefers-reduced-motion:reduce\)\{\.owc-dash-band\{--p:1 !important\}\.owc-scroll-cue\{display:none !important\}\}/);
     const js = read('assets/site.js');
-    assert.match(js, /config\.googleMap = mapsKey !== ''/);
-    assert.match(js, /maps\.googleapis\.com\/maps\/api\/staticmap/);
-    assert.match(js, /addEventListener\('error'/);
-    assert.match(read('netlify.toml'), /img-src 'self' data: https:\/\/maps\.googleapis\.com;/);
-    assert.match(read('privacy.html'), /<p data-flag="googleMap" data-flag-text="googleMapText" hidden><\/p>/, 'the privacy line appears only with the map');
-    assert.doesNotMatch(read('privacy.html'), /comes from Google Maps/, 'and is not in the page while the key is empty');
+    assert.match(js, /document\.querySelector\('\[data-tilt\]'\)/);
+    assert.match(js, /window\.addEventListener\('scroll', tiltQueue, \{ passive: true \}\)/);
+    assert.match(js, /requestAnimationFrame\(tiltUpdate\)/);
+    assert.match(js, /if \(tiltBand && window\.requestAnimationFrame && !still\.matches\)/, 'nothing moves with reduced motion');
+  });
+  test('b. no map anywhere: no Google request, no Maps key, no map images', () => {
+    assert.doesNotMatch(html, /owc-geo|id="matching"|openstreetmap/i);
+    assert.doesNotMatch(read('assets/site-config.js'), /googleMap/);
+    assert.doesNotMatch(read('assets/site.js'), /googleapis|googleMap|owc-geo/);
+    assert.match(read('netlify.toml'), /img-src 'self' data:;/, 'the CSP allows no outside images');
+    assert.doesNotMatch(read('privacy.html'), /googleMap|Google Maps/);
+    assert.ok(!existsSync(new URL('assets/img/map-base-1200.jpg', ROOT)));
   });
   test('c. the staff courtesy, word for word', () => {
     const t = text(sec('courtesy'));
     assert.match(t, /The staff courtesy: you set it and cap it\./);
     assert.ok(t.includes("For your trial the default courtesy is a complimentary consultation, which costs you only a few minutes and often turns into a booking itself. You can choose something else, like a complimentary add-on or a product sample, and you set a cap, for example up to 3 staff per business, so a route means at most 15 courtesies. It's the same for every staff member and is given whether or not they ever send anyone, which keeps it a courtesy and not a payment for referrals."));
   });
-  test('d. the dashboard: the screens, what it shows, the visit log and the Client Portal', () => {
+  test('b. the dashboard: the screens, what it shows, the visit log and the Client Portal', () => {
     const s = sec('dashboard');
     const t = text(s);
     assert.doesNotMatch(t, /Sample account/, 'no sample labels on the screens (the owner\'s call)');
@@ -94,23 +91,19 @@ describe('home: the sections', () => {
     assert.ok(links(s).some((l) => l.href === 'https://www.ournetworkportal.com' && l.text === 'Client Portal'));
     for (const img of tags(s, 'img')) assert.match(attr(img, 'src'), /^\/assets\/img\/portal-/);
   });
-  test('e. results: read from results.json, empty for now, the empty message and no example numbers', () => {
-    const s = sec('results');
-    assert.match(s, /data-results="\/assets\/data\/results\.json"/);
-    assert.match(text(s), /Our first routes are running now with a recovery clinic in Oakbrook Terrace\. Leave your number and we'll text you the results as they come in, good or bad\./);
-    assert.match(s, /<ul class="owc-results-list" hidden><\/ul>/, 'no result cards in the markup');
-    const data = JSON.parse(read('assets/data/results.json'));
-    assert.deepEqual(data.clinics, [], 'never filled with example numbers');
-    assert.match(html, /<script src="\/assets\/results\.js" defer><\/script>/);
-    assert.match(read('assets/results.js'), /textContent/, 'values go in as text, never as HTML');
-    assert.doesNotMatch(read('assets/results.js'), /innerHTML/);
+  test('no results section: no "real clinics, real numbers", no texting form, no results files', () => {
+    assert.doesNotMatch(html, /id="results"|Real clinics|Oakbrook Terrace|results-updates|data-results/);
+    assert.doesNotMatch(html, /results\.js/);
+    assert.ok(!existsSync(new URL('assets/results.js', ROOT)));
+    assert.ok(!existsSync(new URL('assets/data/results.json', ROOT)));
+    assert.ok(!existsSync(new URL('updates-thanks.html', ROOT)));
   });
-  test('f. the pricing teaser', () => {
+  test('d. the pricing teaser', () => {
     const s = sec('try');
     assert.match(text(s), /Try it for one month: \$250\./);
     assert.ok(links(s).some((l) => l.href === '/pricing'));
   });
-  test('g. the compliance part, in writing, and the attorney line behind one switch that is off', () => {
+  test('e. the compliance part, in writing, and the attorney line behind one switch that is off', () => {
     const t = text(sec('compliance'));
     assert.ok(t.includes('Every partner business signs a one-page agreement: mutual promotion, nobody is paid per referral or per patient, no patient records are shared.'));
     assert.ok(t.includes('We send it and the courtesy terms to your medical director before you sign anything.'));
@@ -120,14 +113,14 @@ describe('home: the sections', () => {
     assert.doesNotMatch(html, /reviewed by a healthcare attorney/i, 'the claim is not in the page while the switch is off');
     assert.match(read('assets/site-config.js'), /attorneyReviewed: false,/);
     assert.match(read('assets/site-config.js'), /attorneyReviewedText: 'The partner agreement and the courtesy terms have been reviewed by a healthcare attorney\.'/);
-    assert.match(html, /<script src="\/assets\/site-config\.js" defer><\/script>\n<script src="\/assets\/results\.js" defer><\/script>\n<script src="\/assets\/site\.js" defer>/);
+    assert.match(html, /<script src="\/assets\/site-config\.js" defer><\/script>\n<script src="\/assets\/site\.js" defer>/);
   });
-  test('i. the add-on card leads to the dinner page', () => {
+  test('f. the add-on card leads to the dinner page', () => {
     const s = sec('dinner');
     assert.match(text(s), /Add-on.*A private patient dinner\..*Quoted per event\./);
     assert.ok(links(s).some((l) => l.href === '/patient-network'));
   });
-  test('j. the final call to action, with the phone number', () => {
+  test('g. the final call to action, with the phone number', () => {
     const s = sec('book');
     assert.match(text(s), /Book a 15-minute call\. We'll show you your matched businesses on the call\./);
     assert.ok(links(s).some((l) => l.href === '/contact'));

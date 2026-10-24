@@ -2,7 +2,7 @@
 
 **Our Wellness Connections** ("Your Organic Growth Team.") is a brand of OUR Optimization LLC, a local company in Chicago's western suburbs. The site sells one service to independent med spas, **referral routes**: our business matching software maps the businesses around a clinic and ranks the non-competing ones that share its customers; the owner approves the list; a rep visits a route of 5 matched businesses and introduces the clinic to their staff; every staff member met gets a personal tap-and-scan code (NFC tag and QR) that opens the clinic's first-visit offer, tagged with who sent it; every sign-up lands in the clinic's client portal for its front desk to call.
 
-The site was rebuilt to the owner's brief of October 23, 2026. Its job: a med spa owner scans a card our rep left at her front desk, reads the site on her phone between patients and books a 15-minute call.
+The site was rebuilt to the owner's brief of October 23, 2026, with the owner's notes of October 24 (new hero lines, the dashboard on the green band, no map, no results section, the Growth team page). Its job: a med spa owner scans a card our rep left at her front desk, reads the site on her phone between patients and books a 15-minute call.
 
 Static HTML/CSS/JS, no build step, no dependencies, no third-party requests.
 
@@ -14,7 +14,8 @@ Netlify site "ouroptimization", linked to this repo, branch `main`. No build com
 
 | URL | File | In the menu | Notes |
 | --- | --- | --- | --- |
-| `/` | `index.html` | Home | Hero (no buttons), the business map, the dashboard, the staff courtesy, results, the pricing teaser, compliance (with the sample contract link), the dinner add-on, the closing call (with the phone number). |
+| `/` | `index.html` | Home | Hero (no buttons): "Your Organic Growth Team.", "We put your community into the brand." and the boots-on-the-ground line. Then the dashboard on the green band (the screens tip up flat as you scroll), the staff courtesy, the pricing teaser, compliance (with the sample contract link), the dinner add-on, the closing call (with the phone number). |
+| `/growth-team` | `growth-team.html` | Growth team | "Your Organic Growth Team." and "The boots on the ground maintaining your relationships.": what our people do on a route (treats and coffee, meeting the staff, the codes, the visit log) and how the relationships are kept up month after month. The illustration (`assets/img/team-visit-*`) is Higgsfield clay figurines in the hero's style, not real people. |
 | `/referral-network` | `referral-network.html` | How it works | Referral routes end to end. The old flyer network is folded in here. |
 | `/pricing` | `pricing.html` | Pricing | The trial ($250), Starter ($250/mo), Growth ($400/mo), Reach ($800/mo), the two trial guarantees, terms, who supplies what, add-ons priced on a call. The one page with a closing call band. |
 | `/sample-contract` | `sample-contract.html` | Sample contract | A sample referral-route agreement. |
@@ -26,43 +27,26 @@ Netlify site "ouroptimization", linked to this repo, branch `main`. No build com
 | `/review-tags` | `review-tags.html` | no | Add-on: tap-to-review tags. Keep the URL (printed tags may point at it). |
 | `/website-design` | `website-design.html` | no | Add-on: a website. Keep the URL. |
 | `/expo-vendors` | `expo-vendors.html` | no | Baby & Kids Health Expo table requests (noindex). Keep the URL and the form. |
-| `/privacy`, `/terms` | `privacy.html`, `terms.html` | footer | Last updated October 23, 2026. |
-| `/thanks`, `/updates-thanks` | `thanks.html`, `updates-thanks.html` | no | Form confirmations (noindex). |
+| `/privacy`, `/terms` | `privacy.html`, `terms.html` | footer | Last updated October 24, 2026. |
+| `/thanks` | `thanks.html` | no | The call form's confirmation (noindex). |
 | (any unknown URL) | `404.html` | no | Served with status 404. |
 
-Every page shares the same header (the menu: Home, How it works, Pricing, Sample contract, FAQ, About, Contact, and the Client Portal button to https://www.ournetworkportal.com), the same one-line footer (OUR Optimization LLC, Privacy Policy, Terms of Service) and the same head pattern: its own title and description, a canonical URL, Open Graph and Twitter tags (`assets/img/og-connections.jpg`) and LocalBusiness structured data (name, legal name, phone, email, service area Chicago's western suburbs). The expo page has a brand-only header. When you change the menu or the footer, change it on every page; `node --test` checks they match.
+Every page shares the same header (the menu: Home, Growth team, How it works, Pricing, Sample contract, FAQ, About, Contact, and the Client Portal button to https://www.ournetworkportal.com), the same one-line footer (OUR Optimization LLC, Privacy Policy, Terms of Service) and the same head pattern: its own title and description, a canonical URL, Open Graph and Twitter tags (`assets/img/og-connections.jpg`) and LocalBusiness structured data (name, legal name, phone, email, service area Chicago's western suburbs). The expo page has a brand-only header. When you change the menu or the footer, change it on every page; `node --test` checks they match.
 
 ## Forms (Netlify Forms)
 
 **Site configuration > Forms > Enable form detection** must be on. Netlify reads the forms from the static HTML at deploy, so redeploy after changing a form's fields. Set an email notification per form under **Site configuration > Notifications > Form submission notifications**.
 
 - **`dinner-call`** on `/contact`, posts to `/thanks`, honeypot `bot-field`, validated by `assets/call.js`. Fields: `name`, `clinic`, `phone`, `email` (optional), `town`, `best_time`, `dinner` (what to talk about: Referral routes / Online search / review tags / website / Patient dinner / Not sure yet; the field keeps its old name so Netlify keeps one column) and `message` (optional; its help text asks for no patient information). Links like `/contact?about=pricing` prefill the message; the keys are in `assets/call.js`.
-- **`results-updates`** on the home page (`#results`), posts to `/updates-thanks`, honeypot `bot-field`. Fields: `phone` and `text_consent` (a required, unticked consent box for results texts). Texting: use a provider that handles STOP, and only text the numbers that gave consent.
 - **`expo-vendor`** on `/expo-vendors`: unchanged, byte for byte (a test pins it). The family QR-code forms for the expo live outside this repo; do not move their routes or endpoints.
-
-## Results (`assets/data/results.json`)
-
-The home page's results section reads this file. While `clinics` is empty it shows: "Our first routes are running now with a recovery clinic in Oakbrook Terrace. Leave your number and we'll text you the results as they come in, good or bad." Add one entry per clinic with real, tracked numbers only:
-
-```json
-{ "town": "Oakbrook Terrace", "type": "Recovery clinic", "signups60": 0, "bookedFirstVisits60": 0, "referenceCalls": true }
-```
-
-`signups60` and `bookedFirstVisits60` are whole numbers for the clinic's first 60 days. An entry with a missing or invalid value is skipped. Never put example numbers in this file.
 
 ## Switches (`assets/site-config.js`)
 
 - `attorneyReviewed` (default `false`): shows "The partner agreement and the courtesy terms have been reviewed by a healthcare attorney." in the home page's compliance section. Turn it on only once that review is done.
-- `googleMapsKey` (default empty): puts Google's map under the home page's business map (see below) and shows `googleMapText` in the privacy policy's "Who else sees it" section.
 
-## The business map (home, `#matching`)
+## The dashboard on the green band (home, `#dashboard`)
 
-Real streets of a downtown in Chicago's western suburbs, tipped back like a 3D view, with every business on the map as a dot, your clinic in the middle, five matched businesses as small 3D buildings, and the route between them along the streets.
-
-- **Base map:** our own render of OpenStreetMap data (`assets/img/map-base-{800,1200,1800,2400}.{avif,webp,jpg}`), styled in the brand greens. OpenStreetMap's licence (ODbL) requires the credit "© OpenStreetMap contributors", shown in the corner of the map; keep it.
-- **Overlays:** the dots, the highlighted lots, the route and the rings are inline SVG in the page, drawn in a 640 x 427 frame at zoom 16 around 41.7935, -88.0105 (the `data-geo-*` attributes on the figure). The six buildings (`assets/img/map-*.webp`) were made with Higgsfield in the hero's style.
-- **Motion:** the route flows, a light travels it and rings pulse from the clinic, only while the map is on screen, and never for visitors who ask for reduced motion.
-- **Google Maps instead of our base:** in Google Cloud, create a key with only the **Maps Static API** enabled, restrict it to the websites `ouroptimization.com/*`, `www.ouroptimization.com/*` and `*.netlify.app/*`, and put it in `googleMapsKey` in `assets/site-config.js`. The page then asks Google for one styled image of the same frame and lays the same overlays on it; Google's map is shown flat and uncropped so its logo and attribution stay visible (their terms). If the key is refused, our map stays. Static Maps is billed per image after Google's monthly free allowance. The CSP already allows `https://maps.googleapis.com` for images.
+The portal screens (`assets/img/portal-*`, a sample account for a fictional clinic) lie tipped back under a "Scroll" cue and stand up flat as the visitor scrolls to them. `assets/site.js` sets `--p` on the band from 0 to 1 by scroll position; the CSS turns it into the tilt and fades the cue. Without JavaScript, or for visitors who ask for reduced motion, the screens are simply flat and the cue never shows.
 
 ## Hero video
 
@@ -73,9 +57,9 @@ The home hero shows a still (`assets/img/hero-van-{480,768,1080,1344}.{avif,webp
 - Logo lockup (the infinity-W mark over "Our Wellness Connections", in Playfair Display): `assets/img/owc-logo-360.{webp,png}` in the header, `assets/img/owc-logo.png` (600 px) for structured data.
 - The mark alone: `assets/img/owc-mark-light.{webp,png}` for light backgrounds, `assets/img/owc-mark-on-dark.{webp,png}` for dark ones (the closing band).
 - Favicons (the mark on a cream square): `favicon.ico`, `apple-touch-icon.png`, `assets/owo-favicon.ico`, `assets/owo-icon-{16,32,192,512}.png`, `assets/owo-apple-touch-icon.png`, `assets/favicon-*.png`, `assets/icon-*.png`; the manifest is `site.webmanifest`.
-- Share image: `assets/img/og-connections.jpg` (1200 x 630). The old share images and the old logo 301 to the new ones.
+- Share image: `assets/img/og-connections.jpg` (1200 x 630), with "Your Organic Growth Team." and "We put your community into the brand.". The old share images and the old logo 301 to the new ones.
 - Business matching illustration: `assets/img/matching-map-*` (on `/referral-network`, labelled "Example").
-- Business map: `assets/img/map-base-*` and `assets/img/map-{clinic,cafe,salon,gym,boutique,studio}.webp` (see above).
+- Growth team illustration: `assets/img/team-visit-{480,768,1080}.{avif,webp}`, clay figurines made with Higgsfield in the hero's style (not real people).
 - Portal screenshots: `assets/img/portal-*`, from the portal's sample account (a fictional clinic, 555 phone numbers, `.invalid` emails, made-up partner names). On the home page they carry no label (the owner's call); their alt text says they are the sample account.
 
 Fonts are self-hosted (Playfair Display and Inter, SIL Open Font License, licences in `assets/fonts/`).
@@ -105,8 +89,8 @@ Unit tests (Node 18+, no dependencies):
 node --test
 ```
 
-- `tests/site.test.mjs`: every page's head (title, description, canonical, Open Graph, Twitter, icons, one h1), the LocalBusiness data, the header and footer, the retired words, dashes, where the phone number may appear, internal links and anchors, images, the redirects (flyer paths, no chains, blocked files), the sitemap, the three forms (the expo form pinned byte for byte) and the favicon set.
-- `tests/home.test.mjs`: the home page section by section (order, hero, the business map and the Google Maps switch, the courtesy, the dashboard, results and `results.json`, the pricing teaser, compliance and the switch, the add-on, the closing call) and the pricing page's offer.
+- `tests/site.test.mjs`: every page's head (title, description, canonical, Open Graph, Twitter, icons, one h1), the LocalBusiness data, the header and footer, the retired words, dashes, where the phone number may appear, internal links and anchors, images, the redirects (flyer paths, no chains, blocked files), the sitemap, the two forms (the expo form pinned byte for byte) and the favicon set.
+- `tests/home.test.mjs`: the home page section by section (order, hero, the dashboard on the green band and its scroll tilt, no map and no results section, the courtesy, the pricing teaser, compliance and the switch, the add-on, the closing call) and the pricing page's offer.
 - `tests/call.test.mjs`: the call form and `assets/call.js` (validation rules and `?about=` prefills).
 - `tests/html.mjs`: shared helpers and the page list (not a test file).
 
@@ -116,7 +100,7 @@ Browser tests (Playwright, against a local server that applies the `netlify.toml
 E2E_BASE_URL=http://localhost:8770 node tests/e2e-call.mjs
 ```
 
-They cover the call form end to end, the `?about=` prefills, the old links and redirects, the logo, the results section (empty and with a stubbed entry), the results-updates form and its consent, the attorney switch, the hero video slot (reduced motion and a missing video) and the business map (no request to Google without a key; with a key, Google's image under the overlays and the privacy line; a refused key).
+They cover the call form end to end, the `?about=` prefills, the old links and redirects, the logo, the attorney switch, the hero video slot (reduced motion and a missing video), the dashboard tilt (tipped back below the fold, flat once in view, flat and still with reduced motion or without JavaScript, at 390 and 1280 px) and the Growth team page (second in the menu, the menu on one line at 1000 and 1280 px, the illustration, the clean URL).
 
 ## The client portal
 

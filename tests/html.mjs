@@ -7,9 +7,11 @@ export const read = (p) => readFileSync(new URL(p, ROOT), 'utf8');
 
 /* Every page of the site, with its clean URL and its item in the main menu (null: not in the menu).
    October 23, 2026: Our Wellness Connections. The flyer network folded into the referral routes
-   (/flyer-network 301s to /referral-network); the dinner page stays, reached from the home add-on card. */
+   (/flyer-network 301s to /referral-network); the dinner page stays, reached from the home add-on card.
+   October 24, 2026: the Growth team page joins the menu, second, after Home. */
 export const PAGES = [
   { file: 'index.html', url: '/', nav: 'Home' },
+  { file: 'growth-team.html', url: '/growth-team', nav: 'Growth team' },
   { file: 'referral-network.html', url: '/referral-network', nav: 'How it works' },
   { file: 'pricing.html', url: '/pricing', nav: 'Pricing' },
   { file: 'sample-contract.html', url: '/sample-contract', nav: 'Sample contract' },
@@ -24,11 +26,10 @@ export const PAGES = [
   { file: 'privacy.html', url: '/privacy', nav: null },
   { file: 'terms.html', url: '/terms', nav: null },
   { file: 'thanks.html', url: '/thanks', nav: null, noindex: true },
-  { file: 'updates-thanks.html', url: '/updates-thanks', nav: null, noindex: true },
   { file: '404.html', url: null, nav: null, noindex: true }
 ];
 /* The main menu, in order, then the Client Portal button. */
-export const NAV = [['Home', '/'], ['How it works', '/referral-network'], ['Pricing', '/pricing'], ['Sample contract', '/sample-contract'], ['FAQ', '/faq'], ['About', '/about'], ['Contact', '/contact']];
+export const NAV = [['Home', '/'], ['Growth team', '/growth-team'], ['How it works', '/referral-network'], ['Pricing', '/pricing'], ['Sample contract', '/sample-contract'], ['FAQ', '/faq'], ['About', '/about'], ['Contact', '/contact']];
 export const PORTAL = 'https://www.ournetworkportal.com';
 export const ORIGIN = 'https://ouroptimization.com';
 /* Words that must never appear on the site, built from pieces so this file does not contain them. */

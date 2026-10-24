@@ -46,27 +46,19 @@ const REQUIRED_IDS = ['call-name', 'call-clinic', 'call-phone', 'call-town', 'ca
 const browser = await chromium.launch();
 const results = [];
 
-/* A 1x1 PNG standing in for a Google Static Maps image. */
-const PNG_1PX = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=', 'base64');
-
-async function open({ width = 1280, height = 900, path = '/contact', js = true, motion = 'reduce', stub = {}, google = null } = {}) {
+async function open({ width = 1280, height = 900, path = '/contact', js = true, motion = 'reduce', stub = {} } = {}) {
   const context = await browser.newContext({ viewport: { width, height }, javaScriptEnabled: js, reducedMotion: motion });
   const page = await context.newPage();
   const posts = [];
   const jsErrors = [];
   const missing = [];
-  const maps = [];
+  const outside = [];
   page.on('pageerror', (e) => jsErrors.push(String(e)));
   page.on('response', (r) => { if (r.status() >= 400) missing.push(`${r.status()} ${r.url()}`); });
   await context.route('**/*', async (route) => {
     const req = route.request();
     const url = new URL(req.url());
-    if (url.origin === 'https://maps.googleapis.com') {
-      maps.push(req.url());
-      if (google === 'ok') return route.fulfill({ status: 200, contentType: 'image/png', body: PNG_1PX });
-      if (google === 'refuse') return route.fulfill({ status: 403, contentType: 'text/plain', body: 'The provided API key is invalid.' });
-    }
-    if (url.origin !== baseUrl.origin) return route.abort();
+    if (url.origin !== baseUrl.origin) { outside.push(req.url()); return route.abort(); }
     if (req.method() === 'GET' && Object.hasOwn(stub, url.pathname)) {
       const s = stub[url.pathname];
       return route.fulfill({ status: 200, contentType: s.type, body: s.body });
@@ -78,7 +70,7 @@ async function open({ width = 1280, height = 900, path = '/contact', js = true, 
     return route.continue();
   });
   await page.goto(`${BASE}${path}`, { waitUntil: 'load' });
-  return { page, posts, jsErrors, missing, maps, close: () => context.close() };
+  return { page, posts, jsErrors, missing, outside, close: () => context.close() };
 }
 
 async function fillValid(page, { dinner = 'Referral routes', time = 'Afternoon, 2 to 5 pm' } = {}) {
@@ -368,47 +360,6 @@ await scenario('/thanks loads on its own: noindex, the promise, and a way home',
   await close();
 });
 
-await scenario('home: the results section shows the waiting message while results.json is empty, and one card per real entry', async () => {
-  let s = await open({ path: '/' });
-  await s.page.waitForTimeout(300);
-  assert.equal(await s.page.$eval('.owc-results-list', (l) => l.hidden), true);
-  assert.equal(await s.page.$eval('.owc-results-empty', (p) => p.hidden), false);
-  assert.deepEqual(s.jsErrors, []);
-  await s.close();
-  const entry = { town: 'Oakbrook Terrace', type: 'Recovery clinic', signups60: 7, bookedFirstVisits60: 3, referenceCalls: true };
-  const bad = { town: '<b>x</b>', type: 'Spa', signups60: -1, bookedFirstVisits60: 2, referenceCalls: false };
-  s = await open({ path: '/', stub: { '/assets/data/results.json': { type: 'application/json', body: JSON.stringify({ clinics: [entry, bad] }) } } });
-  await s.page.waitForSelector('.owc-result');
-  const cards = await s.page.$$eval('.owc-result', (els) => els.map((e) => e.innerText.replace(/\s+/g, ' ').trim()));
-  assert.equal(cards.length, 1, 'an entry with a negative number is skipped');
-  assert.match(cards[0], /Oakbrook Terrace Recovery clinic.*7.*3.*The owner takes reference calls\./);
-  assert.equal(await s.page.$eval('.owc-results-empty', (p) => p.hidden), true);
-  assert.equal(await s.page.$eval('.owc-results-more', (p) => p.hidden), false);
-  assert.equal(await s.page.$$eval('.owc-results-list b', (b) => b.length), 0, 'values are text, never HTML');
-  await s.close();
-});
-
-await scenario('home: the results-updates form needs a number and the consent box, then posts once to /updates-thanks', async () => {
-  const { page, posts, close } = await open({ path: '/' });
-  await page.locator('#results').scrollIntoViewIfNeeded();
-  await page.click('form[name="results-updates"] button[type="submit"]');
-  await page.waitForTimeout(200);
-  assert.equal(posts.length, 0, 'empty: blocked');
-  await page.fill('#updates-phone', '(630) 555-0142');
-  await page.click('form[name="results-updates"] button[type="submit"]');
-  await page.waitForTimeout(200);
-  assert.equal(posts.length, 0, 'no consent: blocked');
-  await page.check('#updates-consent');
-  await Promise.all([page.waitForURL('**/updates-thanks'), page.click('form[name="results-updates"] button[type="submit"]')]);
-  assert.equal(posts.length, 1);
-  const body = new URLSearchParams(posts[0].body);
-  assert.equal(body.get('form-name'), 'results-updates');
-  assert.equal(body.get('phone'), '(630) 555-0142');
-  assert.equal(body.get('text_consent'), 'yes');
-  assert.equal(body.get('bot-field'), '');
-  await close();
-});
-
 await scenario('home: the attorney line stays hidden until its one switch is turned on', async () => {
   let s = await open({ path: '/' });
   assert.equal(await s.page.$eval('[data-flag="attorneyReviewed"]', (p) => p.hidden), true);
@@ -439,70 +390,84 @@ await scenario('home: the hero still shows without a video; with motion allowed 
   await s.close();
 });
 
-const withKey = (key) => ({ '/assets/site-config.js': { type: 'text/javascript', body: `window.OWC_CONFIG = { attorneyReviewed: false, googleMapsKey: '${key}', googleMapText: 'The map comes from Google Maps.' };` } });
-const showMap = (page) => page.evaluate(() => document.querySelector('#matching .owc-geo').scrollIntoView({ block: 'center', behavior: 'instant' }));
+/* The dashboard band: --p on .owc-dash-band, and the transform the screens actually get. */
+const tiltState = (page) => page.evaluate(() => {
+  const band = document.querySelector('.owc-dash-band');
+  const cue = document.querySelector('.owc-scroll-cue');
+  return {
+    p: getComputedStyle(band).getPropertyValue('--p').trim(),
+    tilting: band.classList.contains('is-tilting'),
+    transform: getComputedStyle(document.querySelector('.owc-tilt .pt-stage')).transform,
+    cue: getComputedStyle(cue).display,
+    cueOpacity: Number(getComputedStyle(cue).opacity)
+  };
+});
+const FLAT = ['none', 'matrix(1, 0, 0, 1, 0, 0)', 'matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)'];
+/* Scrolls so the top edge of the screens sits this far down the window (0.7 = 70% down). */
+const placeTilt = (page, at) => page.evaluate((f) => {
+  window.scrollBy({ top: document.querySelector('[data-tilt]').getBoundingClientRect().top - window.innerHeight * f, behavior: 'instant' });
+}, at);
 
-await scenario('home: the business map shows real streets, the clinic, five businesses and the route, with no request to Google while there is no key', async () => {
-  for (const width of [1280, 390]) {
-    const s = await open({ path: '/', width, motion: 'no-preference' });
-    await showMap(s.page);
-    await s.page.waitForFunction(() => [...document.querySelectorAll('.owc-geo img')].every((i) => i.complete && i.naturalWidth > 0), null, { timeout: 5000 });
-    assert.equal(await s.page.$$eval('.owc-geo-pin', (l) => l.length), 6);
-    assert.equal(await s.page.$eval('.owc-geo', (f) => f.classList.contains('is-live')), true, 'on screen: the route moves');
-    assert.equal(await s.page.$eval('.owc-geo', (f) => f.classList.contains('is-google')), false);
-    assert.ok(await s.page.$eval('.owc-geo-credit', (c) => c.offsetWidth > 0), 'the OpenStreetMap credit shows');
+await scenario('home: the dashboard screens lie tipped back under "Scroll" and stand up flat as you scroll to them', async () => {
+  for (const [width, height] of [[390, 844], [1280, 900]]) {
+    const s = await open({ path: '/', width, height, motion: 'no-preference' });
+    let st = await tiltState(s.page);
+    assert.equal(st.tilting, true);
+    assert.equal(Number(st.p), 0, `${width}px: below the fold the screens lie back`);
+    assert.ok(!FLAT.includes(st.transform), st.transform);
+    assert.equal(st.cue, 'flex', 'the Scroll cue shows');
+    await placeTilt(s.page, 0.7);
+    await s.page.waitForTimeout(150);
+    st = await tiltState(s.page);
+    assert.ok(Number(st.p) > 0.4 && Number(st.p) < 0.7, `${width}px: on the way up (p=${st.p})`);
+    await placeTilt(s.page, 0.3);
+    await s.page.waitForTimeout(150);
+    st = await tiltState(s.page);
+    assert.equal(Number(st.p), 1, `${width}px: flat`);
+    assert.ok(FLAT.includes(st.transform), st.transform);
+    assert.equal(st.cueOpacity, 0, 'the cue has faded out');
     assert.equal(await s.page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true, `${width}px: no sideways scroll`);
-    assert.deepEqual(s.maps, [], 'no key: nothing is asked of Google');
+    assert.deepEqual(s.outside, [], 'no requests to other sites');
     assert.deepEqual(s.jsErrors, []);
-    await s.page.evaluate(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'instant' }));
-    await s.page.waitForFunction(() => !document.querySelector('.owc-geo').classList.contains('is-live'), null, { timeout: 3000 }); // off screen: it stops
     await s.close();
   }
-  const s = await open({ path: '/', motion: 'reduce' });
-  await showMap(s.page);
-  assert.equal(await s.page.$eval('.owc-geo-comet', (c) => getComputedStyle(c).display), 'none', 'reduced motion: nothing travels the route');
-  assert.equal(await s.page.$eval('.owc-geo-route', (c) => getComputedStyle(c).animationName), 'none');
-  await s.close();
 });
 
-await scenario('home: with a Google Maps key the styled Google map goes under the same overlays, and the privacy policy says so', async () => {
-  let s = await open({ path: '/', google: 'ok', stub: withKey('TEST-KEY') });
-  await showMap(s.page);
-  await s.page.waitForFunction(() => document.querySelector('.owc-geo').classList.contains('is-google'), null, { timeout: 5000 });
-  assert.equal(s.maps.length, 1, 'one image request');
-  const u = new URL(s.maps[0]);
-  assert.equal(u.pathname, '/maps/api/staticmap');
-  assert.equal(u.searchParams.get('center'), '41.7935,-88.0105');
-  assert.equal(u.searchParams.get('zoom'), '16');
-  assert.equal(u.searchParams.get('size'), '640x427');
-  assert.equal(u.searchParams.get('scale'), '2');
-  assert.equal(u.searchParams.get('key'), 'TEST-KEY');
-  assert.ok(u.searchParams.getAll('style').includes('feature:poi|visibility:off'), 'no business names from Google on the map');
-  const layers = await s.page.$$eval('.owc-geo-canvas > *', (l) => l.slice(0, 3).map((e) => e.tagName === 'PICTURE' ? 'picture' : e.getAttribute('class')));
-  assert.deepEqual(layers, ['picture', 'owc-geo-google', 'owc-geo-svg'], 'our map, then Google\'s on top of it, then the overlays');
-  assert.equal(await s.page.$eval('.owc-geo-credit', (c) => getComputedStyle(c).display), 'none', 'Google carries its own attribution');
-  assert.equal(await s.page.$eval('.owc-geo-canvas', (c) => getComputedStyle(c).transform), 'none', 'Google\'s map is shown flat, as delivered');
-  assert.deepEqual(s.jsErrors, []);
-  await s.close();
-  s = await open({ path: '/privacy', stub: withKey('TEST-KEY') });
-  assert.equal(await s.page.$eval('[data-flag="googleMap"]', (p) => p.hidden), false);
-  assert.equal(await s.page.$eval('[data-flag="googleMap"]', (p) => p.textContent), 'The map comes from Google Maps.');
-  await s.close();
-  s = await open({ path: '/privacy' });
-  assert.equal(await s.page.$eval('[data-flag="googleMap"]', (p) => p.hidden), true, 'no key: no Google line');
-  await s.close();
+await scenario('home: with reduced motion, or without JavaScript, the dashboard screens are simply flat and there is no cue', async () => {
+  for (const opts of [{ motion: 'reduce' }, { motion: 'no-preference', js: false }]) {
+    const s = await open({ path: '/', width: 390, height: 844, ...opts });
+    const st = await tiltState(s.page);
+    assert.equal(st.p, '1', JSON.stringify(opts));
+    assert.equal(st.tilting, false);
+    assert.ok(FLAT.includes(st.transform), st.transform);
+    assert.equal(st.cue, 'none');
+    assert.deepEqual(s.jsErrors, []);
+    await s.close();
+  }
 });
 
-await scenario('home: a refused Google Maps key leaves our own map in place', async () => {
-  const s = await open({ path: '/', google: 'refuse', stub: withKey('BAD-KEY') });
-  await showMap(s.page);
-  await s.page.waitForFunction(() => !document.querySelector('.owc-geo-google'), null, { timeout: 5000 });
-  assert.equal(s.maps.length, 1);
-  assert.equal(await s.page.$eval('.owc-geo', (f) => f.classList.contains('is-google')), false);
-  assert.ok(await s.page.$eval('.owc-geo-base', (i) => i.complete && i.naturalWidth > 0));
-  assert.ok(await s.page.$eval('.owc-geo-credit', (c) => c.offsetWidth > 0));
-  assert.deepEqual(s.jsErrors, []);
-  await s.close();
+await scenario('/growth-team: in the menu second, after Home; the page, its illustration and its clean URL', async () => {
+  for (const width of [390, 1000, 1280]) {
+    const s = await open({ path: '/growth-team', width, height: 844 });
+    if (width < 1000) await s.page.click('.menu-btn');
+    const items = await s.page.$$eval('#site-nav li:not(.nav-cta) a', (l) => l.map((a) => a.textContent.trim()));
+    assert.deepEqual(items.slice(0, 3), ['Home', 'Growth team', 'How it works']);
+    assert.equal(await s.page.$eval('#site-nav a[aria-current="page"]', (a) => a.getAttribute('href')), '/growth-team');
+    if (width >= 1000) {
+      const tops = await s.page.$$eval('#site-nav li', (l) => l.filter((li) => li.offsetParent).map((li) => li.getBoundingClientRect().top));
+      assert.equal(new Set(tops.map(Math.round)).size, 1, `${width}px: the menu fits on one line`);
+    }
+    assert.equal(await s.page.textContent('h1'), 'Your Organic Growth Team.');
+    assert.equal(await s.page.textContent('.gt-sub'), 'The boots on the ground maintaining your relationships.');
+    assert.ok(await s.page.$eval('.gt-art img', (i) => i.complete && i.naturalWidth > 0), 'the illustration loads');
+    assert.equal(await s.page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true, `${width}px: no sideways scroll`);
+    assert.deepEqual(s.jsErrors, []);
+    assert.deepEqual(s.missing, []);
+    await s.close();
+  }
+  const r = await fetch(`${BASE}/growth-team.html`, { redirect: 'manual' });
+  assert.equal(r.status, 301);
+  assert.equal(new URL(r.headers.get('location'), BASE).pathname, '/growth-team');
 });
 
 await browser.close();
