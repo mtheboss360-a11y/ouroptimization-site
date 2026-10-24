@@ -1354,3 +1354,4 @@ table{font-variant-numeric:tabular-nums}
 .proof-one p{font-size:.86rem;line-height:1.4;max-width:34ch}
 .proof-one p span{display:block;color:var(--ink-3)}
 @media (max-width:560px){.proof-one{border-radius:999px}}
+.proof-one .proof-avatar{width:44px;height:44px;flex:none;display:block}
