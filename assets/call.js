@@ -7,28 +7,36 @@
 (function () {
   'use strict';
 
-  /* The "What would you like to talk about?" radios. The field keeps its original name, "dinner",
-     so Netlify keeps one column for it across old and new submissions. */
-  var DINNERS = ['Referral or flyer network', 'Plus-One Dinner', 'VIP Night', 'Online search network, review tags or a website', 'Not sure yet'];
+  /* The "What would you like to talk about?" radios, in the order the form shows them: the referral routes
+     first, then the add-ons, then "Not sure yet". Each value reads the same as its label. Since October 23,
+     2026 there were four; on October 24 "Patient dinner" came off (the dinner is mentioned only on the pricing
+     page now, and /contact?about=patient-network still prefills the message). The older labels (the referral or
+     flyer network, Plus-One Dinner, VIP Night, the online search network) are no longer choices. The field keeps its original name, "dinner", so Netlify
+     keeps one column for it across old and new submissions. */
+  var DINNERS = ['Referral routes', 'Online search / review tags / website', 'Not sure yet'];
   var ORDER = ['name', 'clinic', 'phone', 'email', 'town', 'best_time', 'dinner', 'message'];
   var MAX = { name: 120, clinic: 150, phone: 30, email: 254, town: 120, best_time: 60, message: 2000 };
 
-  /* Links from the other pages: /contact?about=patient-network, /contact?about=flyer-network, /contact?about=pricing and so on.
-     Old links (/?about=review-tags#call) are redirected to /contact?about=... by netlify.toml. The keys from
-     before the pages were renamed (October 22, 2026: patient-dinners, flyer-drops, google-ads) keep working
-     and prefill the same message as the new key. */
+  /* Links from the other pages: /contact?about=pricing, /contact?about=referral-network and so on, one key per
+     page (named after its URL).
+     Old links (/?about=review-tags#call) are redirected to /contact?about=... by netlify.toml.
+     Keys that outlived their pages keep working and prefill a message about what replaced them:
+     - flyer-network and flyer-drops: the flyer network folded into the referral routes on October 23, 2026
+       (/flyer-network 301s to /referral-network), so they prefill the referral routes message.
+     - patient-dinners (now patient-network, the private patient dinner page) and google-ads (now
+       online-search-network) were renamed on October 22, 2026 and prefill the same message as the new key. */
   var ABOUT = {
-    'patient-network': "I'm asking about the patient dinners.",
-    'referral-network': "I'm asking about the referral network.",
-    'flyer-network': "I'm asking about flyer drops.",
-    'online-search-network': "I'm asking about Google Ads.",
+    'pricing': "I'm asking about pricing.",
+    'referral-network': "I'm asking about referral routes.",
+    'flyer-network': "I'm asking about referral routes.",
+    'patient-network': "I'm asking about a private patient dinner.",
+    'online-search-network': "I'm asking about Google Ads in my own account.",
     'review-tags': "I'm asking about review tags.",
     'website-design': "I'm asking about a website redesign.",
-    'pricing': "I'm asking about pricing.",
     'sample-contract': "I'm asking about the sample contract.",
-    'patient-dinners': "I'm asking about the patient dinners.",
-    'flyer-drops': "I'm asking about flyer drops.",
-    'google-ads': "I'm asking about Google Ads."
+    'patient-dinners': "I'm asking about a private patient dinner.",
+    'flyer-drops': "I'm asking about referral routes.",
+    'google-ads': "I'm asking about Google Ads in my own account."
   };
 
   function str(v) { return v == null ? '' : String(v); }

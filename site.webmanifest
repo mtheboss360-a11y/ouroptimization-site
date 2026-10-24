@@ -2,8 +2,18 @@
   "name": "Our Wellness Network",
   "short_name": "Our Wellness Network",
   "icons": [
-    { "src": "/assets/owo-icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "/assets/owo-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+    {
+      "src": "/assets/owo-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/owo-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
   ],
   "theme_color": "#F3F6F2",
   "background_color": "#F3F6F2",

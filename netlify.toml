@@ -47,7 +47,7 @@
 
 [[redirects]]
   from = "/flyer-network.html"
-  to = "/flyer-network"
+  to = "/referral-network"
   status = 301
   force = true
 
@@ -88,6 +88,12 @@
   force = true
 
 [[redirects]]
+  from = "/boots-on-the-ground.html"
+  to = "/boots-on-the-ground"
+  status = 301
+  force = true
+
+[[redirects]]
   from = "/faq.html"
   to = "/faq"
   status = 301
@@ -119,17 +125,24 @@
 
 # --- Renamed service pages ---
 # On October 22, 2026 the service pages took their network names: /flyer-drops became /flyer-network,
-# /patient-dinners became /patient-network and /google-ads became /online-search-network. The old paths, with and
-# without .html, 301 straight to the new ones (their .html files are renamed, not kept).
+# /patient-dinners became /patient-network and /google-ads became /online-search-network. On October 23, 2026
+# the flyer network folded into the referral routes, so /flyer-network and every older flyer path 301 straight
+# to /referral-network (printed QR codes keep working). The old paths, with and without .html, 301 to the new ones.
+[[redirects]]
+  from = "/flyer-network"
+  to = "/referral-network"
+  status = 301
+  force = true
+
 [[redirects]]
   from = "/flyer-drops"
-  to = "/flyer-network"
+  to = "/referral-network"
   status = 301
   force = true
 
 [[redirects]]
   from = "/flyer-drops.html"
-  to = "/flyer-network"
+  to = "/referral-network"
   status = 301
   force = true
 
@@ -172,29 +185,29 @@
 # The old community marketing service pages were retired in October 2026 (their .html files are
 # deleted). Each 301s, with and without .html, straight to the page that now covers it. Point new
 # rules at the final target, never at another redirected path, so there are no chains.
-# /client-portal (its own page from October 22, 2026; the portal now shows on the home page, the flyer network and the referral network)
+# /client-portal (its own page from October 22, 2026; the portal now shows in the home page dashboard section)
 [[redirects]]
   from = "/client-portal"
-  to = "/#portal"
+  to = "/#dashboard"
   status = 301
   force = true
 
 [[redirects]]
   from = "/client-portal.html"
-  to = "/#portal"
+  to = "/#dashboard"
   status = 301
   force = true
 
 # /how-it-works
 [[redirects]]
   from = "/how-it-works"
-  to = "/patient-network#how"
+  to = "/referral-network"
   status = 301
   force = true
 
 [[redirects]]
   from = "/how-it-works.html"
-  to = "/patient-network#how"
+  to = "/referral-network"
   status = 301
   force = true
 
@@ -305,13 +318,13 @@
 # /direct-mail
 [[redirects]]
   from = "/direct-mail"
-  to = "/flyer-network"
+  to = "/referral-network"
   status = 301
   force = true
 
 [[redirects]]
   from = "/direct-mail.html"
-  to = "/flyer-network"
+  to = "/referral-network"
   status = 301
   force = true
 
@@ -331,26 +344,26 @@
 # /flyers
 [[redirects]]
   from = "/flyers"
-  to = "/flyer-network"
+  to = "/referral-network"
   status = 301
   force = true
 
 [[redirects]]
   from = "/flyers.html"
-  to = "/flyer-network"
+  to = "/referral-network"
   status = 301
   force = true
 
 # /marketing-kits
 [[redirects]]
   from = "/marketing-kits"
-  to = "/patient-network#handle"
+  to = "/referral-network"
   status = 301
   force = true
 
 [[redirects]]
   from = "/marketing-kits.html"
-  to = "/patient-network#handle"
+  to = "/referral-network"
   status = 301
   force = true
 
@@ -409,13 +422,13 @@
 # /tracking
 [[redirects]]
   from = "/tracking"
-  to = "/patient-network#handle"
+  to = "/#dashboard"
   status = 301
   force = true
 
 [[redirects]]
   from = "/tracking.html"
-  to = "/patient-network#handle"
+  to = "/#dashboard"
   status = 301
   force = true
 
@@ -467,6 +480,84 @@
   force = true
 
 # Repository-only files are not part of the public site.
+# --- October 23, 2026: Our Wellness Network ---
+# The home hero's video slot asks for /assets/video/van-route.mp4 after the page loads. Until that file is
+# deployed, this rewrite answers with a small text file (not a video), so the slot fails quietly, keeps the
+# still and logs no 404. It is not forced: once the real van-route.mp4 is deployed, Netlify serves the file.
+[[redirects]]
+  from = "/assets/video/van-route.mp4"
+  to = "/assets/video/placeholder.txt"
+  status = 200
+
+# Old share images and the old logo carried the previous brand. Their files are gone; links to them
+# (old social shares, cached structured data) get the current image instead.
+[[redirects]]
+  from = "/assets/img/og.jpg"
+  to = "/assets/img/og-network.jpg"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/assets/img/og-community.jpg"
+  to = "/assets/img/og-network.jpg"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/assets/img/og-dinners.jpg"
+  to = "/assets/img/og-network.jpg"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/assets/img/og-neighbors.jpg"
+  to = "/assets/img/og-network.jpg"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/assets/img/og-best-patients.jpg"
+  to = "/assets/img/og-network.jpg"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/assets/img/og-network-neighbors.jpg"
+  to = "/assets/img/og-network.jpg"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/assets/img/og-network-best-patients.jpg"
+  to = "/assets/img/og-network.jpg"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/assets/img/og-community-team.jpg"
+  to = "/assets/img/og-network.jpg"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/assets/img/og-rwn.jpg"
+  to = "/assets/img/og-network.jpg"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/assets/img/our-wellness-network-logo.png"
+  to = "/assets/img/own-logo.png"
+  status = 301
+  force = true
+
+# Repository files that are not part of the site.
+[[redirects]]
+  from = "/.claude/*"
+  to = "/404.html"
+  status = 404
+  force = true
+
 [[redirects]]
   from = "/tests/*"
   to = "/404.html"
@@ -495,5 +586,18 @@
 [[redirects]]
   from = "/vendors"
   to = "/expo-vendors"
+  status = 301
+  force = true
+
+# The Growth team page became Boots on the ground on October 24, 2026.
+[[redirects]]
+  from = "/growth-team"
+  to = "/boots-on-the-ground"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/growth-team.html"
+  to = "/boots-on-the-ground"
   status = 301
   force = true
