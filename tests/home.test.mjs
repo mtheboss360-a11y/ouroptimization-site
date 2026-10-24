@@ -19,14 +19,15 @@ describe('home: order and hero', () => {
     assert.doesNotMatch(text(main), /\$\d/, 'no prices on the home page (pricing is its own page)');
     assert.ok(main.indexOf('hero-orb') < main.indexOf('id="in-person"'), 'the hero comes first');
   });
-  test('the approved orb hero: headline, line and one driver, with no buttons', () => {
+  test('the approved orb hero: headline, line and Devon\'s gym, with no buttons', () => {
     const hero = /<section class="hero-orb"[\s\S]*?<\/section>/.exec(main)[0];
     assert.equal(text(/<h1 id="hero-h">([\s\S]*?)<\/h1>/.exec(hero)[1]), 'Your in-person sales team out in your community.');
     assert.equal(text(/<p class="lede">([\s\S]*?)<\/p>/.exec(hero)[1]),
       'Our software finds the businesses that share your clients. Our people walk in and build the relationships. Their staff send you referrals, and our portal walks you through it all.');
     assert.deepEqual(links(hero).map((l) => l.href), ['#dashboard'], 'only the drivers strip, which jumps to the portal');
     assert.doesNotMatch(hero, /class="btn/, 'no buttons');
-    assert.match(text(hero), /Marcus Reed delivered 2,000 pieces of marketing material\. Friendly and kind at every front desk\./, 'one driver, no promised results');
+    assert.match(text(hero), /Picture it: Devon.s gym sends you 30 clients through referrals\./, 'the gym on the map, framed as a picture, not a claimed result');
+    assert.doesNotMatch(text(hero), /Marcus/);
     assert.doesNotMatch(text(hero), /staff reached|sign-ups|booked/);
   });
   test('the orb: one canvas, drawn by home-orb.js, which keeps the network clear of the words', () => {
