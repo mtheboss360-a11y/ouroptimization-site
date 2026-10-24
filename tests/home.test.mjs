@@ -23,7 +23,7 @@ describe('home: order and hero', () => {
     const hero = /<section class="hero-orb"[\s\S]*?<\/section>/.exec(main)[0];
     assert.equal(text(/<h1 id="hero-h">([\s\S]*?)<\/h1>/.exec(hero)[1]), 'Your in-person sales team out in your community.');
     assert.equal(text(/<p class="lede">([\s\S]*?)<\/p>/.exec(hero)[1]),
-      'Our software finds the businesses that share your clients. Our people walk in and build the relationships. Their staff send you referrals, and our portal tracks it all.');
+      'Our software finds the businesses that share your clients.');
     assert.deepEqual(links(hero).map((l) => l.href), ['#dashboard'], 'only the drivers strip, which jumps to the portal');
     assert.doesNotMatch(hero, /class="btn/, 'no buttons');
     assert.match(text(hero), /Devon.s gym sends you 30 clients through referrals\. Monthly visits with baked treats, and a tap-to-schedule card for every trainer\./, 'the owner\'s wording');
@@ -45,27 +45,12 @@ describe('home: order and hero', () => {
 });
 
 describe('home: the sections', () => {
-  test('b. the dashboard on the green band: the screens lie tipped back and stand up flat as you scroll', () => {
+  test('b. the dashboard on the green band: the screens pop in like every other block, no scroll-driven tilt', () => {
     const s = sec('dashboard');
     assert.match(main, /<section class="section bg-ink owc-dash-band" aria-labelledby="dashboard-h" id="dashboard">/, 'on the green band');
     assert.equal(text(/<h2 id="dashboard-h">([\s\S]*?)<\/h2>/.exec(s)[1]), 'Your drivers, your routes, and every sign-up.');
-    assert.match(s, /<p class="owc-scroll-cue" aria-hidden="true"><span>Scroll<\/span>/, 'the scroll cue is decoration only');
-    const stage = /<div class="owc-tilt" data-tilt>\s*<div class="pt-stage">/.exec(s);
-    assert.ok(stage, 'the screens sit in the tilt wrapper');
-    assert.doesNotMatch(s, /class="pt-stage reveal"/, 'no reveal transform fighting the tilt');
-    const css = read('assets/site.css');
-    assert.match(css, /\.owc-dash-band\{--p:1;/, 'flat by default: no JS means flat screens');
-    assert.match(css, /\.owc-tilt \.pt-stage\{transform:rotateX\(calc\(\(1 - var\(--p\)\) \* 26deg\)\) scale\(calc\(\.86 \+ \.14 \* var\(--p\)\)\)/);
-    assert.match(css, /\.owc-dash-band \.owc-scroll-cue\{display:none;[^}]*color:var\(--gold-bright\)/, 'no cue without JS; pink, like the eyebrow');
-    assert.match(css, /\.js \.owc-dash-band \.owc-scroll-cue\{display:flex\}/, 'its room is kept from the first paint');
-    assert.match(css, /@keyframes owc-cue\{0%,100%\{transform:translateY\(-3px\)\}50%\{transform:translateY\(4px\)\}\}/, 'a transform the compositor can run');
-    assert.match(css, /@media \(prefers-reduced-motion:reduce\)\{\.owc-dash-band\{--p:1 !important\}\.owc-dash-band \.owc-scroll-cue\{display:none !important\}\}/);
-    assert.match(css, /@media print\{\.owc-dash-band\{--p:1 !important\}\.owc-dash-band \.owc-scroll-cue\{display:none !important\}\}/, 'printed flat');
-    const js = read('assets/site.js');
-    assert.match(js, /document\.querySelector\('\[data-tilt\]'\)/);
-    assert.match(js, /window\.addEventListener\('scroll', tiltQueue, \{ passive: true \}\)/);
-    assert.match(js, /requestAnimationFrame\(tiltUpdate\)/);
-    assert.match(js, /if \(tiltBand && window\.requestAnimationFrame && !still\.matches\)/, 'nothing moves with reduced motion');
+    assert.match(s, /<div class="pt-stage reveal">/, 'the same smooth pop-in as the rest of the page');
+    assert.doesNotMatch(s, /data-tilt|owc-tilt|owc-scroll-cue/, 'no tilt and no scroll cue (the owner\'s call)');
   });
   test('b. no map anywhere: no Google request, no Maps key, no map images', () => {
     assert.doesNotMatch(html, /owc-geo|id="matching"|openstreetmap/i);

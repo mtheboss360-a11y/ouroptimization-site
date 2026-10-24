@@ -76,7 +76,7 @@
   <div class="wrap">
     <div class="hero-copy">
       <h1 id="hero-h">Your in-person sales team <em>out in your community.</em></h1>
-      <p class="lede">Our software finds the businesses that share your clients. Our people walk in and build the relationships. Their staff send you referrals, and our portal tracks it all.</p>
+      <p class="lede">Our software finds the businesses that share your clients.</p>
       <a class="proof-row proof-one" href="#dashboard">
         <svg class="proof-avatar" viewBox="0 0 44 44" width="44" height="44" aria-hidden="true" focusable="false"><defs><clipPath id="devon-c"><circle cx="22" cy="22" r="20"/></clipPath></defs><circle cx="22" cy="22" r="21" fill="#fff" stroke="#1F6A52" stroke-width="2"/><g clip-path="url(#devon-c)"><rect width="44" height="44" fill="#E3EDE4"/><ellipse cx="22" cy="40.5" rx="15.6" ry="11" fill="#2F5D4A"/><rect x="19.6" y="23.6" width="4.8" height="6" fill="#8D5A3B"/><ellipse cx="22" cy="19.6" rx="6" ry="7.2" fill="#8D5A3B"/><path d="M15.6 14.8a6.4 3.4 0 0 1 12.8 0z" fill="#1E1A17"/></g></svg>
         <p><b>Devon&rsquo;s gym</b> sends you 30 clients through referrals. <span>Monthly visits with baked treats, and a tap-to-schedule card for every trainer.</span></p>
@@ -107,8 +107,7 @@
 
 
 <!-- ===== b. Inside your referral network portal, on the green band (screens from the portal's sample account).
-     The screens lie tipped back and stand up flat as you scroll to them: site.js sets --p from 0 to 1. Without JS,
-     or with reduced motion, --p stays 1 and they are simply flat. ===== -->
+     The screens fade up into place like every other block on the page (the .reveal pop-in). ===== -->
 <section class="section bg-ink owc-dash-band" aria-labelledby="dashboard-h" id="dashboard">
   <div class="wrap">
     <div class="section-head center reveal">
@@ -117,12 +116,9 @@
       <h2 id="dashboard-h">Your drivers, your routes, <em class="dn-line">and every sign-up.</em></h2>
       <p class="intro">See who is driving your next route, every business they walked into, how many staff they met and what came back. It is counted from the log each driver fills in before they leave a stop.</p>
     </div>
-    <p class="owc-scroll-cue" aria-hidden="true"><span>Scroll</span><svg viewBox="0 0 24 24" focusable="false"><path d="m6 9 6 6 6-6"/></svg></p>
-    <div class="owc-tilt" data-tilt>
-    <div class="pt-stage">
+    <div class="pt-stage reveal">
       <figure class="pt-browser"><div class="pt-bar" aria-hidden="true"><span></span><span></span><span></span></div><picture><source type="image/webp" srcset="/assets/img/drivers-next-route-800.webp 800w, /assets/img/drivers-next-route-1600.webp 1600w" sizes="(min-width:1180px) 960px, (min-width:760px) calc(100vw - 220px), calc(100vw - 40px)"><img src="/assets/img/drivers-next-route-800.jpg" srcset="/assets/img/drivers-next-route-800.jpg 800w, /assets/img/drivers-next-route-1600.jpg 1600w" sizes="(min-width:1180px) 960px, (min-width:760px) calc(100vw - 220px), calc(100vw - 40px)" width="1600" height="617" alt="Screenshot of the portal: the driver for the next route, the date and start time, and the five stops in order." loading="lazy" decoding="async"></picture></figure>
       <figure class="pt-phone"><picture><source type="image/webp" srcset="/assets/img/drivers-phone-390.webp 390w, /assets/img/drivers-phone-780.webp 780w" sizes="(min-width:760px) 230px, 270px"><img src="/assets/img/drivers-phone-390.jpg" srcset="/assets/img/drivers-phone-390.jpg 390w, /assets/img/drivers-phone-780.jpg 780w" sizes="(min-width:760px) 230px, 270px" width="780" height="1688" alt="Screenshot of the portal on a phone: a ten-stop route drawn around the clinic, and the stops in order." loading="lazy" decoding="async"></picture></figure>
-    </div>
     </div>
     <dl class="own-stats reveal" aria-label="Five routes in the portal">
       <div><dt>Stops visited</dt><dd>35</dd></div>
