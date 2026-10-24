@@ -1,4 +1,4 @@
-# Our Wellness Connections (OUR Optimization LLC): static site, no build step.
+# Our Wellness Network (OUR Optimization LLC): static site, no build step.
 # Two Netlify Forms (data-netlify="true" in the static HTML): "dinner-call" on the contact
 # page (contact.html, #call, posts to /thanks) and "expo-vendor" on expo-vendors.html.
 # Submissions appear under Forms in the Netlify UI, and email alerts are set in
@@ -88,8 +88,8 @@
   force = true
 
 [[redirects]]
-  from = "/growth-team.html"
-  to = "/growth-team"
+  from = "/boots-on-the-ground.html"
+  to = "/boots-on-the-ground"
   status = 301
   force = true
 
@@ -480,7 +480,7 @@
   force = true
 
 # Repository-only files are not part of the public site.
-# --- October 23, 2026: Our Wellness Connections ---
+# --- October 23, 2026: Our Wellness Network ---
 # The home hero's video slot asks for /assets/video/van-route.mp4 after the page loads. Until that file is
 # deployed, this rewrite answers with a small text file (not a video), so the slot fails quietly, keeps the
 # still and logs no 404. It is not forced: once the real van-route.mp4 is deployed, Netlify serves the file.
@@ -493,61 +493,61 @@
 # (old social shares, cached structured data) get the current image instead.
 [[redirects]]
   from = "/assets/img/og.jpg"
-  to = "/assets/img/og-connections.jpg"
+  to = "/assets/img/og-network.jpg"
   status = 301
   force = true
 
 [[redirects]]
   from = "/assets/img/og-community.jpg"
-  to = "/assets/img/og-connections.jpg"
+  to = "/assets/img/og-network.jpg"
   status = 301
   force = true
 
 [[redirects]]
   from = "/assets/img/og-dinners.jpg"
-  to = "/assets/img/og-connections.jpg"
+  to = "/assets/img/og-network.jpg"
   status = 301
   force = true
 
 [[redirects]]
   from = "/assets/img/og-neighbors.jpg"
-  to = "/assets/img/og-connections.jpg"
+  to = "/assets/img/og-network.jpg"
   status = 301
   force = true
 
 [[redirects]]
   from = "/assets/img/og-best-patients.jpg"
-  to = "/assets/img/og-connections.jpg"
+  to = "/assets/img/og-network.jpg"
   status = 301
   force = true
 
 [[redirects]]
   from = "/assets/img/og-network-neighbors.jpg"
-  to = "/assets/img/og-connections.jpg"
+  to = "/assets/img/og-network.jpg"
   status = 301
   force = true
 
 [[redirects]]
   from = "/assets/img/og-network-best-patients.jpg"
-  to = "/assets/img/og-connections.jpg"
+  to = "/assets/img/og-network.jpg"
   status = 301
   force = true
 
 [[redirects]]
   from = "/assets/img/og-community-team.jpg"
-  to = "/assets/img/og-connections.jpg"
+  to = "/assets/img/og-network.jpg"
   status = 301
   force = true
 
 [[redirects]]
   from = "/assets/img/og-rwn.jpg"
-  to = "/assets/img/og-connections.jpg"
+  to = "/assets/img/og-network.jpg"
   status = 301
   force = true
 
 [[redirects]]
   from = "/assets/img/our-wellness-network-logo.png"
-  to = "/assets/img/owc-logo.png"
+  to = "/assets/img/own-logo.png"
   status = 301
   force = true
 
@@ -586,5 +586,18 @@
 [[redirects]]
   from = "/vendors"
   to = "/expo-vendors"
+  status = 301
+  force = true
+
+# The Growth team page became Boots on the ground on October 24, 2026.
+[[redirects]]
+  from = "/growth-team"
+  to = "/boots-on-the-ground"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/growth-team.html"
+  to = "/boots-on-the-ground"
   status = 301
   force = true

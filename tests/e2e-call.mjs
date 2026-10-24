@@ -264,7 +264,7 @@ await scenario('the renamed service pages: each old path, with and without .html
     const { page, jsErrors, missing, close } = await open({ path: `${old}#how` });
     assert.equal(new URL(page.url()).pathname, now);
     assert.equal(await page.$$eval('#site-nav a[aria-current="page"]', (a) => (a[0] ? a[0].textContent.trim() : null)), tab);
-    assert.match(await page.title(), / \| Our Wellness Connections$/);
+    assert.match(await page.title(), / \| Our Wellness Network$/);
     assert.deepEqual(jsErrors, []);
     assert.deepEqual(missing, [], 'every stylesheet, script, font and image loads');
     await close();
@@ -277,15 +277,15 @@ await scenario('the renamed service pages: each old path, with and without .html
   }
 });
 
-await scenario('the header shows the Our Wellness Connections logo, loaded and crisp (the footer is one legal line)', async () => {
+await scenario('the header shows the Our Wellness Network logo, loaded and crisp (the footer is one legal line)', async () => {
   const { page, close } = await open({ path: '/' });
-  await page.waitForFunction(() => [...document.querySelectorAll('img[src*="owc-logo"]')].every((i) => i.complete && i.naturalWidth === 360));
-  const logos = await page.$$eval('img[src*="owc-logo"]', (imgs) => imgs.map((i) => ({ src: i.getAttribute('src'), cur: i.currentSrc, alt: i.alt, w: i.getBoundingClientRect().width })));
+  await page.waitForFunction(() => [...document.querySelectorAll('img[src*="own-logo"]')].every((i) => i.complete && i.naturalWidth === 360));
+  const logos = await page.$$eval('img[src*="own-logo"]', (imgs) => imgs.map((i) => ({ src: i.getAttribute('src'), cur: i.currentSrc, alt: i.alt, w: i.getBoundingClientRect().width })));
   assert.equal(logos.length, 1);
   for (const l of logos) {
-    assert.equal(l.src, '/assets/img/owc-logo-360.png');
-    assert.match(l.cur, /owc-logo-360\.webp$/, 'the WebP is used where supported');
-    assert.equal(l.alt, 'Our Wellness Connections');
+    assert.equal(l.src, '/assets/img/own-logo-360.png');
+    assert.match(l.cur, /own-logo-360\.webp$/, 'the WebP is used where supported');
+    assert.equal(l.alt, 'Our Wellness Network');
     assert.ok(l.w > 0 && l.w <= 180, `shown at ${l.w}px from a 360px file, so it stays sharp on 2x screens`);
   }
   await close();
@@ -446,13 +446,13 @@ await scenario('home: with reduced motion, or without JavaScript, the dashboard 
   }
 });
 
-await scenario('/growth-team: in the menu second, after Home; the page, its illustration and its clean URL', async () => {
+await scenario('/boots-on-the-ground: in the menu second, after Home; the page, its illustration and its clean URL', async () => {
   for (const width of [390, 1000, 1280]) {
-    const s = await open({ path: '/growth-team', width, height: 844 });
+    const s = await open({ path: '/boots-on-the-ground', width, height: 844 });
     if (width < 1000) await s.page.click('.menu-btn');
     const items = await s.page.$$eval('#site-nav li:not(.nav-cta) a', (l) => l.map((a) => a.textContent.trim()));
-    assert.deepEqual(items.slice(0, 3), ['Home', 'Growth team', 'How it works']);
-    assert.equal(await s.page.$eval('#site-nav a[aria-current="page"]', (a) => a.getAttribute('href')), '/growth-team');
+    assert.deepEqual(items.slice(0, 3), ['Home', 'Boots on the ground', 'How it works']);
+    assert.equal(await s.page.$eval('#site-nav a[aria-current="page"]', (a) => a.getAttribute('href')), '/boots-on-the-ground');
     if (width >= 1000) {
       const tops = await s.page.$$eval('#site-nav li', (l) => l.filter((li) => li.offsetParent).map((li) => li.getBoundingClientRect().top));
       assert.equal(new Set(tops.map(Math.round)).size, 1, `${width}px: the menu fits on one line`);
@@ -465,9 +465,9 @@ await scenario('/growth-team: in the menu second, after Home; the page, its illu
     assert.deepEqual(s.missing, []);
     await s.close();
   }
-  const r = await fetch(`${BASE}/growth-team.html`, { redirect: 'manual' });
+  const r = await fetch(`${BASE}/boots-on-the-ground.html`, { redirect: 'manual' });
   assert.equal(r.status, 301);
-  assert.equal(new URL(r.headers.get('location'), BASE).pathname, '/growth-team');
+  assert.equal(new URL(r.headers.get('location'), BASE).pathname, '/boots-on-the-ground');
 });
 
 await browser.close();

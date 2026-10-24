@@ -6,12 +6,12 @@ export const ROOT = new URL('../', import.meta.url);
 export const read = (p) => readFileSync(new URL(p, ROOT), 'utf8');
 
 /* Every page of the site, with its clean URL and its item in the main menu (null: not in the menu).
-   October 23, 2026: Our Wellness Connections. The flyer network folded into the referral routes
+   October 23, 2026: Our Wellness Network. The flyer network folded into the referral routes
    (/flyer-network 301s to /referral-network); the dinner page stays, reached from the home add-on card.
-   October 24, 2026: the Growth team page joins the menu, second, after Home. */
+   October 24, 2026: the Growth team page joins the menu, second, after Home. Later that day it became Boots on the ground. */
 export const PAGES = [
   { file: 'index.html', url: '/', nav: 'Home' },
-  { file: 'growth-team.html', url: '/growth-team', nav: 'Growth team' },
+  { file: 'boots-on-the-ground.html', url: '/boots-on-the-ground', nav: 'Boots on the ground' },
   { file: 'referral-network.html', url: '/referral-network', nav: 'How it works' },
   { file: 'pricing.html', url: '/pricing', nav: 'Pricing' },
   { file: 'sample-contract.html', url: '/sample-contract', nav: 'Sample contract' },
@@ -29,12 +29,12 @@ export const PAGES = [
   { file: '404.html', url: null, nav: null, noindex: true }
 ];
 /* The main menu, in order, then the Client Portal button. */
-export const NAV = [['Home', '/'], ['Growth team', '/growth-team'], ['How it works', '/referral-network'], ['Pricing', '/pricing'], ['Sample contract', '/sample-contract'], ['FAQ', '/faq'], ['About', '/about'], ['Contact', '/contact']];
+export const NAV = [['Home', '/'], ['Boots on the ground', '/boots-on-the-ground'], ['How it works', '/referral-network'], ['Pricing', '/pricing'], ['Sample contract', '/sample-contract'], ['FAQ', '/faq'], ['About', '/about'], ['Contact', '/contact']];
 export const PORTAL = 'https://www.ournetworkportal.com';
 export const ORIGIN = 'https://ouroptimization.com';
 /* Words that must never appear on the site, built from pieces so this file does not contain them. */
 export const FORBIDDEN = [
-  ['Our', 'Wellness', 'Network'].join(' '), '$' + '500 a month', '$' + '700', '$' + '1,400',
+  ['Our', 'Wellness', 'Connections'].join(' '), '$' + '400 a month', '$' + '800 a month', '$' + '500 a month', '$' + '700', '$' + '1,400',
   ['three', 'tap-to-sign-up', 'stands'].join(' '), ['signs made for you at no', 'extra cost'].join(' ')
 ];
 

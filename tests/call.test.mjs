@@ -249,7 +249,7 @@ describe('call.js: ?about= prefill', () => {
     for (const [old, now] of [['patient-dinners', 'patient-network'], ['flyer-drops', 'referral-network'], ['flyer-network', 'referral-network'], ['google-ads', 'online-search-network']]) {
       assert.equal(call.prefillFor(`?about=${old}`, ''), call.prefillFor(`?about=${now}`, ''), `${old} and ${now} prefill the same message`);
     }
-    for (const p of PAGES.filter((x) => x.url && !x.noindex && !['/', '/growth-team', '/about', '/faq', '/contact', '/privacy', '/terms'].includes(x.url))) {
+    for (const p of PAGES.filter((x) => x.url && !x.noindex && !['/', '/boots-on-the-ground', '/about', '/faq', '/contact', '/privacy', '/terms'].includes(x.url))) {
       assert.ok(Object.hasOwn(KEYS, p.url.slice(1)), `${p.url} has a key`);
     }
     for (const [key, message] of Object.entries(KEYS)) {

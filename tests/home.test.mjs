@@ -13,9 +13,10 @@ const sec = (id) => {
 };
 
 describe('home: order and hero', () => {
-  test('the sections, in the owner\'s order: the dashboard on the green band, then the courtesy; no map, no results', () => {
+  test('the sections, in the owner\'s order: in person, the portal on the green band, then the courtesy; no pricing, no map, no results', () => {
     const ids = [...main.matchAll(/<section\b[^>]*\sid="([^"]+)"/g)].map((m) => m[1]);
-    assert.deepEqual(ids, ['dashboard', 'courtesy', 'try', 'compliance', 'dinner', 'book']);
+    assert.deepEqual(ids, ['in-person', 'dashboard', 'courtesy', 'compliance', 'dinner', 'book']);
+    assert.doesNotMatch(text(main), /\$\d/, 'no prices on the home page (pricing is its own page)');
     assert.ok(main.indexOf('owc-hero') < main.indexOf('id="dashboard"'), 'the hero comes first');
   });
   test('headline, sub and line, with no buttons', () => {
@@ -23,29 +24,21 @@ describe('home: order and hero', () => {
     assert.equal(text(/<h1 id="hero-h">([\s\S]*?)<\/h1>/.exec(hero)[1]), 'Your Organic Growth Team.');
     assert.equal(text(/<p class="owc-hero-sub">([\s\S]*?)<\/p>/.exec(hero)[1]), 'We put your community into the brand.');
     assert.equal(text(/<p class="lede">([\s\S]*?)<\/p>/.exec(hero)[1]),
-      'We get your clinic recommended by the staff of businesses near you. Our people are the boots on the ground, passing out fresh-baked treats and warm coffee.');
+      'Real people walk into the businesses near your clinic with fresh-baked treats and warm coffee, get to know the staff and get your clinic recommended. Their staff send you referrals, and our portal walks you through it all.');
+    assert.deepEqual(tags(hero, 'li').length, 3, 'warm coffee, fresh-baked treats, real people');
     assert.doesNotMatch(text(hero), /gyms|salons|boutiques/, 'no list of business types (the owner\'s call)');
     assert.deepEqual(links(hero), [], 'no buttons or links in the hero');
   });
-  test('the hero visual: responsive AVIF and WebP, first-screen priority, and a video slot that works without a video', () => {
+  test('the hero visual: the coffee-and-treats visit, responsive AVIF and WebP, first-screen priority', () => {
     const hero = /<section class="hero owc-hero"[\s\S]*?<\/section>/.exec(main)[0];
     const sources = tags(hero, 'source');
     assert.deepEqual(sources.map((s) => attr(s, 'type')), ['image/avif', 'image/webp']);
-    for (const s of sources) assert.equal(attr(s, 'srcset').split(',').length, 4, 'four widths');
+    for (const s of sources) assert.match(attr(s, 'srcset'), /team-visit-480\.\w+ 480w, \/assets\/img\/team-visit-768\.\w+ 768w, \/assets\/img\/team-visit-1080/);
     const img = tags(hero, 'img')[0];
     assert.equal(attr(img, 'fetchpriority'), 'high');
     assert.ok(!hasAttr(img, 'loading'), 'never lazy');
     assert.ok(attr(img, 'sizes'));
-    const video = tags(hero, 'video')[0];
-    assert.equal(attr(video, 'data-src'), '/assets/video/van-route.mp4');
-    for (const a of ['muted', 'loop', 'playsinline']) assert.ok(hasAttr(video, a), a);
-    assert.equal(attr(video, 'preload'), 'none');
-    assert.ok(!hasAttr(video, 'poster'), 'no poster in the markup: phones never download the largest still twice');
-    assert.match(read('assets/site.js'), /heroVideo\.poster = still\.currentSrc/, 'the still on screen becomes the poster');
-    assert.ok(!hasAttr(video, 'src'), 'the video is attached by site.js after load, never in the markup');
-    const js = read('assets/site.js');
-    assert.match(js, /prefers-reduced-motion: reduce/);
-    assert.match(js, /addEventListener\('error', dropVideo/);
+    assert.match(attr(img, 'alt'), /coffee and a box of fresh-baked treats/);
   });
 });
 
@@ -53,7 +46,7 @@ describe('home: the sections', () => {
   test('b. the dashboard on the green band: the screens lie tipped back and stand up flat as you scroll', () => {
     const s = sec('dashboard');
     assert.match(main, /<section class="section bg-ink owc-dash-band" aria-labelledby="dashboard-h" id="dashboard">/, 'on the green band');
-    assert.equal(text(/<h2 id="dashboard-h">([\s\S]*?)<\/h2>/.exec(s)[1]), 'Every lead and booking, and where it came from.');
+    assert.equal(text(/<h2 id="dashboard-h">([\s\S]*?)<\/h2>/.exec(s)[1]), 'Your drivers, your routes, and every sign-up.');
     assert.match(s, /<p class="owc-scroll-cue" aria-hidden="true"><span>Scroll<\/span>/, 'the scroll cue is decoration only');
     const stage = /<div class="owc-tilt" data-tilt>\s*<div class="pt-stage">/.exec(s);
     assert.ok(stage, 'the screens sit in the tilt wrapper');
@@ -86,10 +79,13 @@ describe('home: the sections', () => {
     const s = sec('dashboard');
     const t = text(s);
     assert.doesNotMatch(t, /Sample account/, 'no sample labels on the screens (the owner\'s call)');
-    assert.match(t, /routes completed, businesses visited, codes active, the leads list, and leads and bookings by source, month by month/);
+    assert.match(t, /Inside your referral network portal/);
+    assert.match(t, /who is driving your next route, every business they walked into/);
+    for (const label of ['Stops visited', 'Staff reached', 'Referral cards handed out', 'Staff sign-ups', 'Booked by the front desk']) assert.ok(t.includes(label), label);
+    assert.match(read('assets/site.css'), /\.own-stats dd\{font-family:var\(--nums\)|\.own-stats dd\{font-family/, 'the numbers use the system face');
     assert.match(t, /After every field day you also get a written visit log within 5 business days\./);
     assert.ok(links(s).some((l) => l.href === 'https://www.ournetworkportal.com' && l.text === 'Client Portal'));
-    for (const img of tags(s, 'img')) assert.match(attr(img, 'src'), /^\/assets\/img\/portal-/);
+    for (const img of tags(s, 'img')) assert.match(attr(img, 'src'), /^\/assets\/img\/drivers-/, 'screens from the referral network portal');
   });
   test('no results section: no "real clinics, real numbers", no texting form, no results files', () => {
     assert.doesNotMatch(html, /id="results"|Real clinics|Oakbrook Terrace|results-updates|data-results/);
@@ -98,15 +94,18 @@ describe('home: the sections', () => {
     assert.ok(!existsSync(new URL('assets/data/results.json', ROOT)));
     assert.ok(!existsSync(new URL('updates-thanks.html', ROOT)));
   });
-  test('d. the pricing teaser', () => {
-    const s = sec('try');
-    assert.match(text(s), /Try it for one month: \$250\./);
-    assert.ok(links(s).some((l) => l.href === '/pricing'));
+  test('a. in person: coffee, treats and real people, three scenes', () => {
+    const s = sec('in-person');
+    const t = text(s);
+    assert.match(t, /Coffee, treats and a real hello\./);
+    assert.equal(tags(s, 'img').length, 3);
+    for (const img of tags(s, 'img')) assert.match(attr(img, 'src'), /^\/assets\/img\/visit-(treats|chat|tap)-/);
   });
-  test('e. the compliance part, in writing, and the attorney line behind one switch that is off', () => {
+  test('e. the compliance part, in writing, no medical director line, and the attorney line behind one switch that is off', () => {
     const t = text(sec('compliance'));
     assert.ok(t.includes('Every partner business signs a one-page agreement: mutual promotion, nobody is paid per referral or per patient, no patient records are shared.'));
-    assert.ok(t.includes('We send it and the courtesy terms to your medical director before you sign anything.'));
+    assert.doesNotMatch(t, /medical director/i, 'the owner\'s call: these med spas have no medical director');
+    assert.ok(t.includes('Partners never see who they sent.'));
     assert.ok(t.includes("We never describe your treatments in words you haven't approved, and we make no medical claims."));
     const flagged = /<p class="owc-attorney" data-flag="attorneyReviewed" data-flag-text="attorneyReviewedText" hidden>/.test(sec('compliance'));
     assert.ok(flagged, 'the attorney line is an empty, hidden slot by default');
@@ -131,15 +130,16 @@ describe('home: the sections', () => {
 describe('pricing page: the offer', () => {
   const p = read('pricing.html');
   const t = text(mainOf(p));
-  test('the trial and the three plans', () => {
-    assert.match(t, /\$250/);
-    for (const [plan, price] of [['Starter', '$250'], ['Growth', '$400'], ['Reach', '$800']]) {
+  test('the trial and the two plans', () => {
+    assert.match(t, /\$450/);
+    for (const [plan, price] of [['Neighborhood', '$600'], ['Community', '$1,100']]) {
       assert.match(t, new RegExp(plan), plan);
       assert.ok(t.includes(price), price);
     }
     assert.match(t, /1 route/i);
     assert.match(t, /2 routes/i);
-    assert.match(t, /4 routes/i);
+    assert.doesNotMatch(t, /4 routes|Starter|Reach/);
+    assert.match(t, /fresh-baked treats/i);
   });
   test('the two trial guarantees', () => {
     assert.match(t, /30 days/);

@@ -1,6 +1,6 @@
 # ouroptimization.com
 
-**Our Wellness Connections** ("Your Organic Growth Team.") is a brand of OUR Optimization LLC, a local company in Chicago's western suburbs. The site sells one service to independent med spas, **referral routes**: our business matching software maps the businesses around a clinic and ranks the non-competing ones that share its customers; the owner approves the list; a rep visits a route of 5 matched businesses and introduces the clinic to their staff; every staff member met gets a personal tap-and-scan code (NFC tag and QR) that opens the clinic's first-visit offer, tagged with who sent it; every sign-up lands in the clinic's client portal for its front desk to call.
+**Our Wellness Network** ("Your Organic Growth Team.") is a brand of OUR Optimization LLC, a local company in Chicago's western suburbs. The site sells one service to independent med spas, **referral routes**: our business matching software maps the businesses around a clinic and ranks the non-competing ones that share its customers; the owner approves the list; a rep visits a route of 5 matched businesses and introduces the clinic to their staff; every staff member met gets a personal tap-and-scan code (NFC tag and QR) that opens the clinic's first-visit offer, tagged with who sent it; every sign-up lands in the clinic's client portal for its front desk to call.
 
 The site was rebuilt to the owner's brief of October 23, 2026, with the owner's notes of October 24 (new hero lines, the dashboard on the green band, no map, no results section, the Growth team page). Its job: a med spa owner scans a card our rep left at her front desk, reads the site on her phone between patients and books a 15-minute call.
 
@@ -15,7 +15,7 @@ Netlify site "ouroptimization", linked to this repo, branch `main`. No build com
 | URL | File | In the menu | Notes |
 | --- | --- | --- | --- |
 | `/` | `index.html` | Home | Hero (no buttons): "Your Organic Growth Team.", "We put your community into the brand." and the boots-on-the-ground line. Then the dashboard on the green band (the screens tip up flat as you scroll), the staff courtesy, the pricing teaser, compliance (with the sample contract link), the dinner add-on, the closing call (with the phone number). |
-| `/growth-team` | `growth-team.html` | Growth team | "Your Organic Growth Team." and "The boots on the ground maintaining your relationships.": what our people do on a route (treats and coffee, meeting the staff, the codes, the visit log) and how the relationships are kept up month after month. The illustration (`assets/img/team-visit-*`) is Higgsfield clay figurines in the hero's style, not real people. |
+| `/boots-on-the-ground` | `boots-on-the-ground.html` | Growth team | "Your Organic Growth Team." and "The boots on the ground maintaining your relationships.": what our people do on a route (treats and coffee, meeting the staff, the codes, the visit log) and how the relationships are kept up month after month. The illustration (`assets/img/team-visit-*`) is Higgsfield clay figurines in the hero's style, not real people. |
 | `/referral-network` | `referral-network.html` | How it works | Referral routes end to end. The old flyer network is folded in here. |
 | `/pricing` | `pricing.html` | Pricing | The trial ($250), Starter ($250/mo), Growth ($400/mo), Reach ($800/mo), the two trial guarantees, terms, who supplies what, add-ons priced on a call. The one page with a closing call band. |
 | `/sample-contract` | `sample-contract.html` | Sample contract | A sample referral-route agreement. |
@@ -31,7 +31,7 @@ Netlify site "ouroptimization", linked to this repo, branch `main`. No build com
 | `/thanks` | `thanks.html` | no | The call form's confirmation (noindex). |
 | (any unknown URL) | `404.html` | no | Served with status 404. |
 
-Every page shares the same header (the menu: Home, Growth team, How it works, Pricing, Sample contract, FAQ, About, Contact, and the Client Portal button to https://www.ournetworkportal.com), the same one-line footer (OUR Optimization LLC, Privacy Policy, Terms of Service) and the same head pattern: its own title and description, a canonical URL, Open Graph and Twitter tags (`assets/img/og-connections.jpg`) and LocalBusiness structured data (name, legal name, phone, email, service area Chicago's western suburbs). The expo page has a brand-only header. When you change the menu or the footer, change it on every page; `node --test` checks they match.
+Every page shares the same header (the menu: Home, Growth team, How it works, Pricing, Sample contract, FAQ, About, Contact, and the Client Portal button to https://www.ournetworkportal.com), the same one-line footer (OUR Optimization LLC, Privacy Policy, Terms of Service) and the same head pattern: its own title and description, a canonical URL, Open Graph and Twitter tags (`assets/img/og-network.jpg`) and LocalBusiness structured data (name, legal name, phone, email, service area Chicago's western suburbs). The expo page has a brand-only header. When you change the menu or the footer, change it on every page; `node --test` checks they match.
 
 ## Forms (Netlify Forms)
 
@@ -54,10 +54,10 @@ The home hero shows a still (`assets/img/hero-van-{480,768,1080,1344}.{avif,webp
 
 ## Brand assets
 
-- Logo lockup (the infinity-W mark over "Our Wellness Connections", in Playfair Display): `assets/img/owc-logo-360.{webp,png}` in the header, `assets/img/owc-logo.png` (600 px) for structured data.
+- Logo lockup (the infinity-W mark over "Our Wellness Network", in Playfair Display): `assets/img/owc-logo-360.{webp,png}` in the header, `assets/img/own-logo.png` (600 px) for structured data.
 - The mark alone: `assets/img/owc-mark-light.{webp,png}` for light backgrounds, `assets/img/owc-mark-on-dark.{webp,png}` for dark ones (the closing band).
 - Favicons (the mark on a cream square): `favicon.ico`, `apple-touch-icon.png`, `assets/owo-favicon.ico`, `assets/owo-icon-{16,32,192,512}.png`, `assets/owo-apple-touch-icon.png`, `assets/favicon-*.png`, `assets/icon-*.png`; the manifest is `site.webmanifest`.
-- Share image: `assets/img/og-connections.jpg` (1200 x 630), with "Your Organic Growth Team." and "We put your community into the brand.". The old share images and the old logo 301 to the new ones.
+- Share image: `assets/img/og-network.jpg` (1200 x 630), with "Your Organic Growth Team." and "We put your community into the brand.". The old share images and the old logo 301 to the new ones.
 - Business matching illustration: `assets/img/matching-map-*` (on `/referral-network`, labelled "Example").
 - Growth team illustration: `assets/img/team-visit-{480,768,1080}.{avif,webp}`, clay figurines made with Higgsfield in the hero's style (not real people).
 - Portal screenshots: `assets/img/portal-*`, from the portal's sample account (a fictional clinic, 555 phone numbers, `.invalid` emails, made-up partner names). On the home page they carry no label (the owner's call); their alt text says they are the sample account.
@@ -74,7 +74,7 @@ Fonts are self-hosted (Playfair Display and Inter, SIL Open Font License, licenc
 
 ## Content rules
 
-- The brand is Our Wellness Connections; the company in legal text is OUR Optimization LLC. Service area: Chicago's western suburbs.
+- The brand is Our Wellness Network; the company in legal text is OUR Optimization LLC. Service area: Chicago's western suburbs.
 - Never on the site: invented reviews, testimonials, statistics, scores or results, and medical claims. Examples are labelled "Example".
 - The phone number appears only on the home page's closing call, `/contact` and `/thanks` (plus the structured data).
 - The clinic's front desk calls the leads; the site never says we do. Nobody is paid per referral or per patient; the staff courtesy is the same for everyone and given whether or not they refer.
