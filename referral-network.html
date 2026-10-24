@@ -91,7 +91,7 @@
       <ul>
         <li><svg aria-hidden="true"><use href="#i-search"/></svg><span><b>Matched to your clinic:</b> businesses that share your customers, on a list you approve.</span></li>
         <li><svg aria-hidden="true"><use href="#i-route"/></svg><span><b>5 businesses per route,</b> visited in person, with your printed materials.</span></li>
-        <li><svg aria-hidden="true"><use href="#i-tap"/></svg><span><b>A personal code</b> for each staff member we meet, to tap or scan.</span></li>
+        <li><svg aria-hidden="true"><use href="#i-tap"/></svg><span><b>A personal <span class="nowrap">tap-to-schedule</span> card</b> for each staff member we meet.</span></li>
         <li><svg aria-hidden="true"><use href="#i-track"/></svg><span><b>Every lead in your dashboard</b> right away, with who sent it.</span></li>
         
       </ul>
@@ -112,9 +112,8 @@
         <li><svg aria-hidden="true"><use href="#i-community"/></svg><span><strong>Your current partners stay yours.</strong> We skip any business you already work with, unless you ask us to include it.</span></li>
       </ul>
     </div>
-    <figure class="hiw-map reveal">
-      <div class="pt-frame"><picture><source type="image/avif" srcset="/assets/img/matching-map-480.avif 480w, /assets/img/matching-map-800.avif 800w, /assets/img/matching-map-1200.avif 1200w, /assets/img/matching-map-1677.avif 1677w" sizes="(min-width:1180px) 520px, (min-width:900px) calc(46vw - 40px), calc(100vw - 40px)"><source type="image/webp" srcset="/assets/img/matching-map-480.webp 480w, /assets/img/matching-map-800.webp 800w, /assets/img/matching-map-1200.webp 1200w, /assets/img/matching-map-1677.webp 1677w" sizes="(min-width:1180px) 520px, (min-width:900px) calc(46vw - 40px), calc(100vw - 40px)"><img src="/assets/img/matching-map-800.jpg" srcset="/assets/img/matching-map-480.jpg 480w, /assets/img/matching-map-800.jpg 800w, /assets/img/matching-map-1200.jpg 1200w, /assets/img/matching-map-1677.jpg 1677w" sizes="(min-width:1180px) 520px, (min-width:900px) calc(46vw - 40px), calc(100vw - 40px)" width="1200" height="671" alt="Illustration of a neighborhood: a clinic in the center, five shops around it, among them a caf&eacute;, a gym and a boutique, and a dashed route that links them." loading="lazy" decoding="async"></picture></div>
-      <figcaption><span class="owc-tag">Example</span><span>Your clinic in the center, matched businesses around it, and one route between them.</span></figcaption>
+    <figure class="hiw-map hiw-orb reveal">
+      <canvas id="match-orb" role="img" aria-label="Your clinic in the centre of the orb, and six matched businesses connecting to it one by one: a gym, a hair salon, a yoga studio, a boutique, a physical therapy practice and a nail salon."></canvas>
     </figure>
   </div>
 </section>
@@ -142,8 +141,8 @@
       </li>
       <li>
         <span class="dn-step-n" aria-hidden="true">03</span>
-        <h3><svg aria-hidden="true"><use href="#i-tap"/></svg>Sets up the codes</h3>
-        <p>Each staff member we meet gets a personal code, so anyone they send shows up under their name. <a href="#nfc">How the codes work</a>.</p>
+        <h3><svg aria-hidden="true"><use href="#i-tap"/></svg>Hands out the cards</h3>
+        <p>Each staff member we meet gets a personal <span class="nowrap">tap-to-schedule</span> card, so anyone they send shows up under their name. <a href="#nfc">How the codes work</a>.</p>
       </li>
     </ol>
   </div>
@@ -154,14 +153,14 @@
   <div class="wrap media hiw-codes">
     <div class="reveal">
       <div class="rule" aria-hidden="true"></div>
-      <p class="eyebrow">Step 1 &middot; We show up &middot; Staff codes</p>
-      <h2 id="nfc-h">A personal code <em class="dn-line">for every staff member.</em></h2>
-      <p class="intro">Each staff member we meet gets their own <span class="nowrap">tap-and-scan</span> code: an NFC tag and a QR code. A tap opens your <span class="nowrap">first-visit</span> offer, tagged with who sent it.</p>
+      <p class="eyebrow">Step 1 &middot; We show up &middot; Staff cards</p>
+      <h2 id="nfc-h">A personal <span class="nowrap">tap-to-schedule</span> card for every staff member, <em class="dn-line">programmed to your business.</em></h2>
+      <p class="intro">Each staff member we meet gets their own <span class="nowrap">tap-to-schedule</span> card, programmed to your business: an NFC tag and a QR code. A tap opens your <span class="nowrap">first-visit</span> offer, tagged with who sent it.</p>
       <p class="rn-nfc-p"><strong>What is an NFC tag?</strong> A small chip. Hold a phone near it and a page opens, with no app to download. It is the same tap people use to pay. Phones that don&rsquo;t read NFC scan the QR code instead.</p>
-      <p class="rn-nfc-p">We program and supply the tags at no charge.</p>
+      <p class="rn-nfc-p">We program and supply the cards at no charge.</p>
     </div>
     <ol class="journey rn-flow reveal" aria-label="What happens after a tap or a scan">
-      <li><b>Tap or scan</b><span>A customer taps the staff member&rsquo;s tag or scans the QR code.</span></li>
+      <li><b>Tap or scan</b><span>A customer taps the staff member&rsquo;s card or scans its QR code.</span></li>
       <li><b>Your offer opens</b><span>Your <span class="nowrap">first-visit</span> offer, with a short <span class="nowrap">sign-up</span> form and no health questions.</span></li>
       <li><b>Tagged with who sent it</b><span>The business and the staff member are saved with the <span class="nowrap">sign-up</span>.</span></li>
       <li><b>It lands in your dashboard</b><span>Right away, ready for your front desk to call.</span></li>
@@ -291,5 +290,6 @@
 </footer>
 
 <script src="/assets/site.js" defer></script>
+<script src="/assets/match-orb.js" defer></script>
 </body>
 </html>
