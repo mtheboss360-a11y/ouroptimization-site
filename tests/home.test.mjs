@@ -23,7 +23,7 @@ describe('home: order and hero', () => {
     const hero = /<section class="hero-orb"[\s\S]*?<\/section>/.exec(main)[0];
     assert.equal(text(/<h1 id="hero-h">([\s\S]*?)<\/h1>/.exec(hero)[1]), 'Your in-person sales team out in your community.');
     assert.equal(text(/<p class="lede">([\s\S]*?)<\/p>/.exec(hero)[1]),
-      'Our software finds the businesses that share your clients. Our people walk in and build the relationships. Their staff send you referrals, and our portal tracks it all.');
+      'Our software finds the businesses that share your clients.');
     assert.deepEqual(links(hero).map((l) => l.href), ['#dashboard'], 'only the drivers strip, which jumps to the portal');
     assert.doesNotMatch(hero, /class="btn/, 'no buttons');
     assert.match(text(hero), /Devon.s gym sends you 30 clients through referrals\. Monthly visits with baked treats, and a tap-to-schedule card for every trainer\./, 'the owner\'s wording');
