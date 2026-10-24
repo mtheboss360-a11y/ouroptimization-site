@@ -1279,7 +1279,7 @@ table{font-variant-numeric:tabular-nums}
 /* In person: three scenes */
 .own-scenes{list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(20px,3vw,36px)}
 .own-scenes li{min-width:0;text-align:center}
-.own-scenes img{width:100%;height:auto;margin:0 auto 16px;border-radius:22px}
+.own-scenes img{width:100%;height:auto;aspect-ratio:6/5;object-fit:contain;margin:0 auto 16px}
 .own-scenes h3{font-family:var(--hero);font-weight:500;font-size:1.3rem;line-height:1.25;margin-bottom:6px}
 .own-scenes p{font-size:.97rem;color:var(--ink-2);max-width:30ch;margin:0 auto}
 @media (max-width:860px){.own-scenes{grid-template-columns:minmax(0,1fr);max-width:440px;margin:0 auto}}
@@ -1298,7 +1298,7 @@ table{font-variant-numeric:tabular-nums}
 /* Boots on the ground: deliveries and drop-offs side by side with their scene; tracking on the green band */
 .own-split{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(28px,5vw,72px);align-items:center}
 .own-split-flip .own-split-art{order:2}
-.own-split-art img{width:100%;height:auto;border-radius:24px}
+.own-split-art img{width:100%;height:auto}
 .own-split .intro{margin-top:14px}
 .own-split .dn-checks{margin-top:22px}
 @media (max-width:860px){.own-split{grid-template-columns:minmax(0,1fr)}.own-split-flip .own-split-art{order:0}.own-split-art{max-width:460px}}
@@ -1345,3 +1345,9 @@ table{font-variant-numeric:tabular-nums}
 @media (max-width:760px){.hero-orb{min-height:980px}.hero-orb .wrap{padding-block:28px 380px}.proof-row{border-radius:22px}}
 
 .proof-row .stats .stat-n{font-family:var(--nums);font-variant-numeric:tabular-nums;letter-spacing:-.03em}
+/* The hero strip: one driver, small and round */
+.proof-one{gap:12px;padding:8px 18px 8px 8px;margin-top:26px}
+.proof-one img{width:44px;height:44px;border-radius:50%;object-fit:cover;flex:none}
+.proof-one p{font-size:.86rem;line-height:1.4;max-width:34ch}
+.proof-one p span{display:block;color:var(--ink-3)}
+@media (max-width:560px){.proof-one{border-radius:999px}}

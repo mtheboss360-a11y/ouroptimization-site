@@ -19,14 +19,15 @@ describe('home: order and hero', () => {
     assert.doesNotMatch(text(main), /\$\d/, 'no prices on the home page (pricing is its own page)');
     assert.ok(main.indexOf('hero-orb') < main.indexOf('id="in-person"'), 'the hero comes first');
   });
-  test('the approved orb hero: headline, line and the drivers strip, with no buttons', () => {
+  test('the approved orb hero: headline, line and one driver, with no buttons', () => {
     const hero = /<section class="hero-orb"[\s\S]*?<\/section>/.exec(main)[0];
     assert.equal(text(/<h1 id="hero-h">([\s\S]*?)<\/h1>/.exec(hero)[1]), 'Your in-person sales team out in your community.');
     assert.equal(text(/<p class="lede">([\s\S]*?)<\/p>/.exec(hero)[1]),
       'Our software finds the businesses that share your clients. Our people walk in and build the relationships. Their staff send you referrals, and our portal walks you through it all.');
     assert.deepEqual(links(hero).map((l) => l.href), ['#dashboard'], 'only the drivers strip, which jumps to the portal');
     assert.doesNotMatch(hero, /class="btn/, 'no buttons');
-    assert.match(text(hero), /207 staff reached.*64 sign-ups.*37 booked/);
+    assert.match(text(hero), /Marcus Reed delivered 2,000 pieces of marketing material\. Friendly and kind at every front desk\./, 'one driver, no promised results');
+    assert.doesNotMatch(text(hero), /staff reached|sign-ups|booked/);
   });
   test('the orb: one canvas, drawn by home-orb.js, which keeps the network clear of the words', () => {
     const hero = /<section class="hero-orb"[\s\S]*?<\/section>/.exec(main)[0];
@@ -70,8 +71,9 @@ describe('home: the sections', () => {
   });
   test('c. the staff courtesy, word for word', () => {
     const t = text(sec('courtesy'));
-    assert.match(t, /The staff courtesy: you set it and cap it\./);
-    assert.ok(t.includes("For your trial the default courtesy is a complimentary consultation, which costs you only a few minutes and often turns into a booking itself. You can choose something else, like a complimentary add-on or a product sample, and you set a cap, for example up to 3 staff per business, so a route means at most 15 courtesies. It's the same for every staff member and is given whether or not they ever send anyone, which keeps it a courtesy and not a payment for referrals."));
+    assert.match(t, /The staff courtesy: the same for everyone\./);
+    assert.doesNotMatch(t, /cap/i, 'every staff member can send people, so there is no cap');
+    assert.ok(t.includes('from the front desk to every trainer and stylist, gets the same courtesy from your clinic'));
   });
   test('b. the dashboard: the screens, what it shows, no visit log line, and the Client Portal', () => {
     const s = sec('dashboard');

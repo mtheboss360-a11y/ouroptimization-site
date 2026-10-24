@@ -6,6 +6,14 @@
   window.__owoReady = true;
   root.classList.add('js'); /* restore it if a slow load made the head script drop it */
 
+  /* Every page opens at its top. Some browsers and embedded previews carry the last page's scroll position
+     over when a menu tab is clicked, which dropped visitors at the bottom of the new page. A link to a
+     section (#pricing-faq) still opens at that section. */
+  if ('scrollRestoration' in window.history) window.history.scrollRestoration = 'manual';
+  var toTop = function () { if (!window.location.hash) { try { window.scrollTo({ top: 0, left: 0, behavior: 'instant' }); } catch (e) { window.scrollTo(0, 0); } } };
+  toTop();
+  window.addEventListener('pageshow', function (e) { if (e.persisted) toTop(); });
+
   /* The home page used to hold every section. Old links to those sections now open their own page
      (/#faq opens /faq). The home page's call band came off on October 22, 2026, so /#call opens the
      call form on /contact, with any old query (/#call?package=website) carried along. */
