@@ -75,7 +75,7 @@ describe('home: the sections', () => {
     assert.doesNotMatch(t, /cap/i, 'every staff member can send people, so there is no cap');
     assert.ok(t.includes('from the front desk to every trainer and stylist, gets the same courtesy from your clinic'));
   });
-  test('b. the dashboard: the screens, what it shows, no visit log line, and the Client Portal', () => {
+  test('b. the dashboard: the screens and what it shows; no visit log line and no Client Portal box (it is in the header)', () => {
     const s = sec('dashboard');
     const t = text(s);
     assert.doesNotMatch(t, /Sample account/, 'no sample labels on the screens (the owner\'s call)');
@@ -84,7 +84,7 @@ describe('home: the sections', () => {
     for (const label of ['Stops visited', 'Staff reached', 'Referral cards handed out', 'Staff sign-ups', 'Booked by the front desk']) assert.ok(t.includes(label), label);
     assert.match(read('assets/site.css'), /\.own-stats dd\{font-family:var\(--nums\)|\.own-stats dd\{font-family/, 'the numbers use the system face');
     assert.doesNotMatch(t, /visit log/i, 'the owner took the visit log line out');
-    assert.ok(links(s).some((l) => l.href === 'https://www.ournetworkportal.com' && l.text === 'Client Portal'));
+    assert.ok(!links(s).some((l) => l.href === 'https://www.ournetworkportal.com'), 'no Client Portal box in this section');
     for (const img of tags(s, 'img')) assert.match(attr(img, 'src'), /^\/assets\/img\/drivers-/, 'screens from the referral network portal');
   });
   test('no results section: no "real clinics, real numbers", no texting form, no results files', () => {
