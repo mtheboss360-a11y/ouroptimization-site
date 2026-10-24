@@ -70,7 +70,7 @@ describe('home: the sections', () => {
     const s = sec('dashboard');
     const t = text(s);
     assert.doesNotMatch(t, /Sample account/, 'no sample labels on the screens (the owner\'s call)');
-    assert.match(t, /Inside your referral network portal/);
+    assert.doesNotMatch(t, /Inside your referral network portal/);
     assert.match(t, /who is driving your next route, every business they walked into/);
     for (const label of ['Stops visited', 'Staff reached', 'Referral cards handed out', 'Staff sign-ups', 'Booked by the front desk']) assert.ok(t.includes(label), label);
     assert.match(read('assets/site.css'), /\.own-stats dd\{font-family:var\(--nums\)|\.own-stats dd\{font-family/, 'the numbers use the system face');
