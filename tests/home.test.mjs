@@ -26,7 +26,7 @@ describe('home: order and hero', () => {
       'Our software finds the businesses that share your clients. Our people walk in and build the relationships. Their staff send you referrals, and our portal walks you through it all.');
     assert.deepEqual(links(hero).map((l) => l.href), ['#dashboard'], 'only the drivers strip, which jumps to the portal');
     assert.doesNotMatch(hero, /class="btn/, 'no buttons');
-    assert.match(text(hero), /Picture it: Devon.s gym sends you 30 clients through referrals\./, 'the gym on the map, framed as a picture, not a claimed result');
+    assert.match(text(hero), /Devon.s gym sends you 30 clients through referrals\. A monthly visit with baked treats, and a tap-to-schedule card for every trainer\./, 'the owner\'s wording');
     assert.doesNotMatch(text(hero), /Marcus/);
     assert.doesNotMatch(text(hero), /staff reached|sign-ups|booked/);
   });
