@@ -714,7 +714,6 @@ table{font-variant-numeric:tabular-nums}
 .eyebrow,.journey b,.dg-k,.dn-k,.dn-facts dt{text-transform:none;letter-spacing:.005em}
 .eyebrow{font-size:.9rem;font-weight:600}
 .dg-k,.dn-k{font-size:.84rem;font-weight:600}
-.pt-band{background:linear-gradient(180deg,var(--ground) 0%,var(--paper) 100%)}
 .pt-stage{position:relative;max-width:1080px;margin:0 auto}
 .pt-browser{margin:0;border-radius:16px;overflow:hidden;background:#fff;border:1px solid var(--line);box-shadow:0 2px 4px rgba(28,58,44,.06),0 40px 80px -40px rgba(28,58,44,.45)}
 .pt-bar{display:flex;gap:7px;padding:11px 16px;background:var(--paper);border-bottom:1px solid var(--line-soft)}
@@ -965,6 +964,7 @@ table{font-variant-numeric:tabular-nums}
 .gt-band .cardgrid{background:rgba(243,246,242,.14)}
 .gt-band .cardgrid>li{background:#0F2419}
 @media (min-width:900px){.gt-keep{grid-template-columns:repeat(3,1fr)}}
+@media (min-width:640px) and (max-width:899.98px){.gt-keep>li:last-child{grid-column:1/-1}}
 .gt-more{margin-top:clamp(20px,2.6vw,28px)}
 
 /* --- hiw --- */
@@ -1041,11 +1041,13 @@ table{font-variant-numeric:tabular-nums}
 .owc-dash-band .pt-frame{border-color:rgba(243,246,242,.16);box-shadow:0 30px 60px -34px rgba(0,0,0,.7)}
 .owc-dash-band .pt-row-copy p{color:#C3D2C6}
 /* "Scroll" over the tipped-back screens, fading out as they stand up */
-.owc-scroll-cue{display:none;flex-direction:column;align-items:center;gap:6px;margin:clamp(18px,2.4vw,26px) auto 0;font:600 .78rem/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--gold-bright);opacity:calc(1 - var(--p) * 1.6);pointer-events:none}
+.owc-dash-band .owc-scroll-cue{display:none;flex-direction:column;align-items:center;gap:6px;margin:clamp(18px,2.4vw,26px) auto 0;font:600 .78rem/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--gold-bright);opacity:calc(1 - var(--p) * 1.6);pointer-events:none}
 .owc-scroll-cue svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;animation:owc-cue 1.6s ease-in-out infinite}
-.owc-dash-band.is-tilting .owc-scroll-cue{display:flex}
-@keyframes owc-cue{0%,100%{translate:0 -3px}50%{translate:0 4px}}
-@media (prefers-reduced-motion:reduce){.owc-dash-band{--p:1 !important}.owc-scroll-cue{display:none !important}}
+/* its room is kept from the first paint (.js is set in the head), so the screens never jump; it stays invisible until site.js sets --p */
+.js .owc-dash-band .owc-scroll-cue{display:flex}
+@keyframes owc-cue{0%,100%{transform:translateY(-3px)}50%{transform:translateY(4px)}}
+@media (prefers-reduced-motion:reduce){.owc-dash-band{--p:1 !important}.owc-dash-band .owc-scroll-cue{display:none !important}}
+@media print{.owc-dash-band{--p:1 !important}.owc-dash-band .owc-scroll-cue{display:none !important}}
 /* c. courtesy */
 .owc-courtesy-text{font-size:clamp(1.06rem,1rem + .3vw,1.2rem);line-height:1.7;color:var(--ink);text-wrap:pretty}
 @media (min-width:960px){.owc-courtesy{align-items:center}}
@@ -1054,6 +1056,7 @@ table{font-variant-numeric:tabular-nums}
 .owc-dash-foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:18px 28px;max-width:1080px;margin:clamp(34px,4.4vw,48px) auto 0;padding:clamp(20px,2.6vw,26px) clamp(20px,2.6vw,30px);border-radius:16px;background:#fff;border:1px solid var(--line)}
 .owc-dash-foot p{display:flex;align-items:flex-start;gap:12px;font-size:1.02rem;line-height:1.5;color:var(--ink);max-width:40em}
 .owc-dash-foot svg{width:22px;height:22px;flex:none;margin-top:1px;color:var(--gold-sm)}
+.owc-dash-band .owc-dash-foot :focus-visible{outline-color:var(--gold-sm)}
 /* d. pricing teaser, f. add-on: slim sections */
 .section.owc-slim{padding-block:clamp(40px,5.5vw,64px)}
 .owc-try{margin-top:0;background:#fff}

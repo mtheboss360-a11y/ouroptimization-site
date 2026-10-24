@@ -53,8 +53,11 @@ describe('home: the sections', () => {
     const css = read('assets/site.css');
     assert.match(css, /\.owc-dash-band\{--p:1;/, 'flat by default: no JS means flat screens');
     assert.match(css, /\.owc-tilt \.pt-stage\{transform:rotateX\(calc\(\(1 - var\(--p\)\) \* 26deg\)\) scale\(calc\(\.86 \+ \.14 \* var\(--p\)\)\)/);
-    assert.match(css, /\.owc-scroll-cue\{display:none;/, 'the cue shows only while the screens can move');
-    assert.match(css, /@media \(prefers-reduced-motion:reduce\)\{\.owc-dash-band\{--p:1 !important\}\.owc-scroll-cue\{display:none !important\}\}/);
+    assert.match(css, /\.owc-dash-band \.owc-scroll-cue\{display:none;[^}]*color:var\(--gold-bright\)/, 'no cue without JS; pink, like the eyebrow');
+    assert.match(css, /\.js \.owc-dash-band \.owc-scroll-cue\{display:flex\}/, 'its room is kept from the first paint');
+    assert.match(css, /@keyframes owc-cue\{0%,100%\{transform:translateY\(-3px\)\}50%\{transform:translateY\(4px\)\}\}/, 'a transform the compositor can run');
+    assert.match(css, /@media \(prefers-reduced-motion:reduce\)\{\.owc-dash-band\{--p:1 !important\}\.owc-dash-band \.owc-scroll-cue\{display:none !important\}\}/);
+    assert.match(css, /@media print\{\.owc-dash-band\{--p:1 !important\}\.owc-dash-band \.owc-scroll-cue\{display:none !important\}\}/, 'printed flat');
     const js = read('assets/site.js');
     assert.match(js, /document\.querySelector\('\[data-tilt\]'\)/);
     assert.match(js, /window\.addEventListener\('scroll', tiltQueue, \{ passive: true \}\)/);
@@ -157,5 +160,22 @@ describe('pricing page: the offer', () => {
   test('no old price or old starter item', () => {
     for (const w of FORBIDDEN) assert.ok(!p.includes(w), w);
     assert.doesNotMatch(t, /\$200|\$2,000/);
+  });
+});
+
+describe('growth team page', () => {
+  const gt = read('growth-team.html');
+  test('the owner\'s two lines, and the treats framed like the courtesy', () => {
+    assert.equal(text(/<h1 id="pg-h">([\s\S]*?)<\/h1>/.exec(gt)[1]), 'Your Organic Growth Team.');
+    assert.equal(text(/<p class="gt-sub">([\s\S]*?)<\/p>/.exec(gt)[1]), 'The boots on the ground maintaining your relationships.');
+    assert.match(text(gt), /Fresh-baked treats and warm coffee for the people who work there, the same for everyone, whether or not they ever send anyone\./);
+    assert.match(text(gt), /Even if a trial guarantee gives you your \$250 back, you keep your partner relationships\./, 'the promise as the Terms word it');
+    assert.doesNotMatch(text(gt), /month after month|whether or not you stay/);
+  });
+  test('the illustration: AVIF and WebP, never wider than its 560px box below 960px', () => {
+    const sizes = tags(gt, 'source').concat(tags(gt, 'img')).map((t) => attr(t, 'sizes')).filter(Boolean);
+    assert.ok(sizes.length >= 2);
+    for (const v of sizes) assert.equal(v, '(min-width:1180px) 470px, (min-width:960px) 40vw, (min-width:600px) 560px, calc(100vw - 40px)');
+    for (const t of tags(gt, 'img')) assert.ok(existsSync(new URL('.' + attr(t, 'src'), ROOT)), attr(t, 'src'));
   });
 });

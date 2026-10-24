@@ -17,8 +17,8 @@
   var ORDER = ['name', 'clinic', 'phone', 'email', 'town', 'best_time', 'dinner', 'message'];
   var MAX = { name: 120, clinic: 150, phone: 30, email: 254, town: 120, best_time: 60, message: 2000 };
 
-  /* Links from the other pages: /contact?about=pricing, /contact?about=referral-network, /contact?about=results
-     and so on, one key per page (named after its URL) plus "results" for the home page's results section.
+  /* Links from the other pages: /contact?about=pricing, /contact?about=referral-network and so on, one key per
+     page (named after its URL).
      Old links (/?about=review-tags#call) are redirected to /contact?about=... by netlify.toml.
      Keys that outlived their pages keep working and prefill a message about what replaced them:
      - flyer-network and flyer-drops: the flyer network folded into the referral routes on October 23, 2026
@@ -34,7 +34,6 @@
     'review-tags': "I'm asking about review tags.",
     'website-design': "I'm asking about a website redesign.",
     'sample-contract': "I'm asking about the sample contract.",
-    'results': "I'm asking about the results from your first routes.",
     'patient-dinners': "I'm asking about a private patient dinner.",
     'flyer-drops': "I'm asking about referral routes.",
     'google-ads': "I'm asking about Google Ads in my own account."

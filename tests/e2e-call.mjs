@@ -6,8 +6,8 @@
 //
 // Runs against a LOCAL server only and refuses anything else. Every request that is not a
 // GET or HEAD is intercepted with route.fulfill and answered here, so no submission ever
-// reaches a server. Requests to any other origin are aborted, except Google Static Maps when a
-// scenario asks for it, which is answered here too (never sent).
+// reaches a server. Requests to any other origin are aborted and recorded in `outside`; the home page
+// scenarios assert there are none.
 // Not part of `node --test` (it needs a browser and a running server).
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
