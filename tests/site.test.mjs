@@ -115,9 +115,12 @@ describe('every page: header and footer', () => {
       assert.deepEqual(links(footerOf(src)).map((l) => l.href), ['/privacy', '/terms']);
     });
   }
-  test('the dinner page is out of the menu and reached from the home add-on card', () => {
-    assert.doesNotMatch(headerOf(page['index.html']), /patient-network/);
-    assert.ok(links(byId(page['index.html'], 'dinner')).some((l) => l.href === '/patient-network'));
+  test('the dinner is on the pricing page only: out of the menu, off the home page, linked from pricing alone', () => {
+    for (const p of PAGES) {
+      if (['pricing.html', 'patient-network.html', 'privacy.html', 'terms.html'].includes(p.file)) continue;
+      assert.doesNotMatch(bodyOf(page[p.file]), /patient-network|patient dinner/i, p.file);
+    }
+    assert.ok(links(page['pricing.html']).some((l) => l.href === '/patient-network'));
   });
 });
 
@@ -229,7 +232,7 @@ describe('sitemap and robots', () => {
 });
 
 describe('forms (Netlify detects them from the static HTML)', () => {
-  test('dinner-call on /contact: the four topics, the honeypot and the patient information line', () => {
+  test('dinner-call on /contact: the three topics, the honeypot and the patient information line', () => {
     const src = page['contact.html'];
     const form = /<form\b[^>]*name="dinner-call"[\s\S]*?<\/form>/.exec(src)[0];
     const open = /<form\b[^>]*>/.exec(form)[0];
@@ -240,7 +243,7 @@ describe('forms (Netlify detects them from the static HTML)', () => {
     assert.match(form, /<input type="hidden" name="form-name" value="dinner-call">/);
     assert.match(form, /name="bot-field"/);
     const radios = tags(form, 'input').filter((t) => attr(t, 'name') === 'dinner');
-    assert.deepEqual(radios.map((t) => attr(t, 'value')), ['Referral routes', 'Online search / review tags / website', 'Patient dinner', 'Not sure yet']);
+    assert.deepEqual(radios.map((t) => attr(t, 'value')), ['Referral routes', 'Online search / review tags / website', 'Not sure yet']);
     assert.match(text(form), /Please don't include any patient information\./);
     for (const name of ['name', 'clinic', 'phone', 'email', 'town', 'best_time', 'message']) assert.match(form, new RegExp(`name="${name}"`), name);
   });

@@ -53,10 +53,10 @@ describe('/contact: the call form', () => {
 
     const radios = by('dinner');
     // October 23, 2026: the referral routes first, then the add-ons, then "Not sure yet" (the owner's brief).
-    assert.deepEqual(radios.map((t) => attr(t, 'value')), ['Referral routes', 'Online search / review tags / website', 'Patient dinner', 'Not sure yet']);
-    assert.deepEqual([...form.matchAll(/<label><input type="radio" name="dinner" value="([^"]+)"[^>]*>([^<]+)<\/label>/g)].map((m) => m[1] === m[2]), [true, true, true, true], 'each label reads the same as its value');
+    assert.deepEqual(radios.map((t) => attr(t, 'value')), ['Referral routes', 'Online search / review tags / website', 'Not sure yet']);
+    assert.deepEqual([...form.matchAll(/<label><input type="radio" name="dinner" value="([^"]+)"[^>]*>([^<]+)<\/label>/g)].map((m) => m[1] === m[2]), [true, true, true], 'each label reads the same as its value');
     assert.ok(radios.every((t) => attr(t, 'type') === 'radio' && hasAttr(t, 'required')));
-    assert.deepEqual(radios.map((t) => attr(t, 'value')), call.DINNERS, 'call.js knows the same four choices');
+    assert.deepEqual(radios.map((t) => attr(t, 'value')), call.DINNERS, 'call.js knows the same three choices');
     assert.match(form, /<legend>What would you like to talk about\?<\/legend>/);
 
     for (const t of controls) {
@@ -146,7 +146,7 @@ describe('call.js: module shape', () => {
 
   test('a complete submission passes', () => {
     assert.deepEqual(call.validateAll(valid), []);
-    assert.deepEqual(call.validateAll({ ...valid, email: 'jordan@example.com', message: 'Hello', dinner: 'Patient dinner' }), []);
+    assert.deepEqual(call.validateAll({ ...valid, email: 'jordan@example.com', message: 'Hello', dinner: 'Not sure yet' }), []);
     assert.deepEqual(call.validateAll({ ...valid, dinner: 'Not sure yet' }), []);
     assert.deepEqual(call.validateAll({ ...valid, dinner: 'Online search / review tags / website' }), []);
   });
@@ -207,11 +207,11 @@ describe('call.js: email (optional)', () => {
 });
 
 describe('call.js: what to talk about (required radio, field name "dinner")', () => {
-  for (const v of ['Referral routes', 'Online search / review tags / website', 'Patient dinner', 'Not sure yet']) {
+  for (const v of ['Referral routes', 'Online search / review tags / website', 'Not sure yet']) {
     test(`accepts ${v}`, () => assert.equal(errorFor('dinner', { dinner: v }), ''));
   }
   // Older labels are no longer choices: the ones before October 23, 2026 and before the October 22 rename.
-  for (const v of ['', 'referral routes', 'Referral or flyer network', 'Plus-One Dinner', 'VIP Night', 'Online search network, review tags or a website', 'Flyer drops', 'Flyer drops or referral network', 'Google Ads, review tags or a website', 'Something else']) {
+  for (const v of ['', 'Patient dinner', 'referral routes', 'Referral or flyer network', 'Plus-One Dinner', 'VIP Night', 'Online search network, review tags or a website', 'Flyer drops', 'Flyer drops or referral network', 'Google Ads, review tags or a website', 'Something else']) {
     test(`rejects ${JSON.stringify(v)}`, () => assert.notEqual(errorFor('dinner', { dinner: v }), ''));
   }
   test('the error names the question, not only dinners', () => {

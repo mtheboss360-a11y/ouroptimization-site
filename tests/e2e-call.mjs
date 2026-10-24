@@ -155,13 +155,13 @@ await scenario('only the topic missing: focus lands on the radio group', async (
   assert.equal(await page.textContent('#call-dinner-err'), 'Choose what you would like to talk about, or Not sure yet.');
   await page.check('input[name="dinner"][value="Referral routes"]');
   assert.deepEqual(await invalidIds(page), [], 'choosing a topic clears the error');
-  assert.deepEqual(await page.$$eval('input[name="dinner"]', (r) => r.map((x) => x.value)), ['Referral routes', 'Online search / review tags / website', 'Patient dinner', 'Not sure yet'], 'four choices, the referral routes first');
+  assert.deepEqual(await page.$$eval('input[name="dinner"]', (r) => r.map((x) => x.value)), ['Referral routes', 'Online search / review tags / website', 'Not sure yet'], 'three choices, the referral routes first');
   await close();
 });
 
 await scenario('a valid form posts once to /thanks with every field and an empty honeypot', async () => {
   const { page, posts, close } = await open();
-  await fillValid(page, { dinner: 'Patient dinner' });
+  await fillValid(page, { dinner: 'Not sure yet' });
   await Promise.all([
     page.waitForURL('**/thanks'),
     page.click('#dinner-call button[type="submit"]')
@@ -179,7 +179,7 @@ await scenario('a valid form posts once to /thanks with every field and an empty
   assert.equal(body.get('email'), 'jordan@example.com');
   assert.equal(body.get('town'), 'Naperville');
   assert.equal(body.get('best_time'), 'Afternoon, 2 to 5 pm');
-  assert.equal(body.get('dinner'), 'Patient dinner');
+  assert.equal(body.get('dinner'), 'Not sure yet');
   assert.equal(body.get('message'), 'Thursday works best.');
   assert.deepEqual([...body.keys()].sort(), ['best_time', 'bot-field', 'clinic', 'dinner', 'email', 'form-name', 'message', 'name', 'phone', 'town']);
   assert.match(await page.textContent('h1'), /Thank you/);
@@ -324,7 +324,7 @@ await scenario('phone width (390px): no sideways scroll, the form and the call-n
   const btn = await page.$eval('#dinner-call button[type="submit"]', (b) => b.getBoundingClientRect().width);
   assert.ok(btn > 300, 'submit button spans the card');
   assert.match(await page.textContent('#call'), /Prefer to talk now\?\s*Call or text 331-271-6851\./);
-  await fillValid(page, { dinner: 'Patient dinner' });
+  await fillValid(page, { dinner: 'Not sure yet' });
   await Promise.all([page.waitForURL('**/thanks'), page.click('#dinner-call button[type="submit"]')]);
   assert.equal(posts.length, 1);
   await close();

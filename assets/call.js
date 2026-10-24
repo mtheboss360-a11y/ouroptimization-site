@@ -9,10 +9,11 @@
 
   /* The "What would you like to talk about?" radios, in the order the form shows them: the referral routes
      first, then the add-ons, then "Not sure yet". Each value reads the same as its label. Since October 23,
-     2026 there are four; the older labels (the referral or flyer network, Plus-One Dinner, VIP Night, the
-     online search network) are no longer choices. The field keeps its original name, "dinner", so Netlify
+     2026 there were four; on October 24 "Patient dinner" came off (the dinner is mentioned only on the pricing
+     page now, and /contact?about=patient-network still prefills the message). The older labels (the referral or
+     flyer network, Plus-One Dinner, VIP Night, the online search network) are no longer choices. The field keeps its original name, "dinner", so Netlify
      keeps one column for it across old and new submissions. */
-  var DINNERS = ['Referral routes', 'Online search / review tags / website', 'Patient dinner', 'Not sure yet'];
+  var DINNERS = ['Referral routes', 'Online search / review tags / website', 'Not sure yet'];
   var ORDER = ['name', 'clinic', 'phone', 'email', 'town', 'best_time', 'dinner', 'message'];
   var MAX = { name: 120, clinic: 150, phone: 30, email: 254, town: 120, best_time: 60, message: 2000 };
 

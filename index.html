@@ -68,25 +68,23 @@
 </header>
 
 <main id="main" class="dn-page" tabindex="-1">
-<!-- ===== Hero: coffee, treats and real people at the front desk. Clay figurines, not real people. ===== -->
-<section class="hero owc-hero" aria-labelledby="hero-h">
-  <div class="wrap hero-grid owc-hero-grid">
-    <div class="hero-copy owc-hero-copy">
-      <h1 id="hero-h">Your Organic Growth Team.</h1>
-      <p class="owc-hero-sub">We put your community into the brand.</p>
-      <p class="lede">Real people walk into the businesses near your clinic with <span class="nowrap">fresh-baked</span> treats and warm coffee, get to know the staff and get your clinic recommended. Their staff send you referrals, and our portal walks you through it all.</p>
-      <ul class="own-warm" aria-label="Every visit">
-        <li><svg aria-hidden="true"><use href="#i-coffee"/></svg>Warm coffee</li>
-        <li><svg aria-hidden="true"><use href="#i-treat"/></svg>Fresh-baked treats</li>
-        <li><svg aria-hidden="true"><use href="#i-people"/></svg>Real people, in person</li>
-      </ul>
-    </div>
-    <div class="owc-hero-art">
-      <div class="owc-hero-media own-hero-media">
-        <picture><source type="image/avif" srcset="/assets/img/team-visit-480.avif 480w, /assets/img/team-visit-768.avif 768w, /assets/img/team-visit-1080.avif 1080w" sizes="(min-width:1180px) 560px, (min-width:960px) 46vw, calc(100vw - 40px)"><source type="image/webp" srcset="/assets/img/team-visit-480.webp 480w, /assets/img/team-visit-768.webp 768w, /assets/img/team-visit-1080.webp 1080w" sizes="(min-width:1180px) 560px, (min-width:960px) 46vw, calc(100vw - 40px)"><img src="/assets/img/team-visit-480.jpg" srcset="/assets/img/team-visit-480.jpg 480w, /assets/img/team-visit-768.jpg 768w, /assets/img/team-visit-1080.jpg 1080w" sizes="(min-width:1180px) 560px, (min-width:960px) 46vw, calc(100vw - 40px)" width="1080" height="848" alt="Two of our people carry coffee and a box of fresh-baked treats into a café, where the owner waves hello. Clay figurines." fetchpriority="high" decoding="async"></picture>
-      </div>
+<!-- ===== Hero: the orb. A phthalo dot-orb rises from the corner and opens into the clinic's partner network
+     (illustrated owners, not real people); the network keeps clear of the words and stays open for the visit.
+     Drawn by assets/home-orb.js. ===== -->
+<section class="hero-orb" aria-labelledby="hero-h">
+  <canvas id="orb" role="img" aria-label="Your clinic in the centre, linked to a nearby gym, hair salon, yoga studio, boutique, physical therapy practice and nail salon."></canvas>
+  <div class="wrap">
+    <div class="hero-copy">
+      <h1 id="hero-h">Your in-person sales team <em>out in your community.</em></h1>
+      <p class="lede">Our software finds the businesses that share your clients. Our people walk in and build the relationships. Their staff send you referrals, and our portal walks you through it all.</p>
+      <a class="proof-row" href="#dashboard">
+        <span class="faces"><picture><source type="image/webp" srcset="/assets/img/driver-marcus.webp"><img src="/assets/img/driver-marcus.jpg" alt="" width="40" height="40" decoding="async"></picture><picture><source type="image/webp" srcset="/assets/img/driver-elena.webp"><img src="/assets/img/driver-elena.jpg" alt="" width="40" height="40" decoding="async"></picture><picture><source type="image/webp" srcset="/assets/img/driver-omar.webp"><img src="/assets/img/driver-omar.jpg" alt="" width="40" height="40" decoding="async"></picture><picture><source type="image/webp" srcset="/assets/img/driver-tasha.webp"><img src="/assets/img/driver-tasha.jpg" alt="" width="40" height="40" decoding="async"></picture></span>
+        <p><b>Marcus, Elena, Omar and Tasha</b><br> drove 5 routes for one clinic</p>
+        <span class="stats"><span><span class="stat-n">207</span> staff reached</span><span class="rose"><span class="stat-n">64</span> sign-ups</span><span class="rose"><span class="stat-n">37</span> booked</span></span>
+      </a>
     </div>
   </div>
+  <p class="orb-hint" id="hint" aria-hidden="true">Hover the dots to see your network</p>
 </section>
 
 <!-- ===== a. In person: what every visit looks like ===== -->
@@ -150,7 +148,6 @@
       </li>
     </ol>
     <div class="owc-dash-foot reveal">
-      <p><svg aria-hidden="true"><use href="#i-doc"/></svg><span>After every field day you also get a written visit log within 5 business days.</span></p>
       <a class="btn btn-ghost" href="https://www.ournetworkportal.com">Client Portal</a>
     </div>
   </div>
@@ -190,17 +187,6 @@
   </div>
 </section>
 
-<!-- ===== f. Add-on: a private patient dinner ===== -->
-<section class="section owc-slim" aria-labelledby="dinner-h" id="dinner">
-  <div class="wrap">
-    <a class="owc-addon reveal" href="/patient-network">
-      <svg aria-hidden="true"><use href="#i-dinner"/></svg>
-      <div class="owc-addon-copy"><span class="owc-addon-k">Add-on</span><h2 class="owc-addon-h" id="dinner-h">A private patient dinner.</h2><span class="owc-addon-p">Quoted per event.</span></div>
-      <span class="pg-step-go" aria-hidden="true">See the dinner<svg><use href="#i-arrow"/></svg></span>
-    </a>
-  </div>
-</section>
-
 <!-- ===== g. Final call to action ===== -->
 <section class="section bg-ink owc-final" aria-labelledby="final-h" id="book">
   <div class="wrap cta-inner reveal">
@@ -224,5 +210,6 @@
 
 <script src="/assets/site-config.js" defer></script>
 <script src="/assets/site.js" defer></script>
+<script src="/assets/home-orb.js" defer></script>
 </body>
 </html>

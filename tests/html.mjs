@@ -7,7 +7,7 @@ export const read = (p) => readFileSync(new URL(p, ROOT), 'utf8');
 
 /* Every page of the site, with its clean URL and its item in the main menu (null: not in the menu).
    October 23, 2026: Our Wellness Network. The flyer network folded into the referral routes
-   (/flyer-network 301s to /referral-network); the dinner page stays, reached from the home add-on card.
+   (/flyer-network 301s to /referral-network); the dinner page stays, reached from the pricing page only (October 24, 2026).
    October 24, 2026: the Growth team page joins the menu, second, after Home. Later that day it became Boots on the ground. */
 export const PAGES = [
   { file: 'index.html', url: '/', nav: 'Home' },
