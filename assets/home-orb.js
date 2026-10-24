@@ -7,10 +7,8 @@
   if (!canvas) return;
   const hero = canvas.closest('.hero-orb');
   const ctx = canvas.getContext('2d');
-  const hint = document.getElementById('hint');
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const touch = matchMedia('(hover: none)').matches;
-  if (touch) hint.textContent = 'Tap the dots to replay';
   // Off-screen, the orb stops drawing.
   let onScreen = true;
   new IntersectionObserver(([e]) => { onScreen = e.isIntersecting; }).observe(canvas);
@@ -74,7 +72,7 @@
   const hit = (a, b) => a[0] < b[2] && a[2] > b[0] && a[1] < b[3] && a[3] > b[1];
   function layout() {
     const c = canvas.getBoundingClientRect(), pad = 14;
-    const taken = [...hero.querySelectorAll('h1, .lede, .actions, .proof-row, .eyebrow, .orb-hint:not(.gone)')].map(el => {
+    const taken = [...hero.querySelectorAll('h1, .lede, .actions, .proof-row, .eyebrow')].map(el => {
       const r = el.getBoundingClientRect();
       return [r.left - c.left - pad, r.top - c.top - pad, r.right - c.left + pad, r.bottom - c.top + pad];
     });
@@ -120,7 +118,7 @@
     if (stuck && !v) return;                 // once seen, the network stays
     if (v && !target) openedAt = performance.now();
     target = v;
-    if (v) { hint.classList.add('gone'); stuck = true; try { sessionStorage.setItem(KEY, '1'); } catch (e) {} }
+    if (v) { stuck = true; try { sessionStorage.setItem(KEY, '1'); } catch (e) {} }
   }
 
   function pill(x, y, text, strong) {
@@ -225,8 +223,14 @@
   addEventListener('resize', resize);
   resize();
   // Phones and reduced motion: show the network on its own; desktop waits for hover.
-  if (stuck) { target = 1; open = 1; openedAt = performance.now() - 60000; hint.classList.add('gone'); }
-  else if (touch || reduce) setTimeout(() => setOpen(1), reduce ? 0 : 1800);
+  // The network builds on its own: shown complete if it was already built this visit or motion is
+  // reduced; otherwise it starts building half a second after the hero is first on screen. Tapping
+  // the orb on a phone replays it.
+  if (stuck || reduce) { target = 1; open = 1; openedAt = performance.now() - 60000; }
+  else {
+    const go = new IntersectionObserver(([e]) => { if (e.isIntersecting) { go.disconnect(); setTimeout(() => setOpen(1), 500); } });
+    go.observe(canvas);
+  }
   requestAnimationFrame(frame);
   document.fonts && document.fonts.ready.then(() => { readColors(); layout(); });
 })();

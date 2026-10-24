@@ -35,7 +35,9 @@ describe('home: order and hero', () => {
     assert.ok(attr(tags(hero, 'canvas')[0], 'aria-label'));
     assert.match(html, /<script src="\/assets\/home-orb\.js" defer><\/script>/);
     const js = read('assets/home-orb.js');
-    assert.match(js, /querySelectorAll\('h1, \.lede, \.actions, \.proof-row, \.eyebrow, \.orb-hint:not\(\.gone\)'\)/);
+    assert.match(js, /querySelectorAll\('h1, \.lede, \.actions, \.proof-row, \.eyebrow'\)/);
+    assert.match(js, /new IntersectionObserver\(\(\[e\]\) => \{ if \(e\.isIntersecting\) \{ go\.disconnect\(\); setTimeout\(\(\) => setOpen\(1\), 500\)/, 'the network builds on its own, no hover needed');
+    assert.doesNotMatch(html, /orb-hint|Hover the dots/, 'no hover hint');
     assert.match(js, /prefers-reduced-motion: reduce/);
     assert.match(js, /sessionStorage/, 'once opened, the network stays open for the visit');
   });
