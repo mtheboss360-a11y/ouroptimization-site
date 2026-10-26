@@ -140,7 +140,8 @@
     open += (target - open) * (reduce ? 1 : Math.min(1, dt * 0.004));
     ctx.clearRect(0, 0, W, H);
 
-    // Dots: the sphere recedes and dims a little as the network opens.
+    // Dots: strongest at the orb's outer edge, fading off toward its centre, so the rim reads clearly
+    // and the network inside stays clean. They dim a little as the network opens.
     const cr = Math.cos(rot), sr = Math.sin(rot), tilt = -0.32, ct = Math.cos(tilt), st = Math.sin(tilt);
     ctx.fillStyle = colors.dot;
     for (const [x0, y0, z0, k] of pts) {
@@ -149,7 +150,8 @@
       const depth = (z2 + 1) / 2;
       const px = cx + x1 * R, py = cy + y2 * R;
       if (px < -4 || py < -4 || px > W + 4 || py > H + 4) continue;
-      ctx.globalAlpha = (0.12 + 0.6 * depth * k) * (1 - 0.45 * open);
+      const e = Math.max(0, Math.min(1, (Math.hypot(x1, y2) - 0.3) / 0.65)), edge = e * e * (3 - 2 * e);
+      ctx.globalAlpha = (0.03 + 0.97 * edge) * (0.6 + 0.4 * depth) * (0.5 + 0.5 * k) * (1 - 0.15 * open);
       ctx.beginPath(); ctx.arc(px, py, DOT, 0, 6.283); ctx.fill();
     }
     ctx.globalAlpha = 1;
