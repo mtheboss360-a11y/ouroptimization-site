@@ -19,14 +19,15 @@ describe('home: order and hero', () => {
     assert.doesNotMatch(text(main), /\$\d/, 'no prices on the home page (pricing is its own page)');
     assert.ok(main.indexOf('hero-orb') < main.indexOf('id="in-person"'), 'the hero comes first');
   });
-  test('the approved orb hero: headline, line and Devon\'s gym, with no buttons', () => {
+  test('the approved orb hero: headline and line, with no buttons and no example card', () => {
     const hero = /<section class="hero-orb"[\s\S]*?<\/section>/.exec(main)[0];
     assert.equal(text(/<h1 id="hero-h">([\s\S]*?)<\/h1>/.exec(hero)[1]), 'Your in-person sales team out in your community.');
     assert.equal(text(/<p class="lede">([\s\S]*?)<\/p>/.exec(hero)[1]),
       'Our software finds the businesses that share your clients.');
-    assert.deepEqual(links(hero).map((l) => l.href), ['#dashboard'], 'only the drivers strip, which jumps to the portal');
+    assert.deepEqual(links(hero), [], 'no links: the Devon\'s gym card came off on October 26, 2026');
     assert.doesNotMatch(hero, /class="btn/, 'no buttons');
-    assert.match(text(hero), /Devon.s gym sends you 30 clients through referrals\. Monthly visits with baked treats, and a tap-to-schedule card for every trainer\./, 'the owner\'s wording');
+    assert.doesNotMatch(text(hero), /Devon|30 clients|tap-to-schedule/, 'the owner took the card down');
+    assert.doesNotMatch(hero, /proof-row|proof-one/);
     assert.doesNotMatch(text(hero), /Marcus/);
     assert.doesNotMatch(text(hero), /staff reached|sign-ups|booked/);
   });
