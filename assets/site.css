@@ -1336,7 +1336,9 @@ table{font-variant-numeric:tabular-nums}
 .faces{display:flex}
 .faces img{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid #fff;margin-left:-10px}
 .faces img:first-child{margin-left:0}
-@media (max-width:760px){.hero-wave .wrap{padding-block:28px 540px}}
+/* the room under the words on phones is for the wave, which needs JavaScript; without it the hero is just the words */
+@media (max-width:760px){.hero-wave .wrap{padding-block:28px 48px}.js .hero-wave .wrap{padding-bottom:540px}}
+html:not(.js) .hero-wave{min-height:0}
 
 /* How it works, matching: the orb, whole, building the network when it scrolls into view */
 .hiw-orb{--phthalo:#123F31;--phthalo-lit:#1F6A52;--rose:var(--gold);margin:0;width:100%;max-width:560px;justify-self:center}

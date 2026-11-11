@@ -9,9 +9,17 @@
   if (!canvas) return;
   const hero = canvas.closest('.hero-wave');
   const ctx = canvas.getContext('2d');
+  if (!ctx.roundRect) {                              // Safari before 16
+    ctx.roundRect = function (x, y, w, h, r) {
+      r = Math.max(0, Math.min(r, w / 2, h / 2));
+      this.moveTo(x + r, y); this.arcTo(x + w, y, x + w, y + h, r); this.arcTo(x + w, y + h, x, y + h, r);
+      this.arcTo(x, y + h, x, y, r); this.arcTo(x, y, x + w, y, r); this.closePath();
+    };
+  }
   const still = matchMedia('(prefers-reduced-motion: reduce)');
+  let calm = still.matches;                          // reduced motion: one still frame, redrawn only when needed
   let onScreen = true;
-  new IntersectionObserver(([e]) => { onScreen = e.isIntersecting; }).observe(canvas);
+  new IntersectionObserver(([e]) => { onScreen = e.isIntersecting; kick(); }).observe(canvas);
 
   let W = 0, H = 0, dpr = 1, narrow = false, colors = {};
   const readColors = () => {
@@ -140,14 +148,16 @@
     const rx = Math.max(170, Math.min(W * 0.2, 290)), ry = rx * 0.62;
     for (const p of partners) {
       const a = p.ang * Math.PI / 180;
-      place(p, c0[2] + Math.cos(a) * rx, c0[3] + Math.sin(a) * ry, false, rx * 1.6);
+      const tx = c0[2] + Math.cos(a) * rx, ty = c0[3] + Math.sin(a) * ry;
+      place(p, tx, ty, false, rx * 1.6) || place(p, tx, ty, false, Math.max(W, H));
     }
   }
 
-  function resize() {
-    const rect = canvas.getBoundingClientRect();
-    dpr = Math.min(devicePixelRatio || 1, 2);
-    W = rect.width; H = rect.height;
+  function resize(force) {
+    const rect = canvas.getBoundingClientRect(), d = Math.min(devicePixelRatio || 1, 2);
+    if (!force && rect.width === W && rect.height === H && d === dpr) return;
+    dpr = d; W = rect.width; H = rect.height;
+    if (!W || !H) return;
     canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     narrow = W < 760;
@@ -159,30 +169,47 @@
     grid = new Float32Array(COLS * ROWS * 3);       // screen x, screen y, 1 if in front of the camera
     readColors();
     layout();
-    if (still.matches) draw(performance.now());
+    buildMask();
+    draw(performance.now());
   }
 
-  // Soften the wave where the words are, at the far edge and where the hero meets the next section.
-  function fade() {
-    ctx.globalCompositeOperation = 'destination-out';
+  // Soften the wave where the words are (fully clear right behind them, so the headline keeps its contrast),
+  // at the far edge and where the hero meets the next section. Drawn once per size into a mask.
+  const mask = document.createElement('canvas'), mctx = mask.getContext('2d');
+  if (!mctx.roundRect) mctx.roundRect = ctx.roundRect;
+  function buildMask() {
+    mask.width = canvas.width; mask.height = canvas.height;
+    mctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    mctx.clearRect(0, 0, W, H);
+    mctx.fillStyle = '#000';
     if (textBox && isFinite(textBox[0])) {
-      for (let i = 0; i < 12; i++) {
-        const g = i * 12;
-        ctx.globalAlpha = 0.16;
-        ctx.beginPath();
-        ctx.roundRect(textBox[0] - g, textBox[1] - g, textBox[2] - textBox[0] + 2 * g, textBox[3] - textBox[1] + 2 * g, 24 + g);
-        ctx.fill();
-      }
+      // a soft oval around the words (no straight edges against the wave), and fully clear right behind them
+      const [x0, y0, x1, y1] = textBox, cx = (x0 + x1) / 2, cy = (y0 + y1) / 2;
+      const rx = (x1 - x0) / 2 * 2.0, ry = (y1 - y0) / 2 * 2.2;
+      mctx.save();
+      mctx.translate(cx, cy); mctx.scale(rx, ry);
+      const o = mctx.createRadialGradient(0, 0, 0, 0, 0, 1);
+      o.addColorStop(0, 'rgba(0,0,0,1)'); o.addColorStop(.55, 'rgba(0,0,0,1)'); o.addColorStop(1, 'rgba(0,0,0,0)');
+      mctx.fillStyle = o; mctx.beginPath(); mctx.arc(0, 0, 1, 0, 6.283); mctx.fill();
+      mctx.restore();
+      mctx.fillStyle = '#000'; mctx.globalAlpha = 1;
+      mctx.beginPath(); mctx.roundRect(x0, y0, x1 - x0, y1 - y0, 24); mctx.fill();
     }
-    ctx.globalAlpha = 1;
+    mctx.globalAlpha = 1;
     const top = narrow && textBox ? Math.min(H, textBox[3] + 110) : H * 0.42;
-    let g = ctx.createLinearGradient(0, 0, 0, top);
+    let g = mctx.createLinearGradient(0, 0, 0, top);
     g.addColorStop(0, 'rgba(0,0,0,1)'); g.addColorStop(.55, 'rgba(0,0,0,.6)'); g.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.fillStyle = g; ctx.fillRect(0, 0, W, top);
-    g = ctx.createLinearGradient(0, H * 0.78, 0, H);
+    mctx.fillStyle = g; mctx.fillRect(0, 0, W, top);
+    g = mctx.createLinearGradient(0, H * 0.78, 0, H);
     g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,1)');
-    ctx.fillStyle = g; ctx.fillRect(0, H * 0.78, W, H * 0.22);
-    ctx.globalCompositeOperation = 'source-over';
+    mctx.fillStyle = g; mctx.fillRect(0, H * 0.78, W, H * 0.22);
+  }
+  function fade() {
+    ctx.save();
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.drawImage(mask, 0, 0);
+    ctx.restore();
   }
 
   // The network builds once per visit: your clinic first, then a dashed line goes out to each partner
@@ -201,8 +228,9 @@
     return project(n.gx, height(n.gx, n.gz, t) * ride, n.gz, out);
   }
   function draw(now) {
-    const t = still.matches ? 2.2 : now / 1000 * 1.2;   // the wave's own clock
-    const since = (still.matches || built) ? 99 : (started ? (now - startAt) / 1000 : -1);
+    if (!W || !H) return;
+    const t = calm ? 2.2 : now / 1000 * 1.2;          // the wave's own clock
+    const since = (calm || built) ? 99 : (started ? (now - startAt) / 1000 : -1);
     ctx.clearRect(0, 0, W, H);
 
     // the wave: one path for every line, then the points
@@ -224,17 +252,24 @@
       }
     }
     for (let c = 0; c < COLS; c++) {
-      let pen = false;
+      let pen = false, py = -Infinity;
       for (let r = 0; r < ROWS; r++) {
         const i = (r * COLS + c) * 3;
         if (!grid[i + 2]) { pen = false; continue; }
+        if (grid[i + 1] < py) continue;               // hidden behind the crest in front of it
+        py = grid[i + 1];
         if (pen) ctx.lineTo(grid[i], grid[i + 1]); else ctx.moveTo(grid[i], grid[i + 1]);
         pen = true;
       }
     }
     ctx.stroke();
     ctx.fillStyle = colors.dot; ctx.globalAlpha = .6;
-    for (let i = 0; i < grid.length; i += 3) if (grid[i + 2]) ctx.fillRect(grid[i] - .9, grid[i + 1] - .9, 1.8, 1.8);
+    ctx.beginPath();
+    for (let i = 0; i < grid.length; i += 3) {
+      const x = grid[i], y = grid[i + 1];
+      if (grid[i + 2] && x > -2 && x < W + 2 && y > -2 && y < H + 2) ctx.rect(x - .9, y - .9, 1.8, 1.8);
+    }
+    ctx.fill();
     ctx.globalAlpha = 1;
     fade();
 
@@ -243,43 +278,49 @@
     const q = [0, 0];
     if (!nodeAt(clinic, t, q)) return;
     const shown = partners.filter((p) => !p.hidden);
-    const pos = [0, 0];
+    const at = shown.map((p) => { const o = [0, 0]; return nodeAt(p, t, o) ? o : null; });
+    // the dashed lines out from your clinic: marching slowly, breathing in and out while they wait
+    ctx.setLineDash([5, 6]); ctx.lineDashOffset = calm ? 0 : -t * 10;
+    ctx.strokeStyle = colors.lit; ctx.lineWidth = 1.5;
     shown.forEach((p, i) => {
-      if (!nodeAt(p, t, pos)) return;
-      const begin = LEAD + i * BEAT, d = ease(clamp((since - begin) / DRAW));
+      const pos = at[i]; if (!pos) return;
+      const d = ease(clamp((since - LEAD - i * BEAT) / DRAW));
       if (d <= 0) return;
-      // the dashed line out from your clinic: marching slowly, breathing in and out while it waits
-      const tx = q[0] + (pos[0] - q[0]) * d, ty = q[1] + (pos[1] - q[1]) * d;
-      ctx.setLineDash([5, 6]); ctx.lineDashOffset = still.matches ? 0 : -t * 10;
-      ctx.strokeStyle = colors.lit; ctx.lineWidth = 1.5;
-      ctx.globalAlpha = 0.45 + 0.25 * Math.sin(t * 2 + i * 1.3);
-      ctx.beginPath(); ctx.moveTo(q[0], q[1]); ctx.lineTo(tx, ty); ctx.stroke();
-      ctx.setLineDash([]);
-      if (d < 1) return;
-      const pop = clamp((since - begin - DRAW) / POP);
-      ctx.globalAlpha = Math.min(1, pop * 2.2);
-      owner(pos[0], pos[1], p, Math.max(.01, back(pop)));
-      const name = ease(clamp((since - begin - DRAW - .15) / .35));
-      if (name > 0) { ctx.globalAlpha = name; tag(pos[0], pos[1] - 12 + (1 - name) * 8, p.label, false); }
+      ctx.globalAlpha = calm ? 0.6 : 0.45 + 0.25 * Math.sin(t * 2 + i * 1.3);
+      ctx.beginPath(); ctx.moveTo(q[0], q[1]); ctx.lineTo(q[0] + (pos[0] - q[0]) * d, q[1] + (pos[1] - q[1]) * d); ctx.stroke();
     });
+    ctx.setLineDash([]);
+    // your clinic
     const c = clamp(since / .5);
     ctx.globalAlpha = 1; ctx.fillStyle = colors.rose;
     ctx.beginPath(); ctx.arc(q[0], q[1], 11 * Math.max(.01, back(c)), 0, 6.283); ctx.fill();
-    ctx.strokeStyle = colors.rose; ctx.lineWidth = 2; ctx.globalAlpha = 0.3 + 0.2 * Math.sin(t * 2.4);
+    ctx.strokeStyle = colors.rose; ctx.lineWidth = 2; ctx.globalAlpha = calm ? 0.4 : 0.3 + 0.2 * Math.sin(t * 2.4);
     ctx.beginPath(); ctx.arc(q[0], q[1], 19, 0, 6.283); ctx.stroke();
+    // the partners pop in where their lines land, then their names settle in
+    shown.forEach((p, i) => {
+      const pos = at[i]; if (!pos) return;
+      const landed = LEAD + i * BEAT + DRAW;
+      if (since < landed) return;
+      const pop = clamp((since - landed) / POP);
+      ctx.globalAlpha = Math.min(1, pop * 2.2);
+      owner(pos[0], pos[1], p, Math.max(.01, back(pop)));
+      const name = ease(clamp((since - landed - .15) / .35));
+      if (name > 0) { ctx.globalAlpha = name; tag(pos[0], pos[1] - 12 + (1 - name) * 8, p.label, false); }
+    });
     const label = ease(clamp((since - .25) / .4));
     if (label > 0) { ctx.globalAlpha = label; tag(q[0], q[1] - 6 + (1 - label) * 6, clinic.label, true); }
     ctx.globalAlpha = 1;
   }
 
-  function frame(now) {
-    if (onScreen && !still.matches) draw(now);
-    requestAnimationFrame(frame);
-  }
+  let raf = 0;
+  function kick() { if (!raf && onScreen && !calm && W) raf = requestAnimationFrame(frame); }
+  function frame(now) { raf = 0; draw(now); kick(); }
 
-  addEventListener('resize', resize);
-  still.addEventListener && still.addEventListener('change', () => draw(performance.now()));
-  resize();
+  addEventListener('resize', () => resize());
+  if (window.ResizeObserver) new ResizeObserver(() => resize()).observe(canvas);   // also a late font swap or zoom
+  const onStill = (e) => { calm = e.matches; draw(performance.now()); kick(); };
+  if (still.addEventListener) still.addEventListener('change', onStill); else if (still.addListener) still.addListener(onStill);
+  resize(true);
   // The network starts building half a second after the hero is first on screen; it is shown
   // complete if it was already built this visit, or with reduced motion.
   const go = new IntersectionObserver(([e]) => {
@@ -288,9 +329,11 @@
     setTimeout(() => {
       started = true; startAt = performance.now();
       try { sessionStorage.setItem(KEY, '1'); } catch (e) {}
+      kick();
     }, built ? 0 : 500);
   });
   go.observe(canvas);
-  requestAnimationFrame(frame);
-  document.fonts && document.fonts.ready.then(() => { readColors(); layout(); if (still.matches) draw(performance.now()); });
+  kick();
+  // text metrics change once the headline face arrives: lay the network out again
+  document.fonts && document.fonts.ready.then(() => resize(true));
 })();
