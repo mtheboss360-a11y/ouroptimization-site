@@ -1320,24 +1320,22 @@ table{font-variant-numeric:tabular-nums}
 @media (max-width:520px){.own-two{grid-template-columns:minmax(0,1fr)}}
 .own-frame-orb{max-width:520px;justify-self:center;width:100%}
 
-/* The approved orb hero (October 24, 2026), ported from the in-person sales team preview. */
-/* ---- Hero: the orb ---- */
-.hero-orb{--phthalo:#123F31;--phthalo-lit:#1F6A52;--chip:#FFFFFF;--rule:var(--line);--bg:var(--ground);--rose:var(--gold);
+/* ---- Hero: the wave (November 11, 2026), after the owner's Drift reference: points and fine lines rolling under the words,
+   the wellness partners riding it, their connections pending. Drawn by home-wave.js. ---- */
+.hero-wave{--phthalo:#123F31;--phthalo-lit:#1F6A52;--wave-line:#A9BFB4;--chip:#FFFFFF;--rule:var(--line);--bg:var(--ground);--rose:var(--gold);
   position:relative;isolation:isolate;overflow:hidden;min-height:clamp(640px,86vh,860px)}
-.hero-orb canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;touch-action:manipulation}
-.hero-orb .wrap{position:relative;z-index:2;pointer-events:none;padding-block:clamp(40px,8vh,104px) 48px}
-.hero-orb .wrap>*{pointer-events:auto}
-.hero-orb .hero-copy{max-width:660px}
-.hero-orb h1{font-family:var(--hero);font-weight:500;font-size:clamp(2.6rem,1.5rem + 4.6vw,4.9rem);line-height:1.03;letter-spacing:-.015em}
-.hero-orb h1 em{display:block;color:var(--gold-lg)}
-.hero-orb .lede{margin-top:22px;max-width:34em;font-size:clamp(1.04rem,.98rem + .3vw,1.2rem);color:var(--ink-2)}
-.hero-orb .actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
-.orb-hint{position:absolute;z-index:2;right:max(20px,env(safe-area-inset-right,0px));bottom:18px;font:600 .72rem/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--ink);background:#fff;padding:8px 12px;border-radius:999px;border:1px solid var(--line);transition:opacity .4s}
-.orb-hint.gone{opacity:0}
+.hero-wave canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;touch-action:manipulation}
+.hero-wave .wrap{position:relative;z-index:2;pointer-events:none;padding-block:clamp(40px,8vh,104px) 48px}
+.hero-wave .wrap>*{pointer-events:auto}
+.hero-wave .hero-copy{max-width:660px}
+.hero-wave h1{font-family:var(--hero);font-weight:500;font-size:clamp(2.6rem,1.5rem + 4.6vw,4.9rem);line-height:1.03;letter-spacing:-.015em}
+.hero-wave h1 em{display:block;color:var(--gold-lg)}
+.hero-wave .lede{margin-top:22px;max-width:34em;font-size:clamp(1.04rem,.98rem + .3vw,1.2rem);color:var(--ink-2)}
+.hero-wave .actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
 .faces{display:flex}
 .faces img{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid #fff;margin-left:-10px}
 .faces img:first-child{margin-left:0}
-@media (max-width:760px){.hero-orb .wrap{padding-block:28px 380px}}
+@media (max-width:760px){.hero-wave .wrap{padding-block:28px 540px}}
 
 /* How it works, matching: the orb, whole, building the network when it scrolls into view */
 .hiw-orb{--phthalo:#123F31;--phthalo-lit:#1F6A52;--rose:var(--gold);margin:0;width:100%;max-width:560px;justify-self:center}
