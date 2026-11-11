@@ -71,7 +71,7 @@
   }
 
   // Name tags.
-  const FONT = '600 12px Inter, -apple-system, sans-serif', BOLD = '700 13px Inter, -apple-system, sans-serif';
+  const FONT = '600 12px -apple-system, BlinkMacSystemFont, Roboto, Inter, sans-serif', BOLD = '700 13px -apple-system, BlinkMacSystemFont, Roboto, Inter, sans-serif';
   function tagSize(label, strong) {
     ctx.font = strong ? BOLD : FONT;
     return [ctx.measureText(label).width + 22, strong ? 30 : 26];
@@ -151,7 +151,7 @@
     canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     narrow = W < 760;
-    Z0 = narrow ? 0.5 : -5;
+    Z0 = narrow ? -0.5 : -5;
     ride = narrow ? 0.3 : 0.4;
     COLS = narrow ? 36 : 70; ROWS = Math.round((Z1 - Z0) / S) + 1;
     F = (H / 2) / Math.tan(27.5 * Math.PI / 180);
@@ -175,7 +175,7 @@
       }
     }
     ctx.globalAlpha = 1;
-    const top = narrow && textBox ? Math.min(H, textBox[3] + 200) : H * 0.42;
+    const top = narrow && textBox ? Math.min(H, textBox[3] + 110) : H * 0.42;
     let g = ctx.createLinearGradient(0, 0, 0, top);
     g.addColorStop(0, 'rgba(0,0,0,1)'); g.addColorStop(.55, 'rgba(0,0,0,.6)'); g.addColorStop(1, 'rgba(0,0,0,0)');
     ctx.fillStyle = g; ctx.fillRect(0, 0, W, top);
