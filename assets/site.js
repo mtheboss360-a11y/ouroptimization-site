@@ -182,6 +182,11 @@
      own side rail. Arrow keys, Home and End move between tabs. Without this script every screen shows, one under the other. */
   document.querySelectorAll('[data-ptour]').forEach(function (tour) {
     var tabs = Array.prototype.slice.call(tour.querySelectorAll('[role="tab"]'));
+    /* The screens are plain figures until the tabs work; only then are they tab panels. */
+    tabs.forEach(function (t) {
+      var panel = document.getElementById(t.getAttribute('aria-controls'));
+      if (panel) { panel.setAttribute('role', 'tabpanel'); panel.setAttribute('aria-labelledby', t.id); }
+    });
     var show = function (tab, focus) {
       tabs.forEach(function (t) {
         var on = t === tab;

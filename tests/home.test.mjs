@@ -198,9 +198,8 @@ describe('the portal tour (home, /boots-on-the-ground, /referral-network)', () =
       const panels = tags(s, 'figure');
       assert.equal(panels.length, 4);
       panels.forEach((f, i) => {
-        assert.equal(attr(f, 'role'), 'tabpanel');
+        assert.ok(!hasAttr(f, 'role') && !hasAttr(f, 'aria-labelledby'), 'plain figures until site.js makes them tab panels');
         assert.equal(attr(f, 'id'), `${prefix}-${SCREENS[i]}`);
-        assert.equal(attr(f, 'aria-labelledby'), `${prefix}-tab-${SCREENS[i]}`);
         assert.equal(hasAttr(f, 'hidden'), i !== 0, 'only the first screen shows before a tab is chosen');
       });
     });
@@ -220,6 +219,7 @@ describe('the portal tour (home, /boots-on-the-ground, /referral-network)', () =
   test('site.js drives the tabs (click, arrow keys, Home, End) and every screen shows without it', () => {
     const js = read('assets/site.js');
     assert.match(js, /querySelectorAll\('\[data-ptour\]'\)/);
+    assert.match(js, /panel\.setAttribute\('role', 'tabpanel'\); panel\.setAttribute\('aria-labelledby', t\.id\)/, 'the panels become tab panels only when the tabs work');
     for (const k of ['ArrowRight', 'ArrowLeft', 'Home', 'End']) assert.ok(js.includes(k), k);
     assert.match(read('assets/site.css'), /html:not\(\.js\) \.ptour-panel\[hidden\]\{display:block\}/);
   });
