@@ -57,7 +57,7 @@
     ctx.restore();
   }
   function pill(x, y, text, strong) {
-    ctx.font = `${strong ? 700 : 600} ${strong ? 13 : 12}px Inter, -apple-system, sans-serif`;
+    ctx.font = `${strong ? 700 : 600} ${strong ? 13 : 12}px -apple-system, BlinkMacSystemFont, Roboto, Inter, sans-serif`;
     const w = ctx.measureText(text).width + 22, h = strong ? 30 : 26;
     const px = Math.max(6, Math.min(W - w - 6, x - w / 2)), py = y - h - 10;
     ctx.fillStyle = strong ? colors.ink : colors.chip; ctx.strokeStyle = strong ? colors.ink : colors.rule; ctx.lineWidth = 1;

@@ -17,10 +17,10 @@ describe('home: order and hero', () => {
     const ids = [...main.matchAll(/<section\b[^>]*\sid="([^"]+)"/g)].map((m) => m[1]);
     assert.deepEqual(ids, ['in-person', 'dashboard', 'courtesy', 'compliance', 'book']);
     assert.doesNotMatch(text(main), /\$\d/, 'no prices on the home page (pricing is its own page)');
-    assert.ok(main.indexOf('hero-orb') < main.indexOf('id="in-person"'), 'the hero comes first');
+    assert.ok(main.indexOf('hero-wave') < main.indexOf('id="in-person"'), 'the hero comes first');
   });
-  test('the approved orb hero: headline and line, with no buttons and no example card', () => {
-    const hero = /<section class="hero-orb"[\s\S]*?<\/section>/.exec(main)[0];
+  test('the hero: headline and line, with no buttons and no example card', () => {
+    const hero = /<section class="hero-wave"[\s\S]*?<\/section>/.exec(main)[0];
     assert.equal(text(/<h1 id="hero-h">([\s\S]*?)<\/h1>/.exec(hero)[1]), 'Your in-person sales team out in your community.');
     assert.equal(text(/<p class="lede">([\s\S]*?)<\/p>/.exec(hero)[1]),
       'Our software finds the businesses that share your clients.');
@@ -31,17 +31,23 @@ describe('home: order and hero', () => {
     assert.doesNotMatch(text(hero), /Marcus/);
     assert.doesNotMatch(text(hero), /staff reached|sign-ups|booked/);
   });
-  test('the orb: one canvas, drawn by home-orb.js, which keeps the network clear of the words', () => {
-    const hero = /<section class="hero-orb"[\s\S]*?<\/section>/.exec(main)[0];
+  test('the wave: one canvas drawn by home-wave.js, the wellness partners riding it, clear of the words', () => {
+    const hero = /<section class="hero-wave"[\s\S]*?<\/section>/.exec(main)[0];
     assert.equal(tags(hero, 'canvas').length, 1);
-    assert.ok(attr(tags(hero, 'canvas')[0], 'aria-label'));
-    assert.match(html, /<script src="\/assets\/home-orb\.js" defer><\/script>/);
-    const js = read('assets/home-orb.js');
-    assert.match(js, /querySelectorAll\('h1, \.lede, \.actions, \.proof-row, \.eyebrow'\)/);
-    assert.match(js, /new IntersectionObserver\(\(\[e\]\) => \{ if \(e\.isIntersecting\) \{ go\.disconnect\(\); setTimeout\(\(\) => setOpen\(1\), 500\)/, 'the network builds on its own, no hover needed');
-    assert.doesNotMatch(html, /orb-hint|Hover the dots/, 'no hover hint');
+    assert.match(attr(tags(hero, 'canvas')[0], 'aria-label'), /pending connections to a nearby gym, yoga studio, physical therapy practice, hair salon and nail salon/);
+    assert.match(html, /<script src="\/assets\/home-wave\.js" defer><\/script>/);
+    assert.ok(!existsSync(new URL('assets/home-orb.js', ROOT)), 'the dot orb is gone');
+    assert.doesNotMatch(html, /home-orb|hero-orb|id="orb"/);
+    const js = read('assets/home-wave.js');
+    assert.match(js, /querySelectorAll\('h1, \.lede'\)/, 'the people keep clear of the words');
+    for (const b of ['Gym', 'Yoga studio', 'Physical therapy', 'Hair salon', 'Nail salon']) assert.match(js, new RegExp(`label: '[A-Z][a-z]+ · ${b}'`), b);
+    assert.doesNotMatch(js, /Boutique/, 'wellness businesses only');
+    assert.doesNotMatch(js, /'Pending'/, 'no Pending labels: the dashed lines say it (the owner\'s call)');
+    assert.match(js, /setLineDash\(\[5, 6\]\)/, 'dashed, pending connections');
+    assert.match(js, /height\(n\.gx, n\.gz, t\) \* ride/, 'the people ride the wave');
     assert.match(js, /prefers-reduced-motion: reduce/);
-    assert.match(js, /sessionStorage/, 'once opened, the network stays open for the visit');
+    assert.match(js, /sessionStorage/, 'the network builds once per visit');
+    assert.doesNotMatch(js, /https?:\/\/|THREE|import /, 'no libraries and no outside requests');
   });
 });
 

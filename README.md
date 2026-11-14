@@ -62,7 +62,7 @@ The home hero shows a still (`assets/img/hero-van-{480,768,1080,1344}.{avif,webp
 - Growth team illustration: `assets/img/team-visit-{480,768,1080}.{avif,webp}`, clay figurines made with Higgsfield in the hero's style (not real people).
 - Portal screenshots: `assets/img/portal-*`, from the portal's sample account (a fictional clinic, 555 phone numbers, `.invalid` emails, made-up partner names). On the home page they carry no label (the owner's call); their alt text says they are the sample account.
 
-Fonts are self-hosted (Playfair Display and Inter, SIL Open Font License, licences in `assets/fonts/`).
+Fonts: headlines in Plus Jakarta Sans and Inter as the text fallback, both self-hosted (SIL Open Font License, licences in `assets/fonts/`). Text uses the phone's own face first: SF Pro on Apple devices, Roboto on Android. The big brands' own faces (Google Sans, SF Pro as a web font, Samsung Sharp Sans, Nike Futura, adidas) are licensed to their owners only, so they are not shipped.
 
 ## URLs and redirects (`netlify.toml`)
 
