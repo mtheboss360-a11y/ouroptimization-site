@@ -56,7 +56,7 @@ describe('home: the sections', () => {
     const s = sec('dashboard');
     assert.match(main, /<section class="section bg-ink owc-dash-band" aria-labelledby="dashboard-h" id="dashboard">/, 'on the green band');
     assert.equal(text(/<h2 id="dashboard-h">([\s\S]*?)<\/h2>/.exec(s)[1]), 'Your drivers, your routes, and every sign-up.');
-    assert.match(s, /<div class="pt-stage reveal">/, 'the same smooth pop-in as the rest of the page');
+    assert.match(s, /<div class="ptour reveal" data-ptour>/, 'the same smooth pop-in as the rest of the page');
     assert.doesNotMatch(s, /data-tilt|owc-tilt|owc-scroll-cue/, 'no tilt and no scroll cue (the owner\'s call)');
   });
   test('b. no map anywhere: no Google request, no Maps key, no map images', () => {
@@ -83,7 +83,7 @@ describe('home: the sections', () => {
     assert.match(read('assets/site.css'), /\.own-stats dd\{font-family:var\(--nums\)|\.own-stats dd\{font-family/, 'the numbers use the system face');
     assert.doesNotMatch(t, /visit log/i, 'the owner took the visit log line out');
     assert.ok(!links(s).some((l) => l.href === 'https://www.ournetworkportal.com'), 'no Client Portal box in this section');
-    for (const img of tags(s, 'img')) assert.match(attr(img, 'src'), /^\/assets\/img\/drivers-/, 'screens from the referral network portal');
+    for (const img of tags(s, 'img')) assert.match(attr(img, 'src'), /^\/assets\/img\/portal2-/, 'screens from the client portal (November 14, 2026)');
   });
   test('no results section: no "real clinics, real numbers", no texting form, no results files', () => {
     assert.doesNotMatch(html, /id="results"|Real clinics|Oakbrook Terrace|results-updates|data-results/);
@@ -176,3 +176,57 @@ describe('boots on the ground page (was the growth team page)', () => {
     for (const t of tags(hero, 'img')) { assert.match(attr(t, 'src'), /team-visit-/); assert.ok(existsSync(new URL('.' + attr(t, 'src'), ROOT)), attr(t, 'src')); }
   });
 });
+
+/* November 14, 2026: the portal tour. The portal's screens behind tabs, as in the portal's own side rail. */
+describe('the portal tour (home, /boots-on-the-ground, /referral-network)', () => {
+  const SCREENS = ['route', 'network', 'partners', 'results'];
+  for (const [file, id, prefix] of [['index.html', 'dashboard', 'pt'], ['boots-on-the-ground.html', 'tracking', 'bt'], ['referral-network.html', 'dashboard', 'hw']]) {
+    const s = byId(read(file), id);
+    test(`${file} #${id}: four tabs, each wired to its own screen; the first one showing`, () => {
+      assert.match(s, /<div class="ptour reveal" data-ptour>/);
+      assert.match(s, /<div class="ptour-tabs" role="tablist" aria-label="Screens from the client portal">/);
+      const btns = tags(s, 'button');
+      assert.equal(btns.length, 4);
+      btns.forEach((b, i) => {
+        assert.equal(attr(b, 'role'), 'tab');
+        assert.equal(attr(b, 'type'), 'button');
+        assert.equal(attr(b, 'id'), `${prefix}-tab-${SCREENS[i]}`);
+        assert.equal(attr(b, 'aria-controls'), `${prefix}-${SCREENS[i]}`);
+        assert.equal(attr(b, 'aria-selected'), i === 0 ? 'true' : 'false');
+        assert.equal(hasAttr(b, 'tabindex'), i !== 0, 'only the chosen tab is in the tab order');
+      });
+      const panels = tags(s, 'figure');
+      assert.equal(panels.length, 4);
+      panels.forEach((f, i) => {
+        assert.equal(attr(f, 'role'), 'tabpanel');
+        assert.equal(attr(f, 'id'), `${prefix}-${SCREENS[i]}`);
+        assert.equal(attr(f, 'aria-labelledby'), `${prefix}-tab-${SCREENS[i]}`);
+        assert.equal(hasAttr(f, 'hidden'), i !== 0, 'only the first screen shows before a tab is chosen');
+      });
+    });
+    test(`${file} #${id}: the phone screens on phones, the desktop screens elsewhere, every one described as the sample account`, () => {
+      const imgs = tags(s, 'img');
+      assert.equal(imgs.length, 4);
+      for (const img of imgs) {
+        assert.match(attr(img, 'src'), /^\/assets\/img\/portal2-(stops|network|partners|routes)-1280\.jpg$/);
+        assert.match(attr(img, 'alt'), /^Screenshot of the portal's sample account: /);
+        assert.equal(attr(img, 'loading'), 'lazy');
+      }
+      const phone = tags(s, 'source').filter((t) => attr(t, 'media') === '(max-width:759.98px)');
+      assert.equal(phone.length, 12, 'avif, webp and jpg for each of the four phone screens');
+      for (const t of phone) assert.match(attr(t, 'srcset'), /\/assets\/img\/portal2-phone-/);
+    });
+  }
+  test('site.js drives the tabs (click, arrow keys, Home, End) and every screen shows without it', () => {
+    const js = read('assets/site.js');
+    assert.match(js, /querySelectorAll\('\[data-ptour\]'\)/);
+    for (const k of ['ArrowRight', 'ArrowLeft', 'Home', 'End']) assert.ok(js.includes(k), k);
+    assert.match(read('assets/site.css'), /html:not\(\.js\) \.ptour-panel\[hidden\]\{display:block\}/);
+  });
+  test('the old driver screens and driver photos are gone', () => {
+    for (const f of ['index.html', 'boots-on-the-ground.html', 'referral-network.html']) assert.doesNotMatch(read(f), /drivers?-(card|next-route|orb|phone|stop|elena|marcus|omar|tasha)/, f);
+    assert.ok(!existsSync(new URL('assets/img/drivers-card-546.jpg', ROOT)));
+    assert.ok(!existsSync(new URL('assets/img/driver-marcus.jpg', ROOT)));
+  });
+});
+

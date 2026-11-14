@@ -137,31 +137,68 @@
     window.addEventListener('scroll', onScroll, { passive: true });
   }
 
-  var menuBtn = document.querySelector('.menu-btn');
+  /* The menu opens from the header's Menu button on tablets, and from the bottom tab bar's More button on phones.
+     Both control #site-nav, and both always show the same state. */
+  var menuBtns = Array.prototype.slice.call(document.querySelectorAll('[aria-controls="site-nav"]'));
   var nav = document.getElementById('site-nav');
-  if (menuBtn && nav) {
+  if (menuBtns.length && nav) {
+    var opener = null;
     var setMenu = function (open) {
-      menuBtn.setAttribute('aria-expanded', String(open));
+      menuBtns.forEach(function (b) { b.setAttribute('aria-expanded', String(open)); });
       root.classList.toggle('menu-open', open);
     };
-    menuBtn.addEventListener('click', function () {
-      setMenu(menuBtn.getAttribute('aria-expanded') !== 'true');
+    var isOpen = function () { return root.classList.contains('menu-open'); };
+    menuBtns.forEach(function (b) {
+      b.addEventListener('click', function () { opener = b; setMenu(!isOpen()); });
     });
     /* Escape closes an open menu and returns focus to the button that opened it. */
     document.addEventListener('keydown', function (e) {
-      if (e.key !== 'Escape' || menuBtn.getAttribute('aria-expanded') !== 'true') return;
+      if (e.key !== 'Escape' || !isOpen()) return;
       setMenu(false);
-      menuBtn.focus();
+      if (opener) opener.focus();
     });
-    /* Tabbing out of the header closes the menu, so focus is never hidden under the panel. */
+    /* Tabbing out of the header (which holds the tab bar) closes the menu, so focus is never hidden under the panel. */
     if (header) {
       header.addEventListener('focusout', function (e) {
-        if (menuBtn.getAttribute('aria-expanded') === 'true' && !header.contains(e.relatedTarget)) setMenu(false);
+        if (isOpen() && e.relatedTarget && !header.contains(e.relatedTarget)) setMenu(false);
       });
     }
+    /* A tap anywhere outside the menu and its buttons closes it. */
+    document.addEventListener('click', function (e) {
+      if (isOpen() && !nav.contains(e.target) && !menuBtns.some(function (b) { return b.contains(e.target); })) setMenu(false);
+    });
     /* In-page links (e.g. #anchors) should not leave the menu open over the target. */
     nav.addEventListener('click', function (e) { if (e.target.closest('a')) setMenu(false); });
   }
+
+  /* The portal tour (home #dashboard, /boots-on-the-ground #tracking): tabs for the portal's screens, as in the portal's
+     own side rail. Arrow keys, Home and End move between tabs. Without this script every screen shows, one under the other. */
+  document.querySelectorAll('[data-ptour]').forEach(function (tour) {
+    var tabs = Array.prototype.slice.call(tour.querySelectorAll('[role="tab"]'));
+    var show = function (tab, focus) {
+      tabs.forEach(function (t) {
+        var on = t === tab;
+        t.setAttribute('aria-selected', String(on));
+        t.tabIndex = on ? 0 : -1;
+        var panel = document.getElementById(t.getAttribute('aria-controls'));
+        if (panel) panel.hidden = !on;
+      });
+      if (focus) tab.focus();
+      /* keep the chosen pill in view when the tabs scroll sideways on a phone */
+      if (tab.scrollIntoView && tab.parentNode.scrollWidth > tab.parentNode.clientWidth) {
+        try { tab.scrollIntoView({ block: 'nearest', inline: 'nearest' }); } catch (e) { /* older browsers */ }
+      }
+    };
+    tabs.forEach(function (tab, i) {
+      tab.addEventListener('click', function () { show(tab, false); });
+      tab.addEventListener('keydown', function (e) {
+        var to = { ArrowRight: i + 1, ArrowDown: i + 1, ArrowLeft: i - 1, ArrowUp: i - 1, Home: 0, End: tabs.length - 1 }[e.key];
+        if (to === undefined) return;
+        e.preventDefault();
+        show(tabs[(to + tabs.length) % tabs.length], true);
+      });
+    });
+  });
 
   /* Gentle reveal on scroll. Content is only hidden once JS has run (.js .reveal),
      and anything the observer cannot handle is shown immediately. */
