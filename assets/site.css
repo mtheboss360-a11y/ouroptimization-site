@@ -1343,3 +1343,330 @@ html:not(.js) .hero-wave{min-height:0}
 /* How it works, matching: the orb, whole, building the network when it scrolls into view */
 .hiw-orb{--phthalo:#123F31;--phthalo-lit:#1F6A52;--rose:var(--gold);margin:0;width:100%;max-width:560px;justify-self:center}
 .hiw-orb canvas{display:block;width:100%;aspect-ratio:1;height:auto}
+
+/* =====================================================================================================
+   November 14, 2026: the portal look. The whole site re-dressed in the client portal's design language
+   (our-wellness-portal, src/calm.css): a pale green page, white hairline cards, a forest-green accent,
+   gold kept for marks and small highlights, uppercase labels, pill controls, and on phones the portal's
+   floating bottom tab bar. Everything above stays as it was; this layer re-points the tokens and
+   restyles the shared components. Remove this block to roll the look back.
+   ===================================================================================================== */
+:root{
+  /* page, surfaces and hairlines (calm.css --c-page, --c-surface, --c-surface-2/3, --c-line, --c-line-2) */
+  --ground:#EDF3EA;
+  --paper:#F6FAF4;
+  --surface:#FFFFFF;
+  --stone:#E7EFE4;
+  --slate-wash:#E7EFE4;
+  --cream:#E7EFE4;
+  --line:#D8E4D5;
+  --line-soft:#E4ECE1;
+  --line-2:#C6D5C3;
+  --field-line:#7D9182;
+  /* inks */
+  --ink:#16311F;
+  --ink-2:#36483C;
+  --ink-3:#5A6B5F;
+  /* the forest accent (primary buttons, the selected tab, the stop numbers) */
+  --accent:#1F4D3A;
+  --accent-hover:#173D2E;
+  --accent-soft:#E7F0E9;
+  --accent-line:#BCD3C2;
+  --slate-soft:#3E6B57;
+  /* gold: text-safe gold for words, bright gold for marks and hairlines only, soft gold for callouts */
+  --gold:#B8903F;
+  --gold-lg:#7F6220;
+  --gold-sm:#7F6220;
+  --gold-bright:#E0CC96;
+  --gold-line:#E0CC96;
+  --blush:#FBF7EC;
+  /* status (the portal's ACTIVE PARTNER chip) */
+  --good:#1C6B49;
+  --good-fill:#EDF6F1;
+  --good-line:#BFE0CE;
+  /* the clinic's own dot stays peony, as on the portal's map */
+  --peony:#BD7189;
+  /* depth and corners */
+  --sh-1:0 1px 2px rgba(22,49,31,.05);
+  --sh-2:0 1px 2px rgba(22,49,31,.05),0 4px 16px rgba(22,49,31,.08);
+  --sh-3:0 1px 2px rgba(22,49,31,.05),0 12px 32px rgba(22,49,31,.13);
+  --r-card:14px;
+  --r-panel:14px;
+  --focus:#17402F;
+}
+body{background:linear-gradient(180deg,#F5FAF2 0,var(--ground) 560px) no-repeat var(--ground);color:var(--ink-2)}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.skip{background:var(--accent);color:#fff}
+.hero-wave,.hiw-orb{--rose:var(--peony)}
+
+/* ---------- type: bold page titles, uppercase labels (the portal's NEXT, WHY THIS BUSINESS, TOP 5) ---------- */
+h1 em,h2 em,.hero-wave h1 em,.pg-hero h1 em,.ct-head h1 em,.svc-hero h1 em,.dn-sent h1 em,.xp-hero h1 em,.pr-hero h1 em,.dn-page h2 em,.dn-page .bg-stone h2 em{color:var(--gold-lg)}
+.eyebrow,.dn-k,.dg-k,.dn-facts dt,.journey b,.owc-addon-k,.xp-facts b,.sc-kicker,.sc-role,.scr-cap,.sc-tbl caption,.sc-sum caption{font-family:var(--sans);font-size:.72rem;font-weight:650;line-height:1.45;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.eyebrow{margin-bottom:12px}
+.rule{display:none}
+.intro,.lede{color:var(--ink-2)}
+
+/* ---------- buttons: the forest pill and the white pill with a hairline ---------- */
+.btn{min-height:48px;padding:0 24px;border-radius:999px;font:650 .95rem/1.1 var(--sans);letter-spacing:0;transition:background-color .12s cubic-bezier(.2,.7,.3,1),color .12s cubic-bezier(.2,.7,.3,1),border-color .12s cubic-bezier(.2,.7,.3,1),box-shadow .12s cubic-bezier(.2,.7,.3,1)}
+.btn-primary{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 2px 10px rgba(22,49,31,.06)}
+.btn-primary:hover{background:#2A6349;border-color:#2A6349;box-shadow:0 12px 32px rgba(22,49,31,.13)}
+.btn-ghost{background:#fff;border-color:var(--line-2);color:var(--ink);box-shadow:var(--sh-1)}
+.btn-ghost:hover{background:var(--paper);border-color:#8A9687;color:var(--ink)}
+.btn-light{background:#fff;border-color:#fff;color:var(--accent)}
+.btn-light:hover{background:var(--accent-soft);border-color:var(--accent-soft)}
+.btn-outline-light{border-color:rgba(255,255,255,.42);color:#fff}
+.btn-outline-light:hover{background:rgba(255,255,255,.1);border-color:#fff}
+
+/* ---------- header: a calm white bar with a hairline; the menu as the portal's underline tabs ---------- */
+.site-header{background:rgba(250,252,249,.9);border-bottom:1px solid var(--line)}
+.site-header.is-scrolled{border-bottom-color:var(--line);box-shadow:0 1px 0 rgba(22,49,31,.02),0 6px 20px -16px rgba(22,49,31,.35)}
+.btn-head{min-height:44px;padding:0 18px;font-size:.86rem}
+.site-nav a{color:var(--ink-2);font-weight:500}
+.site-nav a:hover{color:var(--ink)}
+.site-nav a[aria-current="page"]{color:var(--ink);font-weight:650}
+@media (min-width:1000px){
+  .site-nav{border-top-color:var(--line-soft)}
+  .site-nav ul{justify-content:flex-start;gap:0 6px}
+  .site-nav a::after{height:2px;bottom:-1px}
+  .site-nav a:hover::after{background:var(--line-2)}
+  .site-nav a[aria-current="page"]::after{background:var(--accent)}
+}
+@media (max-width:999.98px){
+  .js .menu-btn{border-color:var(--line-2);background:#fff;color:var(--ink);box-shadow:var(--sh-1)}
+  .js .site-nav{background:#fff;border-bottom-color:var(--line);box-shadow:var(--sh-3)}
+  .js .site-nav a{border-bottom-color:var(--line-soft);color:var(--ink)}
+  .js .site-nav a[aria-current="page"]{color:var(--accent);box-shadow:inset 3px 0 0 var(--gold);background:var(--accent-soft)}
+}
+
+/* ---------- phones: the portal's floating bottom tab bar (Home, Growth team, How it works, Pricing, More).
+   "More" opens the full menu as a sheet above the bar. The bar lives inside the header so focus and
+   Escape work as they did; the header gives up its blur on phones so the bar can be fixed to the screen. ---------- */
+.tabbar{display:none}
+@media (max-width:759.98px){
+  .js .site-header{-webkit-backdrop-filter:none;backdrop-filter:none;background:#FAFCF9}
+  /* keyboard focus never lands behind the bar: the browser keeps this much room at the bottom when it scrolls */
+  html.js:has(.tabbar){scroll-padding-bottom:calc(100px + env(safe-area-inset-bottom))}
+  .js .menu-btn{display:none}
+  .js .btn-head{display:inline-flex;min-height:44px;padding:0 16px;font-size:.84rem}
+  .js .site-nav .nav-cta{display:none}
+  .js .tabbar{position:fixed;z-index:60;left:max(8px,env(safe-area-inset-left));right:max(8px,env(safe-area-inset-right));bottom:max(8px,env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:2px;padding:7px 6px;border-radius:26px;background:#fff;border:1px solid var(--line-2);border-top-color:var(--line);box-shadow:0 4px 16px rgba(22,49,31,.1),0 1px 2px rgba(22,49,31,.05)}
+  .tab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:54px;padding:6px 1px 5px;border:0;border-radius:18px;background:transparent;color:var(--ink-3);font:500 .66rem/1.1 var(--sans);letter-spacing:-.005em;text-align:center;text-decoration:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background-color .22s cubic-bezier(.22,1,.36,1),color .22s cubic-bezier(.22,1,.36,1)}
+  .tab svg{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+  .tab span{display:block;max-width:100%;overflow-wrap:normal;text-wrap:balance}
+  .tab[aria-current="page"],.tab-more[aria-expanded="true"]{background:var(--accent-soft);color:var(--accent);font-weight:650}
+  :root:not(.menu-open):has(.site-nav li:nth-child(n+5):not(.nav-cta) a[aria-current="page"]) .tab-more{background:var(--accent-soft);color:var(--accent);font-weight:650}
+  .tab:active{background:var(--accent-soft)}
+  /* the full menu, as a sheet above the bar */
+  .js .site-nav{position:fixed;z-index:59;top:auto;left:max(10px,env(safe-area-inset-left));right:max(10px,env(safe-area-inset-right));bottom:calc(max(8px,env(safe-area-inset-bottom)) + 80px);max-height:calc(100dvh - 170px);padding:8px 10px;border:1px solid var(--line);border-radius:22px;background:#fff;box-shadow:0 1px 2px rgba(22,49,31,.06),0 24px 48px -18px rgba(22,49,31,.4)}
+  .js .site-nav a{min-height:50px;padding:0 12px;border-radius:12px;border-bottom:0;font-size:1rem}
+  .js .site-nav li+li a{box-shadow:0 -1px 0 var(--line-soft)}
+  .js .site-nav a[aria-current="page"]{box-shadow:none;background:var(--accent-soft);color:var(--accent)}
+  .js .site-nav li+li a[aria-current="page"],.js .site-nav li+li a[aria-current="page"]+*{box-shadow:none}
+  /* room at the bottom of every page for the bar */
+  .js body:has(.tabbar) .site-foot{padding-bottom:calc(22px + 92px + env(safe-area-inset-bottom))}
+}
+@media (max-width:759.98px) and (prefers-reduced-motion:no-preference){
+  .js.menu-open .site-nav{animation:owTabSheet .22s cubic-bezier(.2,.8,.2,1)}
+}
+@keyframes owTabSheet{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media print{.tabbar{display:none!important}}
+
+/* ---------- sections: one calm page; bands differ by a shade, never by a dark block ---------- */
+.bg-paper{background:var(--paper)}
+.bg-stone{background:var(--stone)}
+.section+.section:not(.bg-ink):not(.owc-dash-band){border-top:1px solid rgba(216,228,213,.6)}
+.hero::after,.pg-hero::after{display:none}
+.pr-hero{background:var(--ground)}
+
+/* ---------- cards: white, a hairline, a soft shadow, 14px corners ---------- */
+.cardgrid,.steps{gap:14px;background:none;border:0}
+.cardgrid>li,.steps li,.bg-paper .cardgrid>li,.bg-stone .cardgrid>li,.bg-paper .steps li{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);box-shadow:var(--sh-1)}
+.cardgrid>li>svg{box-sizing:content-box;width:22px;height:22px;padding:9px;border-radius:10px;background:var(--accent-soft);color:var(--accent);margin-bottom:18px}
+.steps .num{color:var(--gold-sm)}
+.journey>li,.bg-paper .journey>li{background:var(--surface);border-color:var(--line);box-shadow:var(--sh-1)}
+.journey>li::before{color:var(--gold-sm)}
+.target-strip,.form-aside,.dn-call-aside,.pg-glance,.pg-step-next,.dn-format,.pr-starter li,.pr-addon,.prc-plan,.prc-every,.prc-supply,.fd-supply-card,.est-sent,.dn-contact,.dn-proof,.dn-form-card,.xp-card,.rt-plan,.wd-scope,.owc-addon,.dn-steps>li,.own-two a,.owc-try,.prc-teaser,.owc-dash-foot{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-panel);box-shadow:var(--sh-1)}
+.pg-glance,.dn-format,.prc-plan,.pr-addon,.pg-step-next,.prc-supply,.wd-scope,.dn-form-card{box-shadow:var(--sh-2)}
+.pg-step-next:hover,.owc-addon:hover,.own-two a:hover{border-color:var(--line-2);background:var(--paper)}
+.pg-step-next,.owc-addon,.own-two a{transition:background-color .12s linear,border-color .12s linear}
+.pg-step-next:hover .pg-step-go svg{transform:rotate(-90deg)}
+.pg-step-next:focus-within{outline-color:var(--focus)}
+.pg-step-go svg,.dn-steps p a{color:var(--accent)}
+.dn-step-n,.own-two-n,.xp-steps>li::before{background:var(--accent);color:#fff;font-family:var(--nums,var(--sans));font-weight:600}
+.dn-steps h3 svg,.dn-format-top svg,.pr-plan-top svg,.owc-addon>svg{color:var(--slate-soft)}
+.dn-checks svg,.prc-inc svg,.dn-oncall svg,.pg-glance svg,.pr-starter svg,.wd-notes svg,.rt-addon svg,.wd-addon svg,.dn-onsite svg,.ct-area svg,.own-warm svg,.owc-attorney svg,.xp-done h2 svg,.dn-both li svg,.dn-privacy>svg,.hiw-courtesy-head>svg,.prc-teaser h3 svg,.owc-dash-foot svg{color:var(--accent)}
+.spec svg{color:var(--slate-soft)}
+.doc ul li::before,.sc-list li::before,.rt-drivers li::before,.prc-dots i{background:var(--gold)}
+.shot,.pt-frame{border:1px solid var(--line);border-radius:var(--r-panel);box-shadow:var(--sh-2)}
+.dn-onsite{background:var(--paper);border-color:var(--line)}
+
+/* the portal's NEXT callout: a white card with a forest rule down its left edge */
+.dn-privacy,.hiw-courtesy{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--accent);box-shadow:var(--sh-2)}
+.hiw-courtesy h2 em,.dn-privacy h3 em{color:var(--gold-sm)}
+.dn-both{background:var(--blush);border:1px solid var(--gold-line)}
+.dn-both ul{border-top-color:var(--gold-line)}
+.sc-box{background:var(--blush);border-left-color:var(--gold)}
+
+/* dark cards that stay: the forest accent, as on the portal's selected pill */
+.cardgrid>li.ga-cherry>svg{background:rgba(255,255,255,.12);color:var(--gold-bright)}
+.dn-price,.cardgrid>li.ga-cherry{background:linear-gradient(160deg,#245641 0%,var(--accent) 55%,#173D2E 100%);border-color:transparent;box-shadow:0 20px 44px -26px rgba(22,49,31,.7)}
+.dn-price li,.dn-price-line,.ga-cherry p{color:#DCE8DF}
+.dn-price ul,.dn-price li{border-color:rgba(255,255,255,.16)}
+
+/* ---------- chips and pills ---------- */
+.owc-tag{padding:3px 8px;border-radius:6px;background:var(--accent-soft);border:1px solid var(--accent-line);color:var(--accent);font:650 .68rem/1.5 var(--sans);letter-spacing:.07em;text-transform:uppercase}
+.owc-tag::before{display:none}
+.ex-chips li,.bg-paper .ex-chips li,.xp-cats li,.own-warm li,.wd-scope .ex-chips li{background:var(--surface);border-color:var(--line-2);color:var(--ink);box-shadow:var(--sh-1)}
+.fq-jump a,.pg-links a,.own-jump a,.sc-index a{background:var(--surface);border-color:var(--line-2);color:var(--ink);box-shadow:var(--sh-1)}
+.fq-jump a,.pg-links a,.own-jump a,.sc-index a{transition:background-color .12s linear,border-color .12s linear,color .12s linear}
+.fq-jump a:hover,.pg-links a:hover,.own-jump a:hover,.sc-index a:hover{background:var(--paper);border-color:#8A9687;color:var(--ink)}
+.sc-index-n{background:var(--accent-soft);color:var(--accent)}
+@media (min-width:1000px){
+  .sc-index a{box-shadow:none;background:transparent}
+  .sc-index a[aria-current="true"]{color:var(--accent);box-shadow:inset 3px 0 0 var(--gold);background:var(--accent-soft);padding-left:12px}
+  .sc-index a[aria-current="true"] .sc-index-n{background:var(--accent);color:#fff}
+}
+
+/* ---------- links ---------- */
+.textlink{color:var(--ink);border-bottom-color:var(--gold)}
+.textlink:hover{color:var(--accent);border-color:var(--accent)}
+.backlink:hover,.pg-crumbs a:hover,.foot-legal a:hover,.cardgrid h3 a:hover,.prc-inline:hover{color:var(--accent)}
+.pg-crumbs li+li::before{border-color:var(--gold)}
+
+/* ---------- FAQ: the questions as rows in one white card ---------- */
+.faq{padding:0 clamp(16px,2.4vw,26px);background:var(--surface);border:1px solid var(--line);border-radius:var(--r-panel);box-shadow:var(--sh-1)}
+.faq details{border-bottom-color:var(--line-soft)}
+.faq details:last-child{border-bottom:0}
+.faq summary .sign{color:var(--accent)}
+.faq summary:hover{color:var(--accent)}
+
+/* ---------- forms ---------- */
+.field input,.field select,.field textarea,.dn-call .field input,.dn-call .field select,.dn-call .field textarea{background-color:#fff;border-color:var(--field-line);border-radius:10px}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(31,77,58,.16)}
+.field :is(input,select,textarea):focus-visible{outline-color:var(--accent)}
+.checks label,.dn-radios label{background:#fff;border-color:var(--line-2);border-radius:10px}
+.checks input,.xp-choice input,.xp-check input{accent-color:var(--accent)}
+.dn-radios label:has(input:checked){border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);background:var(--accent-soft)}
+.dn-radios label:has(input:focus-visible){outline-color:var(--accent)}
+.est-sent-mark{background:var(--accent)}
+
+/* ---------- tables and documents ---------- */
+.sc-tbl thead th{background:var(--paper);font-size:.7rem;font-weight:650;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.sc-tw{border-color:var(--line);border-radius:var(--r-card)}
+.sc-sheet{border-radius:var(--r-card);border:1px solid var(--line);box-shadow:var(--sh-3)}
+.sc-fees tfoot th,.sc-fees tfoot td,.sc-fees tfoot tr{background:var(--blush)}
+
+/* ---------- footer ---------- */
+.site-foot{background:var(--paper);border-top-color:var(--line);color:var(--ink-3)}
+
+/* ---------- the green showcase band: the portal's forest, with the portal's own screens on it ---------- */
+.bg-ink,.owc-dash-band{background:radial-gradient(130% 80% at 50% 0%,#285A44 0%,#1F4D3A 48%,#183E2F 100%);color:#CFDDD3}
+.bg-ink .intro,.bg-ink p{color:#CFDDD3}
+.bg-ink .eyebrow{color:var(--gold-bright)}
+.bg-ink h2 em{color:var(--gold-bright)}
+
+/* the closing call to action and the pricing call to action: a forest card on the light page, not a full-bleed block */
+.owc-final,.pg-cta.bg-ink{background:var(--ground);color:inherit}
+.owc-final .cta-inner,.pg-cta .cta-inner{width:auto;max-width:1040px;margin-inline:max(var(--gutter),calc((100% - 1040px) / 2));padding:clamp(40px,6vw,76px) clamp(22px,5vw,64px);border-radius:28px;background:radial-gradient(120% 120% at 50% 0%,#2A5D46 0%,var(--accent) 52%,#173D2E 100%);color:#CFDDD3;box-shadow:0 30px 60px -34px rgba(22,49,31,.75)}
+.owc-final h2,.pg-cta h2{color:#fff}
+.owc-final .intro,.pg-cta .intro,.pg-cta p{color:#D5E3D9}
+.owc-final .owc-final-note{color:#BFD2C5}
+.pg-cta .wrap>.cta-inner{margin-inline:auto}
+.pg-cta .eyebrow{color:var(--gold-bright)}
+.pg-cta h2 em{color:var(--gold-bright)}
+
+/* the pricing guarantees: light, two white cards */
+.prc-guar-sec.bg-ink{background:var(--paper);color:var(--ink-2)}
+.prc-guar-sec h2{color:var(--ink)}
+.prc-guar-sec h2 em{color:var(--gold-lg)}
+.prc-guar-sec .eyebrow{color:var(--ink-3)}
+.prc-guar-sec .intro,.prc-guar-sec p{color:var(--ink-2)}
+.prc-guar>li{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-panel);box-shadow:var(--sh-2)}
+.prc-guar .dn-k{color:var(--ink-3)}
+.prc-guar-sec .prc-guar-n{color:var(--gold-lg)}
+.prc-guar h3{color:var(--ink)}
+.prc-guar-sec .prc-guar-say{color:var(--ink-2)}
+.prc-keep-row{border-top-color:var(--line)}
+.prc-guar-sec .prc-keep{color:var(--ink)}
+.prc-keep svg{color:var(--accent)}
+.prc-guar-sec .textlink{color:var(--ink);border-color:var(--gold)}
+.prc-guar-sec :focus-visible{outline-color:var(--accent)}
+
+/* ---------- the portal's metric tiles: the five route figures as white tiles, the sign-ups and bookings in gold ---------- */
+.own-stats{gap:12px;border:0;margin:clamp(40px,5vw,64px) 0 0}
+.own-stats div,.own-stats div+div,.own-stats div:nth-child(even),.own-stats div:nth-child(n+3){padding:clamp(16px,1.8vw,22px);border:1px solid var(--line);border-radius:var(--r-panel);background:var(--surface);box-shadow:0 1px 2px rgba(0,0,0,.08),0 18px 36px -22px rgba(0,0,0,.45)}
+.own-stats dd{font-size:clamp(2rem,1.5rem + 1.6vw,2.8rem);font-weight:650;color:var(--ink)}
+.own-stats dt{font-size:.88rem;font-weight:600;line-height:1.3;color:var(--ink)}
+.own-stats div:nth-child(4) dd,.own-stats div:nth-child(5) dd{color:var(--gold-lg)}
+@media (max-width:860px){.own-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.own-stats div:nth-child(5){grid-column:1/-1}}
+
+/* ---------- the portal tour: the portal's own side rail on the left (scrolling pills on phones), its screens on the right.
+   The light version is the portal as it is; on the green band the rail sits on glass. ---------- */
+.ptour{display:grid;gap:clamp(18px,2.4vw,28px);max-width:1160px;margin:0 auto}
+.ptour-tabs{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:-4px calc(-1 * var(--gutter)) 0;padding:6px var(--gutter) 8px;scroll-padding-inline:var(--gutter)}
+.ptour-tabs::-webkit-scrollbar{display:none}
+.ptour-tab{display:inline-flex;align-items:center;gap:9px;flex:none;min-height:44px;padding:0 16px 0 12px;border:1px solid var(--line-2);border-radius:999px;background:var(--surface);color:var(--ink-2);font:600 .9rem/1.2 var(--sans);text-align:left;cursor:pointer;box-shadow:var(--sh-1);transition:background-color .2s ease,border-color .2s ease,color .2s ease}
+.ptour-tab svg{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.ptour-tab small{display:none}
+.ptour-tab:hover{border-color:var(--accent-line);color:var(--ink)}
+.ptour-tab[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.ptour-screens{min-width:0}
+.ptour-panel{margin:0;min-width:0}
+.ptour-panel[hidden]{display:none}
+.ptour-cap{margin:0 0 14px;max-width:46em;font-size:1rem;line-height:1.55;color:var(--ink-2);text-wrap:pretty}
+.ptour-cap .ptour-h{display:block;margin:0 0 2px;font:700 clamp(1.15rem,1.05rem + .4vw,1.35rem)/1.25 var(--hero);letter-spacing:-.01em;color:var(--ink)}
+.ptour .pt-browser{border:1px solid var(--line);border-radius:var(--r-panel);background:#fff;box-shadow:var(--sh-3)}
+.pt-bar{align-items:center;background:var(--paper);border-bottom-color:var(--line)}
+.pt-bar span{width:10px;height:10px;background:var(--line-2)}
+.pt-bar .pt-url{width:auto;height:auto;margin:0 auto;padding:3px 14px;border-radius:999px;background:#fff;border:1px solid var(--line);font:500 .74rem/1.3 var(--sans);color:var(--ink-3);transform:translateX(-24px)}
+.ptour-panel picture{display:block}
+.ptour-panel img{display:block;width:100%;height:auto}
+.hiw-sample{margin:0 0 18px}
+@media (max-width:759.98px){
+  /* on a phone, the phone screens, in a phone */
+  .ptour .pt-browser{display:block;width:min(300px,82vw);margin:0 auto;border:7px solid #10261B;border-radius:34px;background:#10261B;box-shadow:0 40px 70px -34px rgba(22,49,31,.6)}
+  .ptour .pt-bar{display:none}
+  .ptour .pt-browser img{border-radius:27px}
+  .ptour-cap{text-align:center;margin-inline:auto}
+  .hiw-sample{text-align:center}
+}
+@media (min-width:1000px){
+  .ptour{grid-template-columns:250px minmax(0,1fr);align-items:start;gap:clamp(24px,3vw,40px)}
+  .ptour-tabs{position:sticky;top:96px;flex-direction:column;gap:4px;overflow:visible;margin:0;padding:10px;border:1px solid var(--line);border-radius:var(--r-panel);background:#FAFCF9;box-shadow:var(--sh-1)}
+  .ptour-tab{position:relative;display:grid;grid-template-columns:20px minmax(0,1fr);column-gap:12px;align-items:center;width:100%;min-height:0;padding:12px 14px;border:0;border-radius:12px;background:transparent;box-shadow:none;color:var(--ink-2)}
+  .ptour-tab small{display:block;grid-column:2;margin-top:2px;font:500 .8rem/1.35 var(--sans);color:var(--ink-3)}
+  .ptour-tab:hover{background:var(--paper)}
+  .ptour-tab[aria-selected="true"]{background:var(--accent-soft);color:var(--accent);font-weight:700;box-shadow:inset 0 0 0 1px var(--accent-line)}
+  .ptour-tab[aria-selected="true"]::before{content:"";position:absolute;left:0;top:12px;bottom:12px;width:3px;border-radius:0 3px 3px 0;background:var(--gold)}
+}
+/* on the green band */
+.owc-dash-band .ptour-tab{border-color:rgba(255,255,255,.22);background:rgba(255,255,255,.06);color:#E3ECE5;box-shadow:none}
+.owc-dash-band .ptour-tab:hover{background:rgba(255,255,255,.12);color:#fff}
+.owc-dash-band .ptour-tab[aria-selected="true"]{background:#fff;border-color:#fff;color:var(--accent)}
+.owc-dash-band .ptour-tab:focus-visible{outline-color:var(--gold-bright)}
+.owc-dash-band .ptour-cap{color:#CFDDD3}
+.owc-dash-band .ptour-cap .ptour-h{color:#fff}
+.owc-dash-band .ptour .pt-browser{border-color:rgba(255,255,255,.18);box-shadow:0 0 0 1px rgba(224,204,150,.12),0 50px 90px -40px rgba(0,0,0,.7)}
+@media (max-width:759.98px){.owc-dash-band .ptour .pt-browser{border-color:#0F2419;background:#0F2419;box-shadow:0 0 0 1px rgba(255,255,255,.14),0 40px 70px -30px rgba(0,0,0,.8)}}
+@media (min-width:1000px){
+  .owc-dash-band .ptour-tabs{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.12);box-shadow:none}
+  .owc-dash-band .ptour-tab{background:transparent}
+  .owc-dash-band .ptour-tab:hover{background:rgba(255,255,255,.08)}
+  .owc-dash-band .ptour-tab small{color:#C6D8CC}
+  .owc-dash-band .ptour-tab[aria-selected="true"]{background:#fff}
+  .owc-dash-band .ptour-tab[aria-selected="true"] small{color:var(--ink-3)}
+}
+/* without JavaScript every screen is shown, one under the other, and the tabs are not needed */
+html:not(.js) .ptour-tabs{display:none}
+html:not(.js) .ptour-screens{display:grid;gap:clamp(36px,5vw,56px)}
+html:not(.js) .ptour-panel[hidden]{display:block}
+@media (min-width:1000px){html:not(.js) .ptour{grid-template-columns:minmax(0,1fr)}}
+@media (prefers-reduced-motion:no-preference){
+  .js .ptour-panel:not([hidden]){animation:owPanelIn .35s ease}
+}
+@keyframes owPanelIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* ---------- the home page's in-person scenes as white cards ---------- */
+.own-scenes li{padding:14px 14px 24px;border:1px solid var(--line);border-radius:var(--r-panel);background:var(--surface);box-shadow:var(--sh-1)}
+.own-scenes img{border-radius:10px;margin-bottom:18px}
+.own-scenes p{padding-inline:6px}

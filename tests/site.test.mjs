@@ -107,6 +107,15 @@ describe('every page: header and footer', () => {
       assert.deepEqual(current, p.nav ? [NAV.find((n) => n[0] === p.nav)[1]] : []);
       assert.match(h, new RegExp(`<a class="btn btn-primary btn-head" href="${PORTAL}">Client Portal</a>`));
       assert.ok(h.indexOf('class="menu-btn"') < h.indexOf('<nav class="site-nav"'), 'the menu button comes before the menu it opens');
+      /* phones: the portal's bottom tab bar, inside the header (November 14, 2026) */
+      const bar = /<nav class="tabbar" aria-label="Shortcuts">[\s\S]*?<\/nav>/.exec(h);
+      assert.ok(bar, 'the tab bar');
+      assert.ok(h.indexOf('<nav class="site-nav"') < h.indexOf('<nav class="tabbar"'), 'after the main menu');
+      assert.deepEqual(links(bar[0]).map((l) => [l.text, l.href]), [['Home', '/'], ['Growth team', '/boots-on-the-ground'], ['How it works', '/referral-network'], ['Pricing', '/pricing']]);
+      assert.match(bar[0], /<button class="tab tab-more" type="button" aria-expanded="false" aria-controls="site-nav">/, 'More opens the full menu');
+      const tabNow = links(bar[0]).filter((l) => /aria-current="page"/.test(l.tag)).map((l) => l.href);
+      const onBar = ['/', '/boots-on-the-ground', '/referral-network', '/pricing'];
+      assert.deepEqual(tabNow, current.filter((c) => onBar.includes(c)), 'the tab for this page is marked, like the menu');
     });
     test(`${p.file}: the footer names the company`, () => {
       const f = text(footerOf(src));

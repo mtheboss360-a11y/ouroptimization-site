@@ -373,83 +373,95 @@ await scenario('home: the attorney line stays hidden until its one switch is tur
   await s.close();
 });
 
-await scenario('home: the hero still shows without a video; with motion allowed the slot tries the video, and reduced motion never loads it', async () => {
-  let s = await open({ path: '/', motion: 'reduce' });
-  const reqs = [];
-  s.page.on('request', (r) => { if (/van-route\.mp4/.test(r.url())) reqs.push(r.url()); });
-  await s.page.waitForTimeout(500);
-  assert.equal(await s.page.$('.owc-hero-video'), null, 'reduced motion: the video element is removed');
-  assert.deepEqual(reqs, []);
-  assert.ok(await s.page.$eval('.owc-hero-media img', (i) => i.complete && i.naturalWidth > 0), 'the still is shown');
-  await s.close();
-  s = await open({ path: '/', motion: 'no-preference' });
-  await s.page.waitForFunction(() => !document.querySelector('.owc-hero-video') || document.querySelector('.owc-hero-media').classList.contains('is-playing'), null, { timeout: 5000 });
-  assert.equal(await s.page.$('.owc-hero-video'), null, 'no van-route.mp4 yet: the slot removes itself after the failed load');
-  assert.ok(await s.page.$eval('.owc-hero-media img', (i) => i.complete && i.naturalWidth > 0), 'the still stays');
-  assert.deepEqual(s.jsErrors, []);
-  await s.close();
-});
-
-/* The dashboard band: --p on .owc-dash-band, and the transform the screens actually get. */
-const tiltState = (page) => page.evaluate(() => {
-  const band = document.querySelector('.owc-dash-band');
-  const cue = document.querySelector('.owc-scroll-cue');
-  return {
-    p: getComputedStyle(band).getPropertyValue('--p').trim(),
-    tilting: band.classList.contains('is-tilting'),
-    transform: getComputedStyle(document.querySelector('.owc-tilt .pt-stage')).transform,
-    cue: getComputedStyle(cue).display,
-    cueOpacity: Number(getComputedStyle(cue).opacity)
-  };
-});
-const FLAT = ['none', 'matrix(1, 0, 0, 1, 0, 0)', 'matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)'];
-/* Scrolls so the top edge of the screens sits this far down the window (0.7 = 70% down). */
-const placeTilt = (page, at) => page.evaluate((f) => {
-  window.scrollBy({ top: document.querySelector('[data-tilt]').getBoundingClientRect().top - window.innerHeight * f, behavior: 'instant' });
-}, at);
-
-await scenario('home: the dashboard screens lie tipped back under "Scroll" and stand up flat as you scroll to them', async () => {
+await scenario('home: the wave hero draws on its canvas, with no outside requests and no script errors', async () => {
   for (const [width, height] of [[390, 844], [1280, 900]]) {
     const s = await open({ path: '/', width, height, motion: 'no-preference' });
-    let st = await tiltState(s.page);
-    assert.equal(st.tilting, true);
-    assert.equal(Number(st.p), 0, `${width}px: below the fold the screens lie back`);
-    assert.ok(!FLAT.includes(st.transform), st.transform);
-    assert.equal(st.cue, 'flex', 'the Scroll cue shows');
-    await placeTilt(s.page, 0.7);
-    await s.page.waitForTimeout(150);
-    st = await tiltState(s.page);
-    assert.ok(Number(st.p) > 0.4 && Number(st.p) < 0.7, `${width}px: on the way up (p=${st.p})`);
-    await placeTilt(s.page, 0.3);
-    await s.page.waitForTimeout(150);
-    st = await tiltState(s.page);
-    assert.equal(Number(st.p), 1, `${width}px: flat`);
-    assert.ok(FLAT.includes(st.transform), st.transform);
-    assert.equal(st.cueOpacity, 0, 'the cue has faded out');
-    assert.equal(await s.page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true, `${width}px: no sideways scroll`);
+    await s.page.waitForTimeout(600);
+    const c = await s.page.$eval('#wave', (el) => ({ w: el.width, h: el.height, lit: (() => { const d = el.getContext('2d').getImageData(0, 0, el.width, el.height).data; let n = 0; for (let i = 3; i < d.length; i += 4) if (d[i]) n++; return n; })() }));
+    assert.ok(c.w > 0 && c.h > 0, `${width}px: the canvas has a size`);
+    assert.ok(c.lit > 1000, `${width}px: the wave is drawn (${c.lit} pixels)`);
     assert.deepEqual(s.outside, [], 'no requests to other sites');
     assert.deepEqual(s.jsErrors, []);
     await s.close();
   }
 });
 
-await scenario('home: with reduced motion, or without JavaScript, the dashboard screens are simply flat and there is no cue', async () => {
-  for (const opts of [{ motion: 'reduce' }, { motion: 'no-preference', js: false }]) {
-    const s = await open({ path: '/', width: 390, height: 844, ...opts });
-    const st = await tiltState(s.page);
-    assert.equal(st.p, '1', JSON.stringify(opts));
-    assert.equal(st.tilting, false);
-    assert.ok(FLAT.includes(st.transform), st.transform);
-    assert.equal(st.cue, 'none');
+/* The portal tour (November 14, 2026): the portal's screens behind tabs, like the portal's own side rail. */
+const tourState = (page, sel) => page.$eval(sel, (t) => ({
+  selected: [...t.querySelectorAll('[role="tab"]')].filter((b) => b.getAttribute('aria-selected') === 'true').map((b) => b.id),
+  tabbable: [...t.querySelectorAll('[role="tab"]')].filter((b) => b.tabIndex === 0).map((b) => b.id),
+  shown: [...t.querySelectorAll('[role="tabpanel"]')].filter((f) => f.getBoundingClientRect().height > 0).map((f) => f.id),
+  img: (() => { const f = [...t.querySelectorAll('[role="tabpanel"]')].find((x) => !x.hidden); const i = f && f.querySelector('img'); return i ? { src: i.currentSrc, w: i.naturalWidth } : null; })()
+}));
+
+await scenario('home: the portal tour switches screens by tap and by arrow keys; phones get the phone screens', async () => {
+  for (const [width, height] of [[390, 844], [1280, 900]]) {
+    const s = await open({ path: '/', width, height });
+    const tour = '#dashboard [data-ptour]';
+    await s.page.locator(tour).scrollIntoViewIfNeeded();
+    let st = await tourState(s.page, tour);
+    assert.deepEqual(st.selected, ['pt-tab-route']);
+    assert.deepEqual(st.shown, ['pt-route']);
+    await s.page.click('#pt-tab-partners');
+    await s.page.waitForFunction(() => { const i = document.querySelector('#pt-partners img'); return i && i.complete && i.naturalWidth > 0; });
+    st = await tourState(s.page, tour);
+    assert.deepEqual(st.selected, ['pt-tab-partners']);
+    assert.deepEqual(st.tabbable, ['pt-tab-partners'], 'only the chosen tab is in the tab order');
+    assert.deepEqual(st.shown, ['pt-partners']);
+    assert.match(st.img.src, width < 760 ? /portal2-phone-partners-/ : /portal2-partners-/, `${width}px: ${st.img.src}`);
+    await s.page.keyboard.press('ArrowRight');
+    st = await tourState(s.page, tour);
+    assert.deepEqual(st.selected, ['pt-tab-results']);
+    assert.equal(await s.page.evaluate(() => document.activeElement.id), 'pt-tab-results', 'focus follows the arrow key');
+    await s.page.keyboard.press('ArrowRight');
+    assert.deepEqual((await tourState(s.page, tour)).selected, ['pt-tab-route'], 'it wraps around');
+    await s.page.keyboard.press('End');
+    assert.deepEqual((await tourState(s.page, tour)).shown, ['pt-results']);
+    assert.equal(await s.page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true, `${width}px: no sideways scroll`);
+    assert.deepEqual(s.outside, []);
     assert.deepEqual(s.jsErrors, []);
+    assert.deepEqual(s.missing, []);
     await s.close();
   }
 });
 
+await scenario('home: without JavaScript every portal screen shows, one under the other, and the tabs are not shown', async () => {
+  const s = await open({ path: '/', width: 1280, height: 900, js: false });
+  const st = await tourState(s.page, '#dashboard [data-ptour]');
+  assert.deepEqual(st.shown, ['pt-route', 'pt-network', 'pt-partners', 'pt-results']);
+  assert.equal(await s.page.$eval('#dashboard .ptour-tabs', (t) => getComputedStyle(t).display), 'none');
+  await s.close();
+});
+
+await scenario('phones: the bottom tab bar, and More opens the whole menu above it; Escape closes it and focus comes back', async () => {
+  const s = await open({ path: '/faq', width: 390, height: 844 });
+  const bar = await s.page.$eval('.tabbar', (b) => ({ pos: getComputedStyle(b).position, bottom: Math.round(window.innerHeight - b.getBoundingClientRect().bottom), tabs: [...b.querySelectorAll('.tab')].map((t) => t.textContent.trim()) }));
+  assert.equal(bar.pos, 'fixed');
+  assert.ok(bar.bottom >= 0 && bar.bottom <= 20, `sits at the bottom (${bar.bottom}px up)`);
+  assert.deepEqual(bar.tabs, ['Home', 'Growth team', 'How it works', 'Pricing', 'More']);
+  assert.equal(await s.page.$eval('.menu-btn', (b) => getComputedStyle(b).display), 'none', 'the header Menu button gives way to the bar');
+  await s.page.click('.tab-more');
+  assert.equal(await s.page.$eval('.tab-more', (b) => b.getAttribute('aria-expanded')), 'true');
+  const sheet = await s.page.$eval('#site-nav', (n) => ({ shown: getComputedStyle(n).display !== 'none', bottom: n.getBoundingClientRect().bottom, barTop: document.querySelector('.tabbar').getBoundingClientRect().top, items: [...n.querySelectorAll('a')].filter((a) => a.offsetParent).map((a) => a.textContent.trim()) }));
+  assert.ok(sheet.shown, 'the menu shows');
+  assert.ok(sheet.bottom <= sheet.barTop, 'above the bar, not under it');
+  assert.deepEqual(sheet.items, ['Home', 'Boots on the ground', 'How it works', 'Pricing', 'Sample contract', 'FAQ', 'About', 'Contact']);
+  assert.equal(await s.page.$eval('#site-nav a[aria-current="page"]', (a) => a.getAttribute('href')), '/faq');
+  await s.page.keyboard.press('Escape');
+  assert.equal(await s.page.evaluate(() => document.documentElement.classList.contains('menu-open')), false);
+  assert.equal(await s.page.evaluate(() => document.activeElement.classList.contains('tab-more')), true, 'focus back on More');
+  await s.page.click('.tab-more');
+  await s.page.click('h1');
+  assert.equal(await s.page.evaluate(() => document.documentElement.classList.contains('menu-open')), false, 'a tap outside closes it');
+  assert.deepEqual(s.jsErrors, []);
+  await s.close();
+});
+
 await scenario('/boots-on-the-ground: in the menu second, after Home; the page, its illustration and its clean URL', async () => {
-  for (const width of [390, 1000, 1280]) {
+  for (const width of [390, 800, 1000, 1280]) {
     const s = await open({ path: '/boots-on-the-ground', width, height: 844 });
-    if (width < 1000) await s.page.click('.menu-btn');
+    if (width < 760) await s.page.click('.tab-more');
+    else if (width < 1000) await s.page.click('.menu-btn');
     const items = await s.page.$$eval('#site-nav li:not(.nav-cta) a', (l) => l.map((a) => a.textContent.trim()));
     assert.deepEqual(items.slice(0, 3), ['Home', 'Boots on the ground', 'How it works']);
     assert.equal(await s.page.$eval('#site-nav a[aria-current="page"]', (a) => a.getAttribute('href')), '/boots-on-the-ground');
@@ -457,8 +469,8 @@ await scenario('/boots-on-the-ground: in the menu second, after Home; the page, 
       const tops = await s.page.$$eval('#site-nav li', (l) => l.filter((li) => li.offsetParent).map((li) => li.getBoundingClientRect().top));
       assert.equal(new Set(tops.map(Math.round)).size, 1, `${width}px: the menu fits on one line`);
     }
-    assert.equal(await s.page.textContent('h1'), 'Your Organic Growth Team.');
-    assert.equal(await s.page.textContent('.gt-sub'), 'The boots on the ground maintaining your relationships.');
+    assert.equal(await s.page.textContent('h1'), 'In person, every month.');
+    assert.equal(await s.page.textContent('.gt-sub'), 'Deliveries, drop-offs and every stop tracked in your portal.');
     assert.ok(await s.page.$eval('.gt-art img', (i) => i.complete && i.naturalWidth > 0), 'the illustration loads');
     assert.equal(await s.page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true, `${width}px: no sideways scroll`);
     assert.deepEqual(s.jsErrors, []);
