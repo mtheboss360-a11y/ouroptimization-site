@@ -1420,7 +1420,7 @@ h1 em,h2 em,.hero-wave h1 em,.pg-hero h1 em,.ct-head h1 em,.svc-hero h1 em,.dn-s
 /* ---------- header: a calm white bar with a hairline; the menu as the portal's underline tabs ---------- */
 .site-header{background:rgba(250,252,249,.9);border-bottom:1px solid var(--line)}
 .site-header.is-scrolled{border-bottom-color:var(--line);box-shadow:0 1px 0 rgba(22,49,31,.02),0 6px 20px -16px rgba(22,49,31,.35)}
-.btn-head{min-height:40px;padding:0 18px;font-size:.86rem}
+.btn-head{min-height:44px;padding:0 18px;font-size:.86rem}
 .site-nav a{color:var(--ink-2);font-weight:500}
 .site-nav a:hover{color:var(--ink)}
 .site-nav a[aria-current="page"]{color:var(--ink);font-weight:650}
@@ -1443,9 +1443,11 @@ h1 em,h2 em,.hero-wave h1 em,.pg-hero h1 em,.ct-head h1 em,.svc-hero h1 em,.dn-s
    Escape work as they did; the header gives up its blur on phones so the bar can be fixed to the screen. ---------- */
 .tabbar{display:none}
 @media (max-width:759.98px){
-  .js .site-header{-webkit-backdrop-filter:none;backdrop-filter:none;background:rgba(250,252,249,.97)}
+  .js .site-header{-webkit-backdrop-filter:none;backdrop-filter:none;background:#FAFCF9}
+  /* keyboard focus never lands behind the bar: the browser keeps this much room at the bottom when it scrolls */
+  html.js:has(.tabbar){scroll-padding-bottom:calc(100px + env(safe-area-inset-bottom))}
   .js .menu-btn{display:none}
-  .js .btn-head{display:inline-flex;min-height:38px;padding:0 15px;font-size:.84rem}
+  .js .btn-head{display:inline-flex;min-height:44px;padding:0 16px;font-size:.84rem}
   .js .site-nav .nav-cta{display:none}
   .js .tabbar{position:fixed;z-index:60;left:max(8px,env(safe-area-inset-left));right:max(8px,env(safe-area-inset-right));bottom:max(8px,env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:2px;padding:7px 6px;border-radius:26px;background:#fff;border:1px solid var(--line-2);border-top-color:var(--line);box-shadow:0 4px 16px rgba(22,49,31,.1),0 1px 2px rgba(22,49,31,.05)}
   .tab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:54px;padding:6px 1px 5px;border:0;border-radius:18px;background:transparent;color:var(--ink-3);font:500 .66rem/1.1 var(--sans);letter-spacing:-.005em;text-align:center;text-decoration:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background-color .22s cubic-bezier(.22,1,.36,1),color .22s cubic-bezier(.22,1,.36,1)}
@@ -1506,6 +1508,7 @@ h1 em,h2 em,.hero-wave h1 em,.pg-hero h1 em,.ct-head h1 em,.svc-hero h1 em,.dn-s
 .sc-box{background:var(--blush);border-left-color:var(--gold)}
 
 /* dark cards that stay: the forest accent, as on the portal's selected pill */
+.cardgrid>li.ga-cherry>svg{background:rgba(255,255,255,.12);color:var(--gold-bright)}
 .dn-price,.cardgrid>li.ga-cherry{background:linear-gradient(160deg,#245641 0%,var(--accent) 55%,#173D2E 100%);border-color:transparent;box-shadow:0 20px 44px -26px rgba(22,49,31,.7)}
 .dn-price li,.dn-price-line,.ga-cherry p{color:#DCE8DF}
 .dn-price ul,.dn-price li{border-color:rgba(255,255,255,.16)}
@@ -1568,6 +1571,7 @@ h1 em,h2 em,.hero-wave h1 em,.pg-hero h1 em,.ct-head h1 em,.svc-hero h1 em,.dn-s
 .owc-final h2,.pg-cta h2{color:#fff}
 .owc-final .intro,.pg-cta .intro,.pg-cta p{color:#D5E3D9}
 .owc-final .owc-final-note{color:#BFD2C5}
+.pg-cta .wrap>.cta-inner{margin-inline:auto}
 .pg-cta .eyebrow{color:var(--gold-bright)}
 .pg-cta h2 em{color:var(--gold-bright)}
 
@@ -1599,7 +1603,7 @@ h1 em,h2 em,.hero-wave h1 em,.pg-hero h1 em,.ct-head h1 em,.svc-hero h1 em,.dn-s
 /* ---------- the portal tour: the portal's own side rail on the left (scrolling pills on phones), its screens on the right.
    The light version is the portal as it is; on the green band the rail sits on glass. ---------- */
 .ptour{display:grid;gap:clamp(18px,2.4vw,28px);max-width:1160px;margin:0 auto}
-.ptour-tabs{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:0 calc(-1 * var(--gutter));padding:2px var(--gutter) 6px;scroll-padding-inline:var(--gutter)}
+.ptour-tabs{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:-4px calc(-1 * var(--gutter)) 0;padding:6px var(--gutter) 8px;scroll-padding-inline:var(--gutter)}
 .ptour-tabs::-webkit-scrollbar{display:none}
 .ptour-tab{display:inline-flex;align-items:center;gap:9px;flex:none;min-height:44px;padding:0 16px 0 12px;border:1px solid var(--line-2);border-radius:999px;background:var(--surface);color:var(--ink-2);font:600 .9rem/1.2 var(--sans);text-align:left;cursor:pointer;box-shadow:var(--sh-1);transition:background-color .2s ease,border-color .2s ease,color .2s ease}
 .ptour-tab svg{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
@@ -1610,7 +1614,7 @@ h1 em,h2 em,.hero-wave h1 em,.pg-hero h1 em,.ct-head h1 em,.svc-hero h1 em,.dn-s
 .ptour-panel{margin:0;min-width:0}
 .ptour-panel[hidden]{display:none}
 .ptour-cap{margin:0 0 14px;max-width:46em;font-size:1rem;line-height:1.55;color:var(--ink-2);text-wrap:pretty}
-.ptour-cap b{display:block;margin-bottom:2px;font:700 clamp(1.15rem,1.05rem + .4vw,1.35rem)/1.25 var(--hero);letter-spacing:-.01em;color:var(--ink)}
+.ptour-cap .ptour-h{display:block;margin:0 0 2px;font:700 clamp(1.15rem,1.05rem + .4vw,1.35rem)/1.25 var(--hero);letter-spacing:-.01em;color:var(--ink)}
 .ptour .pt-browser{border:1px solid var(--line);border-radius:var(--r-panel);background:#fff;box-shadow:var(--sh-3)}
 .pt-bar{align-items:center;background:var(--paper);border-bottom-color:var(--line)}
 .pt-bar span{width:10px;height:10px;background:var(--line-2)}
@@ -1632,7 +1636,7 @@ h1 em,h2 em,.hero-wave h1 em,.pg-hero h1 em,.ct-head h1 em,.svc-hero h1 em,.dn-s
   .ptour-tab{position:relative;display:grid;grid-template-columns:20px minmax(0,1fr);column-gap:12px;align-items:center;width:100%;min-height:0;padding:12px 14px;border:0;border-radius:12px;background:transparent;box-shadow:none;color:var(--ink-2)}
   .ptour-tab small{display:block;grid-column:2;margin-top:2px;font:500 .8rem/1.35 var(--sans);color:var(--ink-3)}
   .ptour-tab:hover{background:var(--paper)}
-  .ptour-tab[aria-selected="true"]{background:var(--accent-soft);color:var(--accent)}
+  .ptour-tab[aria-selected="true"]{background:var(--accent-soft);color:var(--accent);font-weight:700;box-shadow:inset 0 0 0 1px var(--accent-line)}
   .ptour-tab[aria-selected="true"]::before{content:"";position:absolute;left:0;top:12px;bottom:12px;width:3px;border-radius:0 3px 3px 0;background:var(--gold)}
 }
 /* on the green band */
@@ -1641,14 +1645,14 @@ h1 em,h2 em,.hero-wave h1 em,.pg-hero h1 em,.ct-head h1 em,.svc-hero h1 em,.dn-s
 .owc-dash-band .ptour-tab[aria-selected="true"]{background:#fff;border-color:#fff;color:var(--accent)}
 .owc-dash-band .ptour-tab:focus-visible{outline-color:var(--gold-bright)}
 .owc-dash-band .ptour-cap{color:#CFDDD3}
-.owc-dash-band .ptour-cap b{color:#fff}
+.owc-dash-band .ptour-cap .ptour-h{color:#fff}
 .owc-dash-band .ptour .pt-browser{border-color:rgba(255,255,255,.18);box-shadow:0 0 0 1px rgba(224,204,150,.12),0 50px 90px -40px rgba(0,0,0,.7)}
 @media (max-width:759.98px){.owc-dash-band .ptour .pt-browser{border-color:#0F2419;background:#0F2419;box-shadow:0 0 0 1px rgba(255,255,255,.14),0 40px 70px -30px rgba(0,0,0,.8)}}
 @media (min-width:1000px){
   .owc-dash-band .ptour-tabs{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.12);box-shadow:none}
   .owc-dash-band .ptour-tab{background:transparent}
   .owc-dash-band .ptour-tab:hover{background:rgba(255,255,255,.08)}
-  .owc-dash-band .ptour-tab small{color:#A9C2B3}
+  .owc-dash-band .ptour-tab small{color:#C6D8CC}
   .owc-dash-band .ptour-tab[aria-selected="true"]{background:#fff}
   .owc-dash-band .ptour-tab[aria-selected="true"] small{color:var(--ink-3)}
 }

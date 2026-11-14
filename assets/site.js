@@ -149,7 +149,14 @@
     };
     var isOpen = function () { return root.classList.contains('menu-open'); };
     menuBtns.forEach(function (b) {
-      b.addEventListener('click', function () { opener = b; setMenu(!isOpen()); });
+      b.addEventListener('click', function () {
+        opener = b;
+        var open = !isOpen();
+        setMenu(open);
+        /* The tab bar's More sits after the menu in the page, so Tab from it would leave the menu behind:
+           opening from there puts focus on the menu's first link instead. */
+        if (open && b.classList.contains('tab-more')) { var first = nav.querySelector('a'); if (first) first.focus(); }
+      });
     });
     /* Escape closes an open menu and returns focus to the button that opened it. */
     document.addEventListener('keydown', function (e) {
