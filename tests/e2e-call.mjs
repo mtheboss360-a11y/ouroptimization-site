@@ -390,8 +390,9 @@ await scenario('home: the wave hero draws on its canvas, with no outside request
 const tourState = (page, sel) => page.$eval(sel, (t) => ({
   selected: [...t.querySelectorAll('[role="tab"]')].filter((b) => b.getAttribute('aria-selected') === 'true').map((b) => b.id),
   tabbable: [...t.querySelectorAll('[role="tab"]')].filter((b) => b.tabIndex === 0).map((b) => b.id),
-  shown: [...t.querySelectorAll('[role="tabpanel"]')].filter((f) => f.getBoundingClientRect().height > 0).map((f) => f.id),
-  img: (() => { const f = [...t.querySelectorAll('[role="tabpanel"]')].find((x) => !x.hidden); const i = f && f.querySelector('img'); return i ? { src: i.currentSrc, w: i.naturalWidth } : null; })()
+  shown: [...t.querySelectorAll('.ptour-panel')].filter((f) => f.getBoundingClientRect().height > 0).map((f) => f.id),
+  roles: [...t.querySelectorAll('.ptour-panel')].map((f) => f.getAttribute('role')),
+  img: (() => { const f = [...t.querySelectorAll('.ptour-panel')].find((x) => !x.hidden); const i = f && f.querySelector('img'); return i ? { src: i.currentSrc, w: i.naturalWidth } : null; })()
 }));
 
 await scenario('home: the portal tour switches screens by tap and by arrow keys; phones get the phone screens', async () => {
@@ -402,6 +403,7 @@ await scenario('home: the portal tour switches screens by tap and by arrow keys;
     let st = await tourState(s.page, tour);
     assert.deepEqual(st.selected, ['pt-tab-route']);
     assert.deepEqual(st.shown, ['pt-route']);
+    assert.deepEqual(st.roles, ['tabpanel', 'tabpanel', 'tabpanel', 'tabpanel'], 'the script makes the screens tab panels');
     await s.page.click('#pt-tab-partners');
     await s.page.waitForFunction(() => { const i = document.querySelector('#pt-partners img'); return i && i.complete && i.naturalWidth > 0; });
     st = await tourState(s.page, tour);
@@ -429,6 +431,7 @@ await scenario('home: without JavaScript every portal screen shows, one under th
   const s = await open({ path: '/', width: 1280, height: 900, js: false });
   const st = await tourState(s.page, '#dashboard [data-ptour]');
   assert.deepEqual(st.shown, ['pt-route', 'pt-network', 'pt-partners', 'pt-results']);
+  assert.deepEqual(st.roles, [null, null, null, null], 'plain figures: no tab panels without their tabs');
   assert.equal(await s.page.$eval('#dashboard .ptour-tabs', (t) => getComputedStyle(t).display), 'none');
   await s.close();
 });
