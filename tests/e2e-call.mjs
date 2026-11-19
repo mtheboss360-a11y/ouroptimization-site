@@ -448,7 +448,7 @@ await scenario('phones: the bottom tab bar, and More opens the whole menu above 
   const sheet = await s.page.$eval('#site-nav', (n) => ({ shown: getComputedStyle(n).display !== 'none', bottom: n.getBoundingClientRect().bottom, barTop: document.querySelector('.tabbar').getBoundingClientRect().top, items: [...n.querySelectorAll('a')].filter((a) => a.offsetParent).map((a) => a.textContent.trim()) }));
   assert.ok(sheet.shown, 'the menu shows');
   assert.ok(sheet.bottom <= sheet.barTop, 'above the bar, not under it');
-  assert.deepEqual(sheet.items, ['Home', 'Boots on the ground', 'How it works', 'Pricing', 'Sample contract', 'FAQ', 'About', 'Contact']);
+  assert.deepEqual(sheet.items, ['Home', 'Boots on the ground', 'How it works', 'Pricing', 'FAQ', 'About', 'Contact']);
   assert.equal(await s.page.$eval('#site-nav a[aria-current="page"]', (a) => a.getAttribute('href')), '/faq');
   await s.page.keyboard.press('Escape');
   assert.equal(await s.page.evaluate(() => document.documentElement.classList.contains('menu-open')), false);

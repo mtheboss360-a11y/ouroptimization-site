@@ -155,7 +155,7 @@ describe('words and claims', () => {
     for (const p of PAGES) {
       const t = text(mainOf(page[p.file]));
       // the legal pages may name testimonial text among the materials a clinic hands us; no page shows one
-      const legal = ['privacy.html', 'terms.html', 'sample-contract.html'].includes(p.file);
+      const legal = ['privacy.html', 'terms.html'].includes(p.file);
       assert.doesNotMatch(t, legal ? /★|\b\d(\.\d)? out of 5\b|five[- ]star/i : /testimonial|★|\b\d(\.\d)? out of 5\b|five[- ]star/i, p.file);
       assert.doesNotMatch(page[p.file], /AggregateRating|"review"/, p.file);
     }
@@ -215,6 +215,20 @@ describe('links, images and redirects', () => {
       assert.ok(!froms.has(to), `${r.from} -> ${r.to} chains`);
       assert.ok(fileForUrl(to) || to === '/', `${r.from} -> ${r.to}: no such page`);
     }
+  });
+  test('the sample contract page is gone (November 19, 2026): its old address and its .html go straight to pricing, and nothing links to it', () => {
+    assert.ok(!existsSync(new URL('sample-contract.html', ROOT)));
+    for (const from of ['/sample-contract', '/sample-contract.html']) {
+      const r = REDIRECTS.find((x) => x.from === from);
+      assert.ok(r, from);
+      assert.deepEqual([r.to, r.status, r.force], ['/pricing', 301, true], from);
+    }
+    for (const p of PAGES) assert.doesNotMatch(page[p.file], /href="\/sample-contract/, p.file);
+    assert.doesNotMatch(read('sitemap.xml'), /sample-contract/);
+  });
+  test('only one trial guarantee anywhere: the 45-day sign-up guarantee is gone from every page, the terms and the privacy policy', () => {
+    for (const p of PAGES) assert.doesNotMatch(text(bodyOf(page[p.file])), /45 days|fewer than 5 tracked|two trial guarantees|both guarantees|second trial guarantee|two written guarantees/i, p.file);
+    for (const p of PAGES) assert.doesNotMatch(page[p.file], /two guarantees|two trial guarantees|two written guarantees/i, `${p.file}: no "two guarantees" anywhere, meta descriptions included`);
   });
   test('the URLs that must not change still exist', () => {
     for (const f of ['privacy.html', 'terms.html', 'review-tags.html', 'website-design.html', 'expo-vendors.html', 'patient-network.html', 'online-search-network.html']) assert.ok(existsSync(new URL(f, ROOT)), f);
