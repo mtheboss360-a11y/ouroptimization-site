@@ -14,7 +14,6 @@ export const PAGES = [
   { file: 'boots-on-the-ground.html', url: '/boots-on-the-ground', nav: 'Boots on the ground' },
   { file: 'referral-network.html', url: '/referral-network', nav: 'How it works' },
   { file: 'pricing.html', url: '/pricing', nav: 'Pricing' },
-  { file: 'sample-contract.html', url: '/sample-contract', nav: 'Sample contract' },
   { file: 'faq.html', url: '/faq', nav: 'FAQ' },
   { file: 'about.html', url: '/about', nav: 'About' },
   { file: 'contact.html', url: '/contact', nav: 'Contact' },
@@ -29,7 +28,7 @@ export const PAGES = [
   { file: '404.html', url: null, nav: null, noindex: true }
 ];
 /* The main menu, in order, then the Client Portal button. */
-export const NAV = [['Home', '/'], ['Boots on the ground', '/boots-on-the-ground'], ['How it works', '/referral-network'], ['Pricing', '/pricing'], ['Sample contract', '/sample-contract'], ['FAQ', '/faq'], ['About', '/about'], ['Contact', '/contact']];
+export const NAV = [['Home', '/'], ['Boots on the ground', '/boots-on-the-ground'], ['How it works', '/referral-network'], ['Pricing', '/pricing'], ['FAQ', '/faq'], ['About', '/about'], ['Contact', '/contact']];
 export const PORTAL = 'https://www.ournetworkportal.com';
 export const ORIGIN = 'https://ouroptimization.com';
 /* Words that must never appear on the site, built from pieces so this file does not contain them. */

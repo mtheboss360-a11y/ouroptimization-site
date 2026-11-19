@@ -1670,3 +1670,14 @@ html:not(.js) .ptour-panel[hidden]{display:block}
 .own-scenes li{padding:14px 14px 24px;border:1px solid var(--line);border-radius:var(--r-panel);background:var(--surface);box-shadow:var(--sh-1)}
 .own-scenes img{border-radius:10px;margin-bottom:18px}
 .own-scenes p{padding-inline:6px}
+
+/* November 19, 2026: one trial guarantee (the 45-day sign-up guarantee came off). It fills the row as one card,
+   the 30 days beside the words on wider screens. */
+.prc-guar>li:only-child{grid-column:1/-1}
+@media (min-width:820px){
+  .prc-guar>li:only-child{display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-areas:"k h" "n say";column-gap:clamp(28px,4vw,56px);align-items:start}
+  .prc-guar>li:only-child>.dn-k{grid-area:k}
+  .prc-guar>li:only-child>.prc-guar-n{grid-area:n}
+  .prc-guar>li:only-child>h3{grid-area:h;margin-top:0;align-self:end}
+  .prc-guar>li:only-child>.prc-guar-say{grid-area:say;max-width:52ch}
+}

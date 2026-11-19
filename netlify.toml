@@ -75,9 +75,16 @@
   status = 301
   force = true
 
+# The sample contract page came off on November 19, 2026: its old address goes to pricing.
+[[redirects]]
+  from = "/sample-contract"
+  to = "/pricing"
+  status = 301
+  force = true
+
 [[redirects]]
   from = "/sample-contract.html"
-  to = "/sample-contract"
+  to = "/pricing"
   status = 301
   force = true
 

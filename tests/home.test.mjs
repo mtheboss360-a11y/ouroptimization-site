@@ -137,11 +137,10 @@ describe('pricing page: the offer', () => {
     assert.doesNotMatch(t, /4 routes|Starter|Reach/);
     assert.match(t, /fresh-baked treats/i);
   });
-  test('the two trial guarantees', () => {
-    assert.match(t, /30 days/);
-    assert.match(t, /45 days/);
-    assert.match(t, /fewer than 5 tracked sign-ups/);
+  test('the trial guarantee: all 5 visits and the codes within 30 days; no sign-up guarantee (the owner took it out, November 19, 2026)', () => {
+    assert.match(t, /If we haven't visited all 5 businesses and set up your codes within 30 days, the \$450 comes back\./);
     assert.match(t, /keep the partner relationships/i);
+    assert.doesNotMatch(t, /45 days|tracked sign-ups|both guarantees|two (trial |written )?guarantees|Guarantee 2/i);
   });
   test('terms, who supplies what, add-ons priced on a call', () => {
     assert.match(t, /month to month/i);

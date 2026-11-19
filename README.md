@@ -17,8 +17,7 @@ Netlify site "ouroptimization", linked to this repo, branch `main`. No build com
 | `/` | `index.html` | Home | Hero (no buttons): "Your Organic Growth Team.", "We put your community into the brand." and the boots-on-the-ground line. Then the dashboard on the green band (the screens tip up flat as you scroll), the staff courtesy, the pricing teaser, compliance (with the sample contract link), the dinner add-on, the closing call (with the phone number). |
 | `/boots-on-the-ground` | `boots-on-the-ground.html` | Growth team | "Your Organic Growth Team." and "The boots on the ground maintaining your relationships.": what our people do on a route (treats and coffee, meeting the staff, the codes, the visit log) and how the relationships are kept up month after month. The illustration (`assets/img/team-visit-*`) is Higgsfield clay figurines in the hero's style, not real people. |
 | `/referral-network` | `referral-network.html` | How it works | Referral routes end to end. The old flyer network is folded in here. |
-| `/pricing` | `pricing.html` | Pricing | The trial ($250), Starter ($250/mo), Growth ($400/mo), Reach ($800/mo), the two trial guarantees, terms, who supplies what, add-ons priced on a call. The one page with a closing call band. |
-| `/sample-contract` | `sample-contract.html` | Sample contract | A sample referral-route agreement. |
+| `/pricing` | `pricing.html` | Pricing | The trial ($250), Starter ($250/mo), Growth ($400/mo), Reach ($800/mo), the trial guarantee, terms, who supplies what, add-ons priced on a call. The one page with a closing call band. |
 | `/faq` | `faq.html` | FAQ | Ten questions from the brief. |
 | `/about` | `about.html` | About | Who we are, the Grace Pediatrics client work, what we put in writing. |
 | `/contact` | `contact.html` | Contact | The call form (see Forms). |
