@@ -8,10 +8,12 @@ export const read = (p) => readFileSync(new URL(p, ROOT), 'utf8');
 /* Every page of the site, with its clean URL and its item in the main menu (null: not in the menu).
    October 23, 2026: Our Wellness Network. The flyer network folded into the referral routes
    (/flyer-network 301s to /referral-network); the dinner page stays, reached from the pricing page only (October 24, 2026).
-   October 24, 2026: the Growth team page joins the menu, second, after Home. Later that day it became Boots on the ground. */
+   October 24, 2026: the Growth team page joins the menu, second, after Home. Later that day it became Boots on the ground.
+   November 20, 2026: it is the Field Team page (/field-team), and Industries (/#industries) follows it; the eight industry
+   pages under /industries/ are built by tools/build-industries.mjs and are reached from the home page's Industries section. */
 export const PAGES = [
   { file: 'index.html', url: '/', nav: 'Home' },
-  { file: 'boots-on-the-ground.html', url: '/boots-on-the-ground', nav: 'Boots on the ground' },
+  { file: 'field-team.html', url: '/field-team', nav: 'Field Team' },
   { file: 'referral-network.html', url: '/referral-network', nav: 'How it works' },
   { file: 'pricing.html', url: '/pricing', nav: 'Pricing' },
   { file: 'faq.html', url: '/faq', nav: 'FAQ' },
@@ -25,10 +27,18 @@ export const PAGES = [
   { file: 'privacy.html', url: '/privacy', nav: null },
   { file: 'terms.html', url: '/terms', nav: null },
   { file: 'thanks.html', url: '/thanks', nav: null, noindex: true },
-  { file: '404.html', url: null, nav: null, noindex: true }
+  { file: '404.html', url: null, nav: null, noindex: true },
+  { file: 'industries/med-spas.html', url: '/industries/med-spas', nav: null, industry: true },
+  { file: 'industries/dental.html', url: '/industries/dental', nav: null, industry: true },
+  { file: 'industries/chiropractic-physical-therapy.html', url: '/industries/chiropractic-physical-therapy', nav: null, industry: true },
+  { file: 'industries/gyms-fitness-studios.html', url: '/industries/gyms-fitness-studios', nav: null, industry: true },
+  { file: 'industries/salons-barbershops.html', url: '/industries/salons-barbershops', nav: null, industry: true },
+  { file: 'industries/restaurants-cafes.html', url: '/industries/restaurants-cafes', nav: null, industry: true },
+  { file: 'industries/home-services.html', url: '/industries/home-services', nav: null, industry: true },
+  { file: 'industries/auto-shops.html', url: '/industries/auto-shops', nav: null, industry: true }
 ];
 /* The main menu, in order, then the Client Portal button. */
-export const NAV = [['Home', '/'], ['Boots on the ground', '/boots-on-the-ground'], ['How it works', '/referral-network'], ['Pricing', '/pricing'], ['FAQ', '/faq'], ['About', '/about'], ['Contact', '/contact']];
+export const NAV = [['Home', '/'], ['Field Team', '/field-team'], ['Industries', '/#industries'], ['How it works', '/referral-network'], ['Pricing', '/pricing'], ['FAQ', '/faq'], ['About', '/about'], ['Contact', '/contact']];
 export const PORTAL = 'https://www.ournetworkportal.com';
 export const ORIGIN = 'https://ouroptimization.com';
 /* Words that must never appear on the site, built from pieces so this file does not contain them. */

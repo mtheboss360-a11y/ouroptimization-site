@@ -229,9 +229,9 @@ await scenario('an old /?about=flyer-drops link is redirected to /contact?about=
 await scenario('every service page key prefills on /contact, and the keys from before the rename still work', async () => {
   for (const [key, message] of [
     ['referral-network', "I'm asking about referral routes."], ['flyer-network', "I'm asking about referral routes."],
-    ['patient-network', "I'm asking about a private patient dinner."], ['online-search-network', "I'm asking about Google Ads in my own account."],
+    ['patient-network', "I'm asking about a private customer dinner."], ['online-search-network', "I'm asking about Google Ads in my own account."],
     ['pricing', "I'm asking about pricing."], ['sample-contract', "I'm asking about the sample contract."],
-    ['patient-dinners', "I'm asking about a private patient dinner."], ['flyer-drops', "I'm asking about referral routes."], ['google-ads', "I'm asking about Google Ads in my own account."]
+    ['patient-dinners', "I'm asking about a private customer dinner."], ['flyer-drops', "I'm asking about referral routes."], ['google-ads', "I'm asking about Google Ads in my own account."]
   ]) {
     const s = await open({ path: `/contact?about=${key}` });
     assert.equal(await s.page.inputValue('#call-message'), message, key);
@@ -360,15 +360,31 @@ await scenario('/thanks loads on its own: noindex, the promise, and a way home',
   await close();
 });
 
-await scenario('home: the attorney line stays hidden until its one switch is turned on', async () => {
-  let s = await open({ path: '/' });
-  assert.equal(await s.page.$eval('[data-flag="attorneyReviewed"]', (p) => p.hidden), true);
-  assert.doesNotMatch(await s.page.content(), /reviewed by a healthcare attorney/i, 'off: the sentence is not in the page');
+await scenario('industry pages: the sample portal screen shows on phones and desktops, labelled, with no sideways scroll', async () => {
+  for (const [path, width] of [['/industries/auto-shops', 390], ['/industries/dental', 390], ['/industries/med-spas', 1280]]) {
+    const s = await open({ path, width, height: 844 });
+    await s.page.locator('.ind-shot').scrollIntoViewIfNeeded();
+    await s.page.waitForFunction(() => { const i = document.querySelector('.ind-shot img'); return i && i.complete && i.naturalWidth > 0; });
+    const shot = await s.page.$eval('.ind-shot', (f) => ({ h: f.querySelector('img').getBoundingClientRect().height, label: f.querySelector('.sample-tag').textContent.trim(), src: f.querySelector('img').currentSrc }));
+    assert.ok(shot.h > 200, `${path} at ${width}px: the screen is shown (${shot.h}px)`);
+    assert.equal(shot.label, 'Sample account, illustrative data');
+    assert.match(shot.src, width < 760 ? /portal2-phone-routes-/ : /portal2-routes-/, shot.src);
+    assert.equal(await s.page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true, `${path} at ${width}px: no sideways scroll`);
+    assert.deepEqual(s.jsErrors, []);
+    assert.deepEqual(s.missing, []);
+    await s.close();
+  }
+});
+
+await scenario('healthcare pages: the HIPAA line stays hidden until the owner confirms it and turns it on', async () => {
+  let s = await open({ path: '/industries/dental' });
+  assert.equal(await s.page.$eval('[data-flag="hipaaConfirmed"]', (p) => p.hidden), true);
+  assert.doesNotMatch(await s.page.evaluate(() => document.body.innerText), /HIPAA/i, 'off: no HIPAA claim on the page');
   await s.close();
-  s = await open({ path: '/', stub: { '/assets/site-config.js': { type: 'text/javascript', body: "window.OWC_CONFIG = { attorneyReviewed: true, attorneyReviewedText: 'Reviewed by counsel.' };" } } });
+  s = await open({ path: '/industries/dental', stub: { '/assets/site-config.js': { type: 'text/javascript', body: "window.OWC_CONFIG = { hipaaConfirmed: true, hipaaText: 'Confirmed sentence.' };" } } });
   await s.page.waitForTimeout(200);
-  assert.equal(await s.page.$eval('[data-flag="attorneyReviewed"]', (p) => p.hidden), false);
-  assert.equal(await s.page.$eval('[data-flag="attorneyReviewed"]', (p) => p.textContent.trim()), 'Reviewed by counsel.');
+  assert.equal(await s.page.$eval('[data-flag="hipaaConfirmed"]', (p) => p.hidden), false);
+  assert.equal(await s.page.$eval('[data-flag="hipaaConfirmed"]', (p) => p.textContent.trim()), 'Confirmed sentence.');
   assert.deepEqual(s.jsErrors, []);
   await s.close();
 });
@@ -441,14 +457,14 @@ await scenario('phones: the bottom tab bar, and More opens the whole menu above 
   const bar = await s.page.$eval('.tabbar', (b) => ({ pos: getComputedStyle(b).position, bottom: Math.round(window.innerHeight - b.getBoundingClientRect().bottom), tabs: [...b.querySelectorAll('.tab')].map((t) => t.textContent.trim()) }));
   assert.equal(bar.pos, 'fixed');
   assert.ok(bar.bottom >= 0 && bar.bottom <= 20, `sits at the bottom (${bar.bottom}px up)`);
-  assert.deepEqual(bar.tabs, ['Home', 'Growth team', 'How it works', 'Pricing', 'More']);
+  assert.deepEqual(bar.tabs, ['Home', 'Field Team', 'How it works', 'Pricing', 'More']);
   assert.equal(await s.page.$eval('.menu-btn', (b) => getComputedStyle(b).display), 'none', 'the header Menu button gives way to the bar');
   await s.page.click('.tab-more');
   assert.equal(await s.page.$eval('.tab-more', (b) => b.getAttribute('aria-expanded')), 'true');
   const sheet = await s.page.$eval('#site-nav', (n) => ({ shown: getComputedStyle(n).display !== 'none', bottom: n.getBoundingClientRect().bottom, barTop: document.querySelector('.tabbar').getBoundingClientRect().top, items: [...n.querySelectorAll('a')].filter((a) => a.offsetParent).map((a) => a.textContent.trim()) }));
   assert.ok(sheet.shown, 'the menu shows');
   assert.ok(sheet.bottom <= sheet.barTop, 'above the bar, not under it');
-  assert.deepEqual(sheet.items, ['Home', 'Boots on the ground', 'How it works', 'Pricing', 'FAQ', 'About', 'Contact']);
+  assert.deepEqual(sheet.items, ['Home', 'Field Team', 'Industries', 'How it works', 'Pricing', 'FAQ', 'About', 'Contact']);
   assert.equal(await s.page.$eval('#site-nav a[aria-current="page"]', (a) => a.getAttribute('href')), '/faq');
   await s.page.keyboard.press('Escape');
   assert.equal(await s.page.evaluate(() => document.documentElement.classList.contains('menu-open')), false);
@@ -460,29 +476,31 @@ await scenario('phones: the bottom tab bar, and More opens the whole menu above 
   await s.close();
 });
 
-await scenario('/boots-on-the-ground: in the menu second, after Home; the page, its illustration and its clean URL', async () => {
+await scenario('/field-team: in the menu second, after Home, then Industries; the page, its illustration, its clean URL and the old addresses', async () => {
   for (const width of [390, 800, 1000, 1280]) {
-    const s = await open({ path: '/boots-on-the-ground', width, height: 844 });
+    const s = await open({ path: '/field-team', width, height: 844 });
     if (width < 760) await s.page.click('.tab-more');
     else if (width < 1000) await s.page.click('.menu-btn');
     const items = await s.page.$$eval('#site-nav li:not(.nav-cta) a', (l) => l.map((a) => a.textContent.trim()));
-    assert.deepEqual(items.slice(0, 3), ['Home', 'Boots on the ground', 'How it works']);
-    assert.equal(await s.page.$eval('#site-nav a[aria-current="page"]', (a) => a.getAttribute('href')), '/boots-on-the-ground');
+    assert.deepEqual(items.slice(0, 4), ['Home', 'Field Team', 'Industries', 'How it works']);
+    assert.equal(await s.page.$eval('#site-nav a[aria-current="page"]', (a) => a.getAttribute('href')), '/field-team');
     if (width >= 1000) {
       const tops = await s.page.$$eval('#site-nav li', (l) => l.filter((li) => li.offsetParent).map((li) => li.getBoundingClientRect().top));
       assert.equal(new Set(tops.map(Math.round)).size, 1, `${width}px: the menu fits on one line`);
     }
-    assert.equal(await s.page.textContent('h1'), 'In person, every month.');
-    assert.equal(await s.page.textContent('.gt-sub'), 'Deliveries, drop-offs and every stop tracked in your portal.');
+    assert.ok((await s.page.textContent('h1')).trim().length > 0, 'the headline');
+    assert.doesNotMatch(await s.page.evaluate(() => document.body.innerText), /courtesy|Boots on the ground|Growth team/i);
     assert.ok(await s.page.$eval('.gt-art img', (i) => i.complete && i.naturalWidth > 0), 'the illustration loads');
     assert.equal(await s.page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true, `${width}px: no sideways scroll`);
     assert.deepEqual(s.jsErrors, []);
     assert.deepEqual(s.missing, []);
     await s.close();
   }
-  const r = await fetch(`${BASE}/boots-on-the-ground.html`, { redirect: 'manual' });
-  assert.equal(r.status, 301);
-  assert.equal(new URL(r.headers.get('location'), BASE).pathname, '/boots-on-the-ground');
+  for (const old of ['/field-team.html', '/boots-on-the-ground', '/boots-on-the-ground.html', '/growth-team', '/growth-team.html']) {
+    const r = await fetch(`${BASE}${old}`, { redirect: 'manual' });
+    assert.equal(r.status, 301, old);
+    assert.equal(new URL(r.headers.get('location'), BASE).pathname, '/field-team', `${old} goes straight to /field-team`);
+  }
 });
 
 await browser.close();

@@ -95,8 +95,70 @@
   force = true
 
 [[redirects]]
+  from = "/field-team.html"
+  to = "/field-team"
+  status = 301
+  force = true
+
+# The industry pages (November 20, 2026), built by tools/build-industries.mjs: each .html goes to its clean URL.
+[[redirects]]
+  from = "/industries/med-spas.html"
+  to = "/industries/med-spas"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/industries/dental.html"
+  to = "/industries/dental"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/industries/chiropractic-physical-therapy.html"
+  to = "/industries/chiropractic-physical-therapy"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/industries/gyms-fitness-studios.html"
+  to = "/industries/gyms-fitness-studios"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/industries/salons-barbershops.html"
+  to = "/industries/salons-barbershops"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/industries/restaurants-cafes.html"
+  to = "/industries/restaurants-cafes"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/industries/home-services.html"
+  to = "/industries/home-services"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/industries/auto-shops.html"
+  to = "/industries/auto-shops"
+  status = 301
+  force = true
+
+# The Boots on the ground page became the Field Team page on November 20, 2026.
+[[redirects]]
+  from = "/boots-on-the-ground"
+  to = "/field-team"
+  status = 301
+  force = true
+
+[[redirects]]
   from = "/boots-on-the-ground.html"
-  to = "/boots-on-the-ground"
+  to = "/field-team"
   status = 301
   force = true
 
@@ -571,6 +633,13 @@
   status = 404
   force = true
 
+# The page generator and its data (tools/) are repository files, not part of the site.
+[[redirects]]
+  from = "/tools/*"
+  to = "/404.html"
+  status = 404
+  force = true
+
 [[redirects]]
   from = "/README.md"
   to = "/404.html"
@@ -599,12 +668,12 @@
 # The Growth team page became Boots on the ground on October 24, 2026.
 [[redirects]]
   from = "/growth-team"
-  to = "/boots-on-the-ground"
+  to = "/field-team"
   status = 301
   force = true
 
 [[redirects]]
   from = "/growth-team.html"
-  to = "/boots-on-the-ground"
+  to = "/field-team"
   status = 301
   force = true

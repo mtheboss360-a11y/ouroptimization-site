@@ -178,7 +178,7 @@
     nav.addEventListener('click', function (e) { if (e.target.closest('a')) setMenu(false); });
   }
 
-  /* The portal tour (home #dashboard, /boots-on-the-ground #tracking): tabs for the portal's screens, as in the portal's
+  /* The portal tour (home #dashboard, /field-team #tracking, /referral-network #dashboard): tabs for the portal's screens, as in the portal's
      own side rail. Arrow keys, Home and End move between tabs. Without this script every screen shows, one under the other. */
   document.querySelectorAll('[data-ptour]').forEach(function (tour) {
     var tabs = Array.prototype.slice.call(tour.querySelectorAll('[role="tab"]'));

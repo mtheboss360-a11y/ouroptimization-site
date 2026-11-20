@@ -24,19 +24,31 @@
      - flyer-network and flyer-drops: the flyer network folded into the referral routes on October 23, 2026
        (/flyer-network 301s to /referral-network), so they prefill the referral routes message.
      - patient-dinners (now patient-network, the private patient dinner page) and google-ads (now
-       online-search-network) were renamed on October 22, 2026 and prefill the same message as the new key. */
+       online-search-network) were renamed on October 22, 2026 and prefill the same message as the new key.
+     November 20, 2026: the Field Team page and the eight industry pages under /industries/ get a key each, named
+     after the last part of the URL (/industries/dental links to /contact?about=dental). Each industry message
+     matches the aboutText in tools/industries/<slug>.json. */
   var ABOUT = {
     'pricing': "I'm asking about pricing.",
     'referral-network': "I'm asking about referral routes.",
     'flyer-network': "I'm asking about referral routes.",
-    'patient-network': "I'm asking about a private patient dinner.",
+    'patient-network': "I'm asking about a private customer dinner.",
     'online-search-network': "I'm asking about Google Ads in my own account.",
     'review-tags': "I'm asking about review tags.",
     'website-design': "I'm asking about a website redesign.",
     'sample-contract': "I'm asking about the sample contract.",
-    'patient-dinners': "I'm asking about a private patient dinner.",
+    'patient-dinners': "I'm asking about a private customer dinner.",
     'flyer-drops': "I'm asking about referral routes.",
-    'google-ads': "I'm asking about Google Ads in my own account."
+    'google-ads': "I'm asking about Google Ads in my own account.",
+    'field-team': "I'm asking about the field team.",
+    'med-spas': "I'm asking about field sales for my med spa.",
+    'dental': "I'm asking about field sales for my dental practice.",
+    'chiropractic-physical-therapy': "I'm asking about field sales for my chiropractic or physical therapy practice.",
+    'gyms-fitness-studios': "I'm asking about field sales for my gym or fitness studio.",
+    'salons-barbershops': "I'm asking about field sales for my salon or barbershop.",
+    'restaurants-cafes': "I'm asking about field sales for my restaurant or cafe.",
+    'home-services': "I'm asking about field sales for my home service business.",
+    'auto-shops': "I'm asking about field sales for my auto shop."
   };
 
   function str(v) { return v == null ? '' : String(v); }
@@ -66,7 +78,7 @@
         if (tooLong(name, v)) return 'Use ' + MAX.name + ' characters or fewer.';
         return '';
       case 'clinic':
-        if (!v) return 'Enter the name of your clinic.';
+        if (!v) return 'Enter the name of your business.';
         if (tooLong(name, v)) return 'Use ' + MAX.clinic + ' characters or fewer.';
         return '';
       case 'phone':
@@ -75,10 +87,10 @@
         return '';
       case 'email':
         if (!v) return '';
-        if (!isEmail(v)) return 'Enter an email address like name@yourclinic.com, or leave it blank.';
+        if (!isEmail(v)) return 'Enter an email address like name@yourbusiness.com, or leave it blank.';
         return '';
       case 'town':
-        if (!v) return 'Enter the town your clinic is in.';
+        if (!v) return 'Enter the town your business is in.';
         if (tooLong(name, v)) return 'Use ' + MAX.town + ' characters or fewer.';
         return '';
       case 'best_time':

@@ -82,16 +82,16 @@ describe('/contact: the call form', () => {
     }
   });
 
-  test('the message help (with the patient information line), the submit button and the call-now line', () => {
+  test('the message help (with the health and patient information line), the submit button and the call-now line', () => {
     const t = text(byId(html, 'call'));
     assert.doesNotMatch(form, /call-message-note/);
-    assert.match(form, /<p class="help" id="call-message-help">Anything you&rsquo;d like us to know before the call\. Please don&rsquo;t include any patient information\.<\/p>/);
+    assert.match(form, /<p class="help" id="call-message-help">Anything you&rsquo;d like us to know before the call\. Please don&rsquo;t include any health or patient information\.<\/p>/);
     assert.match(form, /aria-describedby="call-message-help call-message-err"/);
     assert.match(form, /<button class="btn btn-primary" type="submit">Book my 15-minute call<\/button>/);
     assert.match(t, /Prefer to talk now\? Call or text 331-271-6851\./);
     assert.match(t, /We use these details to call you back about your request\./);
     assert.match(t, /We show you your matched businesses/);
-    assert.match(t, /We work with clinics in Chicago's western suburbs\./);
+    assert.match(t, /We work with local businesses in Chicago's western suburbs\./);
   });
 });
 
@@ -108,7 +108,7 @@ describe('thanks page', () => {
   test('says we will call at the time they picked, with our number, email and a way home', () => {
     const t = text(thanks.slice(thanks.indexOf('<main'), thanks.indexOf('</main>')));
     assert.equal(text(/<h1\b[^>]*>([\s\S]*?)<\/h1>/.exec(thanks)[1]), "Thank you. We'll call you.");
-    assert.match(t, /We'll call you at the time you picked, to talk through what fits your clinic\./);
+    assert.match(t, /We'll call you at the time you picked, to talk through what fits your business\./);
     assert.match(t, /If that time stops working, or you'd rather talk sooner, call or text us at 331-271-6851\./);
     assert.doesNotMatch(t, /Mustafa/, 'the page says "we"');
     assert.doesNotMatch(t, /patient information/i);
@@ -234,22 +234,32 @@ describe('call.js: ?about= prefill', () => {
     'pricing': "I'm asking about pricing.",
     'referral-network': "I'm asking about referral routes.",
     'flyer-network': "I'm asking about referral routes.",
-    'patient-network': "I'm asking about a private patient dinner.",
+    'patient-network': "I'm asking about a private customer dinner.",
     'online-search-network': "I'm asking about Google Ads in my own account.",
     'review-tags': "I'm asking about review tags.",
     'website-design': "I'm asking about a website redesign.",
     'sample-contract': "I'm asking about the sample contract.",
-    'patient-dinners': "I'm asking about a private patient dinner.",
+    'patient-dinners': "I'm asking about a private customer dinner.",
     'flyer-drops': "I'm asking about referral routes.",
-    'google-ads': "I'm asking about Google Ads in my own account."
+    'google-ads': "I'm asking about Google Ads in my own account.",
+    // November 20, 2026: the Field Team page and the eight industry pages (the industry keys and messages come from tools/industries/*.json)
+    'field-team': "I'm asking about the field team.",
+    'auto-shops': "I'm asking about field sales for my auto shop.",
+    'chiropractic-physical-therapy': "I'm asking about field sales for my chiropractic or physical therapy practice.",
+    'dental': "I'm asking about field sales for my dental practice.",
+    'gyms-fitness-studios': "I'm asking about field sales for my gym or fitness studio.",
+    'home-services': "I'm asking about field sales for my home service business.",
+    'med-spas': "I'm asking about field sales for my med spa.",
+    'restaurants-cafes': "I'm asking about field sales for my restaurant or cafe.",
+    'salons-barbershops': "I'm asking about field sales for my salon or barbershop."
   };
   test('one key for each service page, and the old keys still work', () => {
     assert.deepEqual(call.ABOUT, KEYS);
     for (const [old, now] of [['patient-dinners', 'patient-network'], ['flyer-drops', 'referral-network'], ['flyer-network', 'referral-network'], ['google-ads', 'online-search-network']]) {
       assert.equal(call.prefillFor(`?about=${old}`, ''), call.prefillFor(`?about=${now}`, ''), `${old} and ${now} prefill the same message`);
     }
-    for (const p of PAGES.filter((x) => x.url && !x.noindex && !['/', '/boots-on-the-ground', '/about', '/faq', '/contact', '/privacy', '/terms'].includes(x.url))) {
-      assert.ok(Object.hasOwn(KEYS, p.url.slice(1)), `${p.url} has a key`);
+    for (const p of PAGES.filter((x) => x.url && !x.noindex && !['/', '/about', '/faq', '/contact', '/privacy', '/terms'].includes(x.url))) {
+      assert.ok(Object.hasOwn(KEYS, p.url.split('/').pop()), `${p.url} has a key`);
     }
     for (const [key, message] of Object.entries(KEYS)) {
       assert.equal(call.aboutFromSearch(`?about=${key}`), key);
