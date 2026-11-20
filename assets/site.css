@@ -1710,7 +1710,7 @@ html:not(.js) .ptour-panel[hidden]{display:block}
 .ind-shot img{display:block;width:100%;height:auto}
 .ind-shot figcaption{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin-top:12px;font-size:.92rem;color:var(--ink-3)}
 @media (max-width:759.98px){
-  .ind-shot .pt-browser{width:min(300px,82vw);margin:0 auto;border:7px solid #10261B;border-radius:34px;background:#10261B}
+  .ind-shot .pt-browser{display:block;width:min(300px,82vw);margin:0 auto;border:7px solid #10261B;border-radius:34px;background:#10261B}
   .ind-shot .pt-bar{display:none}
   .ind-shot .pt-browser img{border-radius:27px}
   .ind-shot figcaption{justify-content:center}
@@ -1734,3 +1734,12 @@ html:not(.js) .ptour-panel[hidden]{display:block}
 /* A HIPAA sentence appears here only once the owner turns it on in assets/site-config.js */
 .hipaa-line{display:flex;align-items:flex-start;gap:10px;margin-top:22px;font-weight:600;color:var(--ink)}
 .hipaa-line[hidden]{display:none}
+/* review fixes: the industry FAQ list sits under its centered heading (#questions also names a pricing rule) */
+.ind-page #questions .faq{margin-inline:auto}
+/* the pricing comparison's plan names sit one level under its heading */
+.prc-c3 h4{margin:0 0 10px;font:600 1.18rem/1.3 var(--display);letter-spacing:-.012em;color:var(--ink);text-wrap:balance}
+/* the hidden case study template, ready for when it is filled in */
+@media (min-width:861px){.case-stats{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.case-quote{margin:clamp(28px,4vw,40px) 0 0;padding-left:20px;border-left:3px solid var(--gold)}
+.case-quote p{font:600 clamp(1.15rem,1.05rem + .4vw,1.35rem)/1.45 var(--display);color:var(--ink)}
+.case-quote footer{margin-top:8px;font-size:.92rem;color:var(--ink-3)}

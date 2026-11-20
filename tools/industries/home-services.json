@@ -5,19 +5,37 @@
   "noun": "home service business",
   "healthcare": false,
   "title": "Field Sales Team for Home Services | Our Wellness Network",
-  "description": "Your outsourced field sales team in Naperville and Hinsdale. We visit the hardware stores, real estate offices and movers near you and build a referral network you can track.",
+  "description": "Field sales for home service businesses in Naperville and Hinsdale: we visit the hardware stores, real estate offices and movers near you and build a network you can track.",
   "cardBlurb": "We visit the hardware stores, real estate offices and movers near you and build a network you can track.",
   "h1": "Your field sales team,",
   "h1Em": "for home service businesses.",
   "intro": "We visit the businesses homeowners deal with near you, build relationships with their staff and turn them into a referral network you can track. Every stop and every sign-up shows up in your portal.",
   "partnersIntro": "People buying, renting, moving into or fixing up a home deal with these businesses, often right when a job comes up.",
   "partners": [
-    { "name": "Hardware stores", "why": "Homeowners come in for parts and supplies, and some find out partway through that the job needs a pro." },
-    { "name": "Real estate offices", "why": "Buyers and sellers need repairs, upgrades and move-in work done, often on a deadline." },
-    { "name": "Property management offices", "why": "Managers keep a short list of pros they can call for every unit and every tenant request." },
-    { "name": "Moving companies", "why": "People settling into a new home need a whole list of local pros they can trust." },
-    { "name": "Self-storage facilities", "why": "Renters are often in the middle of a move, a remodel or both." },
-    { "name": "Appliance stores", "why": "A new washer or range can need a plumber or an electrician to finish the job." }
+    {
+      "name": "Hardware stores",
+      "why": "Homeowners come in for parts and supplies, and some find out partway through that the job needs a pro."
+    },
+    {
+      "name": "Real estate offices",
+      "why": "Buyers and sellers need repairs, upgrades and move-in work done, often on a deadline."
+    },
+    {
+      "name": "Property management offices",
+      "why": "Managers keep a short list of pros they can call for every unit and every tenant request."
+    },
+    {
+      "name": "Moving companies",
+      "why": "People settling into a new home need a whole list of local pros they can trust."
+    },
+    {
+      "name": "Self-storage facilities",
+      "why": "Renters are often in the middle of a move, a remodel or both."
+    },
+    {
+      "name": "Appliance stores",
+      "why": "A new washer or range can need a plumber or an electrician to finish the job."
+    }
   ],
   "treatsIntro": "Every visit starts the same way: coffee and treats for the whole staff at each partner business, from the counter to the back office. It's simple hospitality, it's included in your plan, and it's the reason staff are glad when our field team walks in.",
   "treatExamples": [
@@ -28,15 +46,33 @@
   "portalNote": "In your portal you see every stop we make for you and every sign-up that comes through a partner's code, ready for your office to call back and schedule. It's how you see which partnerships are working, business by business.",
   "notesTitle": "Made for home service businesses.",
   "notes": [
-    { "title": "A one-page partner agreement", "text": "Every partner business signs a one-page agreement: mutual promotion, and nobody is paid per referral or per customer." },
-    { "title": "No one in your trade", "text": "Our matching software leaves businesses in your trade off your route, and we skip the agents, managers and suppliers you already work with unless you ask." },
-    { "title": "Your words only", "text": "We describe your services only in words you've approved, and we leave only the printed materials you've signed off on." }
+    {
+      "title": "A one-page partner agreement",
+      "text": "Every partner business signs a one-page agreement: mutual promotion, and nobody is paid per referral or per customer."
+    },
+    {
+      "title": "No one in your trade",
+      "text": "Our matching software leaves businesses in your trade off your route, and we skip the agents, managers and suppliers you already work with unless you ask."
+    },
+    {
+      "title": "Your words only",
+      "text": "We describe your services only in words you've approved, and we leave only the printed materials you've signed off on."
+    }
   ],
   "exclusivity": "Partners agree to promote one business in your trade, yours, for as long as you are a client.",
   "faq": [
-    { "q": "Will you visit other businesses in my trade?", "a": "No. Our matching software ranks the businesses near you that share your customers and don't compete with you. You approve the list before we visit anyone." },
-    { "q": "I already know a few real estate agents. Will you visit them?", "a": "Not unless you ask. We skip any business you already work with, and you approve the full list before any visit." },
-    { "q": "How do sign-ups reach me?", "a": "Every sign-up shows up in your portal with the business and staff member whose code it came through, so your office can call back and set up the job. It also shows you which partnerships are working." }
+    {
+      "q": "Will you visit other businesses in my trade?",
+      "a": "No. Our matching software ranks the businesses near you that share your customers and don't compete with you. You approve the list before we visit anyone."
+    },
+    {
+      "q": "I already know a few real estate agents. Will you visit them?",
+      "a": "Not unless you ask. We skip any business you already work with, and you approve the full list before any visit."
+    },
+    {
+      "q": "How do sign-ups reach me?",
+      "a": "Every sign-up shows up in your portal with the business and staff member whose code it came through, so your office can call back and set up the job. It also shows you which partnerships are working."
+    }
   ],
   "aboutKey": "home-services",
   "aboutText": "I'm asking about field sales for my home service business."

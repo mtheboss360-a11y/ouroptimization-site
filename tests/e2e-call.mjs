@@ -360,6 +360,22 @@ await scenario('/thanks loads on its own: noindex, the promise, and a way home',
   await close();
 });
 
+await scenario('industry pages: the sample portal screen shows on phones and desktops, labelled, with no sideways scroll', async () => {
+  for (const [path, width] of [['/industries/auto-shops', 390], ['/industries/dental', 390], ['/industries/med-spas', 1280]]) {
+    const s = await open({ path, width, height: 844 });
+    await s.page.locator('.ind-shot').scrollIntoViewIfNeeded();
+    await s.page.waitForFunction(() => { const i = document.querySelector('.ind-shot img'); return i && i.complete && i.naturalWidth > 0; });
+    const shot = await s.page.$eval('.ind-shot', (f) => ({ h: f.querySelector('img').getBoundingClientRect().height, label: f.querySelector('.sample-tag').textContent.trim(), src: f.querySelector('img').currentSrc }));
+    assert.ok(shot.h > 200, `${path} at ${width}px: the screen is shown (${shot.h}px)`);
+    assert.equal(shot.label, 'Sample account, illustrative data');
+    assert.match(shot.src, width < 760 ? /portal2-phone-routes-/ : /portal2-routes-/, shot.src);
+    assert.equal(await s.page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true, `${path} at ${width}px: no sideways scroll`);
+    assert.deepEqual(s.jsErrors, []);
+    assert.deepEqual(s.missing, []);
+    await s.close();
+  }
+});
+
 await scenario('healthcare pages: the HIPAA line stays hidden until the owner confirms it and turns it on', async () => {
   let s = await open({ path: '/industries/dental' });
   assert.equal(await s.page.$eval('[data-flag="hipaaConfirmed"]', (p) => p.hidden), true);

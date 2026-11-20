@@ -73,13 +73,13 @@ const ARROW = icon('i-arrow');
 const PH = '(max-width:759.98px)';
 const SHOT_SIZES = '(min-width:1180px) 640px, (min-width:900px) 52vw, calc(100vw - 64px)';
 const PHONE_SIZES = 'min(286px, calc(82vw - 14px))';
-const stopsPicture = (alt) => '<picture>'
-  + `<source media="${PH}" type="image/avif" srcset="/assets/img/portal2-phone-stops-390.avif 390w, /assets/img/portal2-phone-stops-780.avif 780w" sizes="${PHONE_SIZES}" width="780" height="1688">`
-  + `<source media="${PH}" type="image/webp" srcset="/assets/img/portal2-phone-stops-390.webp 390w, /assets/img/portal2-phone-stops-780.webp 780w" sizes="${PHONE_SIZES}" width="780" height="1688">`
-  + `<source media="${PH}" srcset="/assets/img/portal2-phone-stops-780.jpg 780w" sizes="${PHONE_SIZES}" width="780" height="1688">`
-  + `<source type="image/avif" srcset="/assets/img/portal2-stops-800.avif 800w, /assets/img/portal2-stops-1280.avif 1280w, /assets/img/portal2-stops-1920.avif 1920w" sizes="${SHOT_SIZES}" width="1280" height="800">`
-  + `<source type="image/webp" srcset="/assets/img/portal2-stops-800.webp 800w, /assets/img/portal2-stops-1280.webp 1280w, /assets/img/portal2-stops-1920.webp 1920w" sizes="${SHOT_SIZES}" width="1280" height="800">`
-  + `<img src="/assets/img/portal2-stops-1280.jpg" width="1280" height="800" alt="${alt}" loading="lazy" decoding="async">`
+const resultsPicture = (alt) => '<picture>'
+  + `<source media="${PH}" type="image/avif" srcset="/assets/img/portal2-phone-routes-390.avif 390w, /assets/img/portal2-phone-routes-780.avif 780w" sizes="${PHONE_SIZES}" width="780" height="1688">`
+  + `<source media="${PH}" type="image/webp" srcset="/assets/img/portal2-phone-routes-390.webp 390w, /assets/img/portal2-phone-routes-780.webp 780w" sizes="${PHONE_SIZES}" width="780" height="1688">`
+  + `<source media="${PH}" srcset="/assets/img/portal2-phone-routes-780.jpg 780w" sizes="${PHONE_SIZES}" width="780" height="1688">`
+  + `<source type="image/avif" srcset="/assets/img/portal2-routes-800.avif 800w, /assets/img/portal2-routes-1280.avif 1280w, /assets/img/portal2-routes-1920.avif 1920w" sizes="${SHOT_SIZES}" width="1280" height="800">`
+  + `<source type="image/webp" srcset="/assets/img/portal2-routes-800.webp 800w, /assets/img/portal2-routes-1280.webp 1280w, /assets/img/portal2-routes-1920.webp 1920w" sizes="${SHOT_SIZES}" width="1280" height="800">`
+  + `<img src="/assets/img/portal2-routes-1280.jpg" width="1280" height="800" alt="${alt}" loading="lazy" decoding="async">`
   + '</picture>';
 
 /* ---------- the page template ---------- */
@@ -138,7 +138,7 @@ ${d.partners.map((p) => `      <li><h3>${esc(p.name)}</h3><p>${esc(p.why)}</p></
 <section class="section" aria-labelledby="visits-h" id="visits">
   <div class="wrap">
     <div class="section-head center reveal">
-      <p class="eyebrow">Treats for Staff</p>
+      <p class="eyebrow">In person</p>
       <h2 id="visits-h">Coffee, treats <em class="dn-line">and a real hello.</em></h2>
       <p class="intro">${esc(d.treatsIntro)}</p>
     </div>
@@ -180,8 +180,8 @@ ${d.treatExamples.map((t) => `        <li>${esc(t)}</li>`).join('\n')}
       <p class="owc-more"><a class="textlink" href="/referral-network#dashboard">See everything in the portal${ARROW}</a></p>
     </div>
     <figure class="ind-shot reveal">
-      <div class="pt-browser"><div class="pt-bar" aria-hidden="true"><span></span><span></span><span></span><span class="pt-url">ournetworkportal.com</span></div>${stopsPicture("Screenshot of the portal's sample account: one route on a map, the business in the middle and ten numbered stops around it, beside the list of stops with the sign-ups from each.")}</div>
-      <figcaption><span class="owc-tag sample-tag">Sample account, illustrative data</span> Your route, stop by stop.</figcaption>
+      <div class="pt-browser"><div class="pt-bar" aria-hidden="true"><span></span><span></span><span></span><span class="pt-url">ournetworkportal.com</span></div>${resultsPicture("Screenshot of the portal's sample account: the totals for five routes: stops visited, stops still to visit, referral cards handed out, staff sign-ups, bookings by the front desk and businesses that joined.")}</div>
+      <figcaption><span class="owc-tag sample-tag">Sample account, illustrative data</span> Activity and results, as the campaign runs.</figcaption>
     </figure>
   </div>
 </section>`);
