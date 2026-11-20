@@ -1681,3 +1681,9 @@ html:not(.js) .ptour-panel[hidden]{display:block}
   .prc-guar>li:only-child>h3{grid-area:h;margin-top:0;align-self:end}
   .prc-guar>li:only-child>.prc-guar-say{grid-area:say;max-width:52ch}
 }
+
+/* November 20, 2026: who it is for. Every local business its neighbors can recommend, as the portal's chips. */
+.who-for{padding-block:clamp(48px,6vw,80px)}
+.who-for .section-head{margin-bottom:clamp(22px,3vw,30px)}
+.who-chips{justify-content:center;gap:8px 10px;max-width:860px;margin:0 auto}
+.who-chips li{padding:9px 16px;font-size:.92rem;font-weight:550}

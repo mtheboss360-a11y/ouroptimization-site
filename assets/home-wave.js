@@ -48,8 +48,8 @@
     return true;
   }
 
-  // Your clinic and its nearby wellness partners: illustrated owners, not photos of real people.
-  const clinic = { label: 'Your clinic' };
+  // Your business and the nearby businesses that share its customers: illustrated owners, not photos of real people.
+  const clinic = { label: 'Your business' };
   const partners = [
     { label: 'Devon · Gym', skin: '#8D5A3B', hair: '#1E1A17', shirt: '#2F5D4A', style: 'short', ang: -155 },
     { label: 'Rosa · Yoga studio', skin: '#E6B99A', hair: '#6B4A2E', shirt: '#7FA48F', style: 'bun', ang: -105 },
