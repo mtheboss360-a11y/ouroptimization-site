@@ -1,0 +1,43 @@
+{
+  "slug": "med-spas",
+  "order": 1,
+  "name": "Med Spas & Wellness",
+  "noun": "med spa",
+  "healthcare": true,
+  "title": "Field Sales Team for Med Spas | Our Wellness Network",
+  "description": "Our field team visits the gyms, salons and studios near your med spa in Oak Brook, Hinsdale and Naperville and builds a referral network you can track.",
+  "cardBlurb": "We visit the gyms, salons and studios near your med spa and build a referral network you can track.",
+  "h1": "Your in-person sales team,",
+  "h1Em": "out in your community.",
+  "intro": "Our software finds the businesses that share your clients. Every month our field team walks into the gyms, salons and studios around your med spa and gets to know the people who work there.",
+  "partnersIntro": "These are the places your clients already spend their time, and the staff there see them often.",
+  "partners": [
+    { "name": "Gyms and fitness studios", "why": "Their members already put time and money into how they look and feel." },
+    { "name": "Yoga and pilates studios", "why": "Regulars come back week after week, and the front desk knows them by name." },
+    { "name": "Hair salons", "why": "Clients spend a while in the chair talking with their stylist about how they want to look." },
+    { "name": "Nail salons", "why": "Regulars come back every few weeks and know the staff well." },
+    { "name": "Bridal shops", "why": "Brides and their families are planning how they want to look on a big day." },
+    { "name": "Clothing boutiques", "why": "Their shoppers care about how they look and like to shop close to home." }
+  ],
+  "treatsIntro": "On every visit, our field team brings coffee and treats for the whole staff at each partner business, from the front desk to every trainer and stylist. It's simple hospitality, it's the reason staff are glad to see us, and it's included in your plan.",
+  "treatExamples": [
+    "Coffee and pastries for a hair salon's morning stylists",
+    "Muffins and coffee for a gym's opening front desk crew",
+    "Cookies and iced coffee for a nail salon's afternoon shift"
+  ],
+  "portalNote": "Every sign-up lands in your portal with the business and staff member whose code it came through, so your front desk can call them, and the call comes from your med spa, not from us. Together the sign-ups show which businesses, visits and routes are working.",
+  "notesTitle": "The ground rules we keep.",
+  "notes": [
+    { "title": "A one-page partner agreement", "text": "Every partner business signs a one-page agreement: mutual promotion, and nobody is paid per referral or per patient." },
+    { "title": "No patient records, ever", "text": "We never receive patient records, and partners never see who signed up. The sign-up form asks no health questions, and your front desk makes the calls." },
+    { "title": "Your words only", "text": "We make no medical or health claims and never describe your services in words you haven't approved." }
+  ],
+  "exclusivity": "Partners agree to promote one med spa, yours, for as long as you are a client.",
+  "faq": [
+    { "q": "Can't I just walk into the gym next door myself?", "a": "You can. Walking in is the easy part. The work is everything around it: finding the non-competing businesses that share your clients (even ones you don't know yet), giving every staff member a personal tap-to-schedule card and showing you each sign-up and the code it came through, while you run your med spa." },
+    { "q": "What about the rules for healthcare practices?", "a": "Partner programs for healthcare practices are reviewed for compliance with applicable state rules before launch. We never receive patient records, partners never see who signed up, and the sign-up form asks no health questions. If you'd like your own counsel to review the partner agreement, we'll send it to them." },
+    { "q": "Can another med spa get the same partners?", "a": "No. The partners we sign for you agree to promote one med spa, yours, for as long as you are a client. It is written into the partner agreement, and you see it before you sign anything." }
+  ],
+  "aboutKey": "med-spas",
+  "aboutText": "I'm asking about field sales for my med spa."
+}

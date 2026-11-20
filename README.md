@@ -1,10 +1,8 @@
 # ouroptimization.com
 
-**Our Wellness Network** ("Your Organic Growth Team.") is a brand of OUR Optimization LLC, a local company in Chicago's western suburbs. The site sells one service to independent med spas, **referral routes**: our business matching software maps the businesses around a clinic and ranks the non-competing ones that share its customers; the owner approves the list; a rep visits a route of 5 matched businesses and introduces the clinic to their staff; every staff member met gets a personal tap-and-scan code (NFC tag and QR) that opens the clinic's first-visit offer, tagged with who sent it; every sign-up lands in the clinic's client portal for its front desk to call.
+**Our Wellness Network** ("Your outsourced field sales team.") is a service of OUR Optimization LLC, a local company in Chicago's western suburbs (Oak Brook, Lombard, Elmhurst, Naperville, Downers Grove, Hinsdale). Our field team visits the businesses around a client, builds relationships with their staff, and turns them into a referral network the client can track in the client portal. The site is vertical-led (November 20, 2026): a general home page, then one landing page per industry.
 
-The site was rebuilt to the owner's brief of October 23, 2026, with the owner's notes of October 24 (new hero lines, the dashboard on the green band, no map, no results section, the Growth team page). Its job: a med spa owner scans a card our rep left at her front desk, reads the site on her phone between patients and books a 15-minute call.
-
-Static HTML/CSS/JS, no build step, no dependencies, no third-party requests.
+Static HTML/CSS/JS, no build step on Netlify, no dependencies, no third-party requests. The industry pages are generated locally by `tools/build-industries.mjs` and committed (see Industry pages).
 
 ## Deploy
 
@@ -14,23 +12,36 @@ Netlify site "ouroptimization", linked to this repo, branch `main`. No build com
 
 | URL | File | In the menu | Notes |
 | --- | --- | --- | --- |
-| `/` | `index.html` | Home | Hero (no buttons): "Your Organic Growth Team.", "We put your community into the brand." and the boots-on-the-ground line. Then the dashboard on the green band (the screens tip up flat as you scroll), the staff courtesy, the pricing teaser, compliance (with the sample contract link), the dinner add-on, the closing call (with the phone number). |
-| `/boots-on-the-ground` | `boots-on-the-ground.html` | Growth team | "Your Organic Growth Team." and "The boots on the ground maintaining your relationships.": what our people do on a route (treats and coffee, meeting the staff, the codes, the visit log) and how the relationships are kept up month after month. The illustration (`assets/img/team-visit-*`) is Higgsfield clay figurines in the hero's style, not real people. |
-| `/referral-network` | `referral-network.html` | How it works | Referral routes end to end. The old flyer network is folded in here. |
-| `/pricing` | `pricing.html` | Pricing | The trial ($250), Starter ($250/mo), Growth ($400/mo), Reach ($800/mo), the trial guarantee, terms, who supplies what, add-ons priced on a call. The one page with a closing call band. |
-| `/faq` | `faq.html` | FAQ | Ten questions from the brief. |
-| `/about` | `about.html` | About | Who we are, the Grace Pediatrics client work, what we put in writing. |
+| `/` | `index.html` | Home | Hero (no buttons): "Your outsourced field sales team." Then Industries (cards to the industry pages), in person, the portal on the green band (every screen and figure labelled "Sample account, illustrative data"), Treats for Staff, in writing, a hidden case study template, the closing call with the founding client line. |
+| `/field-team` | `field-team.html` | Field Team | What the field team does on every visit: Treats for Staff, drop-offs, the codes, every stop tracked. Was `/boots-on-the-ground` (301). |
+| `/#industries` | (home section) | Industries | The menu item jumps to the home page's Industries cards. `/industries` itself still 301s home (an old page). |
+| `/industries/<slug>` | `industries/<slug>.html` | no | Eight industry pages from one template: med-spas, dental, chiropractic-physical-therapy, gyms-fitness-studios, salons-barbershops, restaurants-cafes, home-services, auto-shops. Generated; do not edit by hand. |
+| `/referral-network` | `referral-network.html` | How it works | Matching, how partners are chosen, a typical month, campaign length and commitment, the codes, the portal. |
+| `/pricing` | `pricing.html` | Pricing | The $450 trial, Neighborhood $600 and Community $1,100 a month, "Plans start at [STARTING PRICE]", what each tier includes, the founding client program, the trial guarantee, terms, add-ons priced on a call. |
+| `/faq` | `faq.html` | FAQ | Treats for Staff, how it works, routes and the trial, leads and data, healthcare practices. |
+| `/about` | `about.html` | About | Who we are, what we put in writing. |
 | `/contact` | `contact.html` | Contact | The call form (see Forms). |
-| `/patient-network` | `patient-network.html` | no | The private patient dinner add-on, reached from the home add-on card. Quoted per event. |
-| `/online-search-network` | `online-search-network.html` | no | Add-on: Google Ads in the clinic's own account. |
+| `/patient-network` | `patient-network.html` | no | Add-on: private dinners for your best customers (reached from pricing). Keep the URL. |
+| `/online-search-network` | `online-search-network.html` | no | Add-on: Google Ads in your own account. |
 | `/review-tags` | `review-tags.html` | no | Add-on: tap-to-review tags. Keep the URL (printed tags may point at it). |
 | `/website-design` | `website-design.html` | no | Add-on: a website. Keep the URL. |
 | `/expo-vendors` | `expo-vendors.html` | no | Baby & Kids Health Expo table requests (noindex). Keep the URL and the form. |
-| `/privacy`, `/terms` | `privacy.html`, `terms.html` | footer | Last updated October 24, 2026. |
+| `/privacy`, `/terms` | `privacy.html`, `terms.html` | footer | Last updated November 20, 2026. |
 | `/thanks` | `thanks.html` | no | The call form's confirmation (noindex). |
 | (any unknown URL) | `404.html` | no | Served with status 404. |
 
-Every page shares the same header (the menu: Home, Growth team, How it works, Pricing, Sample contract, FAQ, About, Contact, and the Client Portal button to https://www.ournetworkportal.com), the same one-line footer (OUR Optimization LLC, Privacy Policy, Terms of Service) and the same head pattern: its own title and description, a canonical URL, Open Graph and Twitter tags (`assets/img/og-network.jpg`) and LocalBusiness structured data (name, legal name, phone, email, service area Chicago's western suburbs). The expo page has a brand-only header. When you change the menu or the footer, change it on every page; `node --test` checks they match.
+Every page shares the same header (the menu: Home, Field Team, Industries, How it works, Pricing, FAQ, About, Contact, and the Client Portal button to https://www.ournetworkportal.com; on phones the bottom tab bar: Home, Field Team, How it works, Pricing, More) and the same one-line footer ("Our Wellness Network is a service of OUR Optimization LLC.", Privacy Policy, Terms of Service).
+
+## Industry pages (`tools/`)
+
+Each industry is one JSON file in `tools/industries/<slug>.json` (partner business types, treat examples, notes, questions, title and description). `tools/build-industries.mjs` builds `industries/<slug>.html` from one template and writes the home page's Industries cards between the `industries:start` and `industries:end` markers. The header, footer and structured data are copied from `index.html`, so change those there first.
+
+```
+node tools/build-industries.mjs           # write the pages
+node tools/build-industries.mjs --check   # fail if a page is out of date (tests/industries.test.mjs runs this)
+```
+
+The healthcare pages (med-spas, dental, chiropractic-physical-therapy) carry `<!-- TODO: attorney review of courtesy program before publishing healthcare pages -->`. `/tools/*` returns 404 on the site.
 
 ## Forms (Netlify Forms)
 
@@ -41,11 +52,11 @@ Every page shares the same header (the menu: Home, Growth team, How it works, Pr
 
 ## Switches (`assets/site-config.js`)
 
-- `attorneyReviewed` (default `false`): shows "The partner agreement and the courtesy terms have been reviewed by a healthcare attorney." in the home page's compliance section. Turn it on only once that review is done.
+- `hipaaConfirmed` (default `false`) and `hipaaText` (default empty): a HIPAA sentence on the healthcare industry pages and the FAQ. Leave both off until the owner has confirmed it is true for every healthcare client (business associate agreements, a documented risk assessment, safeguards for the sign-ups the portal holds). This file is public, so no unconfirmed claim goes in it.
 
-## The dashboard on the green band (home, `#dashboard`)
+## The portal tour (home, `/field-team`, `/referral-network`)
 
-The portal screens (`assets/img/portal-*`, a sample account for a fictional clinic) lie tipped back under a "Scroll" cue and stand up flat as the visitor scrolls to them. `assets/site.js` sets `--p` on the band from 0 to 1 by scroll position; the CSS turns it into the tilt and fades the cue. Without JavaScript, or for visitors who ask for reduced motion, the screens are simply flat and the cue never shows.
+Four portal screens (`assets/img/portal2-*`, the portal's sample account: invented businesses and figures) behind tabs styled as the portal's side rail. Every screen and the five figures carry a visible "Sample account, illustrative data" label.
 
 ## Hero video
 
@@ -56,10 +67,10 @@ The home hero shows a still (`assets/img/hero-van-{480,768,1080,1344}.{avif,webp
 - Logo lockup (the infinity-W mark over "Our Wellness Network", in Playfair Display): `assets/img/owc-logo-360.{webp,png}` in the header, `assets/img/own-logo.png` (600 px) for structured data.
 - The mark alone: `assets/img/owc-mark-light.{webp,png}` for light backgrounds, `assets/img/owc-mark-on-dark.{webp,png}` for dark ones (the closing band).
 - Favicons (the mark on a cream square): `favicon.ico`, `apple-touch-icon.png`, `assets/owo-favicon.ico`, `assets/owo-icon-{16,32,192,512}.png`, `assets/owo-apple-touch-icon.png`, `assets/favicon-*.png`, `assets/icon-*.png`; the manifest is `site.webmanifest`.
-- Share image: `assets/img/og-network.jpg` (1200 x 630), with "Your Organic Growth Team." and "We put your community into the brand.". The old share images and the old logo 301 to the new ones.
+- Share image: `assets/img/og-network.jpg` (1200 x 630): the logo beside an illustrated neighborhood. The old share images and the old logo 301 to the new ones.
 - Business matching illustration: `assets/img/matching-map-*` (on `/referral-network`, labelled "Example").
-- Growth team illustration: `assets/img/team-visit-{480,768,1080}.{avif,webp}`, clay figurines made with Higgsfield in the hero's style (not real people).
-- Portal screenshots: `assets/img/portal-*`, from the portal's sample account (a fictional clinic, 555 phone numbers, `.invalid` emails, made-up partner names). On the home page they carry no label (the owner's call); their alt text says they are the sample account.
+- Field team illustration: `assets/img/team-visit-{480,768,1080}.{avif,webp}`, clay figurines made with Higgsfield in the hero's style (not real people).
+- Portal screenshots: `assets/img/portal2-*`, from the portal's sample account (a fictional business, invented partner names, street addresses reduced to towns). Every one is labelled "Sample account, illustrative data" where it is shown.
 
 Fonts: headlines in Plus Jakarta Sans and Inter as the text fallback, both self-hosted (SIL Open Font License, licences in `assets/fonts/`). Text uses the phone's own face first: SF Pro on Apple devices, Roboto on Android. The big brands' own faces (Google Sans, SF Pro as a web font, Samsung Sharp Sans, Nike Futura, adidas) are licensed to their owners only, so they are not shipped.
 
@@ -68,7 +79,8 @@ Fonts: headlines in Plus Jakarta Sans and Inter as the text fallback, both self-
 - Clean URLs: every page's `.html` URL 301s to its clean URL.
 - `/flyer-network`, `/flyer-network.html` and every older flyer path (`/flyer-drops`, `/flyers`, `/direct-mail`, ...) 301 straight to `/referral-network`, so old links and printed QR codes keep working.
 - Retired pages 301 to the page that covers them; no redirect points at another redirect (a test checks this).
-- `/tests/*`, `/README.md`, `/netlify.toml` and `/.claude/*` return 404: they are in the repo but not part of the site.
+- `/tests/*`, `/tools/*`, `/README.md`, `/netlify.toml` and `/.claude/*` return 404: they are in the repo but not part of the site.
+- `/boots-on-the-ground`, `/growth-team` (and their `.html`) 301 straight to `/field-team`.
 - Security headers (CSP, `nosniff`, frame and referrer policies) are set for every path.
 
 ## Content rules
@@ -76,7 +88,11 @@ Fonts: headlines in Plus Jakarta Sans and Inter as the text fallback, both self-
 - The brand is Our Wellness Network; the company in legal text is OUR Optimization LLC. Service area: Chicago's western suburbs.
 - Never on the site: invented reviews, testimonials, statistics, scores or results, and medical claims. Examples are labelled "Example".
 - The phone number appears only on the home page's closing call, `/contact` and `/thanks` (plus the structured data).
-- The clinic's front desk calls the leads; the site never says we do. Nobody is paid per referral or per patient; the staff courtesy is the same for everyone and given whether or not they refer.
+- The client's team calls the leads; the site never says we do. Nobody is paid per referral or per customer.
+- Treats for Staff: modest coffee, pastries and snacks for the whole staff of each partner business on every visit. Never gift cards, cash, free services or anything of real value. Never connected to referrals, sign-ups or results anywhere except the one FAQ line that says they are shared whether or not anyone refers a customer.
+- Name-tracked sign-ups are described only as measuring campaign performance for the client, never as a basis for rewarding anyone.
+- No legal conclusions and no claims of attorney review. Healthcare pages carry the attorney-review TODO comment.
+- Open figures are placeholders the owner fills in: [STARTING PRICE], [MINIMUM TERM], [CAMPAIGN LENGTH], [STOPS PER MONTH: NEIGHBORHOOD], [STOPS PER MONTH: COMMUNITY], [FOUNDING RATE], [FOUNDING SPOTS] (a test allows no others).
 - Copy uses no em or en dashes.
 - `node --test` holds a list of retired words that must appear nowhere in the files the site serves.
 
@@ -85,12 +101,13 @@ Fonts: headlines in Plus Jakarta Sans and Inter as the text fallback, both self-
 Unit tests (Node 18+, no dependencies):
 
 ```
-node --test
+node --test tests/*.test.mjs
 ```
 
 - `tests/site.test.mjs`: every page's head (title, description, canonical, Open Graph, Twitter, icons, one h1), the LocalBusiness data, the header and footer, the retired words, dashes, where the phone number may appear, internal links and anchors, images, the redirects (flyer paths, no chains, blocked files), the sitemap, the two forms (the expo form pinned byte for byte) and the favicon set.
-- `tests/home.test.mjs`: the home page section by section (order, hero, the dashboard on the green band and its scroll tilt, no map and no results section, the courtesy, the pricing teaser, compliance and the switch, the add-on, the closing call) and the pricing page's offer.
+- `tests/home.test.mjs`: the home page section by section (order, hero, Industries, the portal and its sample labels, Treats for Staff, in writing and the HIPAA switch, the hidden case study, the closing call), the pricing offer, the Field Team page and the portal tour on its three pages.
 - `tests/call.test.mjs`: the call form and `assets/call.js` (validation rules and `?about=` prefills).
+- `tests/industries.test.mjs`: the industry pages match their data (the generator's `--check`), the order, healthcare marking, modest treats.
 - `tests/html.mjs`: shared helpers and the page list (not a test file).
 
 Browser tests (Playwright, against a local server that applies the `netlify.toml` redirects; every form POST is intercepted, nothing is ever submitted):
@@ -99,7 +116,7 @@ Browser tests (Playwright, against a local server that applies the `netlify.toml
 E2E_BASE_URL=http://localhost:8770 node tests/e2e-call.mjs
 ```
 
-They cover the call form end to end, the `?about=` prefills, the old links and redirects, the logo, the attorney switch, the hero video slot (reduced motion and a missing video), the dashboard tilt (tipped back below the fold, flat once in view, flat and still with reduced motion or without JavaScript, at 390 and 1280 px) and the Growth team page (second in the menu, the menu on one line at 1000 and 1280 px, the illustration, the clean URL).
+They cover the call form end to end, the `?about=` prefills, the old links and redirects (including /boots-on-the-ground and /growth-team to /field-team), the logo, the HIPAA switch on a healthcare page, the wave hero, the portal tour, the phone tab bar and its More sheet, and the Field Team page.
 
 ## The client portal
 

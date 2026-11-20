@@ -1,0 +1,43 @@
+{
+  "slug": "gyms-fitness-studios",
+  "order": 4,
+  "name": "Gyms & Fitness Studios",
+  "noun": "gym or studio",
+  "healthcare": false,
+  "title": "Field Sales Team for Gyms and Fitness Studios | Our Wellness Network",
+  "description": "Your outsourced field sales team for gyms and fitness studios in Elmhurst, Hinsdale and Oak Brook: we turn the businesses near you into a referral network you can track.",
+  "cardBlurb": "We visit the juice bars, salons and shops near your gym and build a referral network you can track.",
+  "h1": "Your field sales team,",
+  "h1Em": "for gyms and fitness studios.",
+  "intro": "Our software finds the businesses near you that see the people you want through your door. Every month our field team visits them, meets their staff and gives every staff member a personal tap-to-schedule card.",
+  "partnersIntro": "People who want to get moving already stop at these places, and the staff there know them.",
+  "partners": [
+    { "name": "Smoothie and juice bars", "why": "Their regulars stop in before or after a workout." },
+    { "name": "Running and athletic stores", "why": "People shopping for workout gear are starting or keeping up a routine." },
+    { "name": "Meal prep shops", "why": "Their customers are already working on how they eat." },
+    { "name": "Hair salons and barbershops", "why": "Neighbors of every age come through every few weeks and talk with staff they know." },
+    { "name": "Apartment leasing offices", "why": "New residents are looking for a place to work out close to home." },
+    { "name": "Bridal shops", "why": "Couples and wedding parties often want to get in shape before the big day." }
+  ],
+  "treatsIntro": "On every visit, our field team brings coffee and treats for the whole staff at each partner business, from the counter to the back office. It's simple hospitality, it's the reason staff are glad to see us, and it's included in your plan.",
+  "treatExamples": [
+    "Coffee and bagels for a smoothie bar's opening crew",
+    "Muffins and coffee for a leasing office's morning team",
+    "Cookies and iced coffee for a barbershop's Saturday crew"
+  ],
+  "portalNote": "Every sign-up lands in your portal with the business and staff member whose code it came through, so your front desk can call and book a tour or a first class. Together the sign-ups show which partnerships are working.",
+  "notesTitle": "Made for gyms and studios.",
+  "notes": [
+    { "title": "Never another gym", "text": "We don't visit other gyms or fitness studios for you. Every stop is a business that shares your members and doesn't compete, and you approve the list first." },
+    { "title": "Your first-visit offer", "text": "Each staff member's tap-to-schedule card opens your first-visit offer, in your words, so someone can book a tour or a first class." },
+    { "title": "One flat monthly fee", "text": "Plans run month to month with 30 days' notice, and the fee never moves with referrals, leads or bookings." }
+  ],
+  "exclusivity": "Partners agree to promote one gym or studio like yours, and only yours, for as long as you are a client.",
+  "faq": [
+    { "q": "Will you visit other gyms or studios near me?", "a": "No. Our business matching software ranks the businesses that share your members and don't compete with you, and you approve the list before any visit. If a business on the list feels too close to what you do, take it off." },
+    { "q": "Can't I just walk into the juice bar next door myself?", "a": "You can. Walking in is the easy part. The work is everything around it: finding the non-competing businesses that share your members (even ones you don't know yet), giving every staff member a personal tap-to-schedule card and showing you each sign-up and the code it came through, while you run your gym." },
+    { "q": "Who follows up with the people who sign up?", "a": "Your team. Each sign-up lands in your portal with the business and staff member whose code it came through, ready to call. The call comes from your gym or studio, not from us." }
+  ],
+  "aboutKey": "gyms-fitness-studios",
+  "aboutText": "I'm asking about field sales for my gym or fitness studio."
+}

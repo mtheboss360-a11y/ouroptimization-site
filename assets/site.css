@@ -971,7 +971,7 @@ table{font-variant-numeric:tabular-nums}
 /* --- hiw --- */
 /* How it works (/referral-network). Prefix: hiw-. Built on the live classes (.media, .dn-how, .dn-steps,
    .journey.rn-flow, .pt-tour, .split, .spec, .fd-supply, .target-strip, .pg-step-next); this only adds
-   the map caption, the courtesy card and a few spacing details. Colors are the live :root tokens. */
+   the map caption and a few spacing details. Colors are the live :root tokens. */
 
 /* step 1: the matching map, framed like the portal screens, with its "Example" tag under it */
 .hiw-map{margin:0;min-width:0}
@@ -984,23 +984,12 @@ table{font-variant-numeric:tabular-nums}
 
 /* step 2: the plan line under the route heading */
 .hiw-note{margin-top:16px;font-size:.98rem;line-height:1.55;color:var(--ink-2);max-width:34em;text-wrap:pretty}
-.hiw-note a,.hiw-courtesy p a{color:var(--ink);font-weight:600;text-underline-offset:3px;text-decoration-color:var(--gold)}
+.hiw-note a{color:var(--ink);font-weight:600;text-underline-offset:3px;text-decoration-color:var(--gold)}
 
 /* step 3: codes; the paragraphs under the intro sit a little closer on phones */
 .hiw-codes .rn-nfc-p+.rn-nfc-p{margin-top:10px}
 
-/* the staff courtesy: one blush card; the heading beside the copy on wider screens */
-.hiw-courtesy-sec{padding-block:clamp(52px,7vw,92px)}
-.hiw-courtesy{display:grid;gap:16px;padding:clamp(24px,3.6vw,44px);border-radius:18px;background:var(--blush);border:1px solid #EBD6DD}
-@media (min-width:900px){.hiw-courtesy{grid-template-columns:minmax(0,.78fr) minmax(0,1.22fr);gap:clamp(36px,4.6vw,64px);align-items:start}}
-.hiw-courtesy-head>svg{display:block;width:32px;height:32px;margin-bottom:16px;color:var(--gold-sm)}
-.hiw-courtesy .eyebrow{margin-bottom:10px}
-.hiw-courtesy h2{font-size:clamp(1.7rem,1.3rem + 1.4vw,2.35rem);line-height:1.12}
-.hiw-courtesy h2 em{color:var(--gold-sm)}
-.hiw-courtesy-body>p{font-size:1.02rem;line-height:1.64;color:var(--ink-2);text-wrap:pretty}
-@media (min-width:900px){.hiw-courtesy-body{padding-top:48px}}
-.hiw-courtesy .related{margin-top:20px}
-.hiw-courtesy .textlink,.hiw-portal .textlink{white-space:normal;line-height:1.35}
+.hiw-portal .textlink{white-space:normal;line-height:1.35}
 
 /* step 4: the sample-account tag above each screen's title */
 .hiw-tour .owc-tag{margin-bottom:14px}
@@ -1010,7 +999,7 @@ table{font-variant-numeric:tabular-nums}
 .hiw-codes .rn-flow .nowrap{white-space:nowrap}
 
 /* --- home --- */
-/* Home (.owc-): the hero with its video slot, the dashboard on the green band, the courtesy, the pricing teaser, the compliance cards, the add-on and the closing band */
+/* Home (.owc-): the hero with its video slot, the dashboard on the green band, Treats for Staff, the pricing teaser, the compliance cards, the add-on and the closing band */
 /* The hero is its own blending group on the page colour, so the still (transparent) and a future video with a
    white background both sit on the page: multiply turns white into the background beneath it. */
 .owc-hero{padding-top:clamp(28px,4.5vw,64px);isolation:isolate;background:var(--ground)}
@@ -1049,9 +1038,6 @@ table{font-variant-numeric:tabular-nums}
 @keyframes owc-cue{0%,100%{transform:translateY(-3px)}50%{transform:translateY(4px)}}
 @media (prefers-reduced-motion:reduce){.owc-dash-band{--p:1 !important}.owc-dash-band .owc-scroll-cue{display:none !important}}
 @media print{.owc-dash-band{--p:1 !important}.owc-dash-band .owc-scroll-cue{display:none !important}}
-/* c. courtesy */
-.owc-courtesy-text{font-size:clamp(1.06rem,1rem + .3vw,1.2rem);line-height:1.7;color:var(--ink);text-wrap:pretty}
-@media (min-width:960px){.owc-courtesy{align-items:center}}
 /* the dashboard's tour and foot */
 .owc-tour{margin-top:clamp(40px,5vw,64px)}
 .owc-dash-foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:18px 28px;max-width:1080px;margin:clamp(34px,4.4vw,48px) auto 0;padding:clamp(20px,2.6vw,26px) clamp(20px,2.6vw,30px);border-radius:16px;background:#fff;border:1px solid var(--line)}
@@ -1454,7 +1440,8 @@ h1 em,h2 em,.hero-wave h1 em,.pg-hero h1 em,.ct-head h1 em,.svc-hero h1 em,.dn-s
   .tab svg{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
   .tab span{display:block;max-width:100%;overflow-wrap:normal;text-wrap:balance}
   .tab[aria-current="page"],.tab-more[aria-expanded="true"]{background:var(--accent-soft);color:var(--accent);font-weight:650}
-  :root:not(.menu-open):has(.site-nav li:nth-child(n+5):not(.nav-cta) a[aria-current="page"]) .tab-more{background:var(--accent-soft);color:var(--accent);font-weight:650}
+  /* More lights up on a page that has no tab of its own: its menu link is not one of the four tabs */
+  :root:not(.menu-open):has(.site-nav a[aria-current="page"]:not([href="/"]):not([href="/field-team"]):not([href="/referral-network"]):not([href="/pricing"])) .tab-more{background:var(--accent-soft);color:var(--accent);font-weight:650}
   .tab:active{background:var(--accent-soft)}
   /* the full menu, as a sheet above the bar */
   .js .site-nav{position:fixed;z-index:59;top:auto;left:max(10px,env(safe-area-inset-left));right:max(10px,env(safe-area-inset-right));bottom:calc(max(8px,env(safe-area-inset-bottom)) + 80px);max-height:calc(100dvh - 170px);padding:8px 10px;border:1px solid var(--line);border-radius:22px;background:#fff;box-shadow:0 1px 2px rgba(22,49,31,.06),0 24px 48px -18px rgba(22,49,31,.4)}
@@ -1494,15 +1481,15 @@ h1 em,h2 em,.hero-wave h1 em,.pg-hero h1 em,.ct-head h1 em,.svc-hero h1 em,.dn-s
 .pg-step-go svg,.dn-steps p a{color:var(--accent)}
 .dn-step-n,.own-two-n,.xp-steps>li::before{background:var(--accent);color:#fff;font-family:var(--nums,var(--sans));font-weight:600}
 .dn-steps h3 svg,.dn-format-top svg,.pr-plan-top svg,.owc-addon>svg{color:var(--slate-soft)}
-.dn-checks svg,.prc-inc svg,.dn-oncall svg,.pg-glance svg,.pr-starter svg,.wd-notes svg,.rt-addon svg,.wd-addon svg,.dn-onsite svg,.ct-area svg,.own-warm svg,.owc-attorney svg,.xp-done h2 svg,.dn-both li svg,.dn-privacy>svg,.hiw-courtesy-head>svg,.prc-teaser h3 svg,.owc-dash-foot svg{color:var(--accent)}
+.dn-checks svg,.prc-inc svg,.dn-oncall svg,.pg-glance svg,.pr-starter svg,.wd-notes svg,.rt-addon svg,.wd-addon svg,.dn-onsite svg,.ct-area svg,.own-warm svg,.owc-attorney svg,.xp-done h2 svg,.dn-both li svg,.dn-privacy>svg,.prc-teaser h3 svg,.owc-dash-foot svg{color:var(--accent)}
 .spec svg{color:var(--slate-soft)}
 .doc ul li::before,.sc-list li::before,.rt-drivers li::before,.prc-dots i{background:var(--gold)}
 .shot,.pt-frame{border:1px solid var(--line);border-radius:var(--r-panel);box-shadow:var(--sh-2)}
 .dn-onsite{background:var(--paper);border-color:var(--line)}
 
 /* the portal's NEXT callout: a white card with a forest rule down its left edge */
-.dn-privacy,.hiw-courtesy{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--accent);box-shadow:var(--sh-2)}
-.hiw-courtesy h2 em,.dn-privacy h3 em{color:var(--gold-sm)}
+.dn-privacy{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--accent);box-shadow:var(--sh-2)}
+.dn-privacy h3 em{color:var(--gold-sm)}
 .dn-both{background:var(--blush);border:1px solid var(--gold-line)}
 .dn-both ul{border-top-color:var(--gold-line)}
 .sc-box{background:var(--blush);border-left-color:var(--gold)}
@@ -1687,3 +1674,63 @@ html:not(.js) .ptour-panel[hidden]{display:block}
 .who-for .section-head{margin-bottom:clamp(22px,3vw,30px)}
 .who-chips{justify-content:center;gap:8px 10px;max-width:860px;margin:0 auto}
 .who-chips li{padding:9px 16px;font-size:.92rem;font-weight:550}
+
+/* =====================================================================================================
+   November 20, 2026: vertical-led. The Industries cards on the home page, the industry landing pages
+   (industries/*.html, built by tools/build-industries.mjs), Treats for Staff, the sample-data labels,
+   the founding client line. Built on the portal look above.
+   ===================================================================================================== */
+
+/* Industries: one card per industry page, four across on wide screens */
+.ind-grid{list-style:none;display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(min(100%,250px),1fr));max-width:1120px;margin:0 auto}
+.ind-card{display:flex;flex-direction:column;gap:8px;height:100%;padding:20px 20px 18px;border:1px solid var(--line);border-radius:var(--r-card);background:var(--surface);box-shadow:var(--sh-1);color:var(--ink-2);text-decoration:none;transition:background-color .12s linear,border-color .12s linear}
+.ind-card:hover{background:var(--paper);border-color:var(--line-2)}
+.ind-card:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.ind-card-name{font:700 1.12rem/1.25 var(--hero);letter-spacing:-.01em;color:var(--ink)}
+.ind-card-text{font-size:.94rem;line-height:1.5;text-wrap:pretty}
+.ind-card-go{display:inline-flex;align-items:center;gap:8px;margin-top:auto;padding-top:8px;font:600 .88rem/1.2 var(--sans);color:var(--accent)}
+.ind-card-go svg{width:14px;height:14px;transform:rotate(-90deg)}
+
+/* Industry pages */
+.ind-hero .pg-hero-copy .intro{max-width:36em}
+.ind-partners{grid-template-columns:minmax(0,1fr)}
+@media (min-width:640px){.ind-partners{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (min-width:1000px){.ind-partners{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.ind-excl{display:flex;align-items:flex-start;gap:12px;max-width:52em;margin-top:clamp(22px,3vw,30px);font-size:1rem;line-height:1.55;color:var(--ink)}
+.ind-excl svg{width:22px;height:22px;flex:none;margin-top:1px;color:var(--accent)}
+.ind-treats{max-width:760px;margin:clamp(30px,4vw,44px) auto 0;padding:clamp(20px,2.6vw,28px);border:1px solid var(--gold-line);border-radius:var(--r-card);background:var(--blush);text-align:center}
+.ind-treats .dg-k{margin-bottom:12px}
+.ind-treats .ex-chips{justify-content:center;margin-top:0}
+.ind-modest{margin-top:14px;font-size:.92rem;line-height:1.5;color:var(--ink-2)}
+.ind-portal{display:grid;gap:clamp(28px,4vw,52px);align-items:center}
+@media (min-width:900px){.ind-portal{grid-template-columns:minmax(0,.86fr) minmax(0,1.14fr)}}
+.ind-portal .dn-checks{grid-template-columns:minmax(0,1fr)}
+.ind-shot{margin:0;min-width:0}
+.ind-shot .pt-browser{border:1px solid var(--line);border-radius:var(--r-panel);overflow:hidden;background:#fff;box-shadow:var(--sh-3)}
+.ind-shot img{display:block;width:100%;height:auto}
+.ind-shot figcaption{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin-top:12px;font-size:.92rem;color:var(--ink-3)}
+@media (max-width:759.98px){
+  .ind-shot .pt-browser{width:min(300px,82vw);margin:0 auto;border:7px solid #10261B;border-radius:34px;background:#10261B}
+  .ind-shot .pt-bar{display:none}
+  .ind-shot .pt-browser img{border-radius:27px}
+  .ind-shot figcaption{justify-content:center}
+}
+
+/* "Sample account, illustrative data": always visible next to a portal screen or a figure from the sample account */
+.sample-tag{white-space:nowrap}
+.ptour-cap .sample-tag{display:inline-flex;margin-left:6px;vertical-align:2px}
+.owc-dash-band .sample-tag{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.32);color:#fff}
+.sample-note{margin:clamp(32px,4vw,48px) 0 -28px;text-align:center}
+.owc-dash-band .sample-note+.own-stats{margin-top:clamp(36px,4vw,44px)}
+
+/* Treats for Staff on the home page (in place of the earlier program) */
+.owc-treats-text{font-size:clamp(1.06rem,1rem + .3vw,1.2rem);line-height:1.7;color:var(--ink);text-wrap:pretty}
+@media (min-width:960px){.owc-treats{align-items:center}}
+
+/* The founding client line under a closing call to action */
+.ind-founding{margin-top:18px;font-size:.92rem;line-height:1.55;color:#D5E3D9}
+.ind-founding a{color:#fff;font-weight:600;text-underline-offset:3px;text-decoration-color:var(--gold-bright)}
+
+/* A HIPAA sentence appears here only once the owner turns it on in assets/site-config.js */
+.hipaa-line{display:flex;align-items:flex-start;gap:10px;margin-top:22px;font-weight:600;color:var(--ink)}
+.hipaa-line[hidden]{display:none}

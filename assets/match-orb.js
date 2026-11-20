@@ -1,5 +1,5 @@
 /* How it works, step 1 (matching): the same phthalo dot-orb as the home hero, shown whole. When it
-   scrolls into view the network builds in front of you: your clinic first, then each matched
+   scrolls into view the network builds in front of you: your business first, then each matched
    business on a steady beat, sweeping around the orb. Illustrated owners, not photos of real people.
    Reduced motion shows it complete. */
 (() => {
@@ -28,7 +28,7 @@
     pts.push([Math.cos(t) * r, y, Math.sin(t) * r, 0.6 + 0.4 * Math.sin(i * 12.9898)]);
   }
 
-  // The same six owners as the hero, placed evenly around the clinic, starting at the top.
+  // The same six owners as the hero, placed evenly around the business, starting at the top.
   const partners = [
     { label: 'Devon · Gym', skin: '#8D5A3B', hair: '#1E1A17', shirt: '#2F5D4A', style: 'short' },
     { label: 'Nadia · Hair salon', skin: '#B7825F', hair: '#2A1C16', shirt: '#BD7189', style: 'long' },
@@ -136,7 +136,7 @@
       ctx.beginPath(); ctx.arc(cx, cy, 19, 0, 6.283); ctx.stroke();
     }
     const label = ease(clamp((t - .3) / .4));
-    if (label > 0) { ctx.globalAlpha = label; pill(cx, cy - 6 + (1 - label) * 6, 'Your clinic', true); }
+    if (label > 0) { ctx.globalAlpha = label; pill(cx, cy - 6 + (1 - label) * 6, 'Your business', true); }
     ctx.globalAlpha = 1;
   }
 

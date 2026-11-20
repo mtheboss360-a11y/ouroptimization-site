@@ -111,16 +111,16 @@ describe('every page: header and footer', () => {
       const bar = /<nav class="tabbar" aria-label="Shortcuts">[\s\S]*?<\/nav>/.exec(h);
       assert.ok(bar, 'the tab bar');
       assert.ok(h.indexOf('<nav class="site-nav"') < h.indexOf('<nav class="tabbar"'), 'after the main menu');
-      assert.deepEqual(links(bar[0]).map((l) => [l.text, l.href]), [['Home', '/'], ['Growth team', '/boots-on-the-ground'], ['How it works', '/referral-network'], ['Pricing', '/pricing']]);
+      assert.deepEqual(links(bar[0]).map((l) => [l.text, l.href]), [['Home', '/'], ['Field Team', '/field-team'], ['How it works', '/referral-network'], ['Pricing', '/pricing']]);
       assert.match(bar[0], /<button class="tab tab-more" type="button" aria-expanded="false" aria-controls="site-nav">/, 'More opens the full menu');
       const tabNow = links(bar[0]).filter((l) => /aria-current="page"/.test(l.tag)).map((l) => l.href);
-      const onBar = ['/', '/boots-on-the-ground', '/referral-network', '/pricing'];
+      const onBar = ['/', '/field-team', '/referral-network', '/pricing'];
       assert.deepEqual(tabNow, current.filter((c) => onBar.includes(c)), 'the tab for this page is marked, like the menu');
     });
     test(`${p.file}: the footer names the company`, () => {
       const f = text(footerOf(src));
       assert.match(f, /© 2026 OUR Optimization LLC/);
-      assert.match(f, /Our Wellness Network is a brand of OUR Optimization LLC/);
+      assert.match(f, /Our Wellness Network is a service of OUR Optimization LLC\./, 'the brand line, the same everywhere (November 20, 2026)');
       assert.deepEqual(links(footerOf(src)).map((l) => l.href), ['/privacy', '/terms']);
     });
   }
@@ -235,7 +235,7 @@ describe('links, images and redirects', () => {
     assert.ok(REDIRECTS.some((r) => r.from === '/vendors' && r.to === '/expo-vendors'));
   });
   test('repository files that are not the site are not served', () => {
-    for (const from of ['/tests/*', '/README.md', '/netlify.toml', '/.claude/*']) {
+    for (const from of ['/tests/*', '/tools/*', '/README.md', '/netlify.toml', '/.claude/*']) {
       const r = REDIRECTS.find((x) => x.from === from);
       assert.ok(r && r.status === 404 && r.force, from);
     }
@@ -249,7 +249,7 @@ describe('sitemap and robots', () => {
     const want = PAGES.filter((p) => !p.noindex).map((p) => ORIGIN + p.url).sort();
     assert.deepEqual([...locs].sort(), want);
     assert.equal(new Set(locs).size, locs.length);
-    assert.equal((sm.match(/<lastmod>2026-10-24<\/lastmod>/g) || []).length, locs.length);
+    assert.equal((sm.match(/<lastmod>2026-11-20<\/lastmod>/g) || []).length, locs.length);
   });
   test('robots.txt points at the sitemap', () => assert.match(read('robots.txt'), /Sitemap: https:\/\/ouroptimization\.com\/sitemap\.xml/));
 });
@@ -267,7 +267,7 @@ describe('forms (Netlify detects them from the static HTML)', () => {
     assert.match(form, /name="bot-field"/);
     const radios = tags(form, 'input').filter((t) => attr(t, 'name') === 'dinner');
     assert.deepEqual(radios.map((t) => attr(t, 'value')), ['Referral routes', 'Online search / review tags / website', 'Not sure yet']);
-    assert.match(text(form), /Please don't include any patient information\./);
+    assert.match(text(form), /Please don't include any health or patient information\./);
     for (const name of ['name', 'clinic', 'phone', 'email', 'town', 'best_time', 'message']) assert.match(form, new RegExp(`name="${name}"`), name);
   });
   test('expo-vendor on /expo-vendors: the form and its script are byte-for-byte the live ones', () => {
@@ -294,3 +294,54 @@ describe('assets', () => {
     for (const f of ['favicon.ico', 'assets/owo-favicon.ico', 'assets/owo-icon-16.png', 'assets/owo-icon-32.png', 'assets/owo-icon-192.png', 'assets/owo-icon-512.png', 'assets/owo-apple-touch-icon.png', 'apple-touch-icon.png']) assert.ok(existsSync(new URL(f, ROOT)), f);
   });
 });
+
+/* November 20, 2026: the vertical-led site. The field team, Treats for Staff, the compliance wording, the sample labels,
+   the placeholders the owner fills in, and the naming. These hold on every page, generated industry pages included. */
+describe('every page: the November 20, 2026 rules', () => {
+  const PLACEHOLDERS = ['[STARTING PRICE]', '[MINIMUM TERM]', '[CAMPAIGN LENGTH]', '[STOPS PER MONTH: NEIGHBORHOOD]', '[STOPS PER MONTH: COMMUNITY]', '[FOUNDING RATE]', '[FOUNDING SPOTS]'];
+  const HEALTHCARE = ['industries/med-spas.html', 'industries/dental.html', 'industries/chiropractic-physical-therapy.html'];
+  const TODO = '<!-- TODO: attorney review of courtesy program before publishing healthcare pages -->';
+  for (const p of PAGES) {
+    const src = page[p.file];
+    const t = text(bodyOf(src));
+    test(`${p.file}: no staff courtesy, no old names, treats never tied to referrals`, () => {
+      const withoutTodo = src.replaceAll(TODO, '');
+      assert.doesNotMatch(withoutTodo, /courtesy|complimentary consultation/i, 'the staff courtesy program is gone');
+      assert.doesNotMatch(src, /Organic Growth Team|Boots on the ground|Growth team/i);
+      if (p.file !== 'faq.html') assert.doesNotMatch(t, /whether or not (they|anyone) (ever )?(send|refer)/i, 'only the FAQ says the treats do not depend on referrals');
+      assert.doesNotMatch(t, /HIPAA[- ]compliant/i, 'the HIPAA sentence waits for the owner (assets/site-config.js)');
+    });
+    test(`${p.file}: every portal screen and every sample figure carries a visible sample label`, () => {
+      for (const fig of src.match(/<figure\b[\s\S]*?<\/figure>/g) || []) {
+        if (/src="\/assets\/img\/portal2-/.test(fig)) assert.match(fig, /<span class="owc-tag sample-tag">Sample account, illustrative data<\/span>/, fig.slice(0, 80));
+      }
+      for (const m of src.matchAll(/<dl class="own-stats(?! case-stats)/g)) {
+        assert.match(src.slice(Math.max(0, m.index - 200), m.index), /Sample account, illustrative data<\/span><\/p>\s*$/, 'the sample note sits right before the figures');
+      }
+    });
+    test(`${p.file}: only the agreed placeholders, never an invented one`, () => {
+      for (const ph of t.match(/\[[A-Z][A-Z :,'-]+\]/g) || []) assert.ok(PLACEHOLDERS.includes(ph), ph);
+    });
+  }
+  test('the healthcare industry pages and the FAQ carry the attorney-review note and the state-rules line', () => {
+    for (const f of HEALTHCARE) {
+      assert.ok(page[f].includes(TODO), f);
+      assert.match(text(bodyOf(page[f])), /Partner programs for healthcare practices are reviewed for compliance with applicable state rules before launch\./, f);
+      assert.match(page[f], /<p class="hipaa-line" data-flag="hipaaConfirmed" data-flag-text="hipaaText" hidden><span><\/span><\/p>/, f);
+    }
+    const faq = page['faq.html'];
+    assert.ok(faq.includes(TODO));
+    assert.match(text(bodyOf(faq)), /Partner programs for healthcare practices are reviewed for compliance with applicable state rules before launch\./);
+    assert.match(text(bodyOf(faq)), /Treats are shared with the whole staff on every visit, whether or not anyone refers a customer\./);
+    assert.match(faq, /<script src="\/assets\/site-config\.js" defer><\/script>\n<script src="\/assets\/site\.js" defer>/);
+  });
+  test('the industry pages: titles and descriptions name the towns; each page is in the menu-less list and the sitemap', () => {
+    const towns = ['Oak Brook', 'Lombard', 'Elmhurst', 'Naperville', 'Downers Grove', 'Hinsdale'];
+    for (const p of PAGES.filter((x) => x.industry)) {
+      const d = meta(page[p.file], 'name', 'description');
+      assert.ok(towns.filter((x) => d.includes(x)).length >= 2, `${p.file}: ${d}`);
+      assert.ok(read('sitemap.xml').includes(`<loc>${ORIGIN}${p.url}</loc>`), p.url);
+    }
+  });
+});
+
