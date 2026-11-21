@@ -1,8 +1,10 @@
-// The home page, section by section, against the owner's brief of October 23, 2026 and their notes on the preview, and the pricing page's offer.
+// The home page and the pricing page of the simplified site (the owner's brief of November 21, 2026): the owner's
+// plain-language copy, one portal screenshot, a short FAQ in place of the Field Team, Industries, About and FAQ pages,
+// and confirmed prices only.
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync } from 'node:fs';
-import { read, text, attr, hasAttr, tags, byId, mainOf, links, FORBIDDEN, ROOT } from './html.mjs';
+import { read, text, attr, tags, byId, mainOf, links, FORBIDDEN, ROOT, MERGED } from './html.mjs';
 
 const html = read('index.html');
 const main = mainOf(html);
@@ -11,233 +13,164 @@ const sec = (id) => {
   assert.ok(s, `#${id} exists`);
   return s;
 };
+const PLACEHOLDER = /\[[A-Z][A-Z0-9 :,'.-]*\]/;
 
-describe('home: order and hero', () => {
-  test('the sections (November 20, 2026): the general promise, Industries, in person, the portal, Treats for Staff, in writing, the call; no pricing, no map', () => {
+describe('home: the owner\'s copy (November 21, 2026)', () => {
+  test('the sections, in order: the hero, How it works, What you get, the questions, the call', () => {
     const ids = [...main.replace(/<!--[\s\S]*?-->/g, '').matchAll(/<section\b[^>]*\sid="([^"]+)"/g)].map((m) => m[1]);
-    assert.deepEqual(ids, ['industries', 'in-person', 'dashboard', 'treats', 'compliance', 'book']);
-    assert.doesNotMatch(text(main), /\$\d/, 'no prices on the home page (pricing is its own page)');
-    assert.ok(main.indexOf('hero-wave') < main.indexOf('id="in-person"'), 'the hero comes first');
+    assert.deepEqual(ids, ['how-it-works', 'what-you-get', 'faq', 'book']);
+    assert.ok(main.indexOf('class="s-hero"') < main.indexOf('id="how-it-works"'), 'the hero comes first');
   });
-  test('the hero: headline and line, with no buttons and no example card', () => {
-    const hero = /<section class="hero-wave"[\s\S]*?<\/section>/.exec(main)[0];
-    assert.equal(text(/<h1 id="hero-h">([\s\S]*?)<\/h1>/.exec(hero)[1]), 'Your outsourced field sales team.');
-    assert.equal(text(/<p class="lede">([\s\S]*?)<\/p>/.exec(hero)[1]),
-      'We visit the businesses around you, build relationships with their staff, and turn them into a referral network you can track.');
-    assert.deepEqual(links(hero), [], 'no links: the Devon\'s gym card came off on October 26, 2026');
-    assert.doesNotMatch(hero, /class="btn/, 'no buttons');
-    assert.doesNotMatch(text(hero), /Devon|30 clients|tap-to-schedule/, 'the owner took the card down');
-    assert.doesNotMatch(hero, /proof-row|proof-one/);
-    assert.doesNotMatch(text(hero), /Marcus/);
-    assert.doesNotMatch(text(hero), /staff reached|sign-ups|booked/);
+  test('the hero: the headline, the intro and the two buttons', () => {
+    const hero = /<section class="s-hero"[\s\S]*?<\/section>/.exec(main)[0];
+    assert.equal(text(/<h1 id="hero-h">([\s\S]*?)<\/h1>/.exec(hero)[1]), 'More local customers, through real connections.');
+    assert.equal(text(/<p class="s-lede">([\s\S]*?)<\/p>/.exec(hero)[1]),
+      'Our team visits nearby businesses, introduces your practice, and leaves your approved materials. Your portal shows visits and sign-ups.');
+    assert.deepEqual(links(hero).map((l) => [l.text, l.href, /btn-primary/.test(l.tag)]), [['Book a call', '/contact', true], ['View pricing', '/pricing', false]]);
   });
-  test('the wave: one canvas drawn by home-wave.js, the wellness partners riding it, clear of the words', () => {
-    const hero = /<section class="hero-wave"[\s\S]*?<\/section>/.exec(main)[0];
-    assert.equal(tags(hero, 'canvas').length, 1);
-    assert.match(attr(tags(hero, 'canvas')[0], 'aria-label'), /pending connections to a nearby gym, yoga studio, physical therapy practice, hair salon and nail salon/);
-    assert.match(html, /<script src="\/assets\/home-wave\.js" defer><\/script>/);
-    assert.ok(!existsSync(new URL('assets/home-orb.js', ROOT)), 'the dot orb is gone');
-    assert.doesNotMatch(html, /home-orb|hero-orb|id="orb"/);
-    const js = read('assets/home-wave.js');
-    assert.match(js, /querySelectorAll\('h1, \.lede'\)/, 'the people keep clear of the words');
-    for (const b of ['Gym', 'Yoga studio', 'Physical therapy', 'Hair salon', 'Nail salon']) assert.match(js, new RegExp(`label: '[A-Z][a-z]+ · ${b}'`), b);
-    assert.doesNotMatch(js, /Boutique/, 'wellness businesses only');
-    assert.doesNotMatch(js, /'Pending'/, 'no Pending labels: the dashed lines say it (the owner\'s call)');
-    assert.match(js, /setLineDash\(\[5, 6\]\)/, 'dashed, pending connections');
-    assert.match(js, /height\(n\.gx, n\.gz, t\) \* ride/, 'the people ride the wave');
-    assert.match(js, /prefers-reduced-motion: reduce/);
-    assert.match(js, /sessionStorage/, 'the network builds once per visit');
-    assert.doesNotMatch(js, /https?:\/\/|THREE|import /, 'no libraries and no outside requests');
+  test('How it works: the three steps, word for word', () => {
+    const steps = [...sec('how-it-works').matchAll(/<li><h3>([\s\S]*?)<\/h3><p>([\s\S]*?)<\/p><\/li>/g)].map((m) => [text(m[1]), text(m[2])]);
+    assert.deepEqual(steps, [
+      ['Choose nearby businesses', 'We find local businesses that may share your customers. You approve the list before we visit.'],
+      ['We visit in person', 'Our team introduces your business and leaves approved materials.'],
+      ['Track results', 'Your portal shows visits, staff cards, and sign-ups.']
+    ]);
+    assert.match(sec('how-it-works'), /<ol class="s-steps">/, 'a numbered list');
   });
-});
-
-describe('home: the sections', () => {
-  test('b. the dashboard on the green band: the screens pop in like every other block, no scroll-driven tilt', () => {
-    const s = sec('dashboard');
-    assert.match(main, /<section class="section bg-ink owc-dash-band" aria-labelledby="dashboard-h" id="dashboard">/, 'on the green band');
-    assert.equal(text(/<h2 id="dashboard-h">([\s\S]*?)<\/h2>/.exec(s)[1]), 'Your drivers, your routes, and every sign-up.');
-    assert.match(s, /<div class="ptour reveal" data-ptour>/, 'the same smooth pop-in as the rest of the page');
-    assert.doesNotMatch(s, /data-tilt|owc-tilt|owc-scroll-cue/, 'no tilt and no scroll cue (the owner\'s call)');
-  });
-  test('b. no map anywhere: no Google request, no Maps key, no map images', () => {
-    assert.doesNotMatch(html, /owc-geo|id="matching"|openstreetmap/i);
-    assert.doesNotMatch(read('assets/site-config.js'), /googleMap/);
-    assert.doesNotMatch(read('assets/site.js'), /googleapis|googleMap|owc-geo/);
-    assert.match(read('netlify.toml'), /img-src 'self' data:;/, 'the CSP allows no outside images');
-    assert.doesNotMatch(read('privacy.html'), /googleMap|Google Maps/);
-    assert.ok(!existsSync(new URL('assets/img/map-base-1200.jpg', ROOT)));
-  });
-  test('c. Treats for Staff: hospitality on every visit, modest, never tied to referrals (November 20, 2026)', () => {
-    const t = text(sec('treats'));
-    assert.match(t, /Treats for Staff: hospitality, every visit\./);
-    assert.match(t, /brings coffee and treats for the entire staff of each partner business/);
-    assert.match(t, /modest by design: coffee, pastries and snacks/);
-    assert.doesNotMatch(t, /refer|send|sign-up|code/i, 'treats are never connected to referrals, sign-ups or performance');
-    assert.doesNotMatch(html, /courtesy/i, 'the staff courtesy program is gone, comments included');
-  });
-  test('a2. Industries: one card per industry page, built from the industry data', () => {
-    const s = sec('industries');
-    const hrefs = links(s).map((l) => l.href);
-    assert.deepEqual(hrefs, ['/industries/med-spas', '/industries/dental', '/industries/chiropractic-physical-therapy', '/industries/gyms-fitness-studios', '/industries/salons-barbershops', '/industries/restaurants-cafes', '/industries/home-services', '/industries/auto-shops']);
-    for (const h of hrefs) assert.ok(existsSync(new URL('.' + h + '.html', ROOT)), h);
-  });
-  test('b. the dashboard: the screens and what it shows; no visit log line and no Client Portal box (it is in the header)', () => {
-    const s = sec('dashboard');
-    const t = text(s);
-    assert.doesNotMatch(s, /Sample account|illustrative data|sample-tag|sample-note/, 'no visible sample labels (the owner took them off, November 21, 2026)');
-    assert.doesNotMatch(t, /Inside your referral network portal/);
-    assert.match(t, /who is driving your next route, every business they walked into/);
-    for (const label of ['Stops visited', 'Staff reached', 'Referral cards handed out', 'Staff sign-ups', 'Booked by the front desk']) assert.ok(t.includes(label), label);
-    assert.match(read('assets/site.css'), /\.own-stats dd\{font-family:var\(--nums\)|\.own-stats dd\{font-family/, 'the numbers use the system face');
-    assert.doesNotMatch(t, /visit log/i, 'the owner took the visit log line out');
-    assert.ok(!links(s).some((l) => l.href === 'https://www.ournetworkportal.com'), 'no Client Portal box in this section');
-    for (const img of tags(s, 'img')) assert.match(attr(img, 'src'), /^\/assets\/img\/portal2-/, 'screens from the client portal (November 14, 2026)');
-  });
-  test('no results section: no "real clinics, real numbers", no texting form, no results files', () => {
-    assert.doesNotMatch(html, /id="results"|Real clinics|Oakbrook Terrace|results-updates|data-results/);
-    assert.doesNotMatch(html, /results\.js/);
-    assert.ok(!existsSync(new URL('assets/results.js', ROOT)));
-    assert.ok(!existsSync(new URL('assets/data/results.json', ROOT)));
-    assert.ok(!existsSync(new URL('updates-thanks.html', ROOT)));
-  });
-  test('a. in person: coffee, treats and real people, three scenes', () => {
-    const s = sec('in-person');
-    const t = text(s);
-    assert.match(t, /Coffee, treats and a real hello\./);
-    assert.equal(tags(s, 'img').length, 3);
-    for (const img of tags(s, 'img')) assert.match(attr(img, 'src'), /^\/assets\/img\/visit-(treats|chat|tap)-/);
-  });
-  test('e. in writing, for every business: no legal conclusions, no attorney review claimed anywhere, the HIPAA line held back', () => {
-    const t = text(sec('compliance'));
-    assert.ok(t.includes('Every partner business signs a one-page agreement: mutual promotion, and nobody is paid per referral or per customer.'));
-    assert.ok(t.includes('Partners never see who signed up.'));
-    assert.ok(t.includes("We never describe your services in words you haven't approved, and we make no medical or health claims."));
-    assert.doesNotMatch(t, /medical director|compliant|legal/i);
-    const cfg = read('assets/site-config.js');
-    assert.doesNotMatch(cfg, /attorney/i, 'no attorney review claimed, not even in a switched-off line');
-    assert.match(cfg, /hipaaConfirmed: false,\n  hipaaText: ''/, 'no HIPAA sentence until the owner confirms it');
-    assert.match(html, /<script src="\/assets\/site-config\.js" defer><\/script>\n<script src="\/assets\/site\.js" defer>/);
-  });
-  test('f. no dinner on the home page (pricing only)', () => {
-    assert.doesNotMatch(main, /patient-network|patient dinner/i);
-  });
-  test('f2. the case study is a hidden template (a comment), with placeholders only', () => {
-    const c = /<!-- ===== f\. Case study[\s\S]*?===== -->/.exec(html);
-    assert.ok(c, 'the template is there, commented out');
-    for (const ph of ['[CLIENT NAME]', '[INDUSTRY]', '[STOPS]', '[SIGN-UPS]', '[BOOKINGS]', '[CLIENT QUOTE]']) assert.ok(c[0].includes(ph), ph);
-    assert.doesNotMatch(text(main), /\[CLIENT/, 'nothing of it is visible');
-  });
-  test('g. the final call to action, with the phone number', () => {
-    const s = sec('book');
-    assert.match(text(s), /Book a 15-minute call\. We'll show you your matched businesses on the call\./);
-    assert.ok(links(s).some((l) => l.href === '/contact'));
-    assert.ok(links(s).some((l) => l.href === 'tel:+13312716851' && /331-271-6851/.test(l.text)));
-  });
-});
-
-describe('pricing page: the offer', () => {
-  const p = read('pricing.html');
-  const t = text(mainOf(p));
-  test('the trial and the two plans', () => {
-    assert.match(t, /\$450/);
-    for (const [plan, price] of [['Neighborhood', '$600'], ['Community', '$1,100']]) {
-      assert.match(t, new RegExp(plan), plan);
-      assert.ok(t.includes(price), price);
+  test('What you get: the four items, beside the one portal screenshot', () => {
+    const s = sec('what-you-get');
+    assert.deepEqual([...s.matchAll(/<li>([\s\S]*?)<\/li>/g)].map((m) => text(m[1])),
+      ['In-person visits', 'Approved materials', 'Trackable staff cards', 'Access to your client portal']);
+    assert.equal(tags(main, 'figure').length, 1, 'one screenshot on the page');
+    assert.equal(tags(main, 'img').length, 1);
+    const img = tags(s, 'img')[0];
+    assert.equal(attr(img, 'src'), '/assets/img/portal2-routes-1280.jpg');
+    assert.match(attr(img, 'alt'), /^Screenshot of the portal's sample account: totals for stops visited/);
+    for (const m of main.matchAll(/srcset="([^"]+)"/g)) {
+      for (const u of m[1].split(',').map((x) => x.trim().split(' ')[0])) {
+        assert.match(u, /^\/assets\/img\/portal2-(phone-)?routes-\d+\.(avif|webp|jpg)$/, u);
+        assert.ok(existsSync(new URL('.' + u, ROOT)), u);
+      }
     }
-    assert.match(t, /1 route/i);
-    assert.match(t, /2 routes/i);
-    assert.doesNotMatch(t, /4 routes|Starter|Reach/);
-    assert.match(t, /fresh-baked treats/i);
   });
-  test('the trial guarantee: all 5 visits and the codes within 30 days; no sign-up guarantee (the owner took it out, November 19, 2026)', () => {
-    assert.match(t, /If we haven't visited all 5 businesses and set up your codes within 30 days, the \$450 comes back\./);
-    assert.match(t, /keep the partner relationships/i);
-    assert.doesNotMatch(t, /45 days|tracked sign-ups|both guarantees|two (trial |written )?guarantees|Guarantee 2/i);
+  test('no decoration: no canvas, no icons, no illustrations, no scroll animation, no ornaments', () => {
+    assert.doesNotMatch(main, /<canvas|<svg|class="[^"]*\b(reveal|eyebrow|rule|dn-line)\b/);
+    assert.doesNotMatch(html, /home-wave|match-orb|hero-wave|data-ptour|own-stats|class="sprite"/);
+    for (const f of ['assets/home-wave.js', 'assets/match-orb.js']) assert.ok(!existsSync(new URL(f, ROOT)), f);
+    assert.match(html, /<script src="\/assets\/site-config\.js" defer><\/script>\n<script src="\/assets\/site\.js" defer><\/script>\n<\/body>/);
   });
-  test('terms, who supplies what, add-ons priced on a call', () => {
-    assert.match(t, /month to month/i);
-    assert.match(t, /30 days'? notice/i);
-    assert.match(t, /never moves with referrals, leads or bookings/i);
-    assert.match(t, /printed materials/i);
-    assert.match(t, /at no charge/i);
-    assert.match(t, /priced on a call/i);
-    for (const href of ['/online-search-network', '/review-tags', '/website-design', '/patient-network']) assert.ok(links(p).some((l) => l.href === href), href);
+  test('the questions: who it is for (the eight industries), partners, visits, pay, healthcare', () => {
+    const s = sec('faq');
+    assert.deepEqual([...s.matchAll(/<summary>([\s\S]*?)<span/g)].map((m) => text(m[1])), [
+      'Who is this for?', 'Which businesses do you visit?', 'What do you bring on a visit?',
+      'Are partner businesses paid for referrals?', 'What about healthcare practices?'
+    ]);
+    const who = text(byId(html, 'who'));
+    for (const i of ['med spas and wellness', 'dental', 'chiropractic and physical therapy', 'gyms and fitness studios', 'salons and barbershops', 'restaurants and cafes', 'home services', 'auto shops']) assert.ok(who.includes(i), i);
+    assert.match(who, /Chicago's western suburbs/);
+    assert.match(text(byId(html, 'partners')), /Each partner agrees to promote one business of your kind: yours\./);
+    assert.match(text(byId(html, 'paid')), /nobody is paid per referral or per customer\. Partners never see who signed up\. Your team makes the calls\./);
   });
-  test('no old price or old starter item', () => {
+  test('compliance: the treats sentence, the healthcare sentence, the TODO comment and the switched-off HIPAA slot', () => {
+    const visits = text(byId(html, 'visits'));
+    assert.ok(visits.includes('Treats are shared with the whole staff on every visit, whether or not anyone refers a customer.'));
+    assert.ok(visits.includes('so you can see which partnerships are working'), 'the cards measure the campaign, never reward anyone');
+    const hc = byId(html, 'healthcare');
+    assert.ok(text(hc).includes('Partner programs for healthcare practices are reviewed for compliance with applicable state rules before launch.'));
+    assert.match(text(hc), /We never receive patient records, and we make no medical or health claims\./);
+    assert.match(html, /<!-- TODO: attorney review of courtesy program before publishing healthcare pages -->\n      <details id="healthcare">/);
+    assert.match(hc, /<p class="hipaa-line" data-flag="hipaaConfirmed" data-flag-text="hipaaText" hidden><span><\/span><\/p>/);
+    assert.match(read('assets/site-config.js'), /hipaaConfirmed: false,\n  hipaaText: ''/, 'no HIPAA sentence until the owner confirms it');
+    assert.doesNotMatch(text(main), /HIPAA|compliant|attorney|gift card|cash/i);
+  });
+  test('each detail is explained once: coffee and treats, the tap and QR cards, only in "What do you bring on a visit?"', () => {
+    const outside = text(main.replace(/<details id="visits">[\s\S]*?<\/details>/, ''));
+    assert.doesNotMatch(outside, /coffee|treat|tap|QR|NFC|scan/i);
+    assert.equal((text(main).match(/coffee/gi) || []).length, 1);
+    assert.equal((text(main).match(/QR/g) || []).length, 1);
+  });
+  test('no prices, no dinner and no placeholders on the home page', () => {
+    assert.doesNotMatch(text(main), /\$\d/, 'prices live on the pricing page');
+    assert.doesNotMatch(main, /patient-network|patient dinner/i);
+    assert.doesNotMatch(html, PLACEHOLDER);
+    for (const w of FORBIDDEN) assert.ok(!html.includes(w), w);
+  });
+  test('the call band: Book a call, View pricing, and the phone number', () => {
+    const s = sec('book');
+    assert.deepEqual(links(s).map((l) => [l.text, l.href]), [['Book a call', '/contact'], ['View pricing', '/pricing'], ['331-271-6851', 'tel:+13312716851']]);
+    assert.match(text(s), /You'll talk to the owner\./);
+  });
+  test('the head: title, description with the six towns, canonical, and the business data in the new words', () => {
+    assert.match(html, /<title>Our Wellness Network \| More Local Customers, Through Real Connections<\/title>/);
+    const d = attr(/<meta name="description"[^>]*>/.exec(html)[0], 'content');
+    for (const town of ['Oak Brook', 'Lombard', 'Elmhurst', 'Naperville', 'Downers Grove', 'Hinsdale']) assert.ok(d.includes(town), town);
+    const ld = JSON.parse(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/.exec(html)[1]);
+    assert.equal(ld.slogan, 'More local customers, through real connections.');
+    assert.doesNotMatch(JSON.stringify(ld), /field sales/i);
+  });
+});
+
+describe('pricing page: confirmed prices only (November 21, 2026)', () => {
+  const p = read('pricing.html');
+  const pm = mainOf(p);
+  const t = text(pm);
+  test('the first month and the two plans', () => {
+    const plans = [...pm.matchAll(/<li class="s-plan[^"]*"[^>]*>([\s\S]*?)<\/li>/g)].map((m) => text(m[1]));
+    assert.equal(plans.length, 3);
+    assert.match(plans[0], /^First month \$450 all in One route: 5 nearby businesses you approve, visited in person\./);
+    assert.equal(plans[1], 'Neighborhood $600 a month 1 route a month.');
+    assert.equal(plans[2], 'Community $1,100 a month 2 routes a month.');
+    assert.match(t, /A route is 5 matched businesses near you, visited in person by our team\. Plans start after your first month\./);
+  });
+  test('the guarantee, word for word, and nothing more promised', () => {
+    assert.match(t, /Guarantee: if we haven't visited all 5 businesses and set up your codes within 30 days, the \$450 comes back\. You keep the partner relationships either way\./);
+    assert.doesNotMatch(t, /45 days|tracked sign-ups|both guarantees|two (trial |written )?guarantees/i);
+  });
+  test('what every plan includes, and the terms in three lines', () => {
+    assert.deepEqual([...byId(p, 'included').split('id="terms"')[0].matchAll(/<li>([\s\S]*?)<\/li>/g)].map((m) => text(m[1])), [
+      'In-person visits', 'Approved materials, left at each business (you supply the printing)', 'Trackable staff cards, supplied at no charge',
+      "Coffee and treats for each partner's staff on every visit", 'Access to your client portal'
+    ]);
+    assert.match(t, /Nothing renews on its own after the first month\./);
+    assert.match(t, /Plans run month to month, with 30 days' notice\./);
+    assert.match(t, /It never changes with referrals, leads or bookings, and nobody is paid per referral or per customer\./);
+    assert.ok(links(p).some((l) => l.href === '/terms#tm-prices'));
+    assert.equal((t.match(/coffee/gi) || []).length, 1, 'coffee and treats, once');
+    assert.doesNotMatch(t, /tap-to-schedule|QR|NFC|tap-and-scan/i, 'the cards are explained on the home page');
+  });
+  test('the add-ons, priced on a call, each linking to its page', () => {
+    assert.match(t, /Add-ons, priced on a call/);
+    for (const href of ['/online-search-network', '/review-tags', '/website-design', '/patient-network']) assert.ok(links(pm).some((l) => l.href === href), href);
+  });
+  test('no placeholders, no founding program, no minimum term, no drumroll', () => {
+    assert.doesNotMatch(p, PLACEHOLDER);
+    assert.doesNotMatch(t, /founding|minimum term|starting price|drumroll/i);
+    assert.doesNotMatch(pm, /<svg|pr-drum|class="[^"]*\breveal\b/);
     for (const w of FORBIDDEN) assert.ok(!p.includes(w), w);
     assert.doesNotMatch(t, /\$200|\$2,000/);
   });
-});
-
-describe('the Field Team page (was Boots on the ground, and before that the growth team page)', () => {
-  const gt = read('field-team.html');
-  test('the headline; Treats for Staff never tied to referrals; no breadcrumb', () => {
-    assert.ok(/<h1 id="pg-h">/.test(gt));
-    assert.doesNotMatch(gt, /pg-crumbs/, 'no breadcrumb');
-    assert.match(text(gt), /Treats for Staff/);
-    assert.doesNotMatch(text(gt), /whether or not they ever send anyone|whether or not anyone refers/, 'only the FAQ says that');
-    assert.doesNotMatch(gt, /courtesy|Boots on the ground|Growth team/i);
-    assert.doesNotMatch(text(gt), /month after month|whether or not you stay/);
-  });
-  test('the illustration: the clay team visit, AVIF and WebP, never wider than its 560px box below 960px', () => {
-    const hero = /<section class="pg-hero[\s\S]*?<\/section>/.exec(gt)[0];
-    const sizes = tags(hero, 'source').concat(tags(hero, 'img')).map((t) => attr(t, 'sizes')).filter(Boolean);
-    assert.ok(sizes.length >= 2);
-    for (const v of sizes) assert.equal(v, '(min-width:1180px) 520px, (min-width:960px) 44vw, (min-width:600px) 560px, calc(100vw - 40px)');
-    for (const t of tags(hero, 'img')) { assert.match(attr(t, 'src'), /team-visit-/); assert.ok(existsSync(new URL('.' + attr(t, 'src'), ROOT)), attr(t, 'src')); }
+  test('the call band goes to the form with the pricing message', () => {
+    assert.deepEqual(links(byId(p, 'book')).map((l) => [l.text, l.href]), [['Book a call', '/contact?about=pricing']]);
   });
 });
 
-/* November 14, 2026: the portal tour. The portal's screens behind tabs, as in the portal's own side rail. */
-describe('the portal tour (home, /field-team, /referral-network)', () => {
-  const SCREENS = ['route', 'network', 'partners', 'results'];
-  for (const [file, id, prefix] of [['index.html', 'dashboard', 'pt'], ['field-team.html', 'tracking', 'bt'], ['referral-network.html', 'dashboard', 'hw']]) {
-    const s = byId(read(file), id);
-    test(`${file} #${id}: four tabs, each wired to its own screen; the first one showing`, () => {
-      assert.match(s, /<div class="ptour reveal" data-ptour>/);
-      assert.match(s, /<div class="ptour-tabs" role="tablist" aria-label="Screens from the client portal">/);
-      const btns = tags(s, 'button');
-      assert.equal(btns.length, 4);
-      btns.forEach((b, i) => {
-        assert.equal(attr(b, 'role'), 'tab');
-        assert.equal(attr(b, 'type'), 'button');
-        assert.equal(attr(b, 'id'), `${prefix}-tab-${SCREENS[i]}`);
-        assert.equal(attr(b, 'aria-controls'), `${prefix}-${SCREENS[i]}`);
-        assert.equal(attr(b, 'aria-selected'), i === 0 ? 'true' : 'false');
-        assert.equal(hasAttr(b, 'tabindex'), i !== 0, 'only the chosen tab is in the tab order');
-      });
-      const panels = tags(s, 'figure');
-      assert.equal(panels.length, 4);
-      panels.forEach((f, i) => {
-        assert.ok(!hasAttr(f, 'role') && !hasAttr(f, 'aria-labelledby'), 'plain figures until site.js makes them tab panels');
-        assert.equal(attr(f, 'id'), `${prefix}-${SCREENS[i]}`);
-        assert.equal(hasAttr(f, 'hidden'), i !== 0, 'only the first screen shows before a tab is chosen');
-      });
-    });
-    test(`${file} #${id}: the phone screens on phones, the desktop screens elsewhere, every one described as the sample account`, () => {
-      const imgs = tags(s, 'img');
-      assert.equal(imgs.length, 4);
-      for (const img of imgs) {
-        assert.match(attr(img, 'src'), /^\/assets\/img\/portal2-(stops|network|partners|routes)-1280\.jpg$/);
-        assert.match(attr(img, 'alt'), /^Screenshot of the portal's sample account: /);
-        assert.equal(attr(img, 'loading'), 'lazy');
-      }
-      const phone = tags(s, 'source').filter((t) => attr(t, 'media') === '(max-width:759.98px)');
-      assert.equal(phone.length, 12, 'avif, webp and jpg for each of the four phone screens');
-      for (const t of phone) assert.match(attr(t, 'srcset'), /\/assets\/img\/portal2-phone-/);
-    });
-  }
-  test('site.js drives the tabs (click, arrow keys, Home, End) and every screen shows without it', () => {
-    const js = read('assets/site.js');
-    assert.match(js, /querySelectorAll\('\[data-ptour\]'\)/);
-    assert.match(js, /panel\.setAttribute\('role', 'tabpanel'\); panel\.setAttribute\('aria-labelledby', t\.id\)/, 'the panels become tab panels only when the tabs work');
-    for (const k of ['ArrowRight', 'ArrowLeft', 'Home', 'End']) assert.ok(js.includes(k), k);
-    assert.match(read('assets/site.css'), /html:not\(\.js\) \.ptour-panel\[hidden\]\{display:block\}/);
+describe('the merged pages (November 21, 2026)', () => {
+  const toml = read('netlify.toml');
+  const rules = [...toml.matchAll(/\[\[redirects\]\]\n  from = "([^"]+)"\n  to = "([^"]+)"\n  status = (\d+)(\n  force = true)?/g)].map((m) => ({ from: m[1], to: m[2], status: Number(m[3]), force: !!m[4] }));
+  test('the pages are gone, with the generator and its data', () => {
+    for (const f of ['field-team.html', 'about.html', 'faq.html', 'referral-network.html', 'industries', 'tools']) assert.ok(!existsSync(new URL(f, ROOT)), f);
   });
-  test('the old driver screens and driver photos are gone', () => {
-    for (const f of ['index.html', 'field-team.html', 'referral-network.html']) assert.doesNotMatch(read(f), /drivers?-(card|next-route|orb|phone|stop|elena|marcus|omar|tasha)/, f);
-    assert.ok(!existsSync(new URL('assets/img/drivers-card-546.jpg', ROOT)));
-    assert.ok(!existsSync(new URL('assets/img/driver-marcus.jpg', ROOT)));
+  test('each old address 301s to the part of the home page that answers it', () => {
+    for (const [from, to] of Object.entries(MERGED)) {
+      const r = rules.find((x) => x.from === from) || rules.find((x) => x.from === '/industries/*' && from.startsWith('/industries/'));
+      assert.ok(r, from);
+      assert.equal(r.to, to, from);
+      assert.equal(r.status, 301, from);
+      assert.ok(r.force, from);
+    }
+    for (const id of ['how-it-works', 'faq', 'who']) assert.ok(byId(html, id) !== null, id);
+  });
+  test('no redirect points at a page that is gone', () => {
+    for (const r of rules) assert.ok(!Object.keys(MERGED).includes(r.to.split(/[?#]/)[0]) && !/^\/industries\//.test(r.to), `${r.from} -> ${r.to}`);
   });
 });
-

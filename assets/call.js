@@ -25,9 +25,8 @@
        (/flyer-network 301s to /referral-network), so they prefill the referral routes message.
      - patient-dinners (now patient-network, the private patient dinner page) and google-ads (now
        online-search-network) were renamed on October 22, 2026 and prefill the same message as the new key.
-     November 20, 2026: the Field Team page and the eight industry pages under /industries/ get a key each, named
-     after the last part of the URL (/industries/dental links to /contact?about=dental). Each industry message
-     matches the aboutText in tools/industries/<slug>.json. */
+     - field-team, referral-network and the eight industry keys (/contact?about=dental): those pages merged into the
+       home page on November 21, 2026, and their keys stay so old links still prefill a message. */
   var ABOUT = {
     'pricing': "I'm asking about pricing.",
     'referral-network': "I'm asking about referral routes.",

@@ -90,7 +90,8 @@ describe('/contact: the call form', () => {
     assert.match(form, /<button class="btn btn-primary" type="submit">Book my 15-minute call<\/button>/);
     assert.match(t, /Prefer to talk now\? Call or text 331-271-6851\./);
     assert.match(t, /We use these details to call you back about your request\./);
-    assert.match(t, /We show you your matched businesses/);
+    assert.match(t, /The nearby businesses we would visit for you/);
+    assert.doesNotMatch(t, /Treats for Staff|coffee/i, 'the treats are explained once, on the home page (November 21, 2026)');
     assert.match(t, /We work with local businesses in Chicago's western suburbs\./);
   });
 });
