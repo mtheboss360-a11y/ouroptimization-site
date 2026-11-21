@@ -6,18 +6,12 @@ export const ROOT = new URL('../', import.meta.url);
 export const read = (p) => readFileSync(new URL(p, ROOT), 'utf8');
 
 /* Every page of the site, with its clean URL and its item in the main menu (null: not in the menu).
-   October 23, 2026: Our Wellness Network. The flyer network folded into the referral routes
-   (/flyer-network 301s to /referral-network); the dinner page stays, reached from the pricing page only (October 24, 2026).
-   October 24, 2026: the Growth team page joins the menu, second, after Home. Later that day it became Boots on the ground.
-   November 20, 2026: it is the Field Team page (/field-team), and Industries (/#industries) follows it; the eight industry
-   pages under /industries/ are built by tools/build-industries.mjs and are reached from the home page's Industries section. */
+   November 21, 2026: the simplified site. The menu is Home, How It Works (the home page's #how-it-works), Pricing and
+   Contact, plus the Client Portal button. Field Team, About, FAQ, How it works (/referral-network) and the eight
+   industry pages merged into the home page; their old addresses 301 there (netlify.toml). */
 export const PAGES = [
   { file: 'index.html', url: '/', nav: 'Home' },
-  { file: 'field-team.html', url: '/field-team', nav: 'Field Team' },
-  { file: 'referral-network.html', url: '/referral-network', nav: 'How it works' },
   { file: 'pricing.html', url: '/pricing', nav: 'Pricing' },
-  { file: 'faq.html', url: '/faq', nav: 'FAQ' },
-  { file: 'about.html', url: '/about', nav: 'About' },
   { file: 'contact.html', url: '/contact', nav: 'Contact' },
   { file: 'patient-network.html', url: '/patient-network', nav: null },
   { file: 'online-search-network.html', url: '/online-search-network', nav: null },
@@ -27,18 +21,17 @@ export const PAGES = [
   { file: 'privacy.html', url: '/privacy', nav: null },
   { file: 'terms.html', url: '/terms', nav: null },
   { file: 'thanks.html', url: '/thanks', nav: null, noindex: true },
-  { file: '404.html', url: null, nav: null, noindex: true },
-  { file: 'industries/med-spas.html', url: '/industries/med-spas', nav: null, industry: true },
-  { file: 'industries/dental.html', url: '/industries/dental', nav: null, industry: true },
-  { file: 'industries/chiropractic-physical-therapy.html', url: '/industries/chiropractic-physical-therapy', nav: null, industry: true },
-  { file: 'industries/gyms-fitness-studios.html', url: '/industries/gyms-fitness-studios', nav: null, industry: true },
-  { file: 'industries/salons-barbershops.html', url: '/industries/salons-barbershops', nav: null, industry: true },
-  { file: 'industries/restaurants-cafes.html', url: '/industries/restaurants-cafes', nav: null, industry: true },
-  { file: 'industries/home-services.html', url: '/industries/home-services', nav: null, industry: true },
-  { file: 'industries/auto-shops.html', url: '/industries/auto-shops', nav: null, industry: true }
+  { file: '404.html', url: null, nav: null, noindex: true }
 ];
 /* The main menu, in order, then the Client Portal button. */
-export const NAV = [['Home', '/'], ['Field Team', '/field-team'], ['Industries', '/#industries'], ['How it works', '/referral-network'], ['Pricing', '/pricing'], ['FAQ', '/faq'], ['About', '/about'], ['Contact', '/contact']];
+export const NAV = [['Home', '/'], ['How It Works', '/#how-it-works'], ['Pricing', '/pricing'], ['Contact', '/contact']];
+/* The pages that merged into the home page on November 21, 2026, and where their old addresses go. */
+export const MERGED = {
+  '/field-team': '/', '/about': '/', '/faq': '/#faq', '/referral-network': '/',
+  '/industries/med-spas': '/#who', '/industries/dental': '/#who', '/industries/chiropractic-physical-therapy': '/#who',
+  '/industries/gyms-fitness-studios': '/#who', '/industries/salons-barbershops': '/#who', '/industries/restaurants-cafes': '/#who',
+  '/industries/home-services': '/#who', '/industries/auto-shops': '/#who'
+};
 export const PORTAL = 'https://www.ournetworkportal.com';
 export const ORIGIN = 'https://ouroptimization.com';
 /* Words that must never appear on the site, built from pieces so this file does not contain them. */

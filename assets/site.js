@@ -14,13 +14,13 @@
   toTop();
   window.addEventListener('pageshow', function (e) { if (e.persisted) toTop(); });
 
-  /* The home page used to hold every section. Old links to those sections now open their own page
-     (/#faq opens /faq). The home page's call band came off on October 22, 2026, so /#call opens the
-     call form on /contact, with any old query (/#call?package=website) carried along. */
+  /* Old links to home page sections that now live on other pages: /#formats opens the dinner page, /#add-ons the
+     pricing page's add-ons, and /#call (the home page's call band came off on October 22, 2026) the call form on
+     /contact, with any old query (/#call?package=website) carried along. Sections that moved back onto the home page
+     on November 21, 2026 (#how-it-works, #faq, #who) are handled below. */
   var MOVED = {
-    formats: '/patient-network#formats', how: '/referral-network', 'how-it-works': '/referral-network', handle: '/patient-network#handle',
-    who: '/about', 'add-ons': '/pricing', referrals: '/referral-network',
-    'flyer-drops': '/referral-network', faq: '/faq', call: '/contact#call'
+    formats: '/patient-network#formats', handle: '/patient-network#handle',
+    'add-ons': '/pricing#add-ons', call: '/contact#call'
   };
   var old = /^#([A-Za-z][\w-]*)(?:\?(.*))?$/.exec(window.location.hash);
   if (old && (window.location.pathname === '/' || window.location.pathname === '/index.html') &&
@@ -53,8 +53,15 @@
     strayTarget.scrollIntoView();
   }
 
-  /* The home page's portal sections became #dashboard (October 23, 2026): /#portal and /#breakdown open it. */
-  var ALIAS = { portal: 'dashboard', breakdown: 'dashboard' };
+  /* Old names for sections of the home page (simplified November 21, 2026): /#dashboard and /#portal open the portal
+     screenshot, /#industries opens "Who is this for?", and the old How it works and treats sections open their answers. */
+  var ALIAS = {
+    portal: 'what-you-get', breakdown: 'what-you-get', dashboard: 'what-you-get', how: 'how-it-works', referrals: 'how-it-works',
+    'flyer-drops': 'how-it-works', industries: 'who', treats: 'visits', 'in-person': 'visits', compliance: 'paid',
+    /* sections of the old How it works page (/referral-network now 301s to the home page, keeping its #section) */
+    matching: 'how-it-works', choosing: 'how-it-works', route: 'how-it-works', month: 'how-it-works', roles: 'how-it-works',
+    nfc: 'visits', agreement: 'paid'
+  };
   var alias = /^#([A-Za-z][\w-]*)$/.exec(window.location.hash);
   if (alias && ALIAS[alias[1]] && !document.getElementById(alias[1])) {
     var aliasTarget = document.getElementById(ALIAS[alias[1]]);
@@ -63,6 +70,15 @@
       aliasTarget.scrollIntoView();
     }
   }
+
+  /* A link to one of the home page's questions (/#healthcare) opens that answer. */
+  var openAnswer = function () {
+    var id = /^#([A-Za-z][\w-]*)$/.exec(window.location.hash);
+    var el = id && document.getElementById(id[1]);
+    if (el && el.tagName === 'DETAILS') el.open = true;
+  };
+  openAnswer();
+  window.addEventListener('hashchange', openAnswer);
 
   /* Site switches from /assets/site-config.js: an element with data-flag="name" stays hidden until that switch is
      true. With data-flag-text="key", its text comes from that config value, so the sentence is not in the page
@@ -79,152 +95,11 @@
     el.hidden = false;
   });
 
-  /* Home hero: the van video. It loads after the page (the still is the first paint), plays muted and looped,
-     and fades in over the still once it is actually playing. Missing file, a failed load or reduced motion:
-     the element is removed and the still stays. */
-  var heroVideo = document.querySelector('.owc-hero-video');
-  if (heroVideo) {
-    var reduce = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : { matches: false };
-    var dropVideo = function () { if (heroVideo.parentNode) heroVideo.parentNode.removeChild(heroVideo); };
-    if (reduce.matches || !heroVideo.getAttribute('data-src') || typeof heroVideo.play !== 'function') {
-      dropVideo();
-    } else {
-      var startVideo = function () {
-        heroVideo.addEventListener('playing', function () { heroVideo.parentNode && heroVideo.parentNode.classList.add('is-playing'); }, { once: true });
-        heroVideo.addEventListener('error', dropVideo, { once: true });
-        heroVideo.muted = true;
-        /* the poster is the still already on screen (its responsive size, from the cache), never a second download */
-        var still = document.querySelector('.owc-hero-media img');
-        if (still && still.currentSrc) heroVideo.poster = still.currentSrc;
-        heroVideo.src = heroVideo.getAttribute('data-src');
-        var played = heroVideo.play();
-        if (played && played.catch) played.catch(function () { /* autoplay refused: the still stays */ });
-      };
-      if (document.readyState === 'complete') startVideo(); else window.addEventListener('load', startVideo, { once: true });
-      if (reduce.addEventListener) reduce.addEventListener('change', function (e) { if (e.matches) { heroVideo.pause && heroVideo.pause(); dropVideo(); } });
-    }
-  }
-
-  /* Home dashboard (#dashboard): the screens lie tipped back and stand up flat as you scroll to them. --p on the band
-     runs from 0 (the screens' top edge at the bottom of the window) to 1 (their top edge 45% of the way down).
-     Without this, or with reduced motion, --p keeps its CSS value of 1, so the screens are simply flat. */
-  var tilt = document.querySelector('[data-tilt]');
-  var tiltBand = tilt && tilt.closest('.owc-dash-band');
-  var still = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : { matches: false };
-  if (tiltBand && window.requestAnimationFrame && !still.matches) {
-    var tiltQueued = false;
-    var tiltUpdate = function () {
-      tiltQueued = false;
-      if (still.matches) { tiltBand.classList.remove('is-tilting'); tiltBand.style.removeProperty('--p'); return; }
-      tiltBand.classList.add('is-tilting');
-      var vh = window.innerHeight || root.clientHeight;
-      var p = (vh - tilt.getBoundingClientRect().top) / (vh * 0.55);
-      tiltBand.style.setProperty('--p', (p < 0 ? 0 : p > 1 ? 1 : p).toFixed(3));
-    };
-    var tiltQueue = function () { if (!tiltQueued) { tiltQueued = true; window.requestAnimationFrame(tiltUpdate); } };
-    tiltBand.classList.add('is-tilting');
-    tiltUpdate();
-    window.addEventListener('scroll', tiltQueue, { passive: true });
-    window.addEventListener('resize', tiltQueue);
-    if (still.addEventListener) still.addEventListener('change', tiltQueue);
-  }
-
-  /* Header: hairline once the page scrolls; mobile menu. */
+  /* Header: hairline once the page scrolls. */
   var header = document.querySelector('.site-header');
   if (header) {
     var onScroll = function () { header.classList.toggle('is-scrolled', window.scrollY > 8); };
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
-  }
-
-  /* The menu opens from the header's Menu button on tablets, and from the bottom tab bar's More button on phones.
-     Both control #site-nav, and both always show the same state. */
-  var menuBtns = Array.prototype.slice.call(document.querySelectorAll('[aria-controls="site-nav"]'));
-  var nav = document.getElementById('site-nav');
-  if (menuBtns.length && nav) {
-    var opener = null;
-    var setMenu = function (open) {
-      menuBtns.forEach(function (b) { b.setAttribute('aria-expanded', String(open)); });
-      root.classList.toggle('menu-open', open);
-    };
-    var isOpen = function () { return root.classList.contains('menu-open'); };
-    menuBtns.forEach(function (b) {
-      b.addEventListener('click', function () {
-        opener = b;
-        var open = !isOpen();
-        setMenu(open);
-        /* The tab bar's More sits after the menu in the page, so Tab from it would leave the menu behind:
-           opening from there puts focus on the menu's first link instead. */
-        if (open && b.classList.contains('tab-more')) { var first = nav.querySelector('a'); if (first) first.focus(); }
-      });
-    });
-    /* Escape closes an open menu and returns focus to the button that opened it. */
-    document.addEventListener('keydown', function (e) {
-      if (e.key !== 'Escape' || !isOpen()) return;
-      setMenu(false);
-      if (opener) opener.focus();
-    });
-    /* Tabbing out of the header (which holds the tab bar) closes the menu, so focus is never hidden under the panel. */
-    if (header) {
-      header.addEventListener('focusout', function (e) {
-        if (isOpen() && e.relatedTarget && !header.contains(e.relatedTarget)) setMenu(false);
-      });
-    }
-    /* A tap anywhere outside the menu and its buttons closes it. */
-    document.addEventListener('click', function (e) {
-      if (isOpen() && !nav.contains(e.target) && !menuBtns.some(function (b) { return b.contains(e.target); })) setMenu(false);
-    });
-    /* In-page links (e.g. #anchors) should not leave the menu open over the target. */
-    nav.addEventListener('click', function (e) { if (e.target.closest('a')) setMenu(false); });
-  }
-
-  /* The portal tour (home #dashboard, /field-team #tracking, /referral-network #dashboard): tabs for the portal's screens, as in the portal's
-     own side rail. Arrow keys, Home and End move between tabs. Without this script every screen shows, one under the other. */
-  document.querySelectorAll('[data-ptour]').forEach(function (tour) {
-    var tabs = Array.prototype.slice.call(tour.querySelectorAll('[role="tab"]'));
-    /* The screens are plain figures until the tabs work; only then are they tab panels. */
-    tabs.forEach(function (t) {
-      var panel = document.getElementById(t.getAttribute('aria-controls'));
-      if (panel) { panel.setAttribute('role', 'tabpanel'); panel.setAttribute('aria-labelledby', t.id); }
-    });
-    var show = function (tab, focus) {
-      tabs.forEach(function (t) {
-        var on = t === tab;
-        t.setAttribute('aria-selected', String(on));
-        t.tabIndex = on ? 0 : -1;
-        var panel = document.getElementById(t.getAttribute('aria-controls'));
-        if (panel) panel.hidden = !on;
-      });
-      if (focus) tab.focus();
-      /* keep the chosen pill in view when the tabs scroll sideways on a phone */
-      if (tab.scrollIntoView && tab.parentNode.scrollWidth > tab.parentNode.clientWidth) {
-        try { tab.scrollIntoView({ block: 'nearest', inline: 'nearest' }); } catch (e) { /* older browsers */ }
-      }
-    };
-    tabs.forEach(function (tab, i) {
-      tab.addEventListener('click', function () { show(tab, false); });
-      tab.addEventListener('keydown', function (e) {
-        var to = { ArrowRight: i + 1, ArrowDown: i + 1, ArrowLeft: i - 1, ArrowUp: i - 1, Home: 0, End: tabs.length - 1 }[e.key];
-        if (to === undefined) return;
-        e.preventDefault();
-        show(tabs[(to + tabs.length) % tabs.length], true);
-      });
-    });
-  });
-
-  /* Gentle reveal on scroll. Content is only hidden once JS has run (.js .reveal),
-     and anything the observer cannot handle is shown immediately. */
-  var reveals = document.querySelectorAll('.reveal');
-  if (reveals.length) {
-    if (!('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      reveals.forEach(function (el) { el.classList.add('in'); });
-    } else {
-      var io = new IntersectionObserver(function (entries) {
-        entries.forEach(function (en) {
-          if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
-        });
-      }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
-      reveals.forEach(function (el) { io.observe(el); });
-    }
   }
 })();
