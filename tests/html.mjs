@@ -27,7 +27,7 @@ export const PAGES = [
 export const NAV = [['Home', '/'], ['How It Works', '/#how-it-works'], ['Pricing', '/pricing'], ['Contact', '/contact']];
 /* The pages that merged into the home page on November 21, 2026, and where their old addresses go. */
 export const MERGED = {
-  '/field-team': '/', '/about': '/', '/faq': '/#faq', '/referral-network': '/#how-it-works',
+  '/field-team': '/', '/about': '/', '/faq': '/#faq', '/referral-network': '/',
   '/industries/med-spas': '/#who', '/industries/dental': '/#who', '/industries/chiropractic-physical-therapy': '/#who',
   '/industries/gyms-fitness-studios': '/#who', '/industries/salons-barbershops': '/#who', '/industries/restaurants-cafes': '/#who',
   '/industries/home-services': '/#who', '/industries/auto-shops': '/#who'

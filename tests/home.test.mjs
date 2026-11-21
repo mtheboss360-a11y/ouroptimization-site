@@ -68,13 +68,14 @@ describe('home: the owner\'s copy (November 21, 2026)', () => {
     const who = text(byId(html, 'who'));
     for (const i of ['med spas and wellness', 'dental', 'chiropractic and physical therapy', 'gyms and fitness studios', 'salons and barbershops', 'restaurants and cafes', 'home services', 'auto shops']) assert.ok(who.includes(i), i);
     assert.match(who, /Chicago's western suburbs/);
-    assert.match(text(byId(html, 'partners')), /Each partner agrees to promote one business of your kind: yours\./);
+    assert.match(text(byId(html, 'partners')), /The ones that sign on as partners agree to promote one business of your kind, yours, for as long as you are a client\./, 'the exclusivity, as the terms put it');
     assert.match(text(byId(html, 'paid')), /nobody is paid per referral or per customer\. Partners never see who signed up\. Your team makes the calls\./);
   });
   test('compliance: the treats sentence, the healthcare sentence, the TODO comment and the switched-off HIPAA slot', () => {
     const visits = text(byId(html, 'visits'));
     assert.ok(visits.includes('Treats are shared with the whole staff on every visit, whether or not anyone refers a customer.'));
     assert.ok(visits.includes('so you can see which partnerships are working'), 'the cards measure the campaign, never reward anyone');
+    assert.ok(visits.includes('modest treats: coffee, pastries and snacks'), 'the treats are modest');
     const hc = byId(html, 'healthcare');
     assert.ok(text(hc).includes('Partner programs for healthcare practices are reviewed for compliance with applicable state rules before launch.'));
     assert.match(text(hc), /We never receive patient records, and we make no medical or health claims\./);
@@ -129,10 +130,10 @@ describe('pricing page: confirmed prices only (November 21, 2026)', () => {
   test('what every plan includes, and the terms in three lines', () => {
     assert.deepEqual([...byId(p, 'included').split('id="terms"')[0].matchAll(/<li>([\s\S]*?)<\/li>/g)].map((m) => text(m[1])), [
       'In-person visits', 'Approved materials, left at each business (you supply the printing)', 'Trackable staff cards, supplied at no charge',
-      "Coffee and treats for each partner's staff on every visit", 'Access to your client portal'
+      "Modest treats for each partner's staff on every visit: coffee, pastries and snacks", 'Access to your client portal'
     ]);
     assert.match(t, /Nothing renews on its own after the first month\./);
-    assert.match(t, /Plans run month to month, with 30 days' notice\./);
+    assert.match(t, /After any minimum term agreed in writing, plans run month to month, with 30 days' notice\./, 'no minimum term asserted until the owner confirms one');
     assert.match(t, /It never changes with referrals, leads or bookings, and nobody is paid per referral or per customer\./);
     assert.ok(links(p).some((l) => l.href === '/terms#tm-prices'));
     assert.equal((t.match(/coffee/gi) || []).length, 1, 'coffee and treats, once');
@@ -144,7 +145,8 @@ describe('pricing page: confirmed prices only (November 21, 2026)', () => {
   });
   test('no placeholders, no founding program, no minimum term, no drumroll', () => {
     assert.doesNotMatch(p, PLACEHOLDER);
-    assert.doesNotMatch(t, /founding|minimum term|starting price|drumroll/i);
+    assert.doesNotMatch(t, /founding|minimum term of|starting price|drumroll/i);
+    assert.doesNotMatch(p, /month to month\."/, 'the descriptions do not promise month to month');
     assert.doesNotMatch(pm, /<svg|pr-drum|class="[^"]*\breveal\b/);
     for (const w of FORBIDDEN) assert.ok(!p.includes(w), w);
     assert.doesNotMatch(t, /\$200|\$2,000/);

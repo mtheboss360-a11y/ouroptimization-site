@@ -27,10 +27,11 @@
 
 # --- November 21, 2026: the simplified site ---
 # Field Team, About, FAQ, How it works (/referral-network) and the eight industry pages merged into the home page:
-# each old address 301s to the part of the home page that answers it (#how-it-works, #faq, #who).
+# each old address 301s to the part of the home page that answers it (#faq, #who). /referral-network goes to the
+# home page itself, so an old link's own #section carries through and assets/site.js opens the matching section.
 [[redirects]]
   from = "/referral-network"
-  to = "/#how-it-works"
+  to = "/"
   status = 301
   force = true
 
@@ -74,7 +75,7 @@
 
 [[redirects]]
   from = "/referral-network.html"
-  to = "/#how-it-works"
+  to = "/"
   status = 301
   force = true
 
@@ -288,7 +289,7 @@
 # The old community marketing service pages were retired in October 2026 (their .html files are
 # deleted). Each 301s, with and without .html, straight to the page that now covers it. Point new
 # rules at the final target, never at another redirected path, so there are no chains.
-# /client-portal (its own page from October 22, 2026; the portal now shows in the home page dashboard section)
+# /client-portal (its own page from October 22, 2026; the portal now shows in the home page's What you get section, #what-you-get)
 [[redirects]]
   from = "/client-portal"
   to = "/#what-you-get"
@@ -584,13 +585,6 @@
 
 # Repository-only files are not part of the public site.
 # --- October 23, 2026: Our Wellness Network ---
-# The home hero's video slot asks for /assets/video/van-route.mp4 after the page loads. Until that file is
-# deployed, this rewrite answers with a small text file (not a video), so the slot fails quietly, keeps the
-# still and logs no 404. It is not forced: once the real van-route.mp4 is deployed, Netlify serves the file.
-[[redirects]]
-  from = "/assets/video/van-route.mp4"
-  to = "/assets/video/placeholder.txt"
-  status = 200
 
 # Old share images and the old logo carried the previous brand. Their files are gone; links to them
 # (old social shares, cached structured data) get the current image instead.

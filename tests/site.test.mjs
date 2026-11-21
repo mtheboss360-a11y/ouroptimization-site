@@ -193,7 +193,6 @@ describe('links, images and redirects', () => {
       }
       for (const t of tags(src, 'img')) assert.ok(attr(t, 'width') && attr(t, 'height'), `${p.file}: ${t.slice(0, 80)}`);
       for (const u of urls.filter((x) => x.startsWith('/'))) {
-        if (u === '/assets/video/van-route.mp4') continue;
         assert.ok(existsSync(new URL(u.slice(1), ROOT)), `${p.file}: missing ${u}`);
       }
     }

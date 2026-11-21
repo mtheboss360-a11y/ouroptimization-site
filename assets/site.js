@@ -57,7 +57,10 @@
      screenshot, /#industries opens "Who is this for?", and the old How it works and treats sections open their answers. */
   var ALIAS = {
     portal: 'what-you-get', breakdown: 'what-you-get', dashboard: 'what-you-get', how: 'how-it-works', referrals: 'how-it-works',
-    'flyer-drops': 'how-it-works', industries: 'who', treats: 'visits', 'in-person': 'visits', compliance: 'paid'
+    'flyer-drops': 'how-it-works', industries: 'who', treats: 'visits', 'in-person': 'visits', compliance: 'paid',
+    /* sections of the old How it works page (/referral-network now 301s to the home page, keeping its #section) */
+    matching: 'how-it-works', choosing: 'how-it-works', route: 'how-it-works', month: 'how-it-works', roles: 'how-it-works',
+    nfc: 'visits', agreement: 'paid'
   };
   var alias = /^#([A-Za-z][\w-]*)$/.exec(window.location.hash);
   if (alias && ALIAS[alias[1]] && !document.getElementById(alias[1])) {

@@ -48,9 +48,9 @@ One screenshot on the home page, `#what-you-get`: the portal's Activity & result
 ## Brand assets
 
 - Logo lockup (the infinity-W mark over "Our Wellness Network", in Playfair Display): `assets/img/owc-logo-360.{webp,png}` in the header, `assets/img/own-logo.png` (600 px) for structured data.
-- The mark alone: `assets/img/owc-mark-light.{webp,png}` for light backgrounds, `assets/img/owc-mark-on-dark.{webp,png}` for dark ones (the closing band).
+- The mark alone: `assets/img/owc-mark-light.{webp,png}` for light backgrounds, `assets/img/owc-mark-on-dark.{webp,png}` for dark ones (not used on the pages since November 21, 2026).
 - Favicons (the mark on a cream square): `favicon.ico`, `apple-touch-icon.png`, `assets/owo-favicon.ico`, `assets/owo-icon-{16,32,192,512}.png`, `assets/owo-apple-touch-icon.png`, `assets/favicon-*.png`, `assets/icon-*.png`; the manifest is `site.webmanifest`.
-- Share image: `assets/img/og-network.jpg` (1200 x 630): the logo beside an illustrated neighborhood. The old share images and the old logo 301 to the new ones.
+- Share image: `assets/img/og-network.jpg` (1200 x 630): the logo above "More local customers, through real connections." on the page colour (no illustration, November 21, 2026). The old share images and the old logo 301 to it.
 - Portal screenshots: `assets/img/portal2-*`, from the portal's sample account (a fictional business, invented partner names, street addresses reduced to towns). Only the routes totals are shown on the site.
 
 Fonts: headlines in Plus Jakarta Sans and Inter as the text fallback, both self-hosted (SIL Open Font License, licences in `assets/fonts/`). Text uses the phone's own face first: SF Pro on Apple devices, Roboto on Android. The big brands' own faces (Google Sans, SF Pro as a web font, Samsung Sharp Sans, Nike Futura, adidas) are licensed to their owners only, so they are not shipped.
@@ -59,9 +59,9 @@ Fonts: headlines in Plus Jakarta Sans and Inter as the text fallback, both self-
 
 - Clean URLs: every page's `.html` URL 301s to its clean URL.
 - `/flyer-network`, `/flyer-network.html` and every older flyer path (`/flyer-drops`, `/flyers`, `/direct-mail`, ...) 301 straight to `/#how-it-works`, so old links and printed QR codes keep working.
-- The merged pages: `/field-team`, `/about`, `/boots-on-the-ground` and `/growth-team` go to `/`; `/faq` to `/#faq`; `/referral-network` to `/#how-it-works`; `/industries` and `/industries/*` to `/#who` (the "Who is this for?" answer, which opens). Their `.html` addresses go to the same places. `assets/site.js` maps old home links (`/#dashboard`, `/#industries`, `/#treats`, ...) to the new sections and opens a question when a link points at it.
+- The merged pages: `/field-team`, `/about`, `/boots-on-the-ground` and `/growth-team` go to `/`; `/faq` to `/#faq`; `/referral-network` to `/` (so an old link's own `#section` carries through); `/industries` and `/industries/*` to `/#who` (the "Who is this for?" answer, which opens). Their `.html` addresses go to the same places. `assets/site.js` maps old home links (`/#dashboard`, `/#industries`, `/#treats`, ...) to the new sections and opens a question when a link points at it.
 - Retired pages 301 to the page that covers them; no redirect points at another redirect (a test checks this).
-- `/tests/*`, `/tools/*`, `/README.md`, `/netlify.toml` and `/.claude/*` return 404: they are in the repo but not part of the site.
+- `/tests/*`, `/tools/*`, `/README.md`, `/netlify.toml` and `/.claude/*` return 404 (`/tools/` is no longer in the repo; the rule stays as a guard).
 - Security headers (CSP, `nosniff`, frame and referrer policies) are set for every path.
 
 ## Content rules

@@ -383,6 +383,7 @@ await scenario('home: the one portal screenshot, the phone screen on phones, no 
     assert.match(shot.src, width < 760 ? /portal2-phone-routes-/ : /portal2-routes-/, shot.src);
     const still = await s.page.evaluate(() => ({ canvas: document.querySelectorAll('canvas').length, anims: document.getAnimations().length, hidden: [...document.querySelectorAll('main *')].filter((e) => getComputedStyle(e).opacity === '0').length }));
     assert.deepEqual(still, { canvas: 0, anims: 0, hidden: 0 }, `${width}px: no canvas, no running animation, nothing waiting to fade in`);
+    assert.equal(await s.page.evaluate(() => getComputedStyle(document.documentElement).scrollBehavior), 'auto', 'no smooth-scroll animation');
     assert.equal(await s.page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true, `${width}px: no sideways scroll`);
     assert.deepEqual(s.outside, [], 'no requests to other sites');
     assert.deepEqual(s.jsErrors, []);
@@ -459,7 +460,7 @@ await scenario('the header: four links and Client Portal on one line from 760px;
 
 await scenario('the merged pages: every old address 301s straight to the part of the home page that answers it', async () => {
   const MERGED = [['/field-team', '/'], ['/field-team.html', '/'], ['/boots-on-the-ground', '/'], ['/growth-team', '/'], ['/about', '/'], ['/about.html', '/'],
-    ['/faq', '/#faq'], ['/faq.html', '/#faq'], ['/referral-network', '/#how-it-works'], ['/referral-network.html', '/#how-it-works'],
+    ['/faq', '/#faq'], ['/faq.html', '/#faq'], ['/referral-network', '/'], ['/referral-network.html', '/'],
     ['/industries', '/#who'], ['/industries/dental', '/#who'], ['/industries/med-spas.html', '/#who'], ['/industries/auto-shops', '/#who']];
   for (const [old, to] of MERGED) {
     const r = await fetch(`${BASE}${old}`, { redirect: 'manual' });
@@ -473,6 +474,15 @@ await scenario('the merged pages: every old address 301s straight to the part of
   assert.equal(await s.page.$eval('#who', (d) => d.open), true, 'the "Who is this for?" answer opens');
   assert.deepEqual(s.jsErrors, []);
   await s.close();
+  /* old deep links into How it works keep their section: the browser carries the #fragment through the 301 */
+  for (const [from, to, opened] of [['/referral-network#agreement', '/#paid', 'paid'], ['/referral-network#dashboard', '/#what-you-get', null], ['/referral-network', '/', null]]) {
+    const d = await open({ path: from });
+    await d.page.waitForTimeout(150);
+    assert.equal(await d.page.evaluate(() => location.pathname + location.hash), to, from);
+    if (opened) assert.equal(await d.page.$eval(`#${opened}`, (x) => x.open), true, `${from}: the answer opens`);
+    assert.deepEqual(d.jsErrors, []);
+    await d.close();
+  }
 });
 
 await browser.close();
