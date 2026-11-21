@@ -1716,12 +1716,6 @@ html:not(.js) .ptour-panel[hidden]{display:block}
   .ind-shot figcaption{justify-content:center}
 }
 
-/* "Sample account, illustrative data": always visible next to a portal screen or a figure from the sample account */
-.sample-tag{white-space:nowrap}
-.ptour-cap .sample-tag{display:inline-flex;margin-left:6px;vertical-align:2px}
-.owc-dash-band .sample-tag{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.32);color:#fff}
-.sample-note{margin:clamp(32px,4vw,48px) 0 -28px;text-align:center}
-.owc-dash-band .sample-note+.own-stats{margin-top:clamp(36px,4vw,44px)}
 
 /* Treats for Staff on the home page (in place of the earlier program) */
 .owc-treats-text{font-size:clamp(1.06rem,1rem + .3vw,1.2rem);line-height:1.7;color:var(--ink);text-wrap:pretty}
