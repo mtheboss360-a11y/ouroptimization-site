@@ -84,9 +84,7 @@ describe('home: the sections', () => {
   test('b. the dashboard: the screens and what it shows; no visit log line and no Client Portal box (it is in the header)', () => {
     const s = sec('dashboard');
     const t = text(s);
-    const labels = (s.match(/<span class="owc-tag sample-tag">Sample account, illustrative data<\/span>/g) || []).length;
-    assert.equal(labels, 5, 'a visible sample label beside each of the 4 screens and beside the figures (November 20, 2026)');
-    assert.match(s, /<p class="sample-note reveal"><span class="owc-tag sample-tag">Sample account, illustrative data<\/span><\/p>\n    <dl class="own-stats/);
+    assert.doesNotMatch(s, /Sample account|illustrative data|sample-tag|sample-note/, 'no visible sample labels (the owner took them off, November 21, 2026)');
     assert.doesNotMatch(t, /Inside your referral network portal/);
     assert.match(t, /who is driving your next route, every business they walked into/);
     for (const label of ['Stops visited', 'Staff reached', 'Referral cards handed out', 'Staff sign-ups', 'Booked by the front desk']) assert.ok(t.includes(label), label);

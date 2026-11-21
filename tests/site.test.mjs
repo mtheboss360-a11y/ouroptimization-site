@@ -295,7 +295,7 @@ describe('assets', () => {
   });
 });
 
-/* November 20, 2026: the vertical-led site. The field team, Treats for Staff, the compliance wording, the sample labels,
+/* November 20, 2026: the vertical-led site. The field team, Treats for Staff, the compliance wording, no sample labels,
    the placeholders the owner fills in, and the naming. These hold on every page, generated industry pages included. */
 describe('every page: the November 20, 2026 rules', () => {
   const PLACEHOLDERS = ['[STARTING PRICE]', '[MINIMUM TERM]', '[CAMPAIGN LENGTH]', '[STOPS PER MONTH: NEIGHBORHOOD]', '[STOPS PER MONTH: COMMUNITY]', '[FOUNDING RATE]', '[FOUNDING SPOTS]'];
@@ -311,13 +311,9 @@ describe('every page: the November 20, 2026 rules', () => {
       if (p.file !== 'faq.html') assert.doesNotMatch(t, /whether or not (they|anyone) (ever )?(send|refer)/i, 'only the FAQ says the treats do not depend on referrals');
       assert.doesNotMatch(t, /HIPAA[- ]compliant/i, 'the HIPAA sentence waits for the owner (assets/site-config.js)');
     });
-    test(`${p.file}: every portal screen and every sample figure carries a visible sample label`, () => {
-      for (const fig of src.match(/<figure\b[\s\S]*?<\/figure>/g) || []) {
-        if (/src="\/assets\/img\/portal2-/.test(fig)) assert.match(fig, /<span class="owc-tag sample-tag">Sample account, illustrative data<\/span>/, fig.slice(0, 80));
-      }
-      for (const m of src.matchAll(/<dl class="own-stats(?! case-stats)/g)) {
-        assert.match(src.slice(Math.max(0, m.index - 200), m.index), /Sample account, illustrative data<\/span><\/p>\s*$/, 'the sample note sits right before the figures');
-      }
+    test(`${p.file}: no visible "Sample account, illustrative data" label anywhere (the owner took them off, November 21, 2026)`, () => {
+      assert.doesNotMatch(t, /Sample account|illustrative data/i);
+      assert.doesNotMatch(src, /class="[^"]*\bsample-(tag|note)\b/);
     });
     test(`${p.file}: only the agreed placeholders, never an invented one`, () => {
       for (const ph of t.match(/\[[A-Z][A-Z :,'-]+\]/g) || []) assert.ok(PLACEHOLDERS.includes(ph), ph);

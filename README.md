@@ -12,7 +12,7 @@ Netlify site "ouroptimization", linked to this repo, branch `main`. No build com
 
 | URL | File | In the menu | Notes |
 | --- | --- | --- | --- |
-| `/` | `index.html` | Home | Hero (no buttons): "Your outsourced field sales team." Then Industries (cards to the industry pages), in person, the portal on the green band (every screen and figure labelled "Sample account, illustrative data"), Treats for Staff, in writing, a hidden case study template, the closing call with the founding client line. |
+| `/` | `index.html` | Home | Hero (no buttons): "Your outsourced field sales team." Then Industries (cards to the industry pages), in person, the portal on the green band, Treats for Staff, in writing, a hidden case study template, the closing call with the founding client line. |
 | `/field-team` | `field-team.html` | Field Team | What the field team does on every visit: Treats for Staff, drop-offs, the codes, every stop tracked. Was `/boots-on-the-ground` (301). |
 | `/#industries` | (home section) | Industries | The menu item jumps to the home page's Industries cards. `/industries` itself still 301s home (an old page). |
 | `/industries/<slug>` | `industries/<slug>.html` | no | Eight industry pages from one template: med-spas, dental, chiropractic-physical-therapy, gyms-fitness-studios, salons-barbershops, restaurants-cafes, home-services, auto-shops. Generated; do not edit by hand. |
@@ -56,7 +56,7 @@ The healthcare pages (med-spas, dental, chiropractic-physical-therapy) carry `<!
 
 ## The portal tour (home, `/field-team`, `/referral-network`)
 
-Four portal screens (`assets/img/portal2-*`, the portal's sample account: invented businesses and figures) behind tabs styled as the portal's side rail. Every screen and the five figures carry a visible "Sample account, illustrative data" label.
+Four portal screens (`assets/img/portal2-*`, the portal's sample account: invented businesses and figures) behind tabs styled as the portal's side rail. No visible sample labels (the owner's call, November 21, 2026); the alt text says the screens are from the sample account.
 
 ## Hero video
 
@@ -70,7 +70,7 @@ The home hero shows a still (`assets/img/hero-van-{480,768,1080,1344}.{avif,webp
 - Share image: `assets/img/og-network.jpg` (1200 x 630): the logo beside an illustrated neighborhood. The old share images and the old logo 301 to the new ones.
 - Business matching illustration: `assets/img/matching-map-*` (on `/referral-network`, labelled "Example").
 - Field team illustration: `assets/img/team-visit-{480,768,1080}.{avif,webp}`, clay figurines made with Higgsfield in the hero's style (not real people).
-- Portal screenshots: `assets/img/portal2-*`, from the portal's sample account (a fictional business, invented partner names, street addresses reduced to towns). Every one is labelled "Sample account, illustrative data" where it is shown.
+- Portal screenshots: `assets/img/portal2-*`, from the portal's sample account (a fictional business, invented partner names, street addresses reduced to towns). Shown without visible sample labels (the owner's call, November 21, 2026).
 
 Fonts: headlines in Plus Jakarta Sans and Inter as the text fallback, both self-hosted (SIL Open Font License, licences in `assets/fonts/`). Text uses the phone's own face first: SF Pro on Apple devices, Roboto on Android. The big brands' own faces (Google Sans, SF Pro as a web font, Samsung Sharp Sans, Nike Futura, adidas) are licensed to their owners only, so they are not shipped.
 
