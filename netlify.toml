@@ -25,37 +25,59 @@
   [headers.values]
     Content-Type = "application/manifest+json"
 
-# --- November 21, 2026: the simplified site ---
-# Field Team, About, FAQ, How it works (/referral-network) and the eight industry pages merged into the home page:
-# each old address 301s to the part of the home page that answers it (#faq, #who). /referral-network goes to the
-# home page itself, so an old link's own #section carries through and assets/site.js opens the matching section.
+# --- November 21, 2026: pricing came off the site; Industries is its own page ---
+# /pricing and /pricing.html go to /contact (book a call). The old industry pages go to their section of /industries.
 [[redirects]]
-  from = "/referral-network"
-  to = "/"
+  from = "/pricing"
+  to = "/contact"
   status = 301
   force = true
 
 [[redirects]]
-  from = "/field-team"
-  to = "/"
+  from = "/industries/med-spas"
+  to = "/industries#med-spas"
   status = 301
   force = true
 
 [[redirects]]
-  from = "/about"
-  to = "/"
+  from = "/industries/dental"
+  to = "/industries#dental"
   status = 301
   force = true
 
 [[redirects]]
-  from = "/faq"
-  to = "/#faq"
+  from = "/industries/chiropractic-physical-therapy"
+  to = "/industries#chiropractic-physical-therapy"
   status = 301
   force = true
 
 [[redirects]]
-  from = "/industries/*"
-  to = "/#who"
+  from = "/industries/gyms-fitness-studios"
+  to = "/industries#gyms-fitness-studios"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/industries/salons-barbershops"
+  to = "/industries#salons-barbershops"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/industries/restaurants-cafes"
+  to = "/industries#restaurants-cafes"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/industries/home-services"
+  to = "/industries#home-services"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/industries/auto-shops"
+  to = "/industries#auto-shops"
   status = 301
   force = true
 
@@ -75,13 +97,13 @@
 
 [[redirects]]
   from = "/referral-network.html"
-  to = "/"
+  to = "/referral-network"
   status = 301
   force = true
 
 [[redirects]]
   from = "/flyer-network.html"
-  to = "/#how-it-works"
+  to = "/referral-network"
   status = 301
   force = true
 
@@ -105,101 +127,101 @@
 
 [[redirects]]
   from = "/pricing.html"
-  to = "/pricing"
+  to = "/contact"
   status = 301
   force = true
 
-# The sample contract page came off on November 19, 2026: its old address goes to pricing.
+# The sample contract page came off on November 19, 2026; its old address goes to /contact (pricing came off on November 21, 2026).
 [[redirects]]
   from = "/sample-contract"
-  to = "/pricing"
+  to = "/contact"
   status = 301
   force = true
 
 [[redirects]]
   from = "/sample-contract.html"
-  to = "/pricing"
+  to = "/contact"
   status = 301
   force = true
 
 [[redirects]]
   from = "/about.html"
-  to = "/"
+  to = "/about"
   status = 301
   force = true
 
 [[redirects]]
   from = "/field-team.html"
-  to = "/"
+  to = "/field-team"
   status = 301
   force = true
 
-# The industry pages (November 20, 2026) merged into the home page on November 21, 2026: each old .html address
-# goes to the home page's "Who is this for?" answer (/#who).
+# The eight industry pages (November 20, 2026) became sections of /industries on November 21, 2026: each old address
+# (with or without .html) goes straight to its section.
 [[redirects]]
   from = "/industries/med-spas.html"
-  to = "/#who"
+  to = "/industries#med-spas"
   status = 301
   force = true
 
 [[redirects]]
   from = "/industries/dental.html"
-  to = "/#who"
+  to = "/industries#dental"
   status = 301
   force = true
 
 [[redirects]]
   from = "/industries/chiropractic-physical-therapy.html"
-  to = "/#who"
+  to = "/industries#chiropractic-physical-therapy"
   status = 301
   force = true
 
 [[redirects]]
   from = "/industries/gyms-fitness-studios.html"
-  to = "/#who"
+  to = "/industries#gyms-fitness-studios"
   status = 301
   force = true
 
 [[redirects]]
   from = "/industries/salons-barbershops.html"
-  to = "/#who"
+  to = "/industries#salons-barbershops"
   status = 301
   force = true
 
 [[redirects]]
   from = "/industries/restaurants-cafes.html"
-  to = "/#who"
+  to = "/industries#restaurants-cafes"
   status = 301
   force = true
 
 [[redirects]]
   from = "/industries/home-services.html"
-  to = "/#who"
+  to = "/industries#home-services"
   status = 301
   force = true
 
 [[redirects]]
   from = "/industries/auto-shops.html"
-  to = "/#who"
+  to = "/industries#auto-shops"
   status = 301
   force = true
 
 # The Boots on the ground page became the Field Team page on November 20, 2026.
 [[redirects]]
   from = "/boots-on-the-ground"
-  to = "/"
+  to = "/field-team"
   status = 301
   force = true
 
 [[redirects]]
   from = "/boots-on-the-ground.html"
-  to = "/"
+  to = "/field-team"
   status = 301
   force = true
 
 [[redirects]]
   from = "/faq.html"
-  to = "/#faq"
+  to = "/faq"
   status = 301
   force = true
 
@@ -231,22 +253,22 @@
 # On October 22, 2026 the service pages took their network names: /flyer-drops became /flyer-network,
 # /patient-dinners became /patient-network and /google-ads became /online-search-network. On October 23, 2026
 # the flyer network folded into the referral routes, so /flyer-network and every older flyer path 301 straight
-# to /referral-network, and since November 21, 2026 to its section of the home page, /#how-it-works (printed QR codes keep working). The old paths, with and without .html, 301 to the new ones.
+# to /referral-network (printed QR codes keep working). The old paths, with and without .html, 301 to the new ones.
 [[redirects]]
   from = "/flyer-network"
-  to = "/#how-it-works"
+  to = "/referral-network"
   status = 301
   force = true
 
 [[redirects]]
   from = "/flyer-drops"
-  to = "/#how-it-works"
+  to = "/referral-network"
   status = 301
   force = true
 
 [[redirects]]
   from = "/flyer-drops.html"
-  to = "/#how-it-works"
+  to = "/referral-network"
   status = 301
   force = true
 
@@ -289,29 +311,29 @@
 # The old community marketing service pages were retired in October 2026 (their .html files are
 # deleted). Each 301s, with and without .html, straight to the page that now covers it. Point new
 # rules at the final target, never at another redirected path, so there are no chains.
-# /client-portal (its own page from October 22, 2026; the portal now shows in the home page's What you get section, #what-you-get)
+# /client-portal (its own page from October 22, 2026; the portal now shows in the home page dashboard section)
 [[redirects]]
   from = "/client-portal"
-  to = "/#what-you-get"
+  to = "/#dashboard"
   status = 301
   force = true
 
 [[redirects]]
   from = "/client-portal.html"
-  to = "/#what-you-get"
+  to = "/#dashboard"
   status = 301
   force = true
 
 # /how-it-works
 [[redirects]]
   from = "/how-it-works"
-  to = "/#how-it-works"
+  to = "/referral-network"
   status = 301
   force = true
 
 [[redirects]]
   from = "/how-it-works.html"
-  to = "/#how-it-works"
+  to = "/referral-network"
   status = 301
   force = true
 
@@ -331,26 +353,26 @@
 # /community-marketing
 [[redirects]]
   from = "/community-marketing"
-  to = "/#how-it-works"
+  to = "/referral-network"
   status = 301
   force = true
 
 [[redirects]]
   from = "/community-marketing.html"
-  to = "/#how-it-works"
+  to = "/referral-network"
   status = 301
   force = true
 
 # /custom-marketing
 [[redirects]]
   from = "/custom-marketing"
-  to = "/#how-it-works"
+  to = "/referral-network"
   status = 301
   force = true
 
 [[redirects]]
   from = "/custom-marketing.html"
-  to = "/#how-it-works"
+  to = "/referral-network"
   status = 301
   force = true
 
@@ -369,14 +391,8 @@
 
 # /industries
 [[redirects]]
-  from = "/industries"
-  to = "/#who"
-  status = 301
-  force = true
-
-[[redirects]]
   from = "/industries.html"
-  to = "/#who"
+  to = "/industries"
   status = 301
   force = true
 
@@ -409,26 +425,26 @@
 # /market-research
 [[redirects]]
   from = "/market-research"
-  to = "/#how-it-works"
+  to = "/referral-network"
   status = 301
   force = true
 
 [[redirects]]
   from = "/market-research.html"
-  to = "/#how-it-works"
+  to = "/referral-network"
   status = 301
   force = true
 
 # /direct-mail
 [[redirects]]
   from = "/direct-mail"
-  to = "/#how-it-works"
+  to = "/referral-network"
   status = 301
   force = true
 
 [[redirects]]
   from = "/direct-mail.html"
-  to = "/#how-it-works"
+  to = "/referral-network"
   status = 301
   force = true
 
@@ -448,26 +464,26 @@
 # /flyers
 [[redirects]]
   from = "/flyers"
-  to = "/#how-it-works"
+  to = "/referral-network"
   status = 301
   force = true
 
 [[redirects]]
   from = "/flyers.html"
-  to = "/#how-it-works"
+  to = "/referral-network"
   status = 301
   force = true
 
 # /marketing-kits
 [[redirects]]
   from = "/marketing-kits"
-  to = "/#how-it-works"
+  to = "/referral-network"
   status = 301
   force = true
 
 [[redirects]]
   from = "/marketing-kits.html"
-  to = "/#how-it-works"
+  to = "/referral-network"
   status = 301
   force = true
 
@@ -526,13 +542,13 @@
 # /tracking
 [[redirects]]
   from = "/tracking"
-  to = "/#what-you-get"
+  to = "/#dashboard"
   status = 301
   force = true
 
 [[redirects]]
   from = "/tracking.html"
-  to = "/#what-you-get"
+  to = "/#dashboard"
   status = 301
   force = true
 
@@ -585,6 +601,13 @@
 
 # Repository-only files are not part of the public site.
 # --- October 23, 2026: Our Wellness Network ---
+# The home hero's video slot asks for /assets/video/van-route.mp4 after the page loads. Until that file is
+# deployed, this rewrite answers with a small text file (not a video), so the slot fails quietly, keeps the
+# still and logs no 404. It is not forced: once the real van-route.mp4 is deployed, Netlify serves the file.
+[[redirects]]
+  from = "/assets/video/van-route.mp4"
+  to = "/assets/video/placeholder.txt"
+  status = 200
 
 # Old share images and the old logo carried the previous brand. Their files are gone; links to them
 # (old social shares, cached structured data) get the current image instead.
@@ -696,12 +719,12 @@
 # The Growth team page became Boots on the ground on October 24, 2026.
 [[redirects]]
   from = "/growth-team"
-  to = "/"
+  to = "/field-team"
   status = 301
   force = true
 
 [[redirects]]
   from = "/growth-team.html"
-  to = "/"
+  to = "/field-team"
   status = 301
   force = true

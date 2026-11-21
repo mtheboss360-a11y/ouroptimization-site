@@ -6,12 +6,16 @@ export const ROOT = new URL('../', import.meta.url);
 export const read = (p) => readFileSync(new URL(p, ROOT), 'utf8');
 
 /* Every page of the site, with its clean URL and its item in the main menu (null: not in the menu).
-   November 21, 2026: the simplified site. The menu is Home, How It Works (the home page's #how-it-works), Pricing and
-   Contact, plus the Client Portal button. Field Team, About, FAQ, How it works (/referral-network) and the eight
-   industry pages merged into the home page; their old addresses 301 there (netlify.toml). */
+   November 21, 2026: the full site without pricing. The menu is Home, Field Team, Industries, How It Works
+   (/referral-network), FAQ, About and Contact, plus the Client Portal button. Pricing came off (/pricing 301s to
+   /contact), and the eight industry pages became sections of /industries (their old addresses 301 there). */
 export const PAGES = [
   { file: 'index.html', url: '/', nav: 'Home' },
-  { file: 'pricing.html', url: '/pricing', nav: 'Pricing' },
+  { file: 'field-team.html', url: '/field-team', nav: 'Field Team' },
+  { file: 'industries.html', url: '/industries', nav: 'Industries' },
+  { file: 'referral-network.html', url: '/referral-network', nav: 'How It Works' },
+  { file: 'faq.html', url: '/faq', nav: 'FAQ' },
+  { file: 'about.html', url: '/about', nav: 'About' },
   { file: 'contact.html', url: '/contact', nav: 'Contact' },
   { file: 'patient-network.html', url: '/patient-network', nav: null },
   { file: 'online-search-network.html', url: '/online-search-network', nav: null },
@@ -24,14 +28,9 @@ export const PAGES = [
   { file: '404.html', url: null, nav: null, noindex: true }
 ];
 /* The main menu, in order, then the Client Portal button. */
-export const NAV = [['Home', '/'], ['How It Works', '/#how-it-works'], ['Pricing', '/pricing'], ['Contact', '/contact']];
-/* The pages that merged into the home page on November 21, 2026, and where their old addresses go. */
-export const MERGED = {
-  '/field-team': '/', '/about': '/', '/faq': '/#faq', '/referral-network': '/',
-  '/industries/med-spas': '/#who', '/industries/dental': '/#who', '/industries/chiropractic-physical-therapy': '/#who',
-  '/industries/gyms-fitness-studios': '/#who', '/industries/salons-barbershops': '/#who', '/industries/restaurants-cafes': '/#who',
-  '/industries/home-services': '/#who', '/industries/auto-shops': '/#who'
-};
+export const NAV = [['Home', '/'], ['Field Team', '/field-team'], ['Industries', '/industries'], ['How It Works', '/referral-network'], ['FAQ', '/faq'], ['About', '/about'], ['Contact', '/contact']];
+/* The industries, in order: their sections on /industries (and the old /industries/<slug> pages that 301 there). */
+export const INDUSTRIES = ['med-spas', 'dental', 'chiropractic-physical-therapy', 'gyms-fitness-studios', 'salons-barbershops', 'restaurants-cafes', 'home-services', 'auto-shops'];
 export const PORTAL = 'https://www.ournetworkportal.com';
 export const ORIGIN = 'https://ouroptimization.com';
 /* Words that must never appear on the site, built from pieces so this file does not contain them. */

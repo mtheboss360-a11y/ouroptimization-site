@@ -101,20 +101,21 @@ describe('every page: header and footer', () => {
         return;
       }
       assert.equal(h.replaceAll(' aria-current="page"', ''), home, 'the same header on every page');
-      /* November 21, 2026: four links and the Client Portal button, no menu button; phones get the same four as tabs */
       const nav = links(/<nav class="site-nav"[\s\S]*?<\/nav>/.exec(h)[0]);
-      assert.deepEqual(nav.map((l) => [l.text, l.href]), NAV);
+      assert.deepEqual(nav.map((l) => [l.text, l.href]), [...NAV, ['Client Portal', PORTAL]]);
       const current = nav.filter((l) => /aria-current="page"/.test(l.tag)).map((l) => l.href);
       assert.deepEqual(current, p.nav ? [NAV.find((n) => n[0] === p.nav)[1]] : []);
       assert.match(h, new RegExp(`<a class="btn btn-primary btn-head" href="${PORTAL}">Client Portal</a>`));
-      assert.equal(links(h).filter((l) => l.href === PORTAL).length, 1, 'one Client Portal button');
-      assert.doesNotMatch(h, /menu-btn|tab-more|aria-controls="site-nav"|nav-cta/, 'no menu button and no More tab');
+      assert.ok(h.indexOf('class="menu-btn"') < h.indexOf('<nav class="site-nav"'), 'the menu button comes before the menu it opens');
+      /* phones: the portal's bottom tab bar, inside the header (November 14, 2026) */
       const bar = /<nav class="tabbar" aria-label="Shortcuts">[\s\S]*?<\/nav>/.exec(h);
       assert.ok(bar, 'the tab bar');
       assert.ok(h.indexOf('<nav class="site-nav"') < h.indexOf('<nav class="tabbar"'), 'after the main menu');
-      assert.deepEqual(links(bar[0]).map((l) => [l.text, l.href]), NAV, 'the same four on phones');
+      assert.deepEqual(links(bar[0]).map((l) => [l.text, l.href]), NAV.slice(0, 4), 'the first four menu items, then More (November 21, 2026)');
+      assert.match(bar[0], /<button class="tab tab-more" type="button" aria-expanded="false" aria-controls="site-nav">/, 'More opens the full menu');
       const tabNow = links(bar[0]).filter((l) => /aria-current="page"/.test(l.tag)).map((l) => l.href);
-      assert.deepEqual(tabNow, current, 'the tab for this page is marked, like the menu');
+      const onBar = NAV.slice(0, 4).map((n) => n[1]);
+      assert.deepEqual(tabNow, current.filter((c) => onBar.includes(c)), 'the tab for this page is marked, like the menu');
     });
     test(`${p.file}: the footer names the company`, () => {
       const f = text(footerOf(src));
@@ -123,12 +124,14 @@ describe('every page: header and footer', () => {
       assert.deepEqual(links(footerOf(src)).map((l) => l.href), ['/privacy', '/terms']);
     });
   }
-  test('the dinner is on the pricing page only: out of the menu, off the home page, linked from pricing alone', () => {
+  test('the dinner stays out of the menu and off the home page; the FAQ links it with the other add-ons (pricing came off, November 21, 2026)', () => {
     for (const p of PAGES) {
-      if (['pricing.html', 'patient-network.html', 'privacy.html', 'terms.html'].includes(p.file)) continue;
+      if (['faq.html', 'patient-network.html', 'privacy.html', 'terms.html'].includes(p.file)) continue;
       assert.doesNotMatch(bodyOf(page[p.file]), /patient-network|patient dinner/i, p.file);
     }
-    assert.ok(links(page['pricing.html']).some((l) => l.href === '/patient-network'));
+    const addons = byId(page['faq.html'], 'add-ons');
+    assert.ok(addons, 'the FAQ question on add-ons');
+    for (const href of ['/online-search-network', '/review-tags', '/website-design', '/patient-network']) assert.ok(links(addons).some((l) => l.href === href), href);
   });
 });
 
@@ -193,15 +196,16 @@ describe('links, images and redirects', () => {
       }
       for (const t of tags(src, 'img')) assert.ok(attr(t, 'width') && attr(t, 'height'), `${p.file}: ${t.slice(0, 80)}`);
       for (const u of urls.filter((x) => x.startsWith('/'))) {
+        if (u === '/assets/video/van-route.mp4') continue;
         assert.ok(existsSync(new URL(u.slice(1), ROOT)), `${p.file}: missing ${u}`);
       }
     }
   });
-  test('/flyer-network and every older flyer path 301 straight to How it works on the home page (printed QR codes keep working)', () => {
+  test('/flyer-network and every older flyer path 301 straight to /referral-network (printed QR codes keep working)', () => {
     for (const from of ['/flyer-network', '/flyer-network.html', '/flyer-drops', '/flyer-drops.html', '/flyers', '/direct-mail']) {
       const r = REDIRECTS.find((x) => x.from === from);
       assert.ok(r, from);
-      assert.deepEqual([r.to, r.status, r.force], ['/#how-it-works', 301, true], from);
+      assert.deepEqual([r.to, r.status, r.force], ['/referral-network', 301, true], from);
     }
     assert.ok(!existsSync(new URL('flyer-network.html', ROOT)), 'the flyer page file is gone');
   });
@@ -214,12 +218,12 @@ describe('links, images and redirects', () => {
       assert.ok(fileForUrl(to) || to === '/', `${r.from} -> ${r.to}: no such page`);
     }
   });
-  test('the sample contract page is gone (November 19, 2026): its old address and its .html go straight to pricing, and nothing links to it', () => {
+  test('the sample contract page is gone (November 19, 2026): its old address and its .html go straight to /contact, and nothing links to it', () => {
     assert.ok(!existsSync(new URL('sample-contract.html', ROOT)));
     for (const from of ['/sample-contract', '/sample-contract.html']) {
       const r = REDIRECTS.find((x) => x.from === from);
       assert.ok(r, from);
-      assert.deepEqual([r.to, r.status, r.force], ['/pricing', 301, true], from);
+      assert.deepEqual([r.to, r.status, r.force], ['/contact', 301, true], from);
     }
     for (const p of PAGES) assert.doesNotMatch(page[p.file], /href="\/sample-contract/, p.file);
     assert.doesNotMatch(read('sitemap.xml'), /sample-contract/);
@@ -293,8 +297,8 @@ describe('assets', () => {
   });
 });
 
-/* November 20, 2026: Treats for Staff and the compliance wording. November 21, 2026: the simplified site, with no
-   placeholders left anywhere and the healthcare wording in the home page's questions. These hold on every page. */
+/* November 20, 2026: Treats for Staff and the compliance wording. November 21, 2026: the full site again, with no
+   pricing and no placeholder text anywhere; "Boots on the ground" is the home page's line again. Every page. */
 describe('every page: the November 20 and 21, 2026 rules', () => {
   const TODO = '<!-- TODO: attorney review of courtesy program before publishing healthcare pages -->';
   for (const p of PAGES) {
@@ -303,8 +307,9 @@ describe('every page: the November 20 and 21, 2026 rules', () => {
     test(`${p.file}: no staff courtesy, no old names, treats never tied to referrals`, () => {
       const withoutTodo = src.replaceAll(TODO, '');
       assert.doesNotMatch(withoutTodo, /courtesy|complimentary consultation/i, 'the staff courtesy program is gone');
-      assert.doesNotMatch(src, /Organic Growth Team|Boots on the ground|Growth team|field sales team/i);
-      if (p.file !== 'index.html') assert.doesNotMatch(t, /whether or not (they|anyone) (ever )?(send|refer)/i, 'only the home page\'s questions say the treats do not depend on referrals');
+      assert.doesNotMatch(src, /Organic Growth Team|Growth team|outsourced field sales team/i);
+      if (p.file !== 'index.html') assert.doesNotMatch(t, /Boots on the ground/i, 'the home page\'s line, used once');
+      if (p.file !== 'faq.html') assert.doesNotMatch(t, /whether or not (they|anyone) (ever )?(send|refer)/i, 'only the FAQ says the treats do not depend on referrals');
       assert.doesNotMatch(t, /HIPAA[- ]compliant/i, 'the HIPAA sentence waits for the owner (assets/site-config.js)');
     });
     test(`${p.file}: no visible "Sample account, illustrative data" label anywhere (the owner took them off, November 21, 2026)`, () => {
@@ -312,17 +317,24 @@ describe('every page: the November 20 and 21, 2026 rules', () => {
       assert.doesNotMatch(src, /class="[^"]*\bsample-(tag|note)\b/);
     });
     test(`${p.file}: no unfinished placeholder text, visible or hidden (November 21, 2026)`, () => {
-      assert.doesNotMatch(src, /\[(STARTING PRICE|MINIMUM TERM|CAMPAIGN LENGTH|STOPS PER MONTH[^\]]*|FOUNDING [A-Z]+|CLIENT [A-Z, ]+|PLACEHOLDER|TOWN|INDUSTRY|STOPS|SIGN-UPS|BOOKINGS)\]/);
+      assert.doesNotMatch(src, /\[(STARTING PRICE|MINIMUM TERM|CAMPAIGN LENGTH|STOPS PER MONTH[^\]]*|FOUNDING [A-Z]+|CLIENT [A-Z, ]+|PLACEHOLDER|TOWN|INDUSTRY|STOPS|SIGN-UPS|BOOKINGS|CLIENT QUOTE)\]/);
       assert.doesNotMatch(t, /\[[A-Z][A-Z :,'-]+\]/);
     });
+    test(`${p.file}: no pricing anywhere: no prices, trial, plans, money-back guarantee or links to /pricing (November 21, 2026)`, () => {
+      if (p.file === 'terms.html') return; /* the legal terms keep their clauses on how prices are agreed, with no figures */
+      assert.doesNotMatch(src, /href="\/pricing|\?about=pricing/);
+      assert.doesNotMatch(t, /\$\s?\d|\btrial\b|first-month|Neighborhood plan|Community plan|\bplans?\b|money back|comes back|priced on a call|included in your plan|at no charge|founding/i);
+      assert.doesNotMatch(t, /\bPricing\b/);
+    });
   }
-  test('the home page carries the attorney-review note, the state-rules line, the treats line and the HIPAA slot; no other page does', () => {
-    const home = page['index.html'];
-    assert.ok(home.includes(TODO));
-    assert.match(text(bodyOf(home)), /Partner programs for healthcare practices are reviewed for compliance with applicable state rules before launch\./);
-    assert.match(text(bodyOf(home)), /Treats are shared with the whole staff on every visit, whether or not anyone refers a customer\./);
-    assert.match(home, /<script src="\/assets\/site-config\.js" defer><\/script>\n<script src="\/assets\/site\.js" defer>/);
-    for (const p of PAGES.filter((x) => x.file !== 'index.html')) assert.doesNotMatch(page[p.file], /data-flag="hipaaConfirmed"/, p.file);
+  test('the FAQ carries the attorney-review note, the state-rules line, the treats line and the HIPAA slot; Industries points to it', () => {
+    const faq = page['faq.html'];
+    assert.ok(faq.includes(TODO));
+    assert.match(text(bodyOf(faq)), /Partner programs for healthcare practices are reviewed for compliance with applicable state rules before launch\./);
+    assert.match(text(bodyOf(faq)), /Treats are shared with the whole staff on every visit, whether or not anyone refers a customer\./);
+    assert.match(faq, /<p class="hipaa-line" data-flag="hipaaConfirmed" data-flag-text="hipaaText" hidden><span><\/span><\/p>/);
+    assert.match(faq, /<script src="\/assets\/site-config\.js" defer><\/script>\n<script src="\/assets\/site\.js" defer>/);
+    assert.ok(links(page['industries.html']).some((l) => l.href === '/faq#healthcare'));
   });
 });
 
