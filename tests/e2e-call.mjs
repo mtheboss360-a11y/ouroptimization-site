@@ -230,7 +230,7 @@ await scenario('every service page key prefills on /contact, and the keys from b
   for (const [key, message] of [
     ['referral-network', "I'm asking about referral routes."], ['flyer-network', "I'm asking about referral routes."],
     ['patient-network', "I'm asking about a private customer dinner."], ['online-search-network', "I'm asking about Google Ads in my own account."],
-    ['pricing', "I'm asking about pricing."], ['sample-contract', "I'm asking about the sample contract."],
+    ['pricing', "I'd like to book a call."], ['sample-contract', "I'm asking about the sample contract."],
     ['patient-dinners', "I'm asking about a private customer dinner."], ['flyer-drops', "I'm asking about referral routes."], ['google-ads', "I'm asking about Google Ads in my own account."]
   ]) {
     const s = await open({ path: `/contact?about=${key}` });

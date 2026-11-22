@@ -105,7 +105,9 @@
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     const narrow = W < 760;
     R = narrow ? Math.min(W * 0.92, 420) : Math.min(H * 0.86, W * 0.5, 760);
-    cx = W + (narrow ? R * 0.06 : R * 0.02); cy = H + (narrow ? R * 0.04 : R * 0.02);
+    // phones: lift the orb by the bottom tab bar's height, so your business is never hidden behind it
+    const bar = narrow ? ((document.querySelector('.tabbar') || {}).offsetHeight || 0) + 16 : 0;
+    cx = W + (narrow ? R * 0.06 : R * 0.02); cy = H - bar + (narrow ? R * 0.04 : R * 0.02);
     readColors();
     layout();
   }
@@ -221,7 +223,8 @@
 
   const inOrb = (e) => { const r = canvas.getBoundingClientRect(); return Math.hypot(e.clientX - r.left - cx, e.clientY - r.top - cy) < R; };
   canvas.addEventListener('pointermove', (e) => { if (e.pointerType === 'mouse' && inOrb(e)) setOpen(1); });
-    canvas.addEventListener('pointerdown', (e) => { if (e.pointerType !== 'mouse' && inOrb(e)) { target = 0; open = 0; setTimeout(() => setOpen(1), 60); } });
+  // a tap on the orb on a phone replays the build; a scroll that starts on it does not
+  canvas.addEventListener('click', (e) => { if (touch && inOrb(e)) { target = 0; open = 0; setTimeout(() => setOpen(1), 60); } });
 
   addEventListener('resize', resize);
   resize();

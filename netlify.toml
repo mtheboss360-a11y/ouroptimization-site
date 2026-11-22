@@ -566,16 +566,16 @@
   force = true
 
 # Older retired URLs, pointed straight at their final target.
-# "Who it's for" became "Industries" in the 2026 repositioning; Industries is now retired too.
+# "Who it's for" became "Industries" in the 2026 repositioning (its own page again from November 21, 2026).
 [[redirects]]
   from = "/who-its-for"
-  to = "/"
+  to = "/industries"
   status = 301
   force = true
 
 [[redirects]]
   from = "/who-its-for.html"
-  to = "/"
+  to = "/industries"
   status = 301
   force = true
 

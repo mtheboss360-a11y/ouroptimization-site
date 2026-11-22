@@ -64,7 +64,8 @@
     ctx.beginPath(); ctx.roundRect(px, py, w, h, h / 2); ctx.fill(); ctx.stroke();
     ctx.fillStyle = strong ? '#fff' : colors.ink; ctx.textBaseline = 'middle'; ctx.fillText(text, px + 11, py + h / 2 + .5);
   }
-  const at = (p) => { const a = p.a * Math.PI / 180; return [cx + Math.cos(a) * R * p.r, cy + Math.sin(a) * R * p.r]; };
+  // narrow screens: the owners sit further out and their labels drop the first name, so nothing overlaps
+  const at = (p) => { const a = p.a * Math.PI / 180, r = W < 420 ? p.r + .14 : p.r; return [cx + Math.cos(a) * R * r, cy + Math.sin(a) * R * r]; };
 
   function resize() {
     const rect = canvas.getBoundingClientRect();
@@ -107,6 +108,7 @@
       ctx.strokeStyle = colors.rose; ctx.lineWidth = 1.5; ctx.globalAlpha = alpha * (1 - k);
       ctx.beginPath(); ctx.arc(x, y, from + (to - from) * ease(k), 0, 6.283); ctx.stroke();
     };
+    // first the links and the referrals travelling along them...
     partners.forEach((p, i) => {
       const [x, y] = at(p), start = LEAD + i * BEAT;
       const draw = ease(clamp((t - start) / DRAW));
@@ -115,17 +117,22 @@
       ctx.strokeStyle = colors.lit; ctx.globalAlpha = .55; ctx.lineWidth = 1.4;
       ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(tx, ty); ctx.stroke();
       if (draw < 1) { ctx.fillStyle = colors.lit; ctx.globalAlpha = 1; ctx.beginPath(); ctx.arc(tx, ty, 3.4, 0, 6.283); ctx.fill(); return; }
-      const landed = start + DRAW;
-      ripple(x, y, landed, 14, 34, .5);
-      const pop = clamp((t - landed) / POP);
-      ctx.globalAlpha = Math.min(1, pop * 2.2); owner(x, y, p, Math.max(.01, back(pop)));
-      const name = ease(clamp((t - landed - .16) / .34));
-      if (name > 0) { ctx.globalAlpha = name; pill(x, y - 12 + (1 - name) * 8, p.label, false); }
       if (!reduce && t > done) {
         const f = (((t - done) * .45 + i * .37) % 1);
         ctx.globalAlpha = (1 - Math.abs(f - .5) * 1.2) * clamp((t - done) / .6);
         ctx.fillStyle = colors.lit; ctx.beginPath(); ctx.arc(x + (cx - x) * f, y + (cy - y) * f, 3.2, 0, 6.283); ctx.fill();
       }
+    });
+    // ...then the owners and their names on top, so no line or dot ever crosses a label
+    partners.forEach((p, i) => {
+      const [x, y] = at(p), start = LEAD + i * BEAT;
+      if (ease(clamp((t - start) / DRAW)) < 1) return;
+      const landed = start + DRAW;
+      ripple(x, y, landed, 14, 34, .5);
+      const pop = clamp((t - landed) / POP);
+      ctx.globalAlpha = Math.min(1, pop * 2.2); owner(x, y, p, Math.max(.01, back(pop)));
+      const name = ease(clamp((t - landed - .16) / .34));
+      if (name > 0) { ctx.globalAlpha = name; pill(x, y - 12 + (1 - name) * 8, W < 420 ? p.label.split(' · ')[1] : p.label, false); }
     });
     ripple(cx, cy, 0, 11, 52, .7);
     partners.forEach((p, i) => ripple(cx, cy, LEAD + i * BEAT + DRAW, 12, 30, .35));

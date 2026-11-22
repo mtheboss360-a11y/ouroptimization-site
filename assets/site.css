@@ -673,8 +673,8 @@ a[href^="tel:"],.nowrap{white-space:nowrap}
 @media (min-width:960px){
   .ab-contact{justify-self:end;width:100%}
 }
-@media (min-width:1000px){
-  .ab-commit{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (min-width:1000px) and (max-width:1179.98px){
+  .cardgrid.c4.ab-commit{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 .fq-jump{list-style:none;display:flex;flex-wrap:wrap;gap:8px;margin-top:26px}
 .fq-jump a{display:inline-flex;align-items:center;min-height:42px;padding:0 16px;border-radius:999px;border:1px solid var(--line);background:var(--paper);font:600 .88rem/1 var(--sans);color:var(--ink);text-decoration:none;transition:border-color .25s ease,color .25s ease}
@@ -1800,3 +1800,8 @@ body>main{flex:1 0 auto}
 .ind-other{margin-top:clamp(24px,3vw,32px);text-align:center;color:var(--ink-2)}
 .ind-other a{color:var(--accent);font-weight:600;text-underline-offset:3px}
 .ind-hc{scroll-margin-top:96px}
+
+/* review fixes (November 21, 2026): the third step spans the row while the grid has two columns; no empty orb
+   square on How It Works without JavaScript */
+@media (min-width:640px) and (max-width:859.98px){.home-steps>li:last-child{grid-column:1/-1}}
+html:not(.js) .hiw-orb{display:none}

@@ -231,7 +231,7 @@ describe('call.js: ?about= prefill', () => {
   // One key for each service page and the pricing page (named after its URL), plus the keys from before the pages were renamed
   // (October 22, 2026), which keep working and prefill the same message as the new key.
   const KEYS = {
-    'pricing': "I'm asking about pricing.",
+    'pricing': "I'd like to book a call.",
     'industries': "I'd like to see which businesses near me you would visit.",
     'referral-network': "I'm asking about referral routes.",
     'flyer-network': "I'm asking about referral routes.",

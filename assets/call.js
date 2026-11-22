@@ -29,7 +29,7 @@
      after the last part of the URL (/industries/dental links to /contact?about=dental). Each industry message
      matches the aboutText in tools/industries/<slug>.json. */
   var ABOUT = {
-    'pricing': "I'm asking about pricing.",
+    'pricing': "I'd like to book a call.",
     'industries': "I'd like to see which businesses near me you would visit.",
     'referral-network': "I'm asking about referral routes.",
     'flyer-network': "I'm asking about referral routes.",
