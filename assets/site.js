@@ -20,9 +20,7 @@
   var MOVED = {
     formats: '/patient-network#formats', how: '/referral-network', 'how-it-works': '/referral-network', handle: '/patient-network#handle',
     who: '/about', 'add-ons': '/faq#add-ons', referrals: '/referral-network',
-    'flyer-drops': '/referral-network', faq: '/faq', call: '/contact#call',
-    /* November 21, 2026: the home page's treats, in-person and ground-rules sections moved to their own pages */
-    treats: '/field-team#treats', 'in-person': '/field-team', compliance: '/referral-network#agreement'
+    'flyer-drops': '/referral-network', faq: '/faq', call: '/contact#call'
   };
   var old = /^#([A-Za-z][\w-]*)(?:\?(.*))?$/.exec(window.location.hash);
   if (old && (window.location.pathname === '/' || window.location.pathname === '/index.html') &&

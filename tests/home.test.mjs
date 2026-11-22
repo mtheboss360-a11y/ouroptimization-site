@@ -16,8 +16,9 @@ describe('home: order and hero', () => {
   test('the sections (November 20, 2026): the general promise, Industries, in person, the portal, Treats for Staff, in writing, the call; no pricing, no map', () => {
     const ids = [...main.replace(/<!--[\s\S]*?-->/g, '').matchAll(/<section\b[^>]*\sid="([^"]+)"/g)].map((m) => m[1]);
     assert.deepEqual(ids, ['industries', 'in-person', 'dashboard', 'treats', 'compliance', 'book']);
-    assert.doesNotMatch(text(main), /\$\d/, 'no prices on the home page (pricing is its own page)');
-    assert.ok(main.indexOf('hero-wave') < main.indexOf('id="in-person"'), 'the hero comes first');
+    assert.doesNotMatch(text(main), /\$\d/, 'no prices on the home page');
+    const heroAt = main.indexOf('class="hero-orb"');
+    assert.ok(heroAt >= 0 && heroAt < main.indexOf('id="industries"'), 'the hero comes first');
   });
   test('the hero: the owner\'s line (November 21, 2026), with no buttons and no example card', () => {
     const hero = /<section class="hero-orb"[\s\S]*?<\/section>/.exec(main)[0];

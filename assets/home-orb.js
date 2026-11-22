@@ -15,6 +15,7 @@
   new IntersectionObserver(([e]) => { onScreen = e.isIntersecting; }).observe(canvas);
 
   let W = 0, H = 0, dpr = 1, R = 0, cx = 0, cy = 0, colors = {};
+  let floor = 0, visW = -1, vis = 0;
   const readColors = () => {
     const s = getComputedStyle(hero);
     colors = { dot: s.getPropertyValue('--phthalo').trim(), lit: s.getPropertyValue('--phthalo-lit').trim(),
@@ -79,7 +80,7 @@
     });
     const [qx, qy] = at(clinic);
     taken.push(boxOf(qx, qy, clinic.label, true), [qx - 22, qy - 22, qx + 22, qy + 22]);
-    const clear = (b) => b[0] >= 0 && b[2] <= W && b[1] >= 0 && b[3] <= H && !taken.some(t => hit(b, t));
+    const clear = (b) => b[0] >= 0 && b[2] <= W && b[1] >= 0 && b[3] <= floor && !taken.some(t => hit(b, t));
     for (const p of partners) {
       let best = null;
       search: for (let dr = 0; dr <= 0.5; dr += 0.03) {
@@ -107,7 +108,12 @@
     R = narrow ? Math.min(W * 0.92, 420) : Math.min(H * 0.86, W * 0.5, 760);
     // phones: lift the orb by the bottom tab bar's height, so your business is never hidden behind it
     const bar = narrow ? ((document.querySelector('.tabbar') || {}).offsetHeight || 0) + 16 : 0;
-    cx = W + (narrow ? R * 0.06 : R * 0.02); cy = H - bar + (narrow ? R * 0.04 : R * 0.02);
+    // short phones: sit on the first screen's visible bottom (measured once per width, so a collapsing
+    // browser toolbar doesn't move it), but never above the hero text
+    if (W !== visW) { visW = W; vis = innerHeight - rect.top - scrollY; }
+    const copy = hero.querySelector('.hero-copy').getBoundingClientRect().bottom - rect.top;
+    floor = narrow ? Math.max(copy + R * 0.28 + 64, Math.min(H, vis) - bar) : H;
+    cx = W + (narrow ? R * 0.06 : R * 0.02); cy = floor + (narrow ? R * 0.04 : R * 0.02);
     readColors();
     layout();
   }

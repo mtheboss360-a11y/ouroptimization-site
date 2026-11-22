@@ -4,7 +4,7 @@
   "name": "Dental",
   "noun": "dental practice",
   "healthcare": true,
-  "title": "Field Sales Team for Dental Practices | Our Wellness Network",
+  "title": "Referral Partners for Dental Practices | Our Wellness Network",
   "description": "We visit the daycares, gyms and leasing offices near your dental practice in Elmhurst, Lombard and Downers Grove. You see every sign-up in your portal.",
   "cardBlurb": "We visit the daycares, gyms and leasing offices that see local families.",
   "h1": "Local referral partners",
@@ -32,12 +32,12 @@
     { "title": "No patient records, ever", "text": "We never receive patient records, and partners never see who signed up. The sign-up form asks no health questions." },
     { "title": "Your words only", "text": "We make no medical or health claims. We describe your services only in words you approve." }
   ],
-  "exclusivity": "Each partner promotes one dental practice, yours, for as long as you are a client.",
+  "exclusivity": "Each partner agrees to promote one dental practice, yours, for as long as you are a client.",
   "faq": [
     { "q": "Will you visit other dental practices near me?", "a": "No. We only visit businesses that don't compete with you." },
     { "q": "What about the rules for healthcare practices?", "a": "Partner programs for healthcare practices are reviewed for compliance with applicable state rules before launch. If your lawyer wants to read the partner agreement, we'll send it." },
     { "q": "Can we keep the relationships we already have?", "a": "Yes. We skip businesses you already work with unless you ask, and those relationships stay yours." }
   ],
   "aboutKey": "dental",
-  "aboutText": "I'm asking about field sales for my dental practice."
+  "aboutText": "I'm asking about referral partners for my dental practice."
 }

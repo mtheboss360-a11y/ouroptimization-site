@@ -4,7 +4,7 @@
   "name": "Gyms & Fitness Studios",
   "noun": "gym or studio",
   "healthcare": false,
-  "title": "Field Sales Team for Gyms and Fitness Studios | Our Wellness Network",
+  "title": "Referral Partners for Gyms and Fitness Studios | Our Wellness Network",
   "description": "We visit the juice bars, running stores and shops near your gym or studio in Elmhurst, Hinsdale and Oak Brook. You see every sign-up in your portal.",
   "cardBlurb": "We visit the juice bars, running stores and meal prep shops near you.",
   "h1": "Local referral partners",
@@ -32,12 +32,12 @@
     { "title": "Never another gym", "text": "We never visit other gyms or fitness studios for you. Every stop is a business that doesn't compete." },
     { "title": "Your first-visit offer", "text": "Each staff card opens your first-visit offer, written in your words." }
   ],
-  "exclusivity": "Each partner promotes one gym or studio, yours, for as long as you are a client.",
+  "exclusivity": "Partners agree to promote one gym or studio like yours, and only yours, for as long as you are a client.",
   "faq": [
     { "q": "What if a business on the list feels too close to mine?", "a": "Take it off the list. We only visit the businesses you approve." },
     { "q": "Can't I just walk into the juice bar next door myself?", "a": "You can. The hard part is finding the right businesses, visiting every month and tracking every sign-up." },
     { "q": "Do I need to come along on the visits?", "a": "No. Our field team makes every visit, and you see each stop in your portal." }
   ],
   "aboutKey": "gyms-fitness-studios",
-  "aboutText": "I'm asking about field sales for my gym or fitness studio."
+  "aboutText": "I'm asking about referral partners for my gym or fitness studio."
 }

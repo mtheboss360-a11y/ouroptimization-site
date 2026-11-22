@@ -4,7 +4,7 @@
   "name": "Chiropractic & Physical Therapy",
   "noun": "practice",
   "healthcare": true,
-  "title": "Field Sales Team for Chiropractors and PTs | Our Wellness Network",
+  "title": "Referral Partners for Chiropractors and PTs | Our Wellness Network",
   "description": "For chiropractors and physical therapists in Naperville, Downers Grove and Lombard: we visit the gyms, studios and running stores near you and track every sign-up.",
   "cardBlurb": "We visit the gyms, studios and running stores where active people go.",
   "h1": "Local referral partners",
@@ -32,12 +32,12 @@
     { "title": "No patient records, ever", "text": "We never receive patient records, and partners never see who signed up. The sign-up form asks no health questions." },
     { "title": "Your words only", "text": "We make no medical or health claims. We describe your services only in words you approve." }
   ],
-  "exclusivity": "Each partner promotes one chiropractic or PT practice, yours, for as long as you are a client.",
+  "exclusivity": "Partners agree to promote one practice like yours, and only yours, for as long as you are a client.",
   "faq": [
     { "q": "Do I need to come along on the visits?", "a": "No. Our field team makes every visit, and you see each stop in your portal." },
     { "q": "What about the rules for healthcare practices?", "a": "Partner programs for healthcare practices are reviewed for compliance with applicable state rules before launch. If your lawyer wants to read the partner agreement, we'll send it." },
     { "q": "Can we keep the relationships we already have?", "a": "Yes. We skip businesses you already work with unless you ask, and those relationships stay yours." }
   ],
   "aboutKey": "chiropractic-physical-therapy",
-  "aboutText": "I'm asking about field sales for my chiropractic or physical therapy practice."
+  "aboutText": "I'm asking about referral partners for my chiropractic or physical therapy practice."
 }

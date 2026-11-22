@@ -4,7 +4,7 @@
   "name": "Home Services",
   "noun": "home service business",
   "healthcare": false,
-  "title": "Field Sales Team for Home Services | Our Wellness Network",
+  "title": "Referral Partners for Home Services | Our Wellness Network",
   "description": "We visit the hardware stores, real estate offices and movers near your home service business in Naperville and Hinsdale, and track every sign-up.",
   "cardBlurb": "We visit the hardware stores, real estate offices and movers homeowners use.",
   "h1": "Local referral partners",
@@ -32,12 +32,12 @@
     { "title": "No one in your trade", "text": "We never visit businesses in your trade for you." },
     { "title": "Your words only", "text": "We describe your services only in words you approve." }
   ],
-  "exclusivity": "Each partner promotes one business in your trade, yours, for as long as you are a client.",
+  "exclusivity": "Each partner agrees to promote one business in your trade, yours, for as long as you are a client.",
   "faq": [
     { "q": "Can't I just walk into the hardware store myself?", "a": "You can. The hard part is finding the right businesses, visiting every month and tracking every sign-up." },
     { "q": "I already know a few real estate agents. Will you visit them?", "a": "Not unless you ask. We skip businesses you already work with, and those relationships stay yours." },
     { "q": "Do I need to come along on the visits?", "a": "No. Our field team makes every visit, and you see each stop in your portal." }
   ],
   "aboutKey": "home-services",
-  "aboutText": "I'm asking about field sales for my home service business."
+  "aboutText": "I'm asking about referral partners for my home service business."
 }

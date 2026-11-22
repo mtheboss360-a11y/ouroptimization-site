@@ -4,7 +4,7 @@
   "name": "Auto Shops",
   "noun": "auto shop",
   "healthcare": false,
-  "title": "Field Sales Team for Auto Shops | Our Wellness Network",
+  "title": "Referral Partners for Auto Shops | Our Wellness Network",
   "description": "We visit the car washes, parts stores and dealerships near your auto shop in Lombard, Elmhurst and Oak Brook. You see every sign-up in your portal.",
   "cardBlurb": "We visit the car washes, parts stores and dealerships drivers stop at.",
   "h1": "Local referral partners",
@@ -32,12 +32,12 @@
     { "title": "No competing bays", "text": "We never visit other repair shops for you." },
     { "title": "Your words only", "text": "We describe your shop only in words you approve." }
   ],
-  "exclusivity": "Each partner promotes one auto shop, yours, for as long as you are a client.",
+  "exclusivity": "Partners agree to promote one auto shop like yours, and only yours, for as long as you are a client.",
   "faq": [
     { "q": "I already call a tow company. Will you visit them?", "a": "Not unless you ask. We skip businesses you already work with, and those relationships stay yours." },
     { "q": "Dealerships have their own service departments. Why visit one?", "a": "Only if it shares your customers without competing, and only if you approve it. If you'd rather skip dealerships, we leave them off." },
     { "q": "Do I need to come along on the visits?", "a": "No. Our field team makes every visit, and you see each stop in your portal." }
   ],
   "aboutKey": "auto-shops",
-  "aboutText": "I'm asking about field sales for my auto shop."
+  "aboutText": "I'm asking about referral partners for my auto shop."
 }

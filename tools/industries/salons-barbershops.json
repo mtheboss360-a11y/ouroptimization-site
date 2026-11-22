@@ -4,7 +4,7 @@
   "name": "Salons & Barbershops",
   "noun": "salon or barbershop",
   "healthcare": false,
-  "title": "Field Sales Team for Salons and Barbershops | Our Wellness Network",
+  "title": "Referral Partners for Salons and Barbershops | Our Wellness Network",
   "description": "We visit the bridal shops, boutiques and studios near your salon or barbershop in Oak Brook, Lombard and Hinsdale. You see every sign-up in your portal.",
   "cardBlurb": "We visit the bridal shops, boutiques and photo studios near you.",
   "h1": "Local referral partners",
@@ -32,12 +32,12 @@
     { "title": "No competing chairs", "text": "We never visit other salons or barbershops for you." },
     { "title": "Your words only", "text": "We introduce your salon or barbershop only in words you approve." }
   ],
-  "exclusivity": "Each partner promotes one salon or barbershop, yours, for as long as you are a client.",
+  "exclusivity": "Partners agree to promote one salon or barbershop like yours, and only yours, for as long as you are a client.",
   "faq": [
     { "q": "Can we keep the relationships we already have?", "a": "Yes. We skip businesses you already work with unless you ask, and those relationships stay yours." },
     { "q": "Do I need to come along on the visits?", "a": "No. Our field team makes every visit, and you see each stop in your portal." },
     { "q": "What do you leave at each business?", "a": "We leave your approved printed materials, with permission, and a card for each staff member. We restock every month." }
   ],
   "aboutKey": "salons-barbershops",
-  "aboutText": "I'm asking about field sales for my salon or barbershop."
+  "aboutText": "I'm asking about referral partners for my salon or barbershop."
 }

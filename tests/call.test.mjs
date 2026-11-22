@@ -244,14 +244,14 @@ describe('call.js: ?about= prefill', () => {
     'google-ads': "I'm asking about Google Ads in my own account.",
     // November 20, 2026: the Field Team page and the eight industry pages (the industry keys and messages come from tools/industries/*.json)
     'field-team': "I'm asking about the field team.",
-    'auto-shops': "I'm asking about field sales for my auto shop.",
-    'chiropractic-physical-therapy': "I'm asking about field sales for my chiropractic or physical therapy practice.",
-    'dental': "I'm asking about field sales for my dental practice.",
-    'gyms-fitness-studios': "I'm asking about field sales for my gym or fitness studio.",
-    'home-services': "I'm asking about field sales for my home service business.",
-    'med-spas': "I'm asking about field sales for my med spa.",
-    'restaurants-cafes': "I'm asking about field sales for my restaurant or cafe.",
-    'salons-barbershops': "I'm asking about field sales for my salon or barbershop."
+    'auto-shops': "I'm asking about referral partners for my auto shop.",
+    'chiropractic-physical-therapy': "I'm asking about referral partners for my chiropractic or physical therapy practice.",
+    'dental': "I'm asking about referral partners for my dental practice.",
+    'gyms-fitness-studios': "I'm asking about referral partners for my gym or fitness studio.",
+    'home-services': "I'm asking about referral partners for my home service business.",
+    'med-spas': "I'm asking about referral partners for my med spa.",
+    'restaurants-cafes': "I'm asking about referral partners for my restaurant or cafe.",
+    'salons-barbershops': "I'm asking about referral partners for my salon or barbershop."
   };
   test('one key for each service page, and the old keys still work', () => {
     assert.deepEqual(call.ABOUT, KEYS);
