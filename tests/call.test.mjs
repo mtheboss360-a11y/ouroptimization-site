@@ -232,7 +232,6 @@ describe('call.js: ?about= prefill', () => {
   // (October 22, 2026), which keep working and prefill the same message as the new key.
   const KEYS = {
     'pricing': "I'd like to book a call.",
-    'industries': "I'd like to see which businesses near me you would visit.",
     'referral-network': "I'm asking about referral routes.",
     'flyer-network': "I'm asking about referral routes.",
     'patient-network': "I'm asking about a private customer dinner.",

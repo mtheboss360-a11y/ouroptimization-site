@@ -30,7 +30,6 @@
      matches the aboutText in tools/industries/<slug>.json. */
   var ABOUT = {
     'pricing': "I'd like to book a call.",
-    'industries': "I'd like to see which businesses near me you would visit.",
     'referral-network': "I'm asking about referral routes.",
     'flyer-network': "I'm asking about referral routes.",
     'patient-network': "I'm asking about a private customer dinner.",

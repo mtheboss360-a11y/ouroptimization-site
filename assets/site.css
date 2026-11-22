@@ -673,8 +673,8 @@ a[href^="tel:"],.nowrap{white-space:nowrap}
 @media (min-width:960px){
   .ab-contact{justify-self:end;width:100%}
 }
-@media (min-width:1000px) and (max-width:1179.98px){
-  .cardgrid.c4.ab-commit{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media (min-width:1000px){
+  .ab-commit{grid-template-columns:repeat(3,minmax(0,1fr))}
 }
 .fq-jump{list-style:none;display:flex;flex-wrap:wrap;gap:8px;margin-top:26px}
 .fq-jump a{display:inline-flex;align-items:center;min-height:42px;padding:0 16px;border-radius:999px;border:1px solid var(--line);background:var(--paper);font:600 .88rem/1 var(--sans);color:var(--ink);text-decoration:none;transition:border-color .25s ease,color .25s ease}
@@ -1441,7 +1441,7 @@ h1 em,h2 em,.hero-wave h1 em,.pg-hero h1 em,.ct-head h1 em,.svc-hero h1 em,.dn-s
   .tab span{display:block;max-width:100%;overflow-wrap:normal;text-wrap:balance}
   .tab[aria-current="page"],.tab-more[aria-expanded="true"]{background:var(--accent-soft);color:var(--accent);font-weight:650}
   /* More lights up on a page that has no tab of its own: its menu link is not one of the four tabs */
-  :root:not(.menu-open):has(.site-nav a[aria-current="page"]:not([href="/"]):not([href="/field-team"]):not([href="/industries"]):not([href="/referral-network"])) .tab-more{background:var(--accent-soft);color:var(--accent);font-weight:650}
+  :root:not(.menu-open):has(.site-nav a[aria-current="page"]:not([href="/"]):not([href="/field-team"]):not([href="/referral-network"])) .tab-more{background:var(--accent-soft);color:var(--accent);font-weight:650}
   .tab:active{background:var(--accent-soft)}
   /* the full menu, as a sheet above the bar */
   .js .site-nav{position:fixed;z-index:59;top:auto;left:max(10px,env(safe-area-inset-left));right:max(10px,env(safe-area-inset-right));bottom:calc(max(8px,env(safe-area-inset-bottom)) + 80px);max-height:calc(100dvh - 170px);padding:8px 10px;border:1px solid var(--line);border-radius:22px;background:#fff;box-shadow:0 1px 2px rgba(22,49,31,.06),0 24px 48px -18px rgba(22,49,31,.4)}

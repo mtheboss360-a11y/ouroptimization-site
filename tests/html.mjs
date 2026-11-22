@@ -6,14 +6,15 @@ export const ROOT = new URL('../', import.meta.url);
 export const read = (p) => readFileSync(new URL(p, ROOT), 'utf8');
 
 /* Every page of the site, with its clean URL and its item in the main menu (null: not in the menu).
-   November 21, 2026: the full site without pricing. The menu is Home, Field Team, Industries, How It Works
-   (/referral-network), FAQ, About and Contact, plus the Client Portal button. Pricing came off (/pricing 301s to
-   /contact), and the eight industry pages became sections of /industries (their old addresses 301 there). */
+   October 23, 2026: Our Wellness Network. The flyer network folded into the referral routes
+   (/flyer-network 301s to /referral-network); the dinner page stays, reached from the pricing page only (October 24, 2026).
+   October 24, 2026: the Growth team page joins the menu, second, after Home. Later that day it became Boots on the ground.
+   November 20, 2026: it is the Field Team page (/field-team), and Industries (/#industries) follows it; the eight industry
+   pages under /industries/ are built by tools/build-industries.mjs and are reached from the home page's Industries section. */
 export const PAGES = [
   { file: 'index.html', url: '/', nav: 'Home' },
   { file: 'field-team.html', url: '/field-team', nav: 'Field Team' },
-  { file: 'industries.html', url: '/industries', nav: 'Industries' },
-  { file: 'referral-network.html', url: '/referral-network', nav: 'How It Works' },
+  { file: 'referral-network.html', url: '/referral-network', nav: 'How it works' },
   { file: 'faq.html', url: '/faq', nav: 'FAQ' },
   { file: 'about.html', url: '/about', nav: 'About' },
   { file: 'contact.html', url: '/contact', nav: 'Contact' },
@@ -25,12 +26,19 @@ export const PAGES = [
   { file: 'privacy.html', url: '/privacy', nav: null },
   { file: 'terms.html', url: '/terms', nav: null },
   { file: 'thanks.html', url: '/thanks', nav: null, noindex: true },
-  { file: '404.html', url: null, nav: null, noindex: true }
+  { file: '404.html', url: null, nav: null, noindex: true },
+  { file: 'industries/med-spas.html', url: '/industries/med-spas', nav: null, industry: true },
+  { file: 'industries/dental.html', url: '/industries/dental', nav: null, industry: true },
+  { file: 'industries/chiropractic-physical-therapy.html', url: '/industries/chiropractic-physical-therapy', nav: null, industry: true },
+  { file: 'industries/gyms-fitness-studios.html', url: '/industries/gyms-fitness-studios', nav: null, industry: true },
+  { file: 'industries/salons-barbershops.html', url: '/industries/salons-barbershops', nav: null, industry: true },
+  { file: 'industries/restaurants-cafes.html', url: '/industries/restaurants-cafes', nav: null, industry: true },
+  { file: 'industries/home-services.html', url: '/industries/home-services', nav: null, industry: true },
+  { file: 'industries/auto-shops.html', url: '/industries/auto-shops', nav: null, industry: true }
 ];
 /* The main menu, in order, then the Client Portal button. */
-export const NAV = [['Home', '/'], ['Field Team', '/field-team'], ['Industries', '/industries'], ['How It Works', '/referral-network'], ['FAQ', '/faq'], ['About', '/about'], ['Contact', '/contact']];
-/* The industries, in order: their sections on /industries (and the old /industries/<slug> pages that 301 there). */
-export const INDUSTRIES = ['med-spas', 'dental', 'chiropractic-physical-therapy', 'gyms-fitness-studios', 'salons-barbershops', 'restaurants-cafes', 'home-services', 'auto-shops'];
+/* November 21, 2026: Pricing came off the site (its address 301s to /contact); everything else is as it was. */
+export const NAV = [['Home', '/'], ['Field Team', '/field-team'], ['Industries', '/#industries'], ['How it works', '/referral-network'], ['FAQ', '/faq'], ['About', '/about'], ['Contact', '/contact']];
 export const PORTAL = 'https://www.ournetworkportal.com';
 export const ORIGIN = 'https://ouroptimization.com';
 /* Words that must never appear on the site, built from pieces so this file does not contain them. */

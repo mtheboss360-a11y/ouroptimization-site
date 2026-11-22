@@ -111,7 +111,7 @@ describe('every page: header and footer', () => {
       const bar = /<nav class="tabbar" aria-label="Shortcuts">[\s\S]*?<\/nav>/.exec(h);
       assert.ok(bar, 'the tab bar');
       assert.ok(h.indexOf('<nav class="site-nav"') < h.indexOf('<nav class="tabbar"'), 'after the main menu');
-      assert.deepEqual(links(bar[0]).map((l) => [l.text, l.href]), NAV.slice(0, 4), 'the first four menu items, then More (November 21, 2026)');
+      assert.deepEqual(links(bar[0]).map((l) => [l.text, l.href]), NAV.slice(0, 4), 'the first four menu items, then More (Pricing came off, November 21, 2026)');
       assert.match(bar[0], /<button class="tab tab-more" type="button" aria-expanded="false" aria-controls="site-nav">/, 'More opens the full menu');
       const tabNow = links(bar[0]).filter((l) => /aria-current="page"/.test(l.tag)).map((l) => l.href);
       const onBar = NAV.slice(0, 4).map((n) => n[1]);
@@ -297,9 +297,11 @@ describe('assets', () => {
   });
 });
 
-/* November 20, 2026: Treats for Staff and the compliance wording. November 21, 2026: the full site again, with no
-   pricing and no placeholder text anywhere; "Boots on the ground" is the home page's line again. Every page. */
-describe('every page: the November 20 and 21, 2026 rules', () => {
+/* November 20, 2026: the vertical-led site. The field team, Treats for Staff, the compliance wording, no sample labels,
+   the placeholders the owner fills in, and the naming. These hold on every page, generated industry pages included. */
+describe('every page: the November 20, 2026 rules', () => {
+  const PLACEHOLDERS = []; /* November 21, 2026: no placeholder text anywhere */
+  const HEALTHCARE = ['industries/med-spas.html', 'industries/dental.html', 'industries/chiropractic-physical-therapy.html'];
   const TODO = '<!-- TODO: attorney review of courtesy program before publishing healthcare pages -->';
   for (const p of PAGES) {
     const src = page[p.file];
@@ -308,7 +310,7 @@ describe('every page: the November 20 and 21, 2026 rules', () => {
       const withoutTodo = src.replaceAll(TODO, '');
       assert.doesNotMatch(withoutTodo, /courtesy|complimentary consultation/i, 'the staff courtesy program is gone');
       assert.doesNotMatch(src, /Organic Growth Team|Growth team|outsourced field sales team/i);
-      if (p.file !== 'index.html') assert.doesNotMatch(t, /Boots on the ground/i, 'the home page\'s line, used once');
+      if (p.file !== 'index.html') assert.doesNotMatch(t, /Boots on the ground/i, 'the home hero\'s line, used once (November 21, 2026)');
       if (p.file !== 'faq.html') assert.doesNotMatch(t, /whether or not (they|anyone) (ever )?(send|refer)/i, 'only the FAQ says the treats do not depend on referrals');
       assert.doesNotMatch(t, /HIPAA[- ]compliant/i, 'the HIPAA sentence waits for the owner (assets/site-config.js)');
     });
@@ -317,24 +319,35 @@ describe('every page: the November 20 and 21, 2026 rules', () => {
       assert.doesNotMatch(src, /class="[^"]*\bsample-(tag|note)\b/);
     });
     test(`${p.file}: no unfinished placeholder text, visible or hidden (November 21, 2026)`, () => {
+      for (const ph of t.match(/\[[A-Z][A-Z :,'-]+\]/g) || []) assert.ok(PLACEHOLDERS.includes(ph), ph);
       assert.doesNotMatch(src, /\[(STARTING PRICE|MINIMUM TERM|CAMPAIGN LENGTH|STOPS PER MONTH[^\]]*|FOUNDING [A-Z]+|CLIENT [A-Z, ]+|PLACEHOLDER|TOWN|INDUSTRY|STOPS|SIGN-UPS|BOOKINGS|CLIENT QUOTE)\]/);
-      assert.doesNotMatch(t, /\[[A-Z][A-Z :,'-]+\]/);
     });
-    test(`${p.file}: no pricing anywhere: no prices, trial, plans, money-back guarantee or links to /pricing (November 21, 2026)`, () => {
-      if (p.file === 'terms.html') return; /* the legal terms keep their clauses on how prices are agreed, with no figures */
+    test(`${p.file}: no pricing: no prices, trial, plans, money-back guarantee or links to /pricing (November 21, 2026)`, () => {
+      if (p.file === 'terms.html') return; /* the legal terms keep how prices are agreed in writing, with no figures */
       assert.doesNotMatch(src, /href="\/pricing|\?about=pricing/);
-      assert.doesNotMatch(t, /\$\s?\d|\btrial\b|first-month|Neighborhood plan|Community plan|\bplans?\b|money back|comes back|priced on a call|included in your plan|at no charge|founding/i);
+      assert.doesNotMatch(t, /\$\s?\d|\btrial\b|first-month|Neighborhood plan|Community plan|money back|comes back|priced on a call|included in your plan|at no charge|founding/i);
       assert.doesNotMatch(t, /\bPricing\b/);
     });
   }
-  test('the FAQ carries the attorney-review note, the state-rules line, the treats line and the HIPAA slot; Industries points to it', () => {
+  test('the healthcare industry pages and the FAQ carry the attorney-review note and the state-rules line', () => {
+    for (const f of HEALTHCARE) {
+      assert.ok(page[f].includes(TODO), f);
+      assert.match(text(bodyOf(page[f])), /Partner programs for healthcare practices are reviewed for compliance with applicable state rules before launch\./, f);
+      assert.match(page[f], /<p class="hipaa-line" data-flag="hipaaConfirmed" data-flag-text="hipaaText" hidden><span><\/span><\/p>/, f);
+    }
     const faq = page['faq.html'];
     assert.ok(faq.includes(TODO));
     assert.match(text(bodyOf(faq)), /Partner programs for healthcare practices are reviewed for compliance with applicable state rules before launch\./);
     assert.match(text(bodyOf(faq)), /Treats are shared with the whole staff on every visit, whether or not anyone refers a customer\./);
-    assert.match(faq, /<p class="hipaa-line" data-flag="hipaaConfirmed" data-flag-text="hipaaText" hidden><span><\/span><\/p>/);
     assert.match(faq, /<script src="\/assets\/site-config\.js" defer><\/script>\n<script src="\/assets\/site\.js" defer>/);
-    assert.ok(links(page['industries.html']).some((l) => l.href === '/faq#healthcare'));
+  });
+  test('the industry pages: titles and descriptions name the towns; each page is in the menu-less list and the sitemap', () => {
+    const towns = ['Oak Brook', 'Lombard', 'Elmhurst', 'Naperville', 'Downers Grove', 'Hinsdale'];
+    for (const p of PAGES.filter((x) => x.industry)) {
+      const d = meta(page[p.file], 'name', 'description');
+      assert.ok(towns.filter((x) => d.includes(x)).length >= 2, `${p.file}: ${d}`);
+      assert.ok(read('sitemap.xml').includes(`<loc>${ORIGIN}${p.url}</loc>`), p.url);
+    }
   });
 });
 

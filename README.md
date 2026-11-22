@@ -2,7 +2,7 @@
 
 **Our Wellness Network** ("Boots on the ground for your local business.") is a service of OUR Optimization LLC, a local company in Chicago's western suburbs (Oak Brook, Lombard, Elmhurst, Naperville, Downers Grove, Hinsdale). Our team visits the businesses near a client, introduces the client's business to their staff, and tracks every visit and sign-up in the client portal.
 
-Static HTML/CSS/JS, no build step, no dependencies, no third-party requests.
+Static HTML/CSS/JS, no build step on Netlify, no dependencies, no third-party requests. The industry pages are generated locally by `tools/build-industries.mjs` and committed (see Industry pages).
 
 ## Deploy
 
@@ -10,16 +10,15 @@ Netlify site "ouroptimization", linked to this repo, branch `main`. No build com
 
 ## Pages
 
-November 21, 2026: the full site again, each page with its own job, and no pricing anywhere (the owner's call).
-
 | URL | File | In the menu | Notes |
 | --- | --- | --- | --- |
-| `/` | `index.html` | Home | "Boots on the ground for your local business." over the orb the owner picked (`assets/home-orb.js`); what we do in three steps (each linking to its page); industry cards (to `/industries#<slug>`); one portal screen on the green band; the closing call with the phone number. |
-| `/field-team` | `field-team.html` | Field Team | The people and the visit: Treats for Staff (`#treats`), drop-offs and staff cards (`#drop-offs`), back every month (`#every-month`). |
-| `/industries` | `industries.html` | Industries | One section per industry (`#med-spas`, `#dental`, `#chiropractic-physical-therapy`, `#gyms-fitness-studios`, `#salons-barbershops`, `#restaurants-cafes`, `#home-services`, `#auto-shops`) with the kinds of nearby business we visit; healthcare points to the FAQ. |
-| `/referral-network` | `referral-network.html` | How It Works | Match (`#matching`, the matching orb), visit (`#nfc`, the staff cards), track (`#dashboard`, the portal tour), the partner agreement (`#agreement`), who does what (`#roles`). |
-| `/faq` | `faq.html` | FAQ | Short answers that point to the page that explains each topic; healthcare (`#healthcare`, with the HIPAA switch); add-ons (`#add-ons`). |
-| `/about` | `about.html` | About | Who we are and what we put in writing. |
+| `/` | `index.html` | Home | Hero (no buttons): "Boots on the ground for your local business." over the half orb (`assets/home-orb.js`). Then Industries (cards to the industry pages), in person, the portal on the green band, Treats for Staff, in writing, the closing call. |
+| `/field-team` | `field-team.html` | Field Team | What the field team does on every visit: Treats for Staff, drop-offs, the codes, every stop tracked. Was `/boots-on-the-ground` (301). |
+| `/#industries` | (home section) | Industries | The menu item jumps to the home page's Industries cards. `/industries` itself still 301s home (an old page). |
+| `/industries/<slug>` | `industries/<slug>.html` | no | Eight industry pages from one template: med-spas, dental, chiropractic-physical-therapy, gyms-fitness-studios, salons-barbershops, restaurants-cafes, home-services, auto-shops. Generated; do not edit by hand. |
+| `/referral-network` | `referral-network.html` | How it works | Matching, the route, the staff cards, a typical month, the portal, the partner agreement, who does what. |
+| `/faq` | `faq.html` | FAQ | Short answers that point to the page that explains each topic: visits and treats, how it works (with the add-ons, `#add-ons`), partners and results, leads and data, healthcare practices. |
+| `/about` | `about.html` | About | Who we are, what we put in writing. |
 | `/contact` | `contact.html` | Contact | The call form (see Forms). |
 | `/patient-network` | `patient-network.html` | no | Add-on: private dinners for your best customers (linked from the FAQ's add-ons answer). Keep the URL. |
 | `/online-search-network` | `online-search-network.html` | no | Add-on: Google Ads in your own account. |
@@ -30,9 +29,21 @@ November 21, 2026: the full site again, each page with its own job, and no prici
 | `/thanks` | `thanks.html` | no | The call form's confirmation (noindex). |
 | (any unknown URL) | `404.html` | no | Served with status 404. |
 
-Every page but `/expo-vendors` shares the same header: the menu (Home, Field Team, Industries, How It Works, FAQ, About, Contact) and the Client Portal button (https://www.ournetworkportal.com); on phones the bottom tab bar (Home, Field Team, Industries, How It Works, More). The footer is one legal line.
+Every page shares the same header (the menu: Home, Field Team, Industries, How it works, FAQ, About, Contact, and the Client Portal button to https://www.ournetworkportal.com; on phones the bottom tab bar: Home, Field Team, Industries, How it works, More) and the same one-line footer ("Our Wellness Network is a service of OUR Optimization LLC.", Privacy Policy, Terms of Service).
 
-Removed on November 21, 2026: `/pricing` (301s to `/contact`) and the eight `/industries/<slug>` pages with their generator (`tools/`; each old address 301s to `/industries#<slug>`).
+
+November 21, 2026: same pages, tabs and section order as before, simpler wording on every page, and no pricing anywhere: `/pricing` (and `/pricing.html`) 301s to `/contact`. The section that held only campaign length and commitment terms came off How it works.
+
+## Industry pages (`tools/`)
+
+Each industry is one JSON file in `tools/industries/<slug>.json` (partner business types, treat examples, notes, questions, title and description). `tools/build-industries.mjs` builds `industries/<slug>.html` from one template and writes the home page's Industries cards between the `industries:start` and `industries:end` markers. The header, footer and structured data are copied from `index.html`, so change those there first.
+
+```
+node tools/build-industries.mjs           # write the pages
+node tools/build-industries.mjs --check   # fail if a page is out of date (tests/industries.test.mjs runs this)
+```
+
+The healthcare pages (med-spas, dental, chiropractic-physical-therapy) carry `<!-- TODO: attorney review of courtesy program before publishing healthcare pages -->`. `/tools/*` returns 404 on the site.
 
 ## Forms (Netlify Forms)
 
@@ -43,13 +54,15 @@ Removed on November 21, 2026: `/pricing` (301s to `/contact`) and the eight `/in
 
 ## Switches (`assets/site-config.js`)
 
-- `hipaaConfirmed` (default `false`) and `hipaaText` (default empty): a HIPAA sentence in the FAQ's healthcare answer. Leave both off until the owner has confirmed it is true for every healthcare client (business associate agreements, a documented risk assessment, safeguards for the sign-ups the portal holds). This file is public, so no unconfirmed claim goes in it.
+- `hipaaConfirmed` (default `false`) and `hipaaText` (default empty): a HIPAA sentence on the healthcare industry pages and the FAQ. Leave both off until the owner has confirmed it is true for every healthcare client (business associate agreements, a documented risk assessment, safeguards for the sign-ups the portal holds). This file is public, so no unconfirmed claim goes in it.
 
-## The orbs and the portal
+## The orbs and the portal tour (home, `/field-team`, `/referral-network`)
 
-- Home hero: `assets/home-orb.js`, the orb the owner picked (first shipped October 24, 2026): a green dot-orb rising from the corner, your business at its gold centre, and six illustrated owners (first name and kind of business, never a real person or business) connecting to it. It builds once per visit and keeps the owners clear of the words; reduced motion shows it built.
-- How It Works, `#matching`: `assets/match-orb.js`, the same orb whole, building when it scrolls into view.
-- The portal tour lives on How It Works only (`#dashboard`): four portal screens from the sample account behind tabs. The sample business names in the screenshots are covered with grey bars (November 21, 2026), so no business is shown. The home page shows one screen, cropped to its totals.
+The home hero carries the half orb the owner picked (`assets/home-orb.js`, first shipped October 24, 2026): a green dot-orb rising from the corner, your business at its gold centre, and six illustrated owners (a first name and a kind of business, never a real person or business) connecting to it. It builds once per visit, keeps the owners clear of the words and sits above the phone tab bar. How it works uses the same orb, whole (`assets/match-orb.js`).
+
+
+Four portal screens (`assets/img/portal2-*`, the portal's sample account: invented businesses and figures) behind tabs styled as the portal's side rail. No visible sample labels (the owner's call, November 21, 2026); the alt text says the screens are from the sample account.
+
 
 ## Brand assets
 
@@ -59,7 +72,7 @@ Removed on November 21, 2026: `/pricing` (301s to `/contact`) and the eight `/in
 - Share image: `assets/img/og-network.jpg` (1200 x 630): the logo above "Boots on the ground for your local business." (November 21, 2026). The old share images and the old logo 301 to the new ones.
 - Business matching illustration: `assets/img/matching-map-*` (on `/referral-network`, labelled "Example").
 - Field team illustration: `assets/img/team-visit-{480,768,1080}.{avif,webp}`, clay figurines made with Higgsfield in the hero's style (not real people).
-- Portal screenshots: `assets/img/portal2-*`, from the portal's sample account (a fictional business, invented partner names, street addresses reduced to towns). Shown without visible sample labels (the owner's call, November 21, 2026).
+- Portal screenshots: `assets/img/portal2-*`, from the portal's sample account (a fictional business, invented partner names, street addresses reduced to towns). The business names, and the Partners screen's notice about real businesses, are covered with grey bars (November 21, 2026), so no business is shown.
 
 Fonts: headlines in Plus Jakarta Sans and Inter as the text fallback, both self-hosted (SIL Open Font License, licences in `assets/fonts/`). Text uses the phone's own face first: SF Pro on Apple devices, Roboto on Android. The big brands' own faces (Google Sans, SF Pro as a web font, Samsung Sharp Sans, Nike Futura, adidas) are licensed to their owners only, so they are not shipped.
 
@@ -82,6 +95,7 @@ Fonts: headlines in Plus Jakarta Sans and Inter as the text fallback, both self-
 - Name-tracked sign-ups are described only as measuring campaign performance for the client, never as a basis for rewarding anyone.
 - No legal conclusions and no claims of attorney review. Healthcare pages carry the attorney-review TODO comment.
 - No placeholder text anywhere, and no pricing: no prices, trial, plans or money-back guarantee on any page, and nothing links to `/pricing` (November 21, 2026; the terms keep how prices are agreed in writing, with no figures).
+- Plain words, short sentences; each page explains its own topic and points to the others instead of repeating them.
 - Copy uses no em or en dashes.
 - `node --test` holds a list of retired words that must appear nowhere in the files the site serves.
 
@@ -94,8 +108,9 @@ node --test tests/*.test.mjs
 ```
 
 - `tests/site.test.mjs`: every page's head (title, description, canonical, Open Graph, Twitter, icons, one h1), the LocalBusiness data, the header and footer, the retired words, dashes, where the phone number may appear, internal links and anchors, images, the redirects (flyer paths, no chains, blocked files), the sitemap, the two forms (the expo form pinned byte for byte) and the favicon set.
-- `tests/home.test.mjs`: the home page (the owner's line, the orb, one short section per page), the Industries page, pricing gone and its redirects, the Field Team page and the portal tour on How It Works.
+- `tests/home.test.mjs`: the home page section by section (order, hero, Industries, the portal, Treats for Staff, in writing and the HIPAA switch, the hidden case study, the closing call), the pricing offer, the Field Team page and the portal tour on its three pages.
 - `tests/call.test.mjs`: the call form and `assets/call.js` (validation rules and `?about=` prefills).
+- `tests/industries.test.mjs`: the industry pages match their data (the generator's `--check`), the order, healthcare marking, modest treats.
 - `tests/html.mjs`: shared helpers and the page list (not a test file).
 
 Browser tests (Playwright, against a local server that applies the `netlify.toml` redirects; every form POST is intercepted, nothing is ever submitted):
@@ -104,7 +119,7 @@ Browser tests (Playwright, against a local server that applies the `netlify.toml
 E2E_BASE_URL=http://localhost:8770 node tests/e2e-call.mjs
 ```
 
-They cover the call form end to end, the `?about=` prefills, the old links and redirects (pricing to the call form, the old industry pages to their section of /industries), the logo, the HIPAA switch on the FAQ, the home orb, the portal tour on How It Works, the phone tab bar and its More sheet, and the Field Team page.
+They cover the call form end to end, the `?about=` prefills, the old links and redirects (including /boots-on-the-ground and /growth-team to /field-team, and /pricing to /contact), the logo, the HIPAA switch on a healthcare page, the half orb hero, the portal tour, the phone tab bar and its More sheet, and the Field Team page.
 
 ## The client portal
 

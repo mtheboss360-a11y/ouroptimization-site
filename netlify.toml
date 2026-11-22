@@ -25,8 +25,8 @@
   [headers.values]
     Content-Type = "application/manifest+json"
 
-# --- November 21, 2026: pricing came off the site; Industries is its own page ---
-# /pricing and /pricing.html go to /contact (book a call). The old industry pages go to their section of /industries.
+# --- November 21, 2026: pricing came off the site ---
+# /pricing and /pricing.html go to /contact (book a call).
 [[redirects]]
   from = "/pricing"
   to = "/contact"
@@ -34,50 +34,8 @@
   force = true
 
 [[redirects]]
-  from = "/industries/med-spas"
-  to = "/industries#med-spas"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/industries/dental"
-  to = "/industries#dental"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/industries/chiropractic-physical-therapy"
-  to = "/industries#chiropractic-physical-therapy"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/industries/gyms-fitness-studios"
-  to = "/industries#gyms-fitness-studios"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/industries/salons-barbershops"
-  to = "/industries#salons-barbershops"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/industries/restaurants-cafes"
-  to = "/industries#restaurants-cafes"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/industries/home-services"
-  to = "/industries#home-services"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/industries/auto-shops"
-  to = "/industries#auto-shops"
+  from = "/industries"
+  to = "/#industries"
   status = 301
   force = true
 
@@ -156,53 +114,52 @@
   status = 301
   force = true
 
-# The eight industry pages (November 20, 2026) became sections of /industries on November 21, 2026: each old address
-# (with or without .html) goes straight to its section.
+# The industry pages (November 20, 2026), built by tools/build-industries.mjs: each .html goes to its clean URL.
 [[redirects]]
   from = "/industries/med-spas.html"
-  to = "/industries#med-spas"
+  to = "/industries/med-spas"
   status = 301
   force = true
 
 [[redirects]]
   from = "/industries/dental.html"
-  to = "/industries#dental"
+  to = "/industries/dental"
   status = 301
   force = true
 
 [[redirects]]
   from = "/industries/chiropractic-physical-therapy.html"
-  to = "/industries#chiropractic-physical-therapy"
+  to = "/industries/chiropractic-physical-therapy"
   status = 301
   force = true
 
 [[redirects]]
   from = "/industries/gyms-fitness-studios.html"
-  to = "/industries#gyms-fitness-studios"
+  to = "/industries/gyms-fitness-studios"
   status = 301
   force = true
 
 [[redirects]]
   from = "/industries/salons-barbershops.html"
-  to = "/industries#salons-barbershops"
+  to = "/industries/salons-barbershops"
   status = 301
   force = true
 
 [[redirects]]
   from = "/industries/restaurants-cafes.html"
-  to = "/industries#restaurants-cafes"
+  to = "/industries/restaurants-cafes"
   status = 301
   force = true
 
 [[redirects]]
   from = "/industries/home-services.html"
-  to = "/industries#home-services"
+  to = "/industries/home-services"
   status = 301
   force = true
 
 [[redirects]]
   from = "/industries/auto-shops.html"
-  to = "/industries#auto-shops"
+  to = "/industries/auto-shops"
   status = 301
   force = true
 
@@ -392,7 +349,7 @@
 # /industries
 [[redirects]]
   from = "/industries.html"
-  to = "/industries"
+  to = "/#industries"
   status = 301
   force = true
 
@@ -566,16 +523,16 @@
   force = true
 
 # Older retired URLs, pointed straight at their final target.
-# "Who it's for" became "Industries" in the 2026 repositioning (its own page again from November 21, 2026).
+# "Who it's for" became the home page's Industries section in the 2026 repositioning.
 [[redirects]]
   from = "/who-its-for"
-  to = "/industries"
+  to = "/#industries"
   status = 301
   force = true
 
 [[redirects]]
   from = "/who-its-for.html"
-  to = "/industries"
+  to = "/#industries"
   status = 301
   force = true
 
