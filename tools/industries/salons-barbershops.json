@@ -5,38 +5,38 @@
   "noun": "salon or barbershop",
   "healthcare": false,
   "title": "Field Sales Team for Salons and Barbershops | Our Wellness Network",
-  "description": "Our field team visits the bridal shops, boutiques and studios near your salon or barbershop in Oak Brook, Lombard or Hinsdale and builds a referral network you can track.",
-  "cardBlurb": "We visit the bridal shops, boutiques and studios near you and build a referral network you can track.",
-  "h1": "Your field sales team,",
+  "description": "We visit the bridal shops, boutiques and studios near your salon or barbershop in Oak Brook, Lombard and Hinsdale. You see every sign-up in your portal.",
+  "cardBlurb": "We visit the bridal shops, boutiques and photo studios near you.",
+  "h1": "Local referral partners",
   "h1Em": "for salons and barbershops.",
-  "intro": "We visit the businesses around your salon or barbershop, build relationships with their staff and turn them into a referral network you can track. Every stop and every sign-up shows up in your portal.",
-  "partnersIntro": "People getting ready for a wedding, a photo shoot, an interview or a night out stop at these businesses too, and they want their hair to match the occasion.",
+  "intro": "We find businesses near you where people get ready for a big day. Every month we visit them and introduce your salon or barbershop by name.",
+  "partnersIntro": "People getting ready for a wedding, an interview or a night out stop here too.",
   "partners": [
-    { "name": "Bridal shops", "why": "Brides and their wedding parties need hair for the big day, and they start planning it once the dress is chosen." },
-    { "name": "Clothing and menswear stores", "why": "Shoppers buying an outfit for an interview or an event often want a fresh cut or color to go with it." },
-    { "name": "Photography studios", "why": "Headshots, family portraits and engagement photos are booked by people who want to look their best on camera." },
-    { "name": "Gyms and fitness studios", "why": "Members who keep a routine for how they look and feel often keep a standing haircut too." },
-    { "name": "Tailors and dry cleaners", "why": "Their regulars are getting suits and dresses ready for interviews, weddings and big nights out." },
-    { "name": "Event venues and planners", "why": "Every wedding, gala and party they host has guests who want their hair done that day." }
+    { "name": "Bridal shops", "why": "Once the dress is chosen, brides and their wedding parties think about hair." },
+    { "name": "Clothing and menswear stores", "why": "Shoppers buying an outfit for an event often want a fresh cut to match." },
+    { "name": "Photography studios", "why": "People booking headshots and portraits want to look their best on camera." },
+    { "name": "Gyms and fitness studios", "why": "Members with a routine for how they look often keep a standing haircut too." },
+    { "name": "Tailors and dry cleaners", "why": "Regulars are getting suits and dresses ready for weddings and interviews." },
+    { "name": "Event venues and planners", "why": "Every wedding, gala and party they host has guests who want their hair done." }
   ],
-  "treatsIntro": "On every visit, our field team brings coffee and treats for the whole staff at each partner business. It's simple hospitality, it's included in your plan, and it's the reason staff are glad to see us walk in.",
+  "treatsIntro": "We bring coffee and treats for the whole staff at every stop.",
   "treatExamples": [
     "Coffee and scones for a bridal shop's Saturday team",
     "Muffins and coffee for a gym's early front desk crew",
     "Cookies and coffee for a dry cleaner's afternoon counter staff"
   ],
-  "portalNote": "In your portal you see every stop we make for your salon or barbershop and every sign-up that comes through a partner's code, ready for you to call and book. It's how you see which partnerships are working, business by business.",
+  "portalNote": "Each sign-up lands in your portal. You or your front desk call and book them like any other client.",
   "notesTitle": "Made for salons and barbershops.",
   "notes": [
-    { "title": "A one-page partner agreement", "text": "Every partner business signs a one-page agreement: mutual promotion, and nobody is paid per referral or per customer." },
-    { "title": "No competing chairs", "text": "Our matching software leaves other salons and barbershops off your route, and we skip any business you already work with unless you ask." },
-    { "title": "Your words only", "text": "We introduce your salon or barbershop only in words you've approved, and we leave only the printed materials you've signed off on." }
+    { "title": "A one-page partner agreement", "text": "You and each partner agree to promote each other. Nobody is paid per referral or per customer." },
+    { "title": "No competing chairs", "text": "We never visit other salons or barbershops for you." },
+    { "title": "Your words only", "text": "We introduce your salon or barbershop only in words you approve." }
   ],
-  "exclusivity": "Partners agree to promote one salon or barbershop like yours, and only yours, for as long as you are a client.",
+  "exclusivity": "Each partner promotes one salon or barbershop, yours, for as long as you are a client.",
   "faq": [
-    { "q": "Will you visit other salons or barbershops near me?", "a": "No. Our matching software ranks the businesses near you that share your customers and don't compete with you. You approve the list before we visit anyone." },
-    { "q": "How do sign-ups get booked?", "a": "Every sign-up shows up in your portal with the business and staff member whose code it came through. You or your front desk call and book them the way you book everyone else." },
-    { "q": "What do you leave at each business?", "a": "With each business's permission, your printed materials where staff and customers will see them, and a personal tap-to-schedule card for every staff member we meet. We come back every month to restock and meet new staff." }
+    { "q": "Can we keep the relationships we already have?", "a": "Yes. We skip businesses you already work with unless you ask, and those relationships stay yours." },
+    { "q": "Do I need to come along on the visits?", "a": "No. Our field team makes every visit, and you see each stop in your portal." },
+    { "q": "What do you leave at each business?", "a": "We leave your approved printed materials, with permission, and a card for each staff member. We restock every month." }
   ],
   "aboutKey": "salons-barbershops",
   "aboutText": "I'm asking about field sales for my salon or barbershop."

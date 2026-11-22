@@ -5,38 +5,38 @@
   "noun": "restaurant or cafe",
   "healthcare": false,
   "title": "Field Sales Team for Restaurants and Cafes | Our Wellness Network",
-  "description": "Our field team visits the hotels, leasing offices and workplaces near your restaurant or cafe in Elmhurst, Naperville or Downers Grove and builds a network you can track.",
-  "cardBlurb": "We visit the hotels, leasing offices and workplaces near you and build a referral network you can track.",
-  "h1": "Your field sales team,",
+  "description": "We visit the hotels, leasing offices and workplaces near your restaurant or cafe in Elmhurst, Naperville and Downers Grove, and track every sign-up.",
+  "cardBlurb": "We visit the hotels and offices where people ask where to eat.",
+  "h1": "Local referral partners",
   "h1Em": "for restaurants and cafes.",
-  "intro": "We visit the businesses around your restaurant or cafe, build relationships with their staff and turn them into a referral network you can track. Every stop and every sign-up shows up in your portal.",
-  "partnersIntro": "Hotel guests, new neighbors, office teams and people out for the evening all ask the staff around them the same question: where should we eat?",
+  "intro": "We find businesses near you that share your customers. Every month we visit them and introduce your restaurant or cafe by name.",
+  "partnersIntro": "Hotel guests, new neighbors and office teams all ask the staff here where to eat.",
   "partners": [
-    { "name": "Hotels", "why": "Guests ask the front desk where to eat nearby, and the staff want a place they can name with confidence." },
-    { "name": "Apartment leasing offices", "why": "New residents ask the leasing team where the good local spots are." },
-    { "name": "Gyms and fitness studios", "why": "Members leaving a morning class are looking for coffee or breakfast close by." },
-    { "name": "Offices and coworking spaces", "why": "Office managers order team lunches, plan celebrations and get asked where to take a visitor." },
-    { "name": "Movie theaters and entertainment venues", "why": "People planning a night out want somewhere to eat before or after the show." },
-    { "name": "Auto shops and car dealerships", "why": "Customers waiting on a repair or on paperwork have time to fill and ask where to grab a bite." }
+    { "name": "Hotels", "why": "Guests ask the front desk where to eat, and the staff want a place they trust." },
+    { "name": "Apartment leasing offices", "why": "New residents ask the leasing team for the good local spots." },
+    { "name": "Gyms and fitness studios", "why": "Members leaving a morning class want coffee or breakfast close by." },
+    { "name": "Offices and coworking spaces", "why": "Office managers order team lunches and pick spots for celebrations." },
+    { "name": "Movie theaters and entertainment venues", "why": "People on a night out want somewhere to eat before or after the show." },
+    { "name": "Auto shops and car dealerships", "why": "Customers waiting on a repair ask where to grab a bite." }
   ],
-  "treatsIntro": "You know hospitality better than anyone. On every visit, our field team brings coffee and treats for the whole staff at each partner business: included in your plan, and the reason staff are glad to see us.",
+  "treatsIntro": "You know hospitality better than anyone. We bring coffee and treats for everyone on shift.",
   "treatExamples": [
     "Coffee and pastries for a hotel front desk's morning shift",
     "Bagels and coffee for a leasing office team before the doors open",
     "Snacks for a movie theater's evening box office crew"
   ],
-  "portalNote": "In your portal you see every stop we make for your restaurant or cafe and every sign-up that comes through a partner's code, ready for your team to follow up. It's how you see which partnerships are working, business by business.",
+  "portalNote": "Each sign-up lands in your portal, ready for your team to follow up.",
   "notesTitle": "Made for restaurants and cafes.",
   "notes": [
-    { "title": "A one-page partner agreement", "text": "Every partner business signs a one-page agreement: mutual promotion, and nobody is paid per referral or per customer." },
-    { "title": "No competing kitchens", "text": "Our matching software leaves other restaurants, cafes, bakeries and bars off your route, and we skip any business you already work with unless you ask." },
-    { "title": "Your menu, your words", "text": "We describe your restaurant or cafe only in words you've approved, and we leave only the printed materials you've signed off on." }
+    { "title": "A one-page partner agreement", "text": "You and each partner agree to promote each other. Nobody is paid per referral or per customer." },
+    { "title": "No competing kitchens", "text": "We never visit other restaurants, cafes, bakeries or bars for you." },
+    { "title": "Your menu, your words", "text": "We describe your restaurant or cafe only in words you approve." }
   ],
-  "exclusivity": "Partners agree to promote one restaurant or cafe like yours, and only yours, for as long as you are a client.",
+  "exclusivity": "Each partner promotes one restaurant or cafe, yours, for as long as you are a client.",
   "faq": [
-    { "q": "Will you visit other restaurants or cafes near me?", "a": "No. Our matching software ranks the businesses near you that share your customers and don't compete with you, so no other restaurants, cafes, bakeries or bars. You approve the list before we visit anyone." },
-    { "q": "Most of my customers just walk in. What counts as a sign-up?", "a": "Someone who taps a staff member's card or scans their code and fills in your sign-up form. Each one shows up in your portal with the business and staff member it came through, so your team can follow up and you can see which partnerships are working." },
-    { "q": "Do I need to come along on the visits?", "a": "No. Our field team makes every visit and logs every stop, and you see each one in your portal. Your part is approving the list of businesses and the words we use about your restaurant or cafe, and following up on the sign-ups that come in." }
+    { "q": "Can we keep the relationships we already have?", "a": "Yes. We skip businesses you already work with unless you ask, and those relationships stay yours." },
+    { "q": "Most of my customers just walk in. What counts as a sign-up?", "a": "Someone who taps or scans a staff member's card and fills in your form. Your portal shows where each one came from." },
+    { "q": "Do I need to come along on the visits?", "a": "No. Our field team makes every visit. Your part is approving the list and following up on sign-ups." }
   ],
   "aboutKey": "restaurants-cafes",
   "aboutText": "I'm asking about field sales for my restaurant or cafe."
