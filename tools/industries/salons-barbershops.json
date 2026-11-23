@@ -28,11 +28,11 @@
   "portalNote": "Each sign-up lands in your portal. You or your front desk call and book them like any other client.",
   "notesTitle": "Made for salons and barbershops.",
   "notes": [
-    { "title": "A one-page partner agreement", "text": "You and each partner agree to promote each other. Nobody is paid per referral or per customer." },
+    { "title": "A one-page partner agreement", "text": "When our team visits, you and each partner agree to promote each other. Nobody is paid per referral or per customer." },
     { "title": "No competing chairs", "text": "We never visit other salons or barbershops for you." },
     { "title": "Your words only", "text": "We introduce your salon or barbershop only in words you approve." }
   ],
-  "exclusivity": "Partners agree to promote one salon or barbershop like yours, and only yours, for as long as you are a client.",
+  "exclusivity": "When our team visits, partners agree to promote one salon or barbershop like yours, and only yours, for as long as you are a client.",
   "faq": [
     { "q": "Can we keep the relationships we already have?", "a": "Yes. We skip businesses you already work with unless you ask, and those relationships stay yours." },
     { "q": "Do I need to come along on the visits?", "a": "No. Our field team makes every visit, and you see each stop in your portal." },

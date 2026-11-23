@@ -28,11 +28,11 @@
   "portalNote": "Each sign-up lands in your portal, and your front desk makes the call, not us.",
   "notesTitle": "The ground rules we keep.",
   "notes": [
-    { "title": "A one-page partner agreement", "text": "You and each partner agree to promote each other. Nobody is paid per referral or per patient." },
+    { "title": "A one-page partner agreement", "text": "When our team visits, you and each partner agree to promote each other. Nobody is paid per referral or per patient." },
     { "title": "No patient records, ever", "text": "We never receive patient records, and partners never see who signed up. The sign-up form asks no health questions." },
     { "title": "Your words only", "text": "We make no medical or health claims. We describe your services only in words you approve." }
   ],
-  "exclusivity": "Each partner agrees to promote one dental practice, yours, for as long as you are a client.",
+  "exclusivity": "When our team visits, each partner agrees to promote one dental practice, yours, for as long as you are a client.",
   "faq": [
     { "q": "Will you visit other dental practices near me?", "a": "No. We only visit businesses that don't compete with you." },
     { "q": "What about the rules for healthcare practices?", "a": "Partner programs for healthcare practices are reviewed for compliance with applicable state rules before launch. If your lawyer wants to read the partner agreement, we'll send it." },

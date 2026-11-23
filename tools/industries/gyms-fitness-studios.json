@@ -28,11 +28,11 @@
   "portalNote": "Each sign-up lands in your portal. Your front desk calls to book a tour or a first class.",
   "notesTitle": "Made for gyms and studios.",
   "notes": [
-    { "title": "A one-page partner agreement", "text": "You and each partner agree to promote each other. Nobody is paid per referral or per customer." },
+    { "title": "A one-page partner agreement", "text": "When our team visits, you and each partner agree to promote each other. Nobody is paid per referral or per customer." },
     { "title": "Never another gym", "text": "We never visit other gyms or fitness studios for you. Every stop is a business that doesn't compete." },
     { "title": "Your first-visit offer", "text": "Each staff card opens your first-visit offer, written in your words." }
   ],
-  "exclusivity": "Partners agree to promote one gym or studio like yours, and only yours, for as long as you are a client.",
+  "exclusivity": "When our team visits, partners agree to promote one gym or studio like yours, and only yours, for as long as you are a client.",
   "faq": [
     { "q": "What if a business on the list feels too close to mine?", "a": "Take it off the list. We only visit the businesses you approve." },
     { "q": "Can't I just walk into the juice bar next door myself?", "a": "You can. The hard part is finding the right businesses, visiting every month and tracking every sign-up." },

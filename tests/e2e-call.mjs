@@ -231,7 +231,9 @@ await scenario('every service page key prefills on /contact, and the keys from b
     ['referral-network', "I'm asking about referral routes."], ['flyer-network', "I'm asking about referral routes."],
     ['patient-network', "I'm asking about a private customer dinner."], ['online-search-network', "I'm asking about Google Ads in my own account."],
     ['pricing', "I'd like to book a call."], ['sample-contract', "I'm asking about the partner agreement."],
-    ['patient-dinners', "I'm asking about a private customer dinner."], ['flyer-drops', "I'm asking about referral routes."], ['google-ads', "I'm asking about Google Ads in my own account."]
+    ['patient-dinners', "I'm asking about a private customer dinner."], ['flyer-drops', "I'm asking about referral routes."], ['google-ads', "I'm asking about Google Ads in my own account."],
+    // November 23, 2026: the two ways to run it, in plain words (no "Level 1" or "Level 2")
+    ['level-1', "I'm interested in my team visiting the businesses."], ['level-2', "I'm interested in your team visiting the businesses."]
   ]) {
     const s = await open({ path: `/contact?about=${key}` });
     assert.equal(await s.page.inputValue('#call-message'), message, key);
@@ -360,13 +362,28 @@ await scenario('/thanks loads on its own: noindex, the promise, and a way home',
   await close();
 });
 
-await scenario('the med spa page (November 23, 2026): outcome first, no scenes and no portal screenshot (both live on the home page)', async () => {
-  for (const width of [390, 1280]) {
+await scenario('the med spa page (November 23, 2026): the home page\'s beats for med spas; no scenes and no portal screenshot (both live on the home page)', async () => {
+  for (const width of [320, 390, 768, 1280]) {
     const s = await open({ path: '/industries/med-spas', width, height: 844 });
     assert.equal((await s.page.textContent('h1')).replace(/\s+/g, ' ').trim(), 'New clients for your med spa, from the businesses next door.');
-    assert.equal(await s.page.locator('.ind-shot, .own-scenes').count(), 0, 'no generic scenes or screenshot');
+    assert.equal((await s.page.textContent('.ind-hero .intro')).trim(), 'We connect your med spa with the gyms, studios, salons and shops that already share your clients, and never with your competitors.');
+    assert.deepEqual(await s.page.$$eval('main section[id]', (l) => l.map((x) => x.id)), ['partners', 'never', 'visits', 'questions'], 'who shares your clients, who we never connect you with, how the connection is made, the questions');
+    assert.equal(await s.page.locator('#partners .share-types > li').count(), 6, 'the six partners');
+    assert.deepEqual(await s.page.$$eval('#never .never-cards h3', (l) => l.map((h) => h.textContent.trim())), ['No competitors', 'One med spa, yours', 'You approve every name']);
+    assert.match(await s.page.textContent('#never'), /When our team visits, each partner agrees to promote one med spa, yours, for as long as you are a client\./);
+    assert.deepEqual(await s.page.$$eval('#visits .ind-visit-cards h3', (l) => l.map((h) => h.textContent.trim())), ['A tap-to-schedule card for each staff member', 'A one-page partner agreement', 'No patient records, ever', 'Every visit in your portal']);
+    assert.doesNotMatch(await s.page.textContent('#visits .ind-treats'), /refer|sign-?up|client|patient|partner|book/i, 'the coffee and treats in their own block, with no referral or sign-up words');
+    assert.equal(await s.page.locator('.ind-shot, .own-scenes, main img').count(), 0, 'no generic scenes, screenshot or images');
     assert.equal(await s.page.locator('a[href="/portals"]').count() >= 1, true, 'points to the Portals page');
+    assert.doesNotMatch(await s.page.evaluate(() => document.body.innerText), /Level\s*[12]\b|sample/i);
+    for (const sel of ['#partners .share-types', '#never .never-cards', '#visits .ind-visit-cards', '#visits .visit-words']) {
+      await s.page.locator(sel).scrollIntoViewIfNeeded();
+      await s.page.waitForTimeout(120);
+      assert.equal(await s.page.$eval(sel, (el) => { const r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0 && getComputedStyle(el.closest('.reveal') || el).opacity !== '0'; }), true, `${width}px: ${sel} shows`);
+    }
+    assert.equal(await s.page.$eval('[data-flag="hipaaConfirmed"]', (p) => p.hidden), true, 'the HIPAA line waits for the owner');
     assert.equal(await s.page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true, `${width}px: no sideways scroll`);
+    assert.deepEqual(s.outside, [], 'no requests to other sites');
     assert.deepEqual(s.jsErrors, []);
     assert.deepEqual(s.missing, []);
     await s.close();
@@ -387,6 +404,22 @@ await scenario('Book a call in the header on every page size (November 23, 2026)
       await s.page.waitForTimeout(150);
       assert.equal(await s.page.$eval('.site-header .btn-book', (a) => { const r = a.getBoundingClientRect(); return r.top >= 0 && r.bottom <= innerHeight; }), true, `${width}px: Book a call stays on screen after scrolling`);
     }
+    await s.close();
+  }
+  /* the expo page (November 23, 2026): its logo-only header gains the same Book a call button, and nothing else */
+  for (const width of [320, 390, 800, 1280]) {
+    const s = await open({ path: '/expo-vendors', width, height: 844 });
+    const book = await s.page.$eval('.site-header .btn-book', (a) => { const r = a.getBoundingClientRect(); return { href: a.getAttribute('href'), text: a.textContent.trim(), shown: getComputedStyle(a).display !== 'none' && r.width > 0, inView: r.top >= 0 && r.bottom <= innerHeight && r.right <= innerWidth && r.left >= 0 }; });
+    assert.deepEqual(book, { href: '/contact', text: 'Book a call', shown: true, inView: true }, `/expo-vendors at ${width}px`);
+    assert.equal(await s.page.locator('.site-header nav, .site-header .menu-btn, .site-header .btn-portal, .tabbar').count(), 0, `/expo-vendors at ${width}px: no menu and no portal button`);
+    const brand = await s.page.$eval('.site-header .brand', (a) => a.getBoundingClientRect());
+    const btn = await s.page.$eval('.site-header .btn-book', (a) => a.getBoundingClientRect());
+    assert.ok(btn.left >= brand.right, `/expo-vendors at ${width}px: the button sits beside the logo, not over it`);
+    assert.equal(await s.page.locator('form[name="expo-vendor"]').count(), 1, 'the expo form is still there (never submitted here)');
+    assert.equal(await s.page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true, `/expo-vendors at ${width}px: no sideways scroll`);
+    assert.deepEqual(s.outside, [], 'no requests to other sites');
+    assert.deepEqual(s.jsErrors, []);
+    assert.deepEqual(s.missing, []);
     await s.close();
   }
   const nojs = await open({ path: '/faq', width: 390, height: 844, js: false });
@@ -431,12 +464,62 @@ await scenario('home: the half orb builds its network, clear of the words, with 
     const c = await s.page.$eval('#orb', (el) => ({ w: el.width, h: el.height, lit: (() => { const d = el.getContext('2d').getImageData(0, 0, el.width, el.height).data; let n = 0; for (let i = 3; i < d.length; i += 4) if (d[i]) n++; return n; })() }));
     assert.ok(c.w > 0 && c.h > 0, `${width}px: the canvas has a size`);
     assert.ok(c.lit > 5000, `${width}px: the orb and its network are drawn (${c.lit} pixels)`);
-    assert.equal((await s.page.textContent('#hero-h')).replace(/\s+/g, ' ').trim(), 'New customers and bookings from the businesses near you.');
+    assert.equal((await s.page.textContent('#hero-h')).replace(/\s+/g, ' ').trim(), 'Your customers are already next door.', 'the hero line (November 23, 2026)');
+    assert.equal(await s.page.title(), 'Our Local Network | Your Customers Are Already Next Door');
     assert.deepEqual(s.outside, [], 'no requests to other sites');
     assert.deepEqual(s.jsErrors, []);
     assert.deepEqual(s.missing, []);
     await s.close();
   }
+});
+
+await scenario('home (November 23, 2026): the five beats in order, each one showing, no Level labels, and the Industries link lands on its beat', async () => {
+  for (const [width, motion] of [[320, 'reduce'], [390, 'no-preference'], [768, 'reduce'], [1280, 'no-preference']]) {
+    const s = await open({ path: '/', width, height: 844, motion });
+    assert.deepEqual(await s.page.$$eval('main > section', (l) => l.map((x) => x.id || x.className.split(' ')[0])), ['hero-orb', 'industries', 'never', 'in-person', 'levels', 'dashboard', 'book'], `${width}px: the hero, who shares your customers, who we never connect you with, how the connection is made, the two ways, what you see, the call`);
+    const heads = await s.page.$$eval('main > section[id] .eyebrow', (l) => l.map((e) => e.textContent.trim()));
+    assert.deepEqual(heads, ['Who shares your customers', 'Never a competitor', 'How the connection is made', 'Two ways to run it', 'What you see'], `${width}px: the beats' labels`);
+    assert.equal(await s.page.locator('#industries .share-types > li').count(), 6, 'six kinds of business');
+    assert.equal(await s.page.locator('#industries .ind-grid .ind-card').count(), 8, 'then the eight industry cards');
+    assert.deepEqual(await s.page.$$eval('#never .never-cards h3', (l) => l.map((h) => h.textContent.trim())), ['No competitors', 'One of your kind', 'You approve every name']);
+    assert.deepEqual(await s.page.$$eval('#in-person .visit-cards h3', (l) => l.map((h) => h.textContent.trim())), ['A tap-to-schedule card for each staff member', 'A one-page partner agreement', 'Every visit in your portal']);
+    assert.deepEqual(await s.page.$$eval('#levels .lv-card h3', (l) => l.map((h) => h.textContent.trim())), ['Your team visits', 'Our team visits']);
+    const body = await s.page.evaluate(() => document.body.innerText);
+    assert.doesNotMatch(body, /Level\s*[12]\b|sample|before we leave/i, `${width}px: no numbered labels, no stop-logging promise`);
+    assert.equal((body.match(/treats/gi) || []).length, 1, 'the treats are said once, in their own card');
+    for (const sel of ['#industries .share-types', '#never .never-cards', '#in-person .visit-treats', '#in-person .visit-cards', '#levels .lv-cards', '#dashboard .own-stats']) {
+      await s.page.locator(sel).scrollIntoViewIfNeeded();
+      await s.page.waitForTimeout(motion === 'reduce' ? 80 : 900);
+      assert.equal(await s.page.$eval(sel, (el) => { const r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0 && getComputedStyle(el).opacity === '1'; }), true, `${width}px: ${sel} shows`);
+    }
+    await s.page.waitForFunction(() => { const i = document.querySelector('#in-person .visit-treats img'); return i && i.complete && i.naturalWidth > 0; });
+    assert.equal(await s.page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true, `${width}px: no sideways scroll`);
+    assert.deepEqual(s.outside, [], 'no requests to other sites');
+    assert.deepEqual(s.jsErrors, []);
+    assert.deepEqual(s.missing, []);
+    await s.close();
+  }
+  const s = await open({ path: '/faq', width: 1280, height: 900 });
+  await Promise.all([s.page.waitForURL('**/#industries'), s.page.click('#site-nav a[href="/#industries"]')]);
+  await s.page.waitForTimeout(300);
+  const top = await s.page.$eval('#industries', (el) => el.getBoundingClientRect().top);
+  assert.ok(top >= -5 && top < 300, `the menu's Industries link lands on who shares your customers (top ${Math.round(top)})`);
+  await s.close();
+});
+
+await scenario('no page says "Level 1" or "Level 2" (November 23, 2026): the plain names, and the How it works buttons prefill in plain words', async () => {
+  for (const path of ['/', '/referral-network', '/faq', '/portals', '/field-team', '/industries/med-spas', '/industries/dental']) {
+    const s = await open({ path, width: 1280, height: 900 });
+    assert.doesNotMatch(await s.page.evaluate(() => document.body.innerText), /\bLevel\s*[12]\b/i, path);
+    await s.close();
+  }
+  const s = await open({ path: '/referral-network', width: 1280, height: 900 });
+  assert.deepEqual(await s.page.$$eval('#levels .fd-supply-card h3', (l) => l.map((h) => h.textContent.trim())), ['Your team visits', 'Our team visits']);
+  await Promise.all([s.page.waitForURL('**/contact?about=level-2'), s.page.click('#levels a[href="/contact?about=level-2"]')]);
+  await s.page.waitForTimeout(200);
+  assert.equal(await s.page.inputValue('#call-message'), "I'm interested in your team visiting the businesses.");
+  assert.deepEqual(s.jsErrors, []);
+  await s.close();
 });
 
 await scenario('pricing is gone: /pricing and /pricing.html go to the call form, and no page links to it', async () => {

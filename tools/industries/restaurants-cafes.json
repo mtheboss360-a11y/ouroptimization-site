@@ -28,11 +28,11 @@
   "portalNote": "Each sign-up lands in your portal, ready for your team to follow up.",
   "notesTitle": "Made for restaurants and cafes.",
   "notes": [
-    { "title": "A one-page partner agreement", "text": "You and each partner agree to promote each other. Nobody is paid per referral or per customer." },
+    { "title": "A one-page partner agreement", "text": "When our team visits, you and each partner agree to promote each other. Nobody is paid per referral or per customer." },
     { "title": "No competing kitchens", "text": "We never visit other restaurants, cafes, bakeries or bars for you." },
     { "title": "Your menu, your words", "text": "We describe your restaurant or cafe only in words you approve." }
   ],
-  "exclusivity": "Partners agree to promote one restaurant or cafe like yours, and only yours, for as long as you are a client.",
+  "exclusivity": "When our team visits, partners agree to promote one restaurant or cafe like yours, and only yours, for as long as you are a client.",
   "faq": [
     { "q": "Can we keep the relationships we already have?", "a": "Yes. We skip businesses you already work with unless you ask, and those relationships stay yours." },
     { "q": "Most of my customers just walk in. What counts as a sign-up?", "a": "Someone who taps or scans a staff member's card and fills in your form. Your portal shows where each one came from." },

@@ -28,11 +28,11 @@
   "portalNote": "Each sign-up lands in your portal. Your office calls back and sets up the job.",
   "notesTitle": "Made for home service businesses.",
   "notes": [
-    { "title": "A one-page partner agreement", "text": "You and each partner agree to promote each other. Nobody is paid per referral or per customer." },
+    { "title": "A one-page partner agreement", "text": "When our team visits, you and each partner agree to promote each other. Nobody is paid per referral or per customer." },
     { "title": "No one in your trade", "text": "We never visit businesses in your trade for you." },
     { "title": "Your words only", "text": "We describe your services only in words you approve." }
   ],
-  "exclusivity": "Each partner agrees to promote one business in your trade, yours, for as long as you are a client.",
+  "exclusivity": "When our team visits, each partner agrees to promote one business in your trade, yours, for as long as you are a client.",
   "faq": [
     { "q": "Can't I just walk into the hardware store myself?", "a": "You can. The hard part is finding the right businesses, visiting every month and tracking every sign-up." },
     { "q": "I already know a few real estate agents. Will you visit them?", "a": "Not unless you ask. We skip businesses you already work with, and those relationships stay yours." },
