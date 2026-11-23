@@ -1687,3 +1687,60 @@ html:not(.js) .hiw-orb{display:none}
   .hero-displays ul{grid-template-columns:minmax(0,1fr);gap:18px}
   .hero-displays img{aspect-ratio:auto;object-fit:fill}
 }
+
+/* =====================================================================================================
+   November 23, 2026: the Portals page (/portals). Three portals, each with its own colour: the owner in
+   forest green, the front desk in peony, the runner in gold. Screens from the portal's demo account in a
+   browser frame with the phone screen beside it, the path a sign-up takes, and who sees what.
+   ===================================================================================================== */
+.pr-owner{--role:#1F5C45;--role-soft:#E5EFE8;--role-ink:#16402F}
+.pr-desk{--role:#B5627E;--role-soft:#F6E7EC;--role-ink:#8A3F5A}
+.pr-runner{--role:#A97F2E;--role-soft:#F5EDDC;--role-ink:#6E521A}
+.pr-chip{display:inline-flex;align-items:center;gap:8px;padding:6px 12px 6px 8px;border-radius:999px;background:var(--role-soft);color:var(--role-ink);font:700 .78rem/1 var(--sans);letter-spacing:.08em;text-transform:uppercase}
+.pr-chip svg{width:18px;height:18px}
+/* the three cards under the page head */
+.pr-trio{list-style:none;display:grid;gap:14px;margin-top:clamp(28px,4vw,40px)}
+@media (min-width:760px){.pr-trio{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.pr-trio a{position:relative;display:flex;flex-direction:column;gap:10px;height:100%;padding:20px 20px 22px;border-radius:18px;background:#fff;border:1px solid var(--line);box-shadow:0 14px 34px -24px rgba(22,49,31,.45);color:var(--ink);text-decoration:none;overflow:hidden;transition:transform .15s ease,box-shadow .15s ease}
+.pr-trio a::before{content:"";position:absolute;inset:0 0 auto;height:4px;background:var(--role)}
+.pr-trio a:hover{transform:translateY(-3px);box-shadow:0 22px 40px -24px rgba(22,49,31,.5)}
+.pr-trio b{font-family:var(--hero);font-weight:750;font-size:1.25rem;line-height:1.2}
+.pr-trio span.pr-trio-t{font-size:.95rem;line-height:1.5;color:var(--ink-2)}
+.pr-trio .pr-go{margin-top:auto;font:650 .88rem/1 var(--sans);color:var(--role-ink)}
+/* the path a sign-up takes */
+.pr-flow{list-style:none;display:grid;gap:12px;margin-top:clamp(28px,4vw,44px);counter-reset:prf}
+@media (min-width:900px){.pr-flow{grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}}
+.pr-flow li{position:relative;padding:18px 16px 18px;border-radius:16px;background:#fff;border:1px solid var(--line);counter-increment:prf}
+.pr-flow li::before{content:counter(prf);display:grid;place-items:center;width:30px;height:30px;margin-bottom:12px;border-radius:50%;background:var(--role);color:#fff;font:700 .85rem/1 var(--sans)}
+.pr-flow b{display:block;font-family:var(--hero);font-weight:750;font-size:1.02rem;line-height:1.25;margin-bottom:4px}
+.pr-flow span{display:block;font-size:.9rem;line-height:1.45;color:var(--ink-2)}
+.pr-flow .pr-who{margin-top:10px;font:700 .7rem/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--role-ink)}
+@media (min-width:900px){.pr-flow li:not(:last-child)::after{content:"";position:absolute;top:32px;right:-9px;width:8px;height:2px;background:var(--line-2,#B9C8BB)}}
+/* one portal: the screens on one side, what it does on the other */
+.pr-portal{display:grid;gap:clamp(28px,4vw,56px);align-items:center}
+@media (min-width:1000px){.pr-portal{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)}.pr-portal.pr-flip>.pr-stage{order:2}}
+.pr-stage{position:relative;padding:0 0 clamp(36px,6vw,64px)}
+.pr-stage .pt-browser{border-radius:14px;overflow:hidden;background:#fff;border:1px solid var(--line);box-shadow:0 30px 60px -36px rgba(22,49,31,.55)}
+.pr-stage .pt-browser img{display:block;width:100%;height:auto}
+.pr-phone{position:absolute;right:-6px;bottom:0;width:clamp(120px,24%,190px);padding:7px;border-radius:30px;background:#14261C;box-shadow:0 26px 50px -24px rgba(10,24,16,.7)}
+.pr-phone img{display:block;width:100%;height:auto;border-radius:24px}
+.pr-phone::before{content:"";position:absolute;top:13px;left:50%;width:30%;height:9px;transform:translateX(-50%);border-radius:9px;background:#14261C;z-index:1}
+.pr-phone-only{position:relative;width:min(300px,78%);margin:0 auto}
+.pr-copy h2{margin-top:14px}
+.pr-copy .intro{max-width:34em}
+.pr-lists{display:grid;gap:18px;margin-top:22px}
+.pr-lists h3{font:700 .78rem/1.2 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--role-ink);margin-bottom:8px}
+.pr-lists ul{list-style:none;display:grid;gap:8px}
+.pr-lists li{display:flex;gap:10px;align-items:flex-start;font-size:.97rem;line-height:1.5;color:var(--ink)}
+.pr-lists li svg{flex:none;width:18px;height:18px;margin-top:3px;color:var(--role)}
+.pr-lists .pr-never li svg{color:#8A968C}
+.pr-lists .pr-never li{color:var(--ink-2)}
+/* who sees what */
+.pr-grid{width:100%;border-collapse:separate;border-spacing:0;margin-top:clamp(24px,3.4vw,36px);background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;font-size:.95rem}
+.pr-grid th,.pr-grid td{padding:13px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+.pr-grid tr:last-child th,.pr-grid tr:last-child td{border-bottom:0}
+.pr-grid thead th{font:700 .74rem/1.2 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2);background:var(--paper)}
+.pr-grid td{text-align:center;width:16%}
+.pr-grid .yes{color:#1F5C45;font-weight:700}
+.pr-grid .no{color:#9AA59C}
+@media (max-width:640px){.pr-grid{font-size:.86rem}.pr-grid th,.pr-grid td{padding:10px 8px}}
