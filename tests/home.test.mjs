@@ -112,6 +112,7 @@ describe('home: the sections', () => {
     assert.match(t, /We connect you with the businesses that share your clientele but aren.t your competition\./);
     assert.match(t, /Coffee and treats\s*For the whole staff, on every visit\./);
     assert.equal(tags(s, 'img').length, 1);
+    assert.equal(tags(s, 'li').length, 1, 'one scene only');
     assert.match(attr(tags(s, 'img')[0], 'src'), /^\/assets\/img\/visit-treats-/);
     assert.doesNotMatch(t, /refer|send|sign-up|code|recommend/i, 'the treats sit with nothing about referrals, sign-ups or customers sent');
   });
