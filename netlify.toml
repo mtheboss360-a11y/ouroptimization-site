@@ -114,6 +114,13 @@
   status = 301
   force = true
 
+# The Portals page (November 23, 2026)
+[[redirects]]
+  from = "/portals.html"
+  to = "/portals"
+  status = 301
+  force = true
+
 # The industry pages (November 20, 2026), built by tools/build-industries.mjs: each .html goes to its clean URL.
 [[redirects]]
   from = "/industries/med-spas.html"

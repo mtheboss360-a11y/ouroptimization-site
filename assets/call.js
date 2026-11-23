@@ -43,6 +43,7 @@
     'field-team': "I'm asking about the field team.",
     'level-1': "I'm interested in Level 1: my team visits the businesses.",
     'level-2': "I'm interested in Level 2: your team visits the businesses.",
+    'portals': "I'd like to see the portals.",
     'med-spas': "I'm asking about referral partners for my med spa.",
     'dental': "I'm asking about referral partners for my dental practice.",
     'chiropractic-physical-therapy': "I'm asking about referral partners for my chiropractic or physical therapy practice.",

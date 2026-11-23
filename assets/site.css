@@ -1709,20 +1709,19 @@ html:not(.js) .hiw-orb{display:none}
 .pr-trio .pr-go{margin-top:auto;font:650 .88rem/1 var(--sans);color:var(--role-ink)}
 /* the path a sign-up takes */
 .pr-flow{list-style:none;display:grid;gap:12px;margin-top:clamp(28px,4vw,44px);counter-reset:prf}
-@media (min-width:900px){.pr-flow{grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}}
-.pr-flow li{position:relative;padding:18px 16px 18px;border-radius:16px;background:#fff;border:1px solid var(--line);counter-increment:prf}
-.pr-flow li::before{content:counter(prf);display:grid;place-items:center;width:30px;height:30px;margin-bottom:12px;border-radius:50%;background:var(--role);color:#fff;font:700 .85rem/1 var(--sans)}
+.pr-flow li{position:relative;display:grid;grid-template-columns:34px minmax(0,1fr);column-gap:14px;padding:16px 18px;border-radius:16px;background:#fff;border:1px solid var(--line);counter-increment:prf}
+.pr-flow li::before{content:counter(prf);grid-row:1 / span 3;display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--role);color:#fff;font:700 .88rem/1 var(--sans)}
+.pr-flow li:not(:last-child)::after{content:"";position:absolute;left:34px;bottom:-13px;width:2px;height:12px;background:#C9D6CB}
 .pr-flow b{display:block;font-family:var(--hero);font-weight:750;font-size:1.02rem;line-height:1.25;margin-bottom:4px}
 .pr-flow span{display:block;font-size:.9rem;line-height:1.45;color:var(--ink-2)}
 .pr-flow .pr-who{margin-top:10px;font:700 .7rem/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--role-ink)}
-@media (min-width:900px){.pr-flow li:not(:last-child)::after{content:"";position:absolute;top:32px;right:-9px;width:8px;height:2px;background:var(--line-2,#B9C8BB)}}
 /* one portal: the screens on one side, what it does on the other */
 .pr-portal{display:grid;gap:clamp(28px,4vw,56px);align-items:center}
-@media (min-width:1000px){.pr-portal{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)}.pr-portal.pr-flip>.pr-stage{order:2}}
+@media (min-width:1000px){.pr-portal{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)}.pr-portal.pr-flip{grid-template-columns:minmax(0,1fr) minmax(0,1.25fr)}.pr-portal.pr-flip>.pr-stage{order:2}}
 .pr-stage{position:relative;padding:0 0 clamp(36px,6vw,64px)}
 .pr-stage .pt-browser{border-radius:14px;overflow:hidden;background:#fff;border:1px solid var(--line);box-shadow:0 30px 60px -36px rgba(22,49,31,.55)}
 .pr-stage .pt-browser img{display:block;width:100%;height:auto}
-.pr-phone{position:absolute;right:-6px;bottom:0;width:clamp(120px,24%,190px);padding:7px;border-radius:30px;background:#14261C;box-shadow:0 26px 50px -24px rgba(10,24,16,.7)}
+.pr-phone{position:absolute;right:-6px;bottom:0;width:clamp(132px,29%,210px);padding:7px;border-radius:30px;background:#14261C;box-shadow:0 26px 50px -24px rgba(10,24,16,.7)}
 .pr-phone img{display:block;width:100%;height:auto;border-radius:24px}
 .pr-phone::before{content:"";position:absolute;top:13px;left:50%;width:30%;height:9px;transform:translateX(-50%);border-radius:9px;background:#14261C;z-index:1}
 .pr-phone-only{position:relative;width:min(300px,78%);margin:0 auto}
@@ -1744,3 +1743,37 @@ html:not(.js) .hiw-orb{display:none}
 .pr-grid .yes{color:#1F5C45;font-weight:700}
 .pr-grid .no{color:#9AA59C}
 @media (max-width:640px){.pr-grid{font-size:.86rem}.pr-grid th,.pr-grid td{padding:10px 8px}}
+/* the Portals page head: three phones fanned out beside the words */
+.pr-hero .pg-hero-grid{align-items:center}
+.pr-fan{position:relative;height:clamp(380px,46vw,520px);margin-top:8px}
+.pr-fan .pr-phone{position:absolute;bottom:0;width:clamp(150px,17vw,200px)}
+.pr-fan-1{left:4%;transform:rotate(-7deg) translateY(-14px);z-index:1}
+.pr-fan-2{left:50%;transform:translateX(-50%);z-index:3}
+.pr-fan-3{right:4%;transform:rotate(7deg) translateY(-14px);z-index:2}
+@media (min-width:1000px){.pr-hero .pg-hero-grid{grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:clamp(24px,4vw,56px)}}
+@media (max-width:999.98px){.pr-fan{max-width:520px;margin:clamp(20px,4vw,32px) auto 0}}
+@media (max-width:560px){.pr-fan{height:330px}.pr-fan .pr-phone{width:132px;padding:5px;border-radius:24px}.pr-fan .pr-phone img{border-radius:19px}.pr-fan-1{left:0}.pr-fan-3{right:0}}
+/* the path a sign-up takes, beside the form a customer sees */
+.pr-flow-wrap{display:grid;gap:clamp(28px,4vw,56px);align-items:center}
+@media (min-width:1000px){.pr-flow-wrap{grid-template-columns:minmax(0,1.3fr) minmax(0,.7fr)}}
+.pr-form{margin:0}
+.pr-form figcaption{margin-top:14px;text-align:center;font-size:.9rem;color:var(--ink-2)}
+.pr-phone-only{position:relative;right:auto;bottom:auto}
+.pr-note{margin-top:20px;padding:12px 14px;border-radius:12px;background:var(--role-soft);color:var(--role-ink);font-size:.92rem;line-height:1.5}
+.pr-grid-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.pr-promises{list-style:none;display:grid;gap:12px;margin-top:clamp(22px,3vw,30px)}
+@media (min-width:860px){.pr-promises{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.pr-promises li{display:flex;gap:12px;align-items:flex-start;padding:16px;border-radius:14px;background:#fff;border:1px solid var(--line);font-size:.95rem;line-height:1.5;color:var(--ink-2)}
+.pr-promises b{color:var(--ink)}
+.pr-promises svg{flex:none;width:22px;height:22px;color:var(--accent)}
+.pr-copy .pr-chip{margin-bottom:2px}
+.pr-hero .pr-trio{margin-top:clamp(28px,4vw,44px)}
+/* phones: each portal shows its phone screen, centred, in place of the browser frame */
+@media (max-width:759.98px){
+  .pr-stage{padding:0}
+  .pr-stage .pt-browser{display:none}
+  .pr-stage .pr-phone{position:relative;right:auto;bottom:auto;width:min(250px,66vw);margin:0 auto}
+  .pr-grid th[scope="row"]{width:40%}
+  .pr-grid td{width:20%}
+  .pr-grid thead th{font-size:.66rem;letter-spacing:.04em}
+}
