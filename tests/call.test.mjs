@@ -238,7 +238,7 @@ describe('call.js: ?about= prefill', () => {
     'online-search-network': "I'm asking about Google Ads in my own account.",
     'review-tags': "I'm asking about review tags.",
     'website-design': "I'm asking about a website redesign.",
-    'sample-contract': "I'm asking about the sample contract.",
+    'sample-contract': "I'm asking about the partner agreement.",
     'patient-dinners': "I'm asking about a private customer dinner.",
     'flyer-drops': "I'm asking about referral routes.",
     'google-ads': "I'm asking about Google Ads in my own account.",

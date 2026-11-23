@@ -197,12 +197,12 @@ describe('the portal tour (home, /field-team, /referral-network)', () => {
         assert.equal(hasAttr(f, 'hidden'), i !== 0, 'only the first screen shows before a tab is chosen');
       });
     });
-    test(`${file} #${id}: the phone screens on phones, the desktop screens elsewhere, every one described as the sample account`, () => {
+    test(`${file} #${id}: the phone screens on phones, the desktop screens elsewhere, every one described as the client portal`, () => {
       const imgs = tags(s, 'img');
       assert.equal(imgs.length, 4);
       for (const img of imgs) {
         assert.match(attr(img, 'src'), /^\/assets\/img\/portal2-(stops|network|partners|routes)-1280\.jpg$/);
-        assert.match(attr(img, 'alt'), /^Screenshot of the portal's sample account: /);
+        assert.match(attr(img, 'alt'), /^Screenshot of the client portal: /);
         assert.equal(attr(img, 'loading'), 'lazy');
       }
       const phone = tags(s, 'source').filter((t) => attr(t, 'media') === '(max-width:759.98px)');

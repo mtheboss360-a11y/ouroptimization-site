@@ -230,7 +230,7 @@ await scenario('every service page key prefills on /contact, and the keys from b
   for (const [key, message] of [
     ['referral-network', "I'm asking about referral routes."], ['flyer-network', "I'm asking about referral routes."],
     ['patient-network', "I'm asking about a private customer dinner."], ['online-search-network', "I'm asking about Google Ads in my own account."],
-    ['pricing', "I'd like to book a call."], ['sample-contract', "I'm asking about the sample contract."],
+    ['pricing', "I'd like to book a call."], ['sample-contract', "I'm asking about the partner agreement."],
     ['patient-dinners', "I'm asking about a private customer dinner."], ['flyer-drops', "I'm asking about referral routes."], ['google-ads', "I'm asking about Google Ads in my own account."]
   ]) {
     const s = await open({ path: `/contact?about=${key}` });
@@ -360,7 +360,7 @@ await scenario('/thanks loads on its own: noindex, the promise, and a way home',
   await close();
 });
 
-await scenario('industry pages: the sample portal screen shows on phones and desktops, unlabelled, with no sideways scroll', async () => {
+await scenario('industry pages: the portal screen shows on phones and desktops, unlabelled, with no sideways scroll', async () => {
   for (const [path, width] of [['/industries/auto-shops', 390], ['/industries/dental', 390], ['/industries/med-spas', 1280]]) {
     const s = await open({ path, width, height: 844 });
     await s.page.locator('.ind-shot').scrollIntoViewIfNeeded();

@@ -177,7 +177,7 @@ ${d.treatExamples.map((t) => `        <li>${esc(t)}</li>`).join('\n')}
       <p class="owc-more"><a class="textlink" href="/referral-network#dashboard">See everything in the portal${ARROW}</a></p>
     </div>
     <figure class="ind-shot reveal">
-      <div class="pt-browser"><div class="pt-bar" aria-hidden="true"><span></span><span></span><span></span><span class="pt-url">ournetworkportal.com</span></div>${resultsPicture("Screenshot of the portal's sample account: the totals for five routes: stops visited, stops still to visit, referral cards handed out, staff sign-ups, bookings by the front desk and businesses that joined.")}</div>
+      <div class="pt-browser"><div class="pt-bar" aria-hidden="true"><span></span><span></span><span></span><span class="pt-url">ournetworkportal.com</span></div>${resultsPicture("Screenshot of the client portal: the totals for five routes: stops visited, stops still to visit, referral cards handed out, staff sign-ups, bookings by the front desk and businesses that joined.")}</div>
       <figcaption>Activity and results, as the campaign runs.</figcaption>
     </figure>
   </div>
