@@ -105,12 +105,16 @@ describe('home: the sections', () => {
     assert.ok(!existsSync(new URL('assets/data/results.json', ROOT)));
     assert.ok(!existsSync(new URL('updates-thanks.html', ROOT)));
   });
-  test('a. in person: coffee, treats and real people, three scenes', () => {
+  test('a. in person (November 23, 2026, the owner\'s trim): who we connect you with, then only the coffee and treats', () => {
     const s = sec('in-person');
     const t = text(s);
     assert.match(t, /Coffee, treats and a real hello\./);
-    assert.equal(tags(s, 'img').length, 3);
-    for (const img of tags(s, 'img')) assert.match(attr(img, 'src'), /^\/assets\/img\/visit-(treats|chat|tap)-/);
+    assert.match(t, /We connect you with the businesses that share your clientele but aren.t your competition\./);
+    assert.match(t, /Coffee and treats\s*For the whole staff, on every visit\./);
+    assert.equal(tags(s, 'img').length, 1);
+    assert.equal(tags(s, 'li').length, 1, 'one scene only');
+    assert.match(attr(tags(s, 'img')[0], 'src'), /^\/assets\/img\/visit-treats-/);
+    assert.doesNotMatch(t, /refer|send|sign-up|code|recommend/i, 'the treats sit with nothing about referrals, sign-ups or customers sent');
   });
   test('e. in writing, for every business: no legal conclusions, no attorney review claimed anywhere, the HIPAA line held back', () => {
     const t = text(sec('compliance'));
@@ -244,7 +248,8 @@ describe('November 23, 2026: the network, only what is already true', () => {
   const net = text(sec('network'));
   test('the head and the two cards say what the terms and the partner agreement say', () => {
     assert.match(net, /Local businesses, promoting each other\./);
-    assert.match(net, /We bring together businesses that share customers but don.t compete\. On Level 2, where our team visits for you, every partner signs a one-page agreement: each side promotes the other\./);
+    assert.match(net, /On Level 2, where our team visits for you, every partner signs a one-page agreement: each side promotes the other\./);
+    assert.doesNotMatch(net, /share (customers|your clientele)/, 'said once, in the section below (In person)');
     assert.match(net, /You approve every business/);
     assert.match(net, /You approve the list before any visit, and we skip any business you already work with unless you ask\./);
     assert.match(net, /On Level 2, each partner agrees to promote one business of your kind: yours, for as long as you are a client\./);

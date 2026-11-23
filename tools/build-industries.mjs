@@ -63,7 +63,9 @@ function shell() {
   const headScript = take(/<script>document\.documentElement[\s\S]*?<\/script>/, 'head script');
   const ld = take(/<script type="application\/ld\+json">[\s\S]*?<\/script>/, 'structured data');
   const ogAlt = /<meta property="og:image:alt" content="([^"]*)">/.exec(index)[1];
-  const scene = (name) => take(new RegExp(`<picture><source type="image/avif" srcset="/assets/img/visit-${name}-480\\.avif[\\s\\S]*?</picture>`), `visit-${name} picture`);
+  // the visit scenes live in tools/industries/scenes.html (the home page keeps only the treats scene since November 23, 2026)
+  const scenesSrc = readFileSync(new URL('industries/scenes.html', new URL('./', import.meta.url)), 'utf8');
+  const scene = (name) => { const m = new RegExp(`<picture><source type="image/avif" srcset="/assets/img/visit-${name}-480\\.avif[\\s\\S]*?</picture>`).exec(scenesSrc); if (!m) throw new Error(`tools/industries/scenes.html: no visit-${name} picture`); return m[0]; };
   // every sprite symbol on the site, one definition per id (index.html wins)
   const symbols = new Map();
   const files = ['index.html', ...readdirSync(ROOT).filter((f) => f.endsWith('.html') && f !== 'index.html').sort()];

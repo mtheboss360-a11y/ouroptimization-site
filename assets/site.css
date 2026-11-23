@@ -1820,3 +1820,5 @@ html:not(.js) .hiw-orb{display:none}
 /* The network (November 23, 2026): two cards under a centred head, after Industries */
 .net-cards{max-width:920px;margin-inline:auto}
 .owc-more.center{text-align:center}
+/* In person, one scene (November 23, 2026) */
+.own-scenes.own-scenes-one{grid-template-columns:minmax(0,1fr);max-width:440px;margin-inline:auto}
