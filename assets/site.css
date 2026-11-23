@@ -1779,3 +1779,32 @@ html:not(.js) .hiw-orb{display:none}
   .pr-grid td{width:20%}
   .pr-grid thead th{font-size:.66rem;letter-spacing:.04em}
 }
+
+/* =====================================================================================================
+   November 23, 2026: "Book a call" in the header of every page, the main action; Client Portal beside it,
+   quieter. Phones keep both until the screen is too narrow, then Client Portal sits under More. Also the
+   label on the demo figures, and the (hidden) testimonial.
+   ===================================================================================================== */
+.btn-head.btn-portal{gap:0;background:#fff;border-color:var(--line-2,#C9D6CB);color:var(--ink)}
+.btn-head.btn-portal:hover{background:var(--paper);border-color:#8A9687;color:var(--ink)}
+@media (min-width:1000px){
+  .btn-head.btn-book{grid-row:1;grid-column:3}
+  .btn-head.btn-portal{grid-row:1;grid-column:4;margin-left:-12px}
+}
+@media (max-width:759.98px){
+  .js .btn-head{padding:0 13px;font-size:.8rem;min-height:42px}
+  .js .header-row{gap:8px}
+  /* "Client Portal" reads "Portal" on phones; screen readers still hear the whole name */
+  .bh-client{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+}
+@media (max-width:379.98px){
+  .js .btn-head.btn-portal{display:none}
+  .js .site-nav .nav-cta{display:list-item}
+  .js .site-nav .nav-cta a{font-weight:600;color:var(--gold-sm)}
+}
+.own-stats-note{margin:clamp(36px,4.6vw,56px) 0 0;text-align:center;font-size:.86rem;letter-spacing:.02em;color:var(--ink-2)}
+.owc-dash-band .own-stats-note,.own-track .own-stats-note{color:rgba(243,246,242,.78)}
+.own-stats-note+.own-stats{margin-top:14px}
+.own-quote{max-width:760px;margin:clamp(24px,3.4vw,36px) auto 0;text-align:center}
+.own-quote blockquote p{font-family:var(--hero);font-weight:650;font-size:clamp(1.3rem,1.1rem + .9vw,1.8rem);line-height:1.35;color:var(--ink);text-wrap:balance}
+.own-quote figcaption{margin-top:14px;font-size:.95rem;color:var(--ink-2)}

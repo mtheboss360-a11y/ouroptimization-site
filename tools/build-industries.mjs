@@ -138,14 +138,14 @@ ${d.partners.map((p) => `      <li><h3>${esc(p.name)}</h3><p>${esc(p.why)}</p></
 
   // the visits: one line here; the Field Team page tells the whole visit
   const scenes = shell.cache.scenes;
-  out.push(`
-<section class="section" aria-labelledby="visits-h" id="visits">
-  <div class="wrap">
-    <div class="section-head center reveal">
-      <p class="eyebrow">In person</p>
-      <h2 id="visits-h">Coffee, treats <em class="dn-line">and a real hello.</em></h2>
-      <p class="intro">${esc(d.treatsIntro)}</p>
-    </div>
+  // focused pages (November 23, 2026, the med spa page first): no scenes and no portal screenshot; both live on the home page
+  const focused = d.focused === true;
+  const visitsHead = focused
+    ? `<p class="eyebrow">On every visit</p>
+      <h2 id="visits-h">Treats for the staff <em class="dn-line">who see your clients.</em></h2>`
+    : `<p class="eyebrow">In person</p>
+      <h2 id="visits-h">Coffee, treats <em class="dn-line">and a real hello.</em></h2>`;
+  const sceneList = focused ? '' : `
     <ul class="own-scenes reveal">
       <li>${scenes.treats}
         <h3>Treats for Staff</h3></li>
@@ -153,7 +153,14 @@ ${d.partners.map((p) => `      <li><h3>${esc(p.name)}</h3><p>${esc(p.why)}</p></
         <h3>Real people, in person</h3></li>
       <li>${scenes.tap}
         <h3>A digital <span class="nowrap">sign-up</span> sheet for every business</h3></li>
-    </ul>
+    </ul>`;
+  out.push(`
+<section class="section" aria-labelledby="visits-h" id="visits">
+  <div class="wrap">
+    <div class="section-head center reveal">
+      ${visitsHead}
+      <p class="intro">${esc(d.treatsIntro)}</p>
+    </div>${sceneList}
     <div class="ind-treats reveal">
       <p class="dg-k">What we bring</p>
       <ul class="ex-chips">
@@ -172,14 +179,14 @@ ${d.treatExamples.map((t) => `        <li>${esc(t)}</li>`).join('\n')}
   <div class="wrap ind-portal">
     <div class="reveal">
       <p class="eyebrow">Your client portal</p>
-      <h2 id="portal-h">Every stop and every sign-up, <em class="dn-line">in one place.</em></h2>
+      <h2 id="portal-h">${focused ? 'Every <span class="nowrap">sign-up</span>, <em class="dn-line">straight to your front desk.</em>' : 'Every stop and every sign-up, <em class="dn-line">in one place.</em>'}</h2>
       <p class="intro">${esc(d.portalNote + measure)}</p>
-      <p class="owc-more"><a class="textlink" href="/referral-network#dashboard">See everything in the portal${ARROW}</a></p>
-    </div>
+      <p class="owc-more">${focused ? `<a class="textlink" href="/portals">See the three portals${ARROW}</a>` : `<a class="textlink" href="/referral-network#dashboard">See everything in the portal${ARROW}</a>`}</p>
+    </div>${focused ? '' : `
     <figure class="ind-shot reveal">
       <div class="pt-browser"><div class="pt-bar" aria-hidden="true"><span></span><span></span><span></span><span class="pt-url">ournetworkportal.com</span></div>${resultsPicture("Screenshot of the client portal: the totals for five routes: stops visited, stops still to visit, referral cards handed out, staff sign-ups, bookings by the front desk and businesses that joined.")}</div>
       <figcaption>Activity and results, as the campaign runs.</figcaption>
-    </figure>
+    </figure>`}
   </div>
 </section>`);
 

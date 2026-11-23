@@ -22,9 +22,10 @@ describe('home: order and hero', () => {
   });
   test('the hero: the owner\'s line (November 21, 2026) and the three display photos (November 23, 2026), with no buttons and no example card', () => {
     const hero = /<section class="hero-orb"[\s\S]*?<\/section>/.exec(main)[0];
-    assert.equal(text(/<h1 id="hero-h">([\s\S]*?)<\/h1>/.exec(hero)[1]), 'Boots on the ground for your local business.');
+    /* November 23, 2026: the outcome first, the how second; two short sentences */
+    assert.equal(text(/<h1 id="hero-h">([\s\S]*?)<\/h1>/.exec(hero)[1]), 'New customers and bookings from the businesses near you.');
     assert.equal(text(/<p class="lede">([\s\S]*?)<\/p>/.exec(hero)[1]),
-      'Our team visits the businesses near you and introduces your business to their staff. Every visit and sign-up shows up in your portal.');
+      'Every month our team visits the businesses around you, so their staff send their customers your way.');
     const photos = ['salon', 'bakery', 'medspa'];
     assert.deepEqual(links(hero).map((l) => l.href), photos.map((n) => `/assets/img/display-${n}.png`), 'the only links open the full-size photos');
     for (const n of photos) assert.ok(existsSync(new URL(`./assets/img/display-${n}.png`, ROOT)), n);
@@ -221,6 +222,21 @@ describe('the portal tour (home, /field-team, /referral-network)', () => {
     for (const f of ['index.html', 'field-team.html', 'referral-network.html']) assert.doesNotMatch(read(f), /drivers?-(card|next-route|orb|phone|stop|elena|marcus|omar|tasha)/, f);
     assert.ok(!existsSync(new URL('assets/img/drivers-card-546.jpg', ROOT)));
     assert.ok(!existsSync(new URL('assets/img/driver-marcus.jpg', ROOT)));
+  });
+});
+
+describe('November 23, 2026: honest figures and a testimonial slot', () => {
+  test('the five figures are labelled as a demo account, on the home page and the Field Team page', () => {
+    for (const f of ['index.html', 'field-team.html']) {
+      const m = mainOf(read(f));
+      assert.match(m, /<p class="own-stats-note reveal">Example results from a demo account\.<\/p>\s*<dl class="own-stats reveal" aria-label="Example results from a demo account: five routes in the portal">/, f);
+      for (const [k, v] of [['Stops visited', 35], ['Staff reached', 207], ['Referral cards handed out', 262], ['Staff sign-ups', 64], ['Booked by the front desk', 37]]) assert.match(m, new RegExp(`<dt>${k}</dt><dd>${v}</dd>`), `${f}: ${k}`);
+    }
+  });
+  test('the testimonial stays hidden (commented out) until the owner gives a real quote; nothing invented shows', () => {
+    const m = mainOf(read('index.html'));
+    assert.doesNotMatch(m.replace(/<!--[\s\S]*?-->/g, ''), /id="testimonial"|own-quote/, 'not on the page');
+    assert.match(m, /<!-- ===== Testimonial: HIDDEN[\s\S]*?id="testimonial"[\s\S]*?The client's exact words go here\.[\s\S]*?-->/, 'ready in a comment');
   });
 });
 

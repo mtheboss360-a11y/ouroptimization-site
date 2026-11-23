@@ -360,8 +360,34 @@ await scenario('/thanks loads on its own: noindex, the promise, and a way home',
   await close();
 });
 
+await scenario('the med spa page (November 23, 2026): outcome first, no scenes and no portal screenshot (both live on the home page)', async () => {
+  for (const width of [390, 1280]) {
+    const s = await open({ path: '/industries/med-spas', width, height: 844 });
+    assert.equal((await s.page.textContent('h1')).replace(/\s+/g, ' ').trim(), 'New clients for your med spa, from the businesses next door.');
+    assert.equal(await s.page.locator('.ind-shot, .own-scenes').count(), 0, 'no generic scenes or screenshot');
+    assert.equal(await s.page.locator('a[href="/portals"]').count() >= 1, true, 'points to the Portals page');
+    assert.equal(await s.page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true, `${width}px: no sideways scroll`);
+    assert.deepEqual(s.jsErrors, []);
+    assert.deepEqual(s.missing, []);
+    await s.close();
+  }
+});
+
+await scenario('Book a call in the header on every page size (November 23, 2026); Client Portal stays reachable', async () => {
+  for (const width of [320, 390, 768, 1280]) {
+    const s = await open({ path: '/faq', width, height: 844 });
+    const book = await s.page.$eval('.site-header .btn-book', (a) => { const r = a.getBoundingClientRect(); return { href: a.getAttribute('href'), shown: getComputedStyle(a).display !== 'none' && r.width > 0, inView: r.top >= 0 && r.bottom <= innerHeight && r.right <= innerWidth }; });
+    assert.deepEqual(book, { href: '/contact', shown: true, inView: true }, `${width}px`);
+    const portal = await s.page.$eval('.site-header .btn-portal', (a) => getComputedStyle(a).display !== 'none');
+    if (width >= 380) assert.equal(portal, true, `${width}px: Client Portal in the header`);
+    else assert.equal(await s.page.$eval('.site-nav .nav-cta a', (a) => a.getAttribute('href')), 'https://www.ournetworkportal.com', `${width}px: Client Portal under More`);
+    assert.equal(await s.page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true, `${width}px: no sideways scroll`);
+    await s.close();
+  }
+});
+
 await scenario('industry pages: the portal screen shows on phones and desktops, unlabelled, with no sideways scroll', async () => {
-  for (const [path, width] of [['/industries/auto-shops', 390], ['/industries/dental', 390], ['/industries/med-spas', 1280]]) {
+  for (const [path, width] of [['/industries/auto-shops', 390], ['/industries/dental', 390], ['/industries/gyms-fitness-studios', 1280]]) {
     const s = await open({ path, width, height: 844 });
     await s.page.locator('.ind-shot').scrollIntoViewIfNeeded();
     await s.page.waitForFunction(() => { const i = document.querySelector('.ind-shot img'); return i && i.complete && i.naturalWidth > 0; });
@@ -397,7 +423,7 @@ await scenario('home: the half orb builds its network, clear of the words, with 
     const c = await s.page.$eval('#orb', (el) => ({ w: el.width, h: el.height, lit: (() => { const d = el.getContext('2d').getImageData(0, 0, el.width, el.height).data; let n = 0; for (let i = 3; i < d.length; i += 4) if (d[i]) n++; return n; })() }));
     assert.ok(c.w > 0 && c.h > 0, `${width}px: the canvas has a size`);
     assert.ok(c.lit > 5000, `${width}px: the orb and its network are drawn (${c.lit} pixels)`);
-    assert.equal((await s.page.textContent('#hero-h')).replace(/\s+/g, ' ').trim(), 'Boots on the ground for your local business.');
+    assert.equal((await s.page.textContent('#hero-h')).replace(/\s+/g, ' ').trim(), 'New customers and bookings from the businesses near you.');
     assert.deepEqual(s.outside, [], 'no requests to other sites');
     assert.deepEqual(s.jsErrors, []);
     assert.deepEqual(s.missing, []);

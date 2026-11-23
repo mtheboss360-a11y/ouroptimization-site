@@ -105,7 +105,8 @@ describe('every page: header and footer', () => {
       assert.deepEqual(nav.map((l) => [l.text, l.href]), [...NAV, ['Client Portal', PORTAL]]);
       const current = nav.filter((l) => /aria-current="page"/.test(l.tag)).map((l) => l.href);
       assert.deepEqual(current, p.nav ? [NAV.find((n) => n[0] === p.nav)[1]] : []);
-      assert.match(h, new RegExp(`<a class="btn btn-primary btn-head" href="${PORTAL}">Client Portal</a>`));
+      /* November 23, 2026: Book a call is the header's main action on every page; Client Portal sits beside it */
+      assert.match(h, /<a class="btn btn-primary btn-head btn-book" href="\/contact">Book a call<\/a>\s*<a class="btn btn-ghost btn-head btn-portal" href="https:\/\/www\.ournetworkportal\.com"><span class="bh-client">Client&nbsp;<\/span>Portal<\/a>/);
       assert.ok(h.indexOf('class="menu-btn"') < h.indexOf('<nav class="site-nav"'), 'the menu button comes before the menu it opens');
       /* phones: the portal's bottom tab bar, inside the header (November 14, 2026) */
       const bar = /<nav class="tabbar" aria-label="Shortcuts">[\s\S]*?<\/nav>/.exec(h);
@@ -325,10 +326,19 @@ describe('every page: the November 20, 2026 rules', () => {
     test(`${p.file}: no pricing: no prices, trial, plans, money-back guarantee or links to /pricing (November 21, 2026)`, () => {
       if (p.file === 'terms.html') return; /* the legal terms keep how prices are agreed in writing, with no figures */
       assert.doesNotMatch(src, /href="\/pricing|\?about=pricing/);
-      assert.doesNotMatch(t, /\$\s?\d|\btrial\b|first-month|Neighborhood plan|Community plan|money back|comes back|priced on a call|included in your plan|at no charge|founding/i);
+      /* the one exception (November 23, 2026): the 30-day guarantee, in the FAQ, in the terms' own words */
+      const tt = p.file === 'faq.html' ? t.replace('If we have not visited all 5 businesses and set up your codes within 30 days, your trial fee comes back. You keep the partner relationships either way.', '') : t;
+      assert.doesNotMatch(tt, /\$\s?\d|\btrial\b|first-month|Neighborhood plan|Community plan|money back|comes back|priced on a call|included in your plan|at no charge|founding/i);
       assert.doesNotMatch(t, /\bPricing\b/);
     });
   }
+  test('the 30-day guarantee (November 23, 2026): once on the site, in the FAQ, word for word as in the terms; the terms keep it', () => {
+    const g = 'If we have not visited all 5 businesses and set up your codes within 30 days, your trial fee comes back. You keep the partner relationships either way.';
+    assert.ok(text(page['terms.html']).includes(g), 'the terms keep the guarantee');
+    const where = PAGES.filter((p) => p.file !== 'terms.html').filter((p) => text(page[p.file]).includes('within 30 days')).map((p) => p.file);
+    assert.deepEqual(where, ['faq.html'], 'only the FAQ states it');
+    assert.equal(text(page['faq.html']).split(g).length - 1, 1, 'once, verbatim');
+  });
   test('the healthcare industry pages and the FAQ carry the attorney-review note and the state-rules line', () => {
     for (const f of HEALTHCARE) {
       assert.ok(page[f].includes(TODO), f);
