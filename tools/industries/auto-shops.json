@@ -28,11 +28,11 @@
   "portalNote": "Each sign-up lands in your portal, ready for your service desk to call and book.",
   "notesTitle": "Made for auto shops.",
   "notes": [
-    { "title": "A one-page partner agreement", "text": "You and each partner agree to promote each other. Nobody is paid per referral or per customer." },
+    { "title": "A one-page partner agreement", "text": "When our team visits, you and each partner agree to promote each other. Nobody is paid per referral or per customer." },
     { "title": "No competing bays", "text": "We never visit other repair shops for you." },
     { "title": "Your words only", "text": "We describe your shop only in words you approve." }
   ],
-  "exclusivity": "Partners agree to promote one auto shop like yours, and only yours, for as long as you are a client.",
+  "exclusivity": "When our team visits, partners agree to promote one auto shop like yours, and only yours, for as long as you are a client.",
   "faq": [
     { "q": "I already call a tow company. Will you visit them?", "a": "Not unless you ask. We skip businesses you already work with, and those relationships stay yours." },
     { "q": "Dealerships have their own service departments. Why visit one?", "a": "Only if it shares your customers without competing, and only if you approve it. If you'd rather skip dealerships, we leave them off." },

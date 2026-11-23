@@ -29,13 +29,21 @@ export function loadIndustries() {
   list.sort((a, b) => a.order - b.order);
   const problems = [];
   const need = ['slug', 'order', 'name', 'noun', 'healthcare', 'title', 'description', 'cardBlurb', 'h1', 'h1Em', 'intro', 'partnersIntro',
-    'partners', 'treatsIntro', 'treatExamples', 'portalNote', 'notesTitle', 'notes', 'exclusivity', 'faq', 'aboutKey', 'aboutText'];
+    'partners', 'treatsIntro', 'treatExamples', 'portalNote', 'faq', 'aboutKey', 'aboutText'];
+  // the full template's own blocks; a focused page (November 23, 2026) says these things in the home page's beats instead,
+  // and needs the word for the people it serves ("clients") and the kinds of business that compete with it
+  const FULL = ['notesTitle', 'notes', 'exclusivity'];
+  const FOCUSED = ['people', 'competitors'];
   for (const d of list) {
-    for (const k of need) if (d[k] === undefined || d[k] === '') problems.push(`${d.slug}: missing ${k}`);
+    const focused = d.focused === true;
+    for (const k of [...need, ...(focused ? FOCUSED : FULL)]) if (d[k] === undefined || d[k] === '') problems.push(`${d.slug}: missing ${k}`);
+    if (focused) for (const k of FULL) if (k in d) problems.push(`${d.slug}: ${k} is not used on a focused page`);
     if (!/^[a-z0-9-]+$/.test(d.slug || '')) problems.push(`${d.slug}: bad slug`);
     if ((d.partners || []).length !== 6) problems.push(`${d.slug}: needs exactly 6 partners`);
-    if ((d.notes || []).length !== 3) problems.push(`${d.slug}: needs exactly 3 notes`);
-    if ((d.faq || []).length !== 3) problems.push(`${d.slug}: needs exactly 3 questions`);
+    if (focused) for (const p of d.partners || []) if (!/^i-[a-z]+$/.test(p.icon || '')) problems.push(`${d.slug}: ${p.name} needs an icon (a sprite id such as i-gym)`);
+    if (!focused && (d.notes || []).length !== 3) problems.push(`${d.slug}: needs exactly 3 notes`);
+    const questions = (d.faq || []).length;
+    if (focused ? questions < 2 || questions > 3 : questions !== 3) problems.push(`${d.slug}: needs ${focused ? '2 or 3' : 'exactly 3'} questions`);
     const t = d.title || '';
     if (t.length < 15 || t.length > 70 || !t.endsWith(' | Our Local Network')) problems.push(`${d.slug}: title "${t}" (${t.length})`);
     const desc = esc(d.description || '');
@@ -88,6 +96,108 @@ const resultsPicture = (alt) => '<picture>'
   + `<img src="/assets/img/portal2-routes-1280.jpg" width="1280" height="800" alt="${alt}" loading="lazy" decoding="async">`
   + '</picture>';
 
+/* ---------- the focused template (November 23, 2026; the med spa page first) ----------
+   The home page's beats, for one kind of business, after the hero: 2. who shares your clients (#partners), 3. who we
+   never connect you with (#never), 4. how the connection is made (#visits), 5. what you see (#see, the portal in words),
+   then the questions and the call. No visit scenes, no portal screenshot and no demo figures: those live on the home page. The page-specific words come from the data (people,
+   partners and their icons, competitors, treatsIntro, treatExamples, portalNote); every line about the agreement, the
+   exclusivity and the treats is written here once, in the words of terms.html and /referral-network#agreement:
+   one of your kind is a commitment ("agrees to promote") and holds when our team visits; the coffee and treats sit in
+   their own block, with no word about referrals or sign-ups. */
+const NOWRAP = (h) => h.replace(/\b([A-Za-z]+(?:-[A-Za-z]+)+)\b/g, '<span class="nowrap">$1</span>');
+function focusedBeats(d) {
+  const care = d.healthcare;
+  const people = esc(d.people);
+  const noun = esc(d.noun);
+  const out = [];
+
+  // 2. who shares your clients: the six kinds of business, each with its icon and one plain line
+  out.push(`
+<section class="section bg-paper" aria-labelledby="partners-h" id="partners">
+  <div class="wrap">
+    <div class="section-head center reveal">
+      <p class="eyebrow">Who shares your ${people}</p>
+      <h2 id="partners-h">Same ${people}, <em class="dn-line">different businesses.</em></h2>
+      <p class="intro">${esc(d.partnersIntro)}</p>
+    </div>
+    <ul class="cardgrid icon-side share-types reveal">
+${d.partners.map((p) => `      <li>${icon(p.icon)}<h3>${esc(p.name)}</h3><p>${NOWRAP(esc(p.why))}</p></li>`).join('\n')}
+    </ul>
+  </div>
+</section>`);
+
+  // 3. who we never connect you with: no competitors, one of your kind (when our team visits), you approve every name
+  const never = [
+    ['i-no', 'No competitors', `We never put ${esc(d.competitors)} on your route.`],
+    ['i-shield', `One ${noun}, yours`, `When our team visits, each partner agrees to promote one ${noun}, yours, for as long as you are a client.`],
+    ['i-check', 'You approve every name', 'You approve the list before any visit, and you can cross any business off it. We skip any business you already work with unless you ask.']
+  ];
+  out.push(`
+<section class="section bg-stone" aria-labelledby="never-h" id="never">
+  <div class="wrap">
+    <div class="section-head center reveal">
+      <p class="eyebrow">Never a competitor</p>
+      <h2 id="never-h">Who we never <em class="dn-line">connect you with.</em></h2>
+      <p class="intro">Your partners share your ${people}, not your services. Here is how we keep it that way.</p>
+    </div>
+    <ul class="cardgrid never-cards reveal">
+${never.map(([i, h, p]) => `      <li>${icon(i)}<h3>${h}</h3><p>${p}</p></li>`).join('\n')}
+    </ul>
+    <p class="owc-more center reveal"><a class="textlink" href="/referral-network#agreement">What the partner agreement says${ARROW}</a></p>
+  </div>
+</section>`);
+
+  // 4. how the connection is made: the coffee and treats in their own block, then what every visit brings
+  const SIGNUP = '<span class="nowrap">sign-up</span>';
+  const cards = [
+    ['i-tap', 'A <span class="nowrap">tap-to-schedule</span> card for each staff member', `Every staff member we meet gets a personal card with an NFC tag and a QR code. A tap or a scan opens your <span class="nowrap">first-visit</span> offer and a short ${SIGNUP} form.`],
+    ['i-doc', 'A <span class="nowrap">one-page</span> partner agreement', `Every partner signs one. Each side promotes the other. Nobody is paid per referral or per ${care ? 'patient' : 'customer'}.${care ? '' : ' Partners never see who signed up.'}`],
+    ...(care ? [['i-lock', 'No patient records, ever', `We never receive patient records, and partners never see who signed up. The ${SIGNUP} form asks no health questions.`]] : []),
+    ['i-track', 'Every visit in your portal', 'Your portal logs each visit.']
+  ];
+  out.push(`
+<section class="section" aria-labelledby="visits-h" id="visits">
+  <div class="wrap">
+    <div class="section-head center reveal">
+      <p class="eyebrow">How the connection is made</p>
+      <h2 id="visits-h">In person, <em class="dn-line">every month.</em></h2>
+      <p class="intro">When our team visits, we go to every business on your route each month. Here is what happens on each visit.</p>
+    </div>
+    <div class="ind-treats visit-treats reveal">
+      <h3>Coffee and treats</h3>
+      <p>${esc(d.treatsIntro)}</p>
+      <ul class="ex-chips">
+${d.treatExamples.map((t) => `        <li>${esc(t)}</li>`).join('\n')}
+      </ul>
+      <p class="ind-modest">We keep it modest: coffee, pastries and snacks. Never gift cards, cash, free services or anything of real value.</p>
+      <a class="textlink" href="/field-team#treats">More about our visits${ARROW}</a>
+    </div>
+    <ul class="cardgrid icon-side ind-visit-cards reveal">
+${cards.map(([i, h, p, more]) => `      <li>${icon(i)}<h3>${h}</h3><p>${p}</p>${more || ''}</li>`).join('\n')}
+    </ul>${care ? `
+    <div class="visit-words reveal">
+      <p>${icon('i-pen')}<span><strong>Your words only.</strong> We make no medical or health claims. We describe your services only in words you approve.</span></p>
+      <a class="textlink" href="/faq#healthcare">Healthcare practices: how it works for you${ARROW}</a>
+    </div>
+    <p class="hipaa-line" data-flag="hipaaConfirmed" data-flag-text="hipaaText" hidden><span></span></p>` : ''}
+  </div>
+</section>`);
+
+  // 5. what you see: the portal, in words (no screenshot and no demo figures; those live on the home page)
+  out.push(`
+<section class="section bg-stone" aria-labelledby="see-h" id="see">
+  <div class="wrap">
+    <div class="section-head center reveal">
+      <p class="eyebrow">What you see</p>
+      <h2 id="see-h">Every stop, <em class="dn-line">every ${SIGNUP}.</em></h2>
+      <p class="intro">Your portal shows every route, every stop, the staff we met and every ${SIGNUP}. ${NOWRAP(esc(d.portalNote))}${care ? ' <span class="nowrap">Sign-ups</span> show how your campaign is doing and are never used to reward anyone.' : ''}</p>
+    </div>
+    <p class="owc-more center reveal"><a class="textlink" href="/portals">See the three portals${ARROW}</a></p>
+  </div>
+</section>`);
+  return out.join('\n');
+}
+
 /* ---------- the page template ---------- */
 function main(d) {
   const key = d.aboutKey;
@@ -122,8 +232,11 @@ function main(d) {
   </div>
 </section>`);
 
-  // who shares your customers
-  out.push(`
+  // a focused page (November 23, 2026; the med spa page first) tells its story in the home page's beats: see focusedBeats
+  if (d.focused === true) out.push(focusedBeats(d));
+  else {
+    // who shares your customers
+    out.push(`
 <section class="section bg-paper" aria-labelledby="partners-h" id="partners">
   <div class="wrap">
     <div class="section-head reveal">
@@ -138,16 +251,16 @@ ${d.partners.map((p) => `      <li><h3>${esc(p.name)}</h3><p>${esc(p.why)}</p></
   </div>
 </section>`);
 
-  // the visits: one line here; the Field Team page tells the whole visit
-  const scenes = shell.cache.scenes;
-  // focused pages (November 23, 2026, the med spa page first): no scenes and no portal screenshot; both live on the home page
-  const focused = d.focused === true;
-  const visitsHead = focused
-    ? `<p class="eyebrow">On every visit</p>
-      <h2 id="visits-h">Coffee and treats <em class="dn-line">for the whole staff.</em></h2>`
-    : `<p class="eyebrow">In person</p>
-      <h2 id="visits-h">Coffee, treats <em class="dn-line">and a real hello.</em></h2>`;
-  const sceneList = focused ? '' : `
+    // the visits: one line here; the Field Team page tells the whole visit
+    const scenes = shell.cache.scenes;
+    out.push(`
+<section class="section" aria-labelledby="visits-h" id="visits">
+  <div class="wrap">
+    <div class="section-head center reveal">
+      <p class="eyebrow">In person</p>
+      <h2 id="visits-h">Coffee, treats <em class="dn-line">and a real hello.</em></h2>
+      <p class="intro">${esc(d.treatsIntro)}</p>
+    </div>
     <ul class="own-scenes reveal">
       <li>${scenes.treats}
         <h3>Treats for Staff</h3></li>
@@ -155,14 +268,7 @@ ${d.partners.map((p) => `      <li><h3>${esc(p.name)}</h3><p>${esc(p.why)}</p></
         <h3>Real people, in person</h3></li>
       <li>${scenes.tap}
         <h3>A digital <span class="nowrap">sign-up</span> sheet for every business</h3></li>
-    </ul>`;
-  out.push(`
-<section class="section" aria-labelledby="visits-h" id="visits">
-  <div class="wrap">
-    <div class="section-head center reveal">
-      ${visitsHead}
-      <p class="intro">${esc(d.treatsIntro)}</p>
-    </div>${sceneList}
+    </ul>
     <div class="ind-treats reveal">
       <p class="dg-k">What we bring</p>
       <ul class="ex-chips">
@@ -174,27 +280,27 @@ ${d.treatExamples.map((t) => `        <li>${esc(t)}</li>`).join('\n')}
   </div>
 </section>`);
 
-  // the portal: who calls the sign-ups, in one or two lines; How it works shows the whole portal
-  const measure = care ? ' Sign-ups show how your campaign is doing and are never used to reward anyone.' : '';
-  out.push(`
+    // the portal: who calls the sign-ups, in one or two lines; How it works shows the whole portal
+    const measure = care ? ' Sign-ups show how your campaign is doing and are never used to reward anyone.' : '';
+    out.push(`
 <section class="section bg-paper" aria-labelledby="portal-h" id="portal">
-  <div class="wrap ind-portal${focused ? ' ind-portal-solo' : ''}">
+  <div class="wrap ind-portal">
     <div class="reveal">
       <p class="eyebrow">Your client portal</p>
-      <h2 id="portal-h">${focused ? 'Every <span class="nowrap">sign-up</span>, <em class="dn-line">straight to your front desk.</em>' : 'Every stop and every sign-up, <em class="dn-line">in one place.</em>'}</h2>
+      <h2 id="portal-h">Every stop and every sign-up, <em class="dn-line">in one place.</em></h2>
       <p class="intro">${esc(d.portalNote + measure)}</p>
-      <p class="owc-more">${focused ? `<a class="textlink" href="/portals">See the three portals${ARROW}</a>` : `<a class="textlink" href="/referral-network#dashboard">See everything in the portal${ARROW}</a>`}</p>
-    </div>${focused ? '' : `
+      <p class="owc-more"><a class="textlink" href="/referral-network#dashboard">See everything in the portal${ARROW}</a></p>
+    </div>
     <figure class="ind-shot reveal">
       <div class="pt-browser"><div class="pt-bar" aria-hidden="true"><span></span><span></span><span></span><span class="pt-url">ournetworkportal.com</span></div>${resultsPicture("Screenshot of the client portal: the totals for five routes: stops visited, stops still to visit, referral cards handed out, staff sign-ups, bookings by the front desk and businesses that joined.")}</div>
       <figcaption>Activity and results, as the campaign runs.</figcaption>
-    </figure>`}
+    </figure>
   </div>
 </section>`);
 
-  // good to know (healthcare: the protections)
-  const noteIcons = ['i-doc', 'i-shield', 'i-pen'];
-  out.push(`
+    // good to know (healthcare: the protections)
+    const noteIcons = ['i-doc', 'i-shield', 'i-pen'];
+    out.push(`
 <section class="section" aria-labelledby="notes-h" id="good-to-know">
   <div class="wrap">
     <div class="section-head reveal">
@@ -207,6 +313,7 @@ ${d.notes.map((n, i) => `      <li>${icon(noteIcons[i])}<h3>${esc(n.title)}</h3>
     <p class="hipaa-line" data-flag="hipaaConfirmed" data-flag-text="hipaaText" hidden><span></span></p>` : ''}
   </div>
 </section>`);
+  }
 
   // questions
   out.push(`

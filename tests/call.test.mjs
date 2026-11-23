@@ -244,8 +244,8 @@ describe('call.js: ?about= prefill', () => {
     'google-ads': "I'm asking about Google Ads in my own account.",
     // November 20, 2026: the Field Team page and the eight industry pages (the industry keys and messages come from tools/industries/*.json)
     'field-team': "I'm asking about the field team.",
-    'level-1': "I'm interested in Level 1: my team visits the businesses.",
-    'level-2': "I'm interested in Level 2: your team visits the businesses.",
+    'level-1': "I'm interested in my team visiting the businesses.",
+    'level-2': "I'm interested in your team visiting the businesses.",
     'portals': "I'd like to see the portals.",
     'auto-shops': "I'm asking about referral partners for my auto shop.",
     'chiropractic-physical-therapy': "I'm asking about referral partners for my chiropractic or physical therapy practice.",
@@ -270,6 +270,11 @@ describe('call.js: ?about= prefill', () => {
     }
     assert.equal(call.aboutFromSearch('?ref=x&about=Review-Tags'), 'review-tags');
     assert.equal(call.aboutFromSearch('?about=%20website-design%20'), 'website-design');
+  });
+  test('the two ways to run it prefill in plain words: no "Level 1" or "Level 2" in any message (November 23, 2026)', () => {
+    for (const [key, message] of Object.entries(call.ABOUT)) assert.doesNotMatch(message, /\bLevel\s*[12]\b/i, key);
+    assert.match(call.prefillFor('?about=level-1', ''), /my team visiting/);
+    assert.match(call.prefillFor('?about=level-2', ''), /your team visiting/);
   });
   test('anything else is ignored', () => {
     for (const s of ['', '?', '?about=', '?about=seo', '?about=website-design-x', '?xabout=review-tags', '?about=%E0%A4%A', '?about=__proto__', '?about=constructor']) {

@@ -97,7 +97,9 @@ describe('every page: header and footer', () => {
       assert.match(h, /<a aria-label="Our Local Network home" class="brand" href="\/">/);
       assert.match(h, /<img src="\/assets\/img\/own-logo-360\.png" alt="Our Local Network" width="360" height="130">/);
       if (p.brandOnly) {
-        assert.doesNotMatch(h, /<nav/);
+        /* November 23, 2026: the expo page keeps its logo-only header, plus the one Book a call button; no menu, no portal button */
+        assert.doesNotMatch(h, /<nav|class="menu-btn"|btn-portal/);
+        assert.match(h, /<\/picture><\/a>\s*<a class="btn btn-primary btn-head btn-book" href="\/contact">Book a call<\/a>\s*<\/div>\s*<\/header>/, 'Book a call right after the logo, as on every page');
         return;
       }
       assert.equal(h.replaceAll(' aria-current="page"', ''), home, 'the same header on every page');
@@ -125,14 +127,17 @@ describe('every page: header and footer', () => {
       assert.deepEqual(links(footerOf(src)).map((l) => l.href), ['/privacy', '/terms']);
     });
   }
-  test('the dinner stays out of the menu and off the home page; the FAQ links it with the other add-ons (pricing came off, November 21, 2026)', () => {
+  test('the dinner stays out of the menu and off the home page (pricing came off, November 21, 2026)', () => {
     for (const p of PAGES) {
       if (['faq.html', 'patient-network.html', 'privacy.html', 'terms.html'].includes(p.file)) continue;
       assert.doesNotMatch(bodyOf(page[p.file]), /patient-network|patient dinner/i, p.file);
     }
-    const addons = byId(page['faq.html'], 'add-ons');
-    assert.ok(addons, 'the FAQ question on add-ons');
-    for (const href of ['/online-search-network', '/review-tags', '/website-design', '/patient-network']) assert.ok(links(addons).some((l) => l.href === href), href);
+  });
+  test('every page header has the Book a call button, once, the expo page included (November 23, 2026)', () => {
+    for (const p of PAGES) {
+      const h = headerOf(page[p.file]);
+      assert.equal(h.split('<a class="btn btn-primary btn-head btn-book" href="/contact">Book a call</a>').length - 1, 1, p.file);
+    }
   });
 });
 
@@ -361,3 +366,129 @@ describe('every page: the November 20, 2026 rules', () => {
   });
 });
 
+/* November 23, 2026: the FAQ answers every question; the add-ons and the industry pages, named as their own pages name
+   them; "Level 1" and "Level 2" are gone (the plain names are "Your team visits" and "Our team visits"); and How it works
+   says how matching works without claims about software. */
+describe('November 23, 2026: every question answered, plain names, matching', () => {
+  /* the words a visitor sees: an element marked hidden does not count as an answer */
+  const visible = (s) => text(s.replace(/<([a-z0-9]+)\b[^>]*\shidden\b[^>]*>[\s\S]*?<\/\1>/gi, ' '));
+  const questions = (src) => [...src.matchAll(/<details\b[^>]*>([\s\S]*?)<\/details>/g)].map((m) => {
+    const q = /<summary>([\s\S]*?)<\/summary>([\s\S]*)$/.exec(m[1]);
+    return { q: q ? text(q[1]) : '', rest: q ? q[2] : m[1] };
+  });
+  const faqQ = (summary) => questions(page['faq.html']).find((x) => x.q === summary);
+  test('every FAQ question on every page has a real answer under it', () => {
+    assert.ok(questions(page['faq.html']).length >= 15, 'the FAQ page has its questions');
+    for (const p of PAGES) {
+      for (const { q, rest } of questions(page[p.file])) {
+        assert.match(q, /\?$/, `${p.file}: a question in the summary: "${q}"`);
+        const ans = /^\s*<div class="answer">([\s\S]*)<\/div>\s*$/.exec(rest);
+        assert.ok(ans, `${p.file}: "${q}" has an answer block right under it`);
+        const a = visible(ans[1]);
+        assert.ok(a.split(' ').length >= 4 && /\w[.?!]/.test(a), `${p.file}: "${q}" has an empty or unfinished answer: "${a}"`);
+      }
+    }
+  });
+  test('"Do you offer anything besides the visits?": the three add-on pages, each described in its own words', () => {
+    const a = faqQ('Do you offer anything besides the visits?');
+    assert.ok(a, 'the question is on the FAQ');
+    assert.ok(byId(page['faq.html'], 'add-ons').includes('Do you offer anything besides the visits?'), 'it keeps id="add-ons" (/faq#add-ons)');
+    assert.deepEqual(links(a.rest).map((l) => l.href), ['/review-tags', '/online-search-network', '/website-design']);
+    const said = text(a.rest).toLowerCase();
+    for (const [f, phrases] of [
+      ['review-tags.html', ['counter stands, table tents, cards and stickers', 'in your logo and colors', 'one tap or scan opens your google review form']],
+      ['online-search-network.html', ['google ads in your own account', 'pay google directly']],
+      ['website-design.html', ['rebuilt around the customers you want', 'call or book on every page']]
+    ]) {
+      const own = (text(page[f]) + ' ' + meta(page[f], 'name', 'description')).toLowerCase();
+      for (const w of phrases) {
+        assert.ok(said.includes(w), `the FAQ says "${w}"`);
+        assert.ok(own.includes(w), `${f} says "${w}" itself`);
+      }
+    }
+  });
+  test('"Is there a page for my kind of practice?": all eight industry pages, named as in tools/industries/*.json', () => {
+    const a = faqQ('Is there a page for my kind of practice?');
+    assert.ok(a, 'the question is on the FAQ');
+    const got = links(a.rest).map((l) => [l.text, l.href]);
+    const files = readdirSync(new URL('tools/industries/', ROOT)).filter((f) => f.endsWith('.json'));
+    const want = files.map((f) => JSON.parse(read('tools/industries/' + f))).sort((x, y) => x.order - y.order).map((j) => [j.name, '/industries/' + j.slug]);
+    assert.equal(want.length, 8);
+    assert.deepEqual(got, want);
+    for (const [, href] of got) assert.ok(PAGES.some((p) => p.url === href), href);
+  });
+  test('no page says "Level 1" or "Level 2": the plain names are "Your team visits" and "Our team visits"', () => {
+    for (const p of PAGES) assert.doesNotMatch(page[p.file].replace(/<!--[\s\S]*?-->/g, ' '), /\bLevel [12]\b/i, p.file);
+    const lv = text(byId(page['referral-network.html'], 'levels'));
+    assert.match(lv, /Your team visits/);
+    assert.match(lv, /Our team visits/);
+    assert.match(text(page['referral-network.html']), /When our team visits, every partner we sign for you signs it\./);
+    assert.match(text(page['faq.html']), /Not when our team visits\. Each partner we sign for you agrees to promote one business of your kind, yours, for as long as you are a client\./);
+  });
+  test('How it works: how matching works, in one short beat, and no claims about software', () => {
+    const m = text(byId(page['referral-network.html'], 'matching'));
+    assert.match(m, /We look for businesses near you that already serve your customers\. Same customers, different service\. You approve the list before anyone is visited\./);
+    assert.match(m, /We never match you with a business that competes with you\./);
+    for (const p of PAGES) {
+      if (p.file === 'terms.html') continue; /* the legal terms keep their own wording */
+      assert.doesNotMatch(text(page[p.file]), /matching software|ranks the best fits|you may not know yet/i, p.file);
+    }
+    for (const id of ['matching', 'choosing', 'route', 'nfc', 'treats', 'month', 'dashboard', 'agreement', 'levels']) assert.match(page['referral-network.html'], new RegExp(`\\sid="${id}"`), `#${id} stays: other pages link here`);
+  });
+});
+
+/* November 23, 2026 (integration): one share image for every page, so one description of it and one set of structured
+   data; and the claims the review found that the terms and the partner agreement do not back, held to their sources. */
+describe('November 23, 2026: the share image, and only what the terms back', () => {
+  const TERMS = text(read('terms.html'));
+  const ldOf = (src) => /<script type="application\/ld\+json">[\s\S]*?<\/script>/.exec(headOf(src))[0];
+  test('every page describes the share image as it is, and carries the home page\'s structured data (the new slogan)', () => {
+    const alt = meta(page['index.html'], 'property', 'og:image:alt');
+    assert.equal(alt, 'The Our Local Network logo above the line: Your customers are already next door.');
+    for (const p of PAGES) {
+      assert.equal(meta(page[p.file], 'property', 'og:image:alt'), alt, p.file);
+      assert.equal(ldOf(page[p.file]), ldOf(page['index.html']), `${p.file}: the same LocalBusiness data as the home page`);
+      assert.doesNotMatch(headOf(page[p.file]), /Boots on the ground/i, `${p.file}: the old slogan is retired from the head`);
+    }
+  });
+  test('the staff card: the owner\'s name for it (tap-to-schedule), and what a tap really opens (the terms)', () => {
+    assert.match(TERMS, /personal tap-and-scan code: an NFC tag and a QR code/);
+    for (const f of ['index.html', 'referral-network.html', 'field-team.html', 'industries/med-spas.html']) assert.match(text(page[f]), /tap-to-schedule card/, f);
+    for (const f of ['index.html', 'industries/med-spas.html']) assert.match(text(page[f]), /A tap or a scan opens your first-visit offer and a short sign-up form\./, f);
+  });
+  test('the displays (the owner, November 2026): when our team visits, we make them with your team, or you make your own', () => {
+    assert.match(text(byId(page['referral-network.html'], 'levels')), /Make your displays with your team, or use the ones you make\./);
+    assert.match(text(page['faq.html']), /When your team visits, your team makes them and drops them off\. When our team visits, we make them with your team, or you make your own\./);
+    assert.match(text(page['field-team.html']), /Your displays, made with us or by you, at the front counter\./);
+  });
+  test('About: the owner\'s story in his own facts (November 23, 2026), nothing added', () => {
+    const st = text(byId(page['about.html'], 'story'));
+    assert.match(st, /Our story It started with my mom.s clinic\./);
+    assert.match(st, /I.m Mustafa Siddiqui\. My mom, Dr\. Farhana, runs a pediatric clinic\. I started out as her marketing team, and I ran the flyers for her business myself\./);
+    assert.match(st, /While I did, her clinic grew from 380K in revenue to more than 800K\. I got to see what that meant for her\./);
+    assert.match(st, /When you work with us, you work with me directly\./);
+    assert.doesNotMatch(st, /families who found her|patients|\$\d/, 'no facts he did not give; the figures are revenue, written without a dollar sign');
+  });
+  test('the partner agreement is signed when our team visits, on About and Field Team too', () => {
+    assert.match(text(mainOf(page['about.html'])), /A one-page partner agreement\s*When our team visits, every partner signs one\./);
+    assert.match(text(mainOf(page['field-team.html'])), /When our team visits, each partner signs a one-page agreement\. You promote each other\./);
+    for (const f of ['about.html', 'field-team.html']) assert.doesNotMatch(text(mainOf(page[f])), /Every partner business signs|agreement with your business/, f);
+  });
+  test('the portals: names and numbers reach your portal and us (the terms), and the runner list keeps the treats out', () => {
+    const t = text(mainOf(page['portals.html']));
+    assert.match(TERMS, /Sign-ups reach your client portal, and us/);
+    assert.match(t, /Sign-ups reach your portal, and us\. In the portal, only you and your front desk see names and numbers\. Our team.s logins see counts, not names\./, 'the terms: sign-ups reach the portal and us; the portal code: admin logins see counts only');
+    assert.doesNotMatch(t, /Only you and your front desk see names/, 'scoped to the portal, never absolute');
+    assert.match(t, /What they are carrying: flyers and staff cards\./);
+    assert.doesNotMatch(t, /treats and referral cards/);
+  });
+  test('no promises the terms do not make: the treats as the terms say them, the expo, the ads', () => {
+    const ft = text(mainOf(page['field-team.html']));
+    assert.match(ft, /Modest by design: coffee, pastries and snacks\. Never gift cards, cash, free services or anything of real value\./);
+    assert.doesNotMatch(ft, /picked up that morning|fresh-baked/i);
+    const expo = text(mainOf(page['expo-vendors.html']));
+    assert.match(expo, /expecting and new parents meet local providers for their family\./);
+    assert.doesNotMatch(expo, /next decade|future patients/i);
+    assert.match(text(mainOf(page['online-search-network.html'])), /Your ads can be there when they do\./);
+  });
+});
