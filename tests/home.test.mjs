@@ -15,7 +15,7 @@ const sec = (id) => {
 describe('home: order and hero', () => {
   test('the sections (November 20, 2026): the general promise, Industries, in person, the portal, Treats for Staff, in writing, the call; no pricing, no map', () => {
     const ids = [...main.replace(/<!--[\s\S]*?-->/g, '').matchAll(/<section\b[^>]*\sid="([^"]+)"/g)].map((m) => m[1]);
-    assert.deepEqual(ids, ['industries', 'in-person', 'dashboard', 'levels', 'treats', 'compliance', 'book']);
+    assert.deepEqual(ids, ['industries', 'network', 'in-person', 'dashboard', 'levels', 'treats', 'compliance', 'book']);
     assert.doesNotMatch(text(main), /\$\d/, 'no prices on the home page');
     const heroAt = main.indexOf('class="hero-orb"');
     assert.ok(heroAt >= 0 && heroAt < main.indexOf('id="industries"'), 'the hero comes first');
@@ -240,3 +240,25 @@ describe('November 23, 2026: honest figures and a testimonial slot', () => {
   });
 });
 
+describe('November 23, 2026: the network, only what is already true', () => {
+  const net = text(sec('network'));
+  test('the head and the two cards say what the terms and the partner agreement say', () => {
+    assert.match(net, /Local businesses, promoting each other\./);
+    assert.match(net, /We bring together businesses that share customers but don.t compete\. On Level 2, every partner signs a one-page agreement: each side promotes the other\./);
+    assert.match(net, /We pick the businesses near you that share your customers and don.t compete with you\. You approve every one before a visit\./);
+    assert.match(net, /On Level 2, each partner promotes one business of your kind: yours, for as long as you are a client\./);
+    assert.match(sec('network'), /href="\/referral-network#agreement"/, 'links to the agreement itself');
+  });
+  test('no claim the network cannot back: no certification, prestige, perks, or members trading customers', () => {
+    assert.doesNotMatch(net, /certif|prestig|exclusive club|\bclub\b|decal|directory|member/i);
+    assert.doesNotMatch(net, /send (each other|you) (customers|patients|clients)|referral swap|refer (each other|patients)/i);
+  });
+  test('the terms still back every line', () => {
+    const terms = text(read('terms.html'));
+    assert.match(terms, /ranks the non-competing ones that share your customers\. You approve the list before any visit/);
+    assert.match(terms, /The partners we sign for you agree to promote one business of your kind, yours, for as long as you are a client\./);
+    const rn = text(read('referral-network.html'));
+    assert.match(rn, /On Level 2, every partner we sign for you signs it\./);
+    assert.match(rn, /Each side promotes the other\./);
+  });
+});

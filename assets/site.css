@@ -1816,3 +1816,7 @@ html:not(.js) .hiw-orb{display:none}
 .own-quote{max-width:760px;margin:clamp(24px,3.4vw,36px) auto 0;text-align:center}
 .own-quote blockquote p{font-family:var(--hero);font-weight:650;font-size:clamp(1.3rem,1.1rem + .9vw,1.8rem);line-height:1.35;color:var(--ink);text-wrap:balance}
 .own-quote figcaption{margin-top:14px;font-size:.95rem;color:var(--ink-2)}
+
+/* The network (November 23, 2026): two cards under a centred head, after Industries */
+.net-cards{max-width:920px;margin-inline:auto}
+.owc-more.center{text-align:center}
