@@ -15,22 +15,26 @@ const sec = (id) => {
 describe('home: order and hero', () => {
   test('the sections (November 20, 2026): the general promise, Industries, in person, the portal, Treats for Staff, in writing, the call; no pricing, no map', () => {
     const ids = [...main.replace(/<!--[\s\S]*?-->/g, '').matchAll(/<section\b[^>]*\sid="([^"]+)"/g)].map((m) => m[1]);
-    assert.deepEqual(ids, ['industries', 'in-person', 'dashboard', 'levels', 'treats', 'compliance', 'book']);
+    assert.deepEqual(ids, ['displays', 'industries', 'in-person', 'dashboard', 'treats', 'compliance', 'book']);
     assert.doesNotMatch(text(main), /\$\d/, 'no prices on the home page');
     const heroAt = main.indexOf('class="hero-orb"');
     assert.ok(heroAt >= 0 && heroAt < main.indexOf('id="industries"'), 'the hero comes first');
   });
-  test('the hero: the owner\'s line (November 21, 2026), with no buttons and no example card', () => {
+  test('the hero: the owner\'s line (November 21, 2026) and the two levels (November 23, 2026), with no buttons and no example card', () => {
     const hero = /<section class="hero-orb"[\s\S]*?<\/section>/.exec(main)[0];
     assert.equal(text(/<h1 id="hero-h">([\s\S]*?)<\/h1>/.exec(hero)[1]), 'Boots on the ground for your local business.');
     assert.equal(text(/<p class="lede">([\s\S]*?)<\/p>/.exec(hero)[1]),
-      'Our team visits the businesses near you and introduces your business to their staff. Every visit and sign-up shows up in your portal.');
-    assert.deepEqual(links(hero), [], 'no links: the Devon\'s gym card came off on October 26, 2026');
+      'We find the businesses near you that share your customers. Then you choose who visits them: your team or ours.');
+    const cards = [...hero.matchAll(/<a class="hero-lv[^"]*" href="([^"]+)">([\s\S]*?)<\/a>/g)];
+    assert.deepEqual(cards.map((m) => m[1]), ['/referral-network#levels', '/referral-network#levels'], 'two level cards, each to the full detail');
+    assert.match(text(cards[0][2]), /^Level 1 Your team visits /);
+    assert.match(text(cards[1][2]), /^Level 2 Our team visits /);
+    assert.deepEqual(links(hero).map((l) => l.href), ['/referral-network#levels', '/referral-network#levels'], 'no other links in the hero');
     assert.doesNotMatch(hero, /class="btn/, 'no buttons');
     assert.doesNotMatch(text(hero), /Devon|30 clients|tap-to-schedule/, 'the owner took the card down');
     assert.doesNotMatch(hero, /proof-row|proof-one/);
     assert.doesNotMatch(text(hero), /Marcus/);
-    assert.doesNotMatch(text(hero), /staff reached|sign-ups|booked/);
+    assert.doesNotMatch(text(hero).replace(/Level [12]/g, ''), /staff reached|sign-ups|booked|\d/, 'no figures in the hero');
   });
   test('the half orb the owner picked (assets/home-orb.js): one canvas, your business at its gold centre, illustrated owners clear of the words', () => {
     const hero = /<section class="hero-orb"[\s\S]*?<\/section>/.exec(main)[0];

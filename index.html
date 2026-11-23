@@ -76,14 +76,41 @@
 <!-- ===== Hero (November 21, 2026): the owner's line over the half orb they picked (assets/home-orb.js, first shipped
      October 24, 2026): a green dot-orb rising from the corner, your business at its gold centre, and the businesses
      around it connecting one by one. Illustrated owners with a first name and a kind of business, never a real person
-     or a real business. They keep clear of the words. ===== -->
+     or a real business. They keep clear of the words. Under the line, the two levels (November 23, 2026). ===== -->
 <section class="hero-orb" aria-labelledby="hero-h">
   <canvas id="orb" role="img" aria-label="Your business at the centre of a half orb, linked one by one to a nearby gym, hair salon, yoga studio, boutique, physical therapy practice and nail salon."></canvas>
   <div class="wrap">
     <div class="hero-copy">
       <h1 id="hero-h">Boots on the ground <em>for your local business.</em></h1>
-      <p class="lede">Our team visits the businesses near you and introduces your business to their staff. Every visit and sign-up shows up in your portal.</p>
+      <p class="lede">We find the businesses near you that share your customers. Then you choose who visits them: your team or ours.</p>
+      <ul class="hero-levels" aria-label="Two levels">
+        <li><a class="hero-lv" href="/referral-network#levels"><span class="lv-k">Level 1</span> <b>Your team visits</b> <span class="hero-lv-t">We pick the businesses. Your team makes and drops off the displays.</span></a></li>
+        <li><a class="hero-lv lv-full" href="/referral-network#levels"><span class="lv-k">Level 2</span> <b>Our team visits</b> <span class="hero-lv-t">We set up your displays every month and track every visit.</span></a></li>
+      </ul>
     </div>
+  </div>
+</section>
+
+<!-- ===== The display photos, first under the hero (November 23, 2026; the owner's photos of real businesses,
+     used unchanged with the owner's permission). The two levels are in the hero; the full detail is on
+     /referral-network#levels. ===== -->
+<section class="section bg-paper" aria-labelledby="displays-h" id="displays">
+  <div class="wrap">
+    <div class="section-head center reveal">
+      <div class="rule" aria-hidden="true"></div>
+      <p class="eyebrow">Displays</p>
+      <h2 id="displays-h">Your displays, <em class="dn-line">on their front desks.</em></h2>
+      <p class="intro">We can make them with your team, or you can make your own. Here are a few we have made.</p>
+    </div>
+    <ul class="own-scenes lv-displays reveal">
+      <li><a class="lv-zoom" href="/assets/img/display-salon.png" aria-label="Open the full-size photo"><picture><source type="image/avif" srcset="/assets/img/display-salon-480.avif 480w, /assets/img/display-salon-768.avif 768w" sizes="(min-width:900px) 330px, (min-width:861px) 30vw, min(440px, calc(100vw - 40px))"><source type="image/webp" srcset="/assets/img/display-salon-480.webp 480w, /assets/img/display-salon-768.webp 768w" sizes="(min-width:900px) 330px, (min-width:861px) 30vw, min(440px, calc(100vw - 40px))"><img src="/assets/img/display-salon.png" width="1208" height="1302" alt="Two counter displays for Wonderland Beauty Salon on a marble front desk, in front of the Ace Dental sign. One has a QR code to book. The other lists the salon&rsquo;s services and prices." loading="lazy" decoding="async"></picture></a>
+        <h3>Hair salon</h3><p>Scan to book, with the service menu beside it.</p></li>
+      <li><a class="lv-zoom" href="/assets/img/display-bakery.png" aria-label="Open the full-size photo"><picture><source type="image/avif" srcset="/assets/img/display-bakery-480.avif 480w, /assets/img/display-bakery-768.avif 768w" sizes="(min-width:900px) 330px, (min-width:861px) 30vw, min(440px, calc(100vw - 40px))"><source type="image/webp" srcset="/assets/img/display-bakery-480.webp 480w, /assets/img/display-bakery-768.webp 768w" sizes="(min-width:900px) 330px, (min-width:861px) 30vw, min(440px, calc(100vw - 40px))"><img src="/assets/img/display-bakery.png" width="1312" height="1199" alt="Two counter displays for Maple &amp; Spice Sweets on a marble front desk, in front of the Niswa sign. One has a QR code to order catering. The other is the catering menu with prices." loading="lazy" decoding="async"></picture></a>
+        <h3>Bakery</h3><p>Scan to order, with the catering menu beside it.</p></li>
+      <li><a class="lv-zoom" href="/assets/img/display-medspa.png" aria-label="Open the full-size photo"><picture><source type="image/avif" srcset="/assets/img/display-medspa-480.avif 480w, /assets/img/display-medspa-768.avif 768w" sizes="(min-width:900px) 330px, (min-width:861px) 30vw, min(440px, calc(100vw - 40px))"><source type="image/webp" srcset="/assets/img/display-medspa-480.webp 480w, /assets/img/display-medspa-768.webp 768w" sizes="(min-width:900px) 330px, (min-width:861px) 30vw, min(440px, calc(100vw - 40px))"><img src="/assets/img/display-medspa.png" width="1312" height="1199" alt="Two counter displays for Glow Aesthetics Med Spa on the front desk of Glendale Heights Family Dental. One says tap here with your phone or scan the QR code to book. The other lists the med spa&rsquo;s services." loading="lazy" decoding="async"></picture></a>
+        <h3>Med spa</h3><p>Tap or scan to book, with the list of services.</p></li>
+    </ul>
+    <p class="owc-more lv-more reveal"><a class="textlink" href="/referral-network#levels">See what each level includes<svg aria-hidden="true"><use href="#i-arrow"/></svg></a></p>
   </div>
 </section>
 
@@ -173,49 +200,6 @@
       <div><dt>Staff sign-ups</dt><dd>64</dd></div>
       <div><dt>Booked by the front desk</dt><dd>37</dd></div>
     </dl>
-  </div>
-</section>
-
-<!-- ===== Two levels, and three counter displays as examples (November 23, 2026; the owner's photos of real
-     businesses, used unchanged with the owner's permission). The full detail is on /referral-network#levels. ===== -->
-<section class="section bg-paper" aria-labelledby="levels-h" id="levels">
-  <div class="wrap">
-    <div class="section-head center reveal">
-      <div class="rule" aria-hidden="true"></div>
-      <p class="eyebrow">Two levels</p>
-      <h2 id="levels-h">Your team or ours. <em class="dn-line">You choose who visits.</em></h2>
-      <p class="intro">Either way, we choose the businesses near you that share your customers.</p>
-    </div>
-    <ul class="lv-cards reveal">
-      <li class="lv-card">
-        <p class="lv-k">Level 1</p>
-        <h3>Your team visits</h3>
-        <ul class="dn-checks">
-          <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>We give you the businesses to visit.</span></li>
-          <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>Your team makes the displays.</span></li>
-          <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>Your team drops them off.</span></li>
-        </ul>
-      </li>
-      <li class="lv-card lv-full">
-        <p class="lv-k">Level 2</p>
-        <h3>Our team visits</h3>
-        <ul class="dn-checks">
-          <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>We make the displays with your team, or you make them.</span></li>
-          <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>Our team sets them up at each business, every month.</span></li>
-          <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>Your portal tracks every visit and <span class="nowrap">sign-up</span>.</span></li>
-        </ul>
-      </li>
-    </ul>
-    <h3 class="lv-gal-h reveal">Displays we have made</h3>
-    <ul class="own-scenes lv-displays reveal">
-      <li><a class="lv-zoom" href="/assets/img/display-salon.png" aria-label="Open the full-size photo"><picture><source type="image/avif" srcset="/assets/img/display-salon-480.avif 480w, /assets/img/display-salon-768.avif 768w" sizes="(min-width:900px) 330px, (min-width:861px) 30vw, min(440px, calc(100vw - 40px))"><source type="image/webp" srcset="/assets/img/display-salon-480.webp 480w, /assets/img/display-salon-768.webp 768w" sizes="(min-width:900px) 330px, (min-width:861px) 30vw, min(440px, calc(100vw - 40px))"><img src="/assets/img/display-salon.png" width="1208" height="1302" alt="Two counter displays for Wonderland Beauty Salon on a marble front desk, in front of the Ace Dental sign. One has a QR code to book. The other lists the salon&rsquo;s services and prices." loading="lazy" decoding="async"></picture></a>
-        <h3>Hair salon</h3><p>Scan to book, with the service menu beside it.</p></li>
-      <li><a class="lv-zoom" href="/assets/img/display-bakery.png" aria-label="Open the full-size photo"><picture><source type="image/avif" srcset="/assets/img/display-bakery-480.avif 480w, /assets/img/display-bakery-768.avif 768w" sizes="(min-width:900px) 330px, (min-width:861px) 30vw, min(440px, calc(100vw - 40px))"><source type="image/webp" srcset="/assets/img/display-bakery-480.webp 480w, /assets/img/display-bakery-768.webp 768w" sizes="(min-width:900px) 330px, (min-width:861px) 30vw, min(440px, calc(100vw - 40px))"><img src="/assets/img/display-bakery.png" width="1312" height="1199" alt="Two counter displays for Maple &amp; Spice Sweets on a marble front desk, in front of the Niswa sign. One has a QR code to order catering. The other is the catering menu with prices." loading="lazy" decoding="async"></picture></a>
-        <h3>Bakery</h3><p>Scan to order, with the catering menu beside it.</p></li>
-      <li><a class="lv-zoom" href="/assets/img/display-medspa.png" aria-label="Open the full-size photo"><picture><source type="image/avif" srcset="/assets/img/display-medspa-480.avif 480w, /assets/img/display-medspa-768.avif 768w" sizes="(min-width:900px) 330px, (min-width:861px) 30vw, min(440px, calc(100vw - 40px))"><source type="image/webp" srcset="/assets/img/display-medspa-480.webp 480w, /assets/img/display-medspa-768.webp 768w" sizes="(min-width:900px) 330px, (min-width:861px) 30vw, min(440px, calc(100vw - 40px))"><img src="/assets/img/display-medspa.png" width="1312" height="1199" alt="Two counter displays for Glow Aesthetics Med Spa on the front desk of Glendale Heights Family Dental. One says tap here with your phone or scan the QR code to book. The other lists the med spa&rsquo;s services." loading="lazy" decoding="async"></picture></a>
-        <h3>Med spa</h3><p>Tap or scan to book, with the list of services.</p></li>
-    </ul>
-    <p class="owc-more lv-more reveal"><a class="textlink" href="/referral-network#levels">See what each level includes<svg aria-hidden="true"><use href="#i-arrow"/></svg></a></p>
   </div>
 </section>
 
