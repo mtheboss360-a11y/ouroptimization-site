@@ -1667,7 +1667,9 @@ html:not(.js) .hiw-orb{display:none}
 .lv-detail .lv-full h4{color:var(--gold-bright)}
 .lv-detail .dn-checks{margin-top:10px}
 .lv-detail .btn{margin-top:26px}
-@media (min-width:860px){.lv-detail{align-items:start}}
+.lv-detail{align-items:start}
+.lv-full :focus-visible{outline-color:var(--gold-bright)}
+.lv-note{margin-top:22px;padding-top:16px;border-top:1px dashed var(--line);font-size:.9rem;line-height:1.5;color:var(--ink-2)}
 .lv-more{display:flex;justify-content:center}
 /* the owner's three counter display photos in the home hero (November 23, 2026): a row of three under the
    line on wider screens, a swipeable row on phones. Each opens the full-size photo. */

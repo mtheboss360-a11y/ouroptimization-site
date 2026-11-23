@@ -36,7 +36,7 @@
   "faq": [
     { "q": "Can we keep the relationships we already have?", "a": "Yes. We skip businesses you already work with unless you ask, and those relationships stay yours." },
     { "q": "Do I need to come along on the visits?", "a": "No. Our field team makes every visit, and you see each stop in your portal." },
-    { "q": "What do you leave at each business?", "a": "We leave your approved printed materials, with permission, and a card for each staff member. We restock every month." }
+    { "q": "What do you leave at each business?", "a": "We leave your approved displays, with permission, and a card for each staff member. We restock every month." }
   ],
   "aboutKey": "salons-barbershops",
   "aboutText": "I'm asking about referral partners for my salon or barbershop."
