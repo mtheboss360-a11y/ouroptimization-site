@@ -40,7 +40,7 @@
 <symbol id="i-arrow" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15M6 13.5l6 6 6-6"/></symbol>
 <symbol id="i-dinner" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="16" r="7"/><circle cx="16" cy="16" r="3.8"/><path d="M3.5 5v6a2 2 0 0 0 4 0V5M5.5 5v22"/><path d="M28 27V5c-2.4 1.6-3.5 4.6-3.5 8.6 0 1.2.9 1.9 2 1.9H28"/></g></symbol>
 <symbol id="i-doc" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 4.5h11l4 4v19h-15z"/><path d="M19.5 4.5v4h4"/><path d="M11.5 14h9M11.5 18h9M11.5 22h6"/></g></symbol>
-<symbol id="i-pen" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22.5 4.5 27.5 9.5 11 26l-6.5 1.5L6 21z"/><path d="m19.5 7.5 5 5M6 21l5 5"/></g></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" d="m5 12.5 4.5 4.5L19 7.5"/></symbol><symbol id="i-pen" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22.5 4.5 27.5 9.5 11 26l-6.5 1.5L6 21z"/><path d="m19.5 7.5 5 5M6 21l5 5"/></g></symbol>
 <symbol id="i-phone" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4.5h4l2 6-3 2a15 15 0 0 0 8.5 8.5l2-3 6 2v4a3 3 0 0 1-3 3C14.5 27 5 17.5 5 7.5a3 3 0 0 1 3-3z"/></g></symbol>
 <symbol id="i-shield" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4.5 6.5 8.2v7.3c0 6 4.1 10.5 9.5 12 5.4-1.5 9.5-6 9.5-12V8.2z"/><path d="m11.8 16.2 3 3 5.6-6"/></g></symbol>
 </svg>
@@ -173,6 +173,49 @@
       <div><dt>Staff sign-ups</dt><dd>64</dd></div>
       <div><dt>Booked by the front desk</dt><dd>37</dd></div>
     </dl>
+  </div>
+</section>
+
+<!-- ===== Two levels, and three counter displays as examples (November 23, 2026; the owner's photos of real
+     businesses, used unchanged with the owner's permission). The full detail is on /referral-network#levels. ===== -->
+<section class="section bg-paper" aria-labelledby="levels-h" id="levels">
+  <div class="wrap">
+    <div class="section-head center reveal">
+      <div class="rule" aria-hidden="true"></div>
+      <p class="eyebrow">Two levels</p>
+      <h2 id="levels-h">Your team or ours. <em class="dn-line">You choose who visits.</em></h2>
+      <p class="intro">Either way, we choose the businesses near you that share your customers.</p>
+    </div>
+    <ul class="lv-cards reveal">
+      <li class="lv-card">
+        <p class="lv-k">Level 1</p>
+        <h3>Your team visits</h3>
+        <ul class="dn-checks">
+          <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>We give you the businesses to visit.</span></li>
+          <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>Your team makes the displays.</span></li>
+          <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>Your team drops them off.</span></li>
+        </ul>
+      </li>
+      <li class="lv-card lv-full">
+        <p class="lv-k">Level 2</p>
+        <h3>Our team visits</h3>
+        <ul class="dn-checks">
+          <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>We make the displays with your team, or you make them.</span></li>
+          <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>Our team sets them up at each business, every month.</span></li>
+          <li><svg aria-hidden="true"><use href="#i-check"/></svg><span>Your portal tracks every visit and <span class="nowrap">sign-up</span>.</span></li>
+        </ul>
+      </li>
+    </ul>
+    <h3 class="lv-gal-h reveal">Displays we have made</h3>
+    <ul class="own-scenes lv-displays reveal">
+      <li><a class="lv-zoom" href="/assets/img/display-salon.png" aria-label="Open the full-size photo"><picture><source type="image/avif" srcset="/assets/img/display-salon-480.avif 480w, /assets/img/display-salon-768.avif 768w" sizes="(min-width:900px) 330px, (min-width:861px) 30vw, min(440px, calc(100vw - 40px))"><source type="image/webp" srcset="/assets/img/display-salon-480.webp 480w, /assets/img/display-salon-768.webp 768w" sizes="(min-width:900px) 330px, (min-width:861px) 30vw, min(440px, calc(100vw - 40px))"><img src="/assets/img/display-salon.png" width="1208" height="1302" alt="Two counter displays for Wonderland Beauty Salon on a marble front desk, in front of the Ace Dental sign. One has a QR code to book. The other lists the salon&rsquo;s services and prices." loading="lazy" decoding="async"></picture></a>
+        <h3>Hair salon</h3><p>Scan to book, with the service menu beside it.</p></li>
+      <li><a class="lv-zoom" href="/assets/img/display-bakery.png" aria-label="Open the full-size photo"><picture><source type="image/avif" srcset="/assets/img/display-bakery-480.avif 480w, /assets/img/display-bakery-768.avif 768w" sizes="(min-width:900px) 330px, (min-width:861px) 30vw, min(440px, calc(100vw - 40px))"><source type="image/webp" srcset="/assets/img/display-bakery-480.webp 480w, /assets/img/display-bakery-768.webp 768w" sizes="(min-width:900px) 330px, (min-width:861px) 30vw, min(440px, calc(100vw - 40px))"><img src="/assets/img/display-bakery.png" width="1312" height="1199" alt="Two counter displays for Maple &amp; Spice Sweets on a marble front desk, in front of the Niswa sign. One has a QR code to order catering. The other is the catering menu with prices." loading="lazy" decoding="async"></picture></a>
+        <h3>Bakery</h3><p>Scan to order, with the catering menu beside it.</p></li>
+      <li><a class="lv-zoom" href="/assets/img/display-medspa.png" aria-label="Open the full-size photo"><picture><source type="image/avif" srcset="/assets/img/display-medspa-480.avif 480w, /assets/img/display-medspa-768.avif 768w" sizes="(min-width:900px) 330px, (min-width:861px) 30vw, min(440px, calc(100vw - 40px))"><source type="image/webp" srcset="/assets/img/display-medspa-480.webp 480w, /assets/img/display-medspa-768.webp 768w" sizes="(min-width:900px) 330px, (min-width:861px) 30vw, min(440px, calc(100vw - 40px))"><img src="/assets/img/display-medspa.png" width="1312" height="1199" alt="Two counter displays for Glow Aesthetics Med Spa on the front desk of Glendale Heights Family Dental. One says tap here with your phone or scan the QR code to book. The other lists the med spa&rsquo;s services." loading="lazy" decoding="async"></picture></a>
+        <h3>Med spa</h3><p>Tap or scan to book, with the list of services.</p></li>
+    </ul>
+    <p class="owc-more lv-more reveal"><a class="textlink" href="/referral-network#levels">See what each level includes<svg aria-hidden="true"><use href="#i-arrow"/></svg></a></p>
   </div>
 </section>
 

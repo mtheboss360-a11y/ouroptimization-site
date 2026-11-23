@@ -244,6 +244,8 @@ describe('call.js: ?about= prefill', () => {
     'google-ads': "I'm asking about Google Ads in my own account.",
     // November 20, 2026: the Field Team page and the eight industry pages (the industry keys and messages come from tools/industries/*.json)
     'field-team': "I'm asking about the field team.",
+    'level-1': "I'm interested in Level 1: my team visits the businesses.",
+    'level-2': "I'm interested in Level 2: your team visits the businesses.",
     'auto-shops': "I'm asking about referral partners for my auto shop.",
     'chiropractic-physical-therapy': "I'm asking about referral partners for my chiropractic or physical therapy practice.",
     'dental': "I'm asking about referral partners for my dental practice.",

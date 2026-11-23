@@ -1645,3 +1645,30 @@ body>main{flex:1 0 auto}
    square on How It Works without JavaScript */
 @media (min-width:640px) and (max-width:859.98px){.home-steps>li:last-child{grid-column:1/-1}}
 html:not(.js) .hiw-orb{display:none}
+
+/* =====================================================================================================
+   November 23, 2026: two levels. Level 1, your team visits; Level 2, our team visits. A short version on
+   the home page (#levels) with the owner's three counter display photos, and the full detail on How it
+   works (#levels).
+   ===================================================================================================== */
+.lv-k{font:700 .78rem/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--gold-sm);margin-bottom:10px}
+.lv-cards{list-style:none;display:grid;gap:16px;max-width:980px;margin:clamp(28px,4vw,44px) auto 0}
+@media (min-width:760px){.lv-cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.lv-card{padding:clamp(22px,3vw,32px);border-radius:18px;background:var(--surface);border:1px solid var(--line);box-shadow:var(--sh-1)}
+.lv-card h3{font-size:1.35rem;line-height:1.2}
+.lv-card .dn-checks{margin-top:14px;grid-template-columns:minmax(0,1fr)}
+.lv-full{background:radial-gradient(120% 120% at 50% 0%,#2A5D46 0%,var(--accent) 52%,#173D2E 100%);border-color:transparent;color:#CFDDD3}
+.lv-full h3{color:#fff}
+.lv-full .lv-k{color:var(--gold-bright)}
+.lv-full .dn-checks{border-top-color:rgba(255,255,255,.18)}
+.lv-full .dn-checks li{color:#E8EFE9;border-bottom-color:rgba(255,255,255,.18)}
+.lv-full .dn-checks svg{color:var(--gold-bright)}
+.lv-gal-h{text-align:center;font-size:1.25rem;margin:clamp(48px,6vw,68px) 0 clamp(18px,2.4vw,26px)}
+.lv-displays img{aspect-ratio:1/1;object-fit:contain;background:var(--surface)}
+.lv-zoom{display:block;border-radius:10px}
+.lv-detail h4{margin-top:24px;font:700 .8rem/1.2 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2)}
+.lv-detail .lv-full h4{color:var(--gold-bright)}
+.lv-detail .dn-checks{margin-top:10px}
+.lv-detail .btn{margin-top:26px}
+@media (min-width:860px){.lv-detail{align-items:start}}
+.lv-more{display:flex;justify-content:center}
