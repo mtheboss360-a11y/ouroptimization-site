@@ -74,7 +74,7 @@
   const hit = (a, b) => a[0] < b[2] && a[2] > b[0] && a[1] < b[3] && a[3] > b[1];
   function layout() {
     const c = canvas.getBoundingClientRect(), pad = 14;
-    const taken = [...hero.querySelectorAll('h1, .lede, .actions, .proof-row, .eyebrow, .hero-levels')].map(el => {
+    const taken = [...hero.querySelectorAll('h1, .lede, .actions, .proof-row, .eyebrow, .hero-displays')].map(el => {
       const r = el.getBoundingClientRect();
       return [r.left - c.left - pad, r.top - c.top - pad, r.right - c.left + pad, r.bottom - c.top + pad];
     });

@@ -1663,24 +1663,26 @@ html:not(.js) .hiw-orb{display:none}
 .lv-full .dn-checks{border-top-color:rgba(255,255,255,.18)}
 .lv-full .dn-checks li{color:#E8EFE9;border-bottom-color:rgba(255,255,255,.18)}
 .lv-full .dn-checks svg{color:var(--gold-bright)}
-.lv-displays img{aspect-ratio:1/1;object-fit:contain;background:var(--surface)}
-.lv-zoom{display:block;border-radius:10px}
 .lv-detail h4{margin-top:24px;font:700 .8rem/1.2 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2)}
 .lv-detail .lv-full h4{color:var(--gold-bright)}
 .lv-detail .dn-checks{margin-top:10px}
 .lv-detail .btn{margin-top:26px}
 @media (min-width:860px){.lv-detail{align-items:start}}
 .lv-more{display:flex;justify-content:center}
-.lv-displays{margin-top:clamp(28px,4vw,44px)}
-/* the two levels in the home hero: two small cards under the line, side by side even on phones */
-.hero-levels{list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;max-width:600px;margin-top:26px}
-.hero-lv{display:flex;flex-direction:column;gap:4px;height:100%;padding:14px 16px 16px;border-radius:14px;background:rgba(255,255,255,.94);border:1px solid var(--line);box-shadow:0 10px 28px -18px rgba(22,49,31,.35);color:var(--ink);text-decoration:none;transition:transform .15s ease,box-shadow .15s ease,border-color .15s ease}
-.hero-lv:hover{transform:translateY(-2px);border-color:#9DB3A2;box-shadow:0 16px 34px -18px rgba(22,49,31,.45)}
-.hero-lv .lv-k{margin-bottom:2px;font-size:.7rem}
-.hero-lv b{font-family:var(--hero);font-weight:750;font-size:clamp(1rem,.95rem + .3vw,1.15rem);line-height:1.2}
-.hero-lv-t{font-size:.9rem;line-height:1.45;color:var(--ink-2)}
-.hero-lv.lv-full{background:radial-gradient(120% 120% at 50% 0%,#2A5D46 0%,var(--accent) 52%,#173D2E 100%);border-color:transparent}
-.hero-lv.lv-full b{color:#fff}
-.hero-lv.lv-full .hero-lv-t{color:#D9E5DC}
-.hero-lv.lv-full:hover{border-color:transparent}
-@media (max-width:380px){.hero-lv{padding:12px 12px 14px}.hero-lv-t{font-size:.84rem}}
+/* the owner's three counter display photos in the home hero (November 23, 2026): a row of three under the
+   line on wider screens, a swipeable row on phones. Each opens the full-size photo. */
+.hero-displays{margin-top:28px;max-width:700px}
+.hero-displays ul{list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.hero-displays li{min-width:0}
+.hero-displays a{display:block;border-radius:14px;overflow:hidden;background:#fff;border:1px solid var(--line);box-shadow:0 16px 34px -20px rgba(22,49,31,.5);transition:transform .15s ease,box-shadow .15s ease}
+.hero-displays a:hover{transform:translateY(-3px);box-shadow:0 22px 40px -20px rgba(22,49,31,.55)}
+.hero-displays img{display:block;width:100%;height:auto;aspect-ratio:1/1;object-fit:cover}
+.hero-dsp-k{display:block;margin-top:8px;font:650 .86rem/1.2 var(--sans);color:var(--ink)}
+.hero-displays figcaption{margin-top:12px;font-size:.88rem;color:var(--ink-2)}
+@media (max-width:759.98px){
+  .hero-displays{margin-inline:calc(var(--gutter) * -1)}
+  .hero-displays ul{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px var(--gutter) 10px;scrollbar-width:none;overscroll-behavior-x:contain}
+  .hero-displays ul::-webkit-scrollbar{display:none}
+  .hero-displays li{flex:0 0 68%;scroll-snap-align:start;scroll-margin-inline:var(--gutter)}
+  .hero-displays figcaption{margin-top:6px;padding-inline:var(--gutter)}
+}
