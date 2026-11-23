@@ -12,7 +12,7 @@ Netlify site "ouroptimization", linked to this repo, branch `main`. No build com
 
 | URL | File | In the menu | Notes |
 | --- | --- | --- | --- |
-| `/` | `index.html` | Home | Hero (no buttons): "Boots on the ground for your local business." over the half orb (`assets/home-orb.js`). Then Industries (cards to the industry pages), in person, the portal on the green band, Treats for Staff, in writing, the closing call. |
+| `/` | `index.html` | Home | Hero (no buttons; November 23, 2026, the outcome first): "New customers and bookings from the businesses near you." then "Every month our team visits the businesses around you, so their staff send their customers your way." over the half orb (`assets/home-orb.js`). Then Industries (cards to the industry pages), in person, the portal on the green band, Treats for Staff, in writing, the closing call. |
 | `/field-team` | `field-team.html` | Field Team | What the field team does on every visit: Treats for Staff, drop-offs, the codes, every stop tracked. Was `/boots-on-the-ground` (301). |
 | `/#industries` | (home section) | Industries | The menu item jumps to the home page's Industries cards. `/industries` itself still 301s home (an old page). |
 | `/industries/<slug>` | `industries/<slug>.html` | no | Eight industry pages from one template: med-spas, dental, chiropractic-physical-therapy, gyms-fitness-studios, salons-barbershops, restaurants-cafes, home-services, auto-shops. Generated; do not edit by hand. |
@@ -29,7 +29,7 @@ Netlify site "ouroptimization", linked to this repo, branch `main`. No build com
 | `/thanks` | `thanks.html` | no | The call form's confirmation (noindex). |
 | (any unknown URL) | `404.html` | no | Served with status 404. |
 
-Every page shares the same header (the menu: Home, Field Team, Industries, How it works, FAQ, About, Contact, and the Client Portal button to https://www.ournetworkportal.com; on phones the bottom tab bar: Home, Field Team, Industries, How it works, More) and the same one-line footer ("Our Local Network is a service of OUR Optimization LLC.", Privacy Policy, Terms of Service).
+Every page shares the same header (the menu: Home, Field Team, Industries, How it works, FAQ, About, Contact, then a Book a call button to /contact (in the pinned menu row on desktop) and a quieter Client Portal button to https://www.ournetworkportal.com, which reads "Portal" on phones and moves under More below 380px (November 23, 2026); on phones the bottom tab bar: Home, Field Team, Industries, How it works, More) and the same one-line footer ("Our Local Network is a service of OUR Optimization LLC.", Privacy Policy, Terms of Service).
 
 
 November 21, 2026: same pages, tabs and section order as before, simpler wording on every page, and no pricing anywhere: `/pricing` (and `/pricing.html`) 301s to `/contact`. The section that held only campaign length and commitment terms came off How it works.
@@ -61,7 +61,7 @@ The healthcare pages (med-spas, dental, chiropractic-physical-therapy) carry `<!
 The home hero carries the half orb the owner picked (`assets/home-orb.js`, first shipped October 24, 2026): a green dot-orb rising from the corner, your business at its gold centre, and six illustrated owners (a first name and a kind of business, never a real person or business) connecting to it. It builds once per visit, keeps the owners clear of the words and sits above the phone tab bar. How it works uses the same orb, whole (`assets/match-orb.js`).
 
 
-Four portal screens (`assets/img/portal2-*`, the portal's sample account: invented businesses and figures) behind tabs styled as the portal's side rail. No visible sample labels (the owner's call, November 21, 2026); the alt text says the screens are from the sample account.
+Four portal screens (`assets/img/portal2-*`, the portal's demo account: invented businesses and figures; the five figures under them, 35, 207, 262, 64 and 37, are recomputed from the portal's samples/field-log.sample.json and labelled "Example results from a demo account." on the home and Field Team pages, November 23, 2026) behind tabs styled as the portal's side rail. No visible sample labels (the owner's call, November 21, 2026); the alt text says the screens are from the sample account.
 
 
 ## Brand assets
@@ -94,7 +94,8 @@ Fonts: headlines in Plus Jakarta Sans and Inter as the text fallback, both self-
 - Treats for Staff: modest coffee, pastries and snacks for the whole staff of each partner business on every visit. Never gift cards, cash, free services or anything of real value. Never connected to referrals, sign-ups or results anywhere except the one FAQ line that says they are shared whether or not anyone refers a customer.
 - Name-tracked sign-ups are described only as measuring campaign performance for the client, never as a basis for rewarding anyone.
 - No legal conclusions and no claims of attorney review. Healthcare pages carry the attorney-review TODO comment.
-- No placeholder text anywhere, and no pricing: no prices, trial, plans or money-back guarantee on any page, and nothing links to `/pricing` (November 21, 2026; the terms keep how prices are agreed in writing, with no figures).
+- The 30-day guarantee appears once, in the FAQ, word for word as in the terms (November 23, 2026). A testimonial section waits, commented out, in index.html until the owner gives a real quote.
+- No placeholder text anywhere, and no pricing: no prices, trial, plans or money-back guarantee on any page (apart from that one FAQ guarantee), and nothing links to `/pricing` (November 21, 2026; the terms keep how prices are agreed in writing, with no figures).
 - Plain words, short sentences; each page explains its own topic and points to the others instead of repeating them.
 - Copy uses no em or en dashes.
 - `node --test` holds a list of retired words that must appear nowhere in the files the site serves.

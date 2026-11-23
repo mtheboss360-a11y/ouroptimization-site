@@ -142,7 +142,7 @@ ${d.partners.map((p) => `      <li><h3>${esc(p.name)}</h3><p>${esc(p.why)}</p></
   const focused = d.focused === true;
   const visitsHead = focused
     ? `<p class="eyebrow">On every visit</p>
-      <h2 id="visits-h">Treats for the staff <em class="dn-line">who see your clients.</em></h2>`
+      <h2 id="visits-h">Coffee and treats <em class="dn-line">for the whole staff.</em></h2>`
     : `<p class="eyebrow">In person</p>
       <h2 id="visits-h">Coffee, treats <em class="dn-line">and a real hello.</em></h2>`;
   const sceneList = focused ? '' : `
@@ -176,7 +176,7 @@ ${d.treatExamples.map((t) => `        <li>${esc(t)}</li>`).join('\n')}
   const measure = care ? ' Sign-ups show how your campaign is doing and are never used to reward anyone.' : '';
   out.push(`
 <section class="section bg-paper" aria-labelledby="portal-h" id="portal">
-  <div class="wrap ind-portal">
+  <div class="wrap ind-portal${focused ? ' ind-portal-solo' : ''}">
     <div class="reveal">
       <p class="eyebrow">Your client portal</p>
       <h2 id="portal-h">${focused ? 'Every <span class="nowrap">sign-up</span>, <em class="dn-line">straight to your front desk.</em>' : 'Every stop and every sign-up, <em class="dn-line">in one place.</em>'}</h2>

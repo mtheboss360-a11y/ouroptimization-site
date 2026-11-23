@@ -1788,8 +1788,10 @@ html:not(.js) .hiw-orb{display:none}
 .btn-head.btn-portal{gap:0;background:#fff;border-color:var(--line-2,#C9D6CB);color:var(--ink)}
 .btn-head.btn-portal:hover{background:var(--paper);border-color:#8A9687;color:var(--ink)}
 @media (min-width:1000px){
-  .btn-head.btn-book{grid-row:1;grid-column:3}
-  .btn-head.btn-portal{grid-row:1;grid-column:4;margin-left:-12px}
+  /* the top row scrolls away and the menu row stays pinned, so Book a call sits at the end of the menu row */
+  .site-nav{grid-column:1/4}
+  .btn-head.btn-book{grid-row:2;grid-column:4;min-height:40px}
+  .btn-head.btn-portal{grid-row:1;grid-column:3/5;justify-self:end;margin-left:0}
 }
 @media (max-width:759.98px){
   .js .btn-head{padding:0 13px;font-size:.8rem;min-height:42px}
@@ -1802,6 +1804,12 @@ html:not(.js) .hiw-orb{display:none}
   .js .site-nav .nav-cta{display:list-item}
   .js .site-nav .nav-cta a{font-weight:600;color:var(--gold-sm)}
 }
+@media (max-width:559.98px){
+  /* without JavaScript (or before it loads) phones still get Book a call, and Client Portal in the menu */
+  html:not(.js) .btn-head.btn-book{display:inline-flex}
+  html:not(.js) .site-nav .nav-cta{display:list-item}
+}
+@media (min-width:900px){.ind-portal.ind-portal-solo{grid-template-columns:minmax(0,1fr);max-width:760px;text-align:center}}
 .own-stats-note{margin:clamp(36px,4.6vw,56px) 0 0;text-align:center;font-size:.86rem;letter-spacing:.02em;color:var(--ink-2)}
 .owc-dash-band .own-stats-note,.own-track .own-stats-note{color:rgba(243,246,242,.78)}
 .own-stats-note+.own-stats{margin-top:14px}

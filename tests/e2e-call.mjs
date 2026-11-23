@@ -374,7 +374,7 @@ await scenario('the med spa page (November 23, 2026): outcome first, no scenes a
 });
 
 await scenario('Book a call in the header on every page size (November 23, 2026); Client Portal stays reachable', async () => {
-  for (const width of [320, 390, 768, 1280]) {
+  for (const width of [320, 390, 768, 1280, 1440]) {
     const s = await open({ path: '/faq', width, height: 844 });
     const book = await s.page.$eval('.site-header .btn-book', (a) => { const r = a.getBoundingClientRect(); return { href: a.getAttribute('href'), shown: getComputedStyle(a).display !== 'none' && r.width > 0, inView: r.top >= 0 && r.bottom <= innerHeight && r.right <= innerWidth }; });
     assert.deepEqual(book, { href: '/contact', shown: true, inView: true }, `${width}px`);
@@ -382,8 +382,16 @@ await scenario('Book a call in the header on every page size (November 23, 2026)
     if (width >= 380) assert.equal(portal, true, `${width}px: Client Portal in the header`);
     else assert.equal(await s.page.$eval('.site-nav .nav-cta a', (a) => a.getAttribute('href')), 'https://www.ournetworkportal.com', `${width}px: Client Portal under More`);
     assert.equal(await s.page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true, `${width}px: no sideways scroll`);
+    if (width >= 1000) {
+      await s.page.evaluate(() => window.scrollTo({ top: 1500, behavior: 'instant' }));
+      await s.page.waitForTimeout(150);
+      assert.equal(await s.page.$eval('.site-header .btn-book', (a) => { const r = a.getBoundingClientRect(); return r.top >= 0 && r.bottom <= innerHeight; }), true, `${width}px: Book a call stays on screen after scrolling`);
+    }
     await s.close();
   }
+  const nojs = await open({ path: '/faq', width: 390, height: 844, js: false });
+  assert.equal(await nojs.page.$eval('.site-header .btn-book', (a) => getComputedStyle(a).display !== 'none' && a.getBoundingClientRect().top >= 0), true, 'without JavaScript: Book a call in the header on a phone');
+  await nojs.close();
 });
 
 await scenario('industry pages: the portal screen shows on phones and desktops, unlabelled, with no sideways scroll', async () => {
