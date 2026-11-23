@@ -264,7 +264,7 @@ await scenario('the renamed service pages: each old path, with and without .html
     const { page, jsErrors, missing, close } = await open({ path: `${old}#how` });
     assert.equal(new URL(page.url()).pathname, now);
     assert.equal(await page.$$eval('#site-nav a[aria-current="page"]', (a) => (a[0] ? a[0].textContent.trim() : null)), tab);
-    assert.match(await page.title(), / \| Our Wellness Network$/);
+    assert.match(await page.title(), / \| Our Local Network$/);
     assert.deepEqual(jsErrors, []);
     assert.deepEqual(missing, [], 'every stylesheet, script, font and image loads');
     await close();
@@ -277,7 +277,7 @@ await scenario('the renamed service pages: each old path, with and without .html
   }
 });
 
-await scenario('the header shows the Our Wellness Network logo, loaded and crisp (the footer is one legal line)', async () => {
+await scenario('the header shows the Our Local Network logo, loaded and crisp (the footer is one legal line)', async () => {
   const { page, close } = await open({ path: '/' });
   await page.waitForFunction(() => [...document.querySelectorAll('img[src*="own-logo"]')].every((i) => i.complete && i.naturalWidth === 360));
   const logos = await page.$$eval('img[src*="own-logo"]', (imgs) => imgs.map((i) => ({ src: i.getAttribute('src'), cur: i.currentSrc, alt: i.alt, w: i.getBoundingClientRect().width })));
@@ -285,7 +285,7 @@ await scenario('the header shows the Our Wellness Network logo, loaded and crisp
   for (const l of logos) {
     assert.equal(l.src, '/assets/img/own-logo-360.png');
     assert.match(l.cur, /own-logo-360\.webp$/, 'the WebP is used where supported');
-    assert.equal(l.alt, 'Our Wellness Network');
+    assert.equal(l.alt, 'Our Local Network');
     assert.ok(l.w > 0 && l.w <= 180, `shown at ${l.w}px from a 360px file, so it stays sharp on 2x screens`);
   }
   await close();

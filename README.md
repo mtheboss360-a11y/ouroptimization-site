@@ -1,6 +1,6 @@
 # ouroptimization.com
 
-**Our Wellness Network** ("Boots on the ground for your local business.") is a service of OUR Optimization LLC, a local company in Chicago's western suburbs (Oak Brook, Lombard, Elmhurst, Naperville, Downers Grove, Hinsdale). Our team visits the businesses near a client, introduces the client's business to their staff, and tracks every visit and sign-up in the client portal.
+**Our Local Network** ("Boots on the ground for your local business.") is a service of OUR Optimization LLC, a local company in Chicago's western suburbs (Oak Brook, Lombard, Elmhurst, Naperville, Downers Grove, Hinsdale). Our team visits the businesses near a client, introduces the client's business to their staff, and tracks every visit and sign-up in the client portal.
 
 Static HTML/CSS/JS, no build step on Netlify, no dependencies, no third-party requests. The industry pages are generated locally by `tools/build-industries.mjs` and committed (see Industry pages).
 
@@ -29,7 +29,7 @@ Netlify site "ouroptimization", linked to this repo, branch `main`. No build com
 | `/thanks` | `thanks.html` | no | The call form's confirmation (noindex). |
 | (any unknown URL) | `404.html` | no | Served with status 404. |
 
-Every page shares the same header (the menu: Home, Field Team, Industries, How it works, FAQ, About, Contact, and the Client Portal button to https://www.ournetworkportal.com; on phones the bottom tab bar: Home, Field Team, Industries, How it works, More) and the same one-line footer ("Our Wellness Network is a service of OUR Optimization LLC.", Privacy Policy, Terms of Service).
+Every page shares the same header (the menu: Home, Field Team, Industries, How it works, FAQ, About, Contact, and the Client Portal button to https://www.ournetworkportal.com; on phones the bottom tab bar: Home, Field Team, Industries, How it works, More) and the same one-line footer ("Our Local Network is a service of OUR Optimization LLC.", Privacy Policy, Terms of Service).
 
 
 November 21, 2026: same pages, tabs and section order as before, simpler wording on every page, and no pricing anywhere: `/pricing` (and `/pricing.html`) 301s to `/contact`. The section that held only campaign length and commitment terms came off How it works.
@@ -66,7 +66,7 @@ Four portal screens (`assets/img/portal2-*`, the portal's sample account: invent
 
 ## Brand assets
 
-- Logo lockup (the infinity-W mark over "Our Wellness Network", in Playfair Display): `assets/img/owc-logo-360.{webp,png}` in the header, `assets/img/own-logo.png` (600 px) for structured data.
+- Logo lockup (the infinity-W mark over "Our Local Network", in Playfair Display): `assets/img/owc-logo-360.{webp,png}` in the header, `assets/img/own-logo.png` (600 px) for structured data.
 - The mark alone: `assets/img/owc-mark-light.{webp,png}` for light backgrounds, `assets/img/owc-mark-on-dark.{webp,png}` for dark ones (the closing band).
 - Favicons (the mark on a cream square): `favicon.ico`, `apple-touch-icon.png`, `assets/owo-favicon.ico`, `assets/owo-icon-{16,32,192,512}.png`, `assets/owo-apple-touch-icon.png`, `assets/favicon-*.png`, `assets/icon-*.png`; the manifest is `site.webmanifest`.
 - Share image: `assets/img/og-network.jpg` (1200 x 630): the logo above "Boots on the ground for your local business." (November 21, 2026). The old share images and the old logo 301 to the new ones.
@@ -87,7 +87,7 @@ Fonts: headlines in Plus Jakarta Sans and Inter as the text fallback, both self-
 
 ## Content rules
 
-- The brand is Our Wellness Network; the company in legal text is OUR Optimization LLC. Service area: Chicago's western suburbs.
+- The brand is Our Local Network; the company in legal text is OUR Optimization LLC. Service area: Chicago's western suburbs.
 - Never on the site: invented reviews, testimonials, statistics, scores or results, and medical claims. Examples are labelled "Example".
 - The phone number appears only on the home page's closing call, `/contact` and `/thanks` (plus the structured data).
 - The client's team calls the leads; the site never says we do. Nobody is paid per referral or per customer.

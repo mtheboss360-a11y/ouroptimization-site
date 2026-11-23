@@ -1,5 +1,5 @@
 // The whole site: every page's head, header, footer and structured data; the words that must never appear;
-// internal links, images and redirects; the sitemap; the forms. October 23, 2026: Our Wellness Network.
+// internal links, images and redirects; the sitemap; the forms. October 23, 2026: Our Local Network.
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readdirSync } from 'node:fs';
@@ -39,7 +39,7 @@ describe('every page: head', () => {
       assert.match(src, /^<!doctype html>\n<html lang="en"/);
       const title = text(/<title>([\s\S]*?)<\/title>/.exec(src)[1]);
       assert.ok(title.length >= 15 && title.length <= 70, `title length ${title.length}: ${title}`);
-      if (!p.brandOnly) assert.match(title, /Our Wellness Network/); // the expo page keeps its own event title
+      if (!p.brandOnly) assert.match(title, /Our Local Network/); // the expo page keeps its own event title
       assert.ok(!titles.has(title), `title also used by ${titles.get(title)}`);
       titles.set(title, p.file);
       const desc = meta(src, 'name', 'description');
@@ -54,7 +54,7 @@ describe('every page: head', () => {
         assert.equal(meta(src, 'property', 'og:url'), ORIGIN + p.url);
       }
       assert.equal(meta(src, 'property', 'og:type'), 'website');
-      assert.equal(meta(src, 'property', 'og:site_name'), 'Our Wellness Network');
+      assert.equal(meta(src, 'property', 'og:site_name'), 'Our Local Network');
       assert.equal(meta(src, 'property', 'og:title'), meta(src, 'name', 'twitter:title'));
       assert.ok(meta(src, 'property', 'og:description'));
       assert.equal(meta(src, 'property', 'og:image'), `${ORIGIN}/assets/img/og-network.jpg`);
@@ -76,7 +76,7 @@ describe('every page: head', () => {
       assert.ok(m, 'JSON-LD in the head');
       const d = JSON.parse(m[1]);
       assert.equal(d['@type'], 'LocalBusiness');
-      assert.equal(d.name, 'Our Wellness Network');
+      assert.equal(d.name, 'Our Local Network');
       assert.equal(d.legalName, 'OUR Optimization LLC');
       assert.equal(d.telephone, '+1-331-271-6851');
       assert.match(d.areaServed.name, /^Chicago's western suburbs/);
@@ -94,8 +94,8 @@ describe('every page: header and footer', () => {
     const src = page[p.file];
     test(`${p.file}: the header`, () => {
       const h = headerOf(src);
-      assert.match(h, /<a aria-label="Our Wellness Network home" class="brand" href="\/">/);
-      assert.match(h, /<img src="\/assets\/img\/own-logo-360\.png" alt="Our Wellness Network" width="360" height="130">/);
+      assert.match(h, /<a aria-label="Our Local Network home" class="brand" href="\/">/);
+      assert.match(h, /<img src="\/assets\/img\/own-logo-360\.png" alt="Our Local Network" width="360" height="130">/);
       if (p.brandOnly) {
         assert.doesNotMatch(h, /<nav/);
         return;
@@ -120,7 +120,7 @@ describe('every page: header and footer', () => {
     test(`${p.file}: the footer names the company`, () => {
       const f = text(footerOf(src));
       assert.match(f, /© 2026 OUR Optimization LLC/);
-      assert.match(f, /Our Wellness Network is a service of OUR Optimization LLC\./, 'the brand line, the same everywhere (November 20, 2026)');
+      assert.match(f, /Our Local Network is a service of OUR Optimization LLC\./, 'the brand line, the same everywhere (November 20, 2026)');
       assert.deepEqual(links(footerOf(src)).map((l) => l.href), ['/privacy', '/terms']);
     });
   }
@@ -292,7 +292,7 @@ describe('assets', () => {
   });
   test('the favicon set and the manifest carry the new name', () => {
     const m = JSON.parse(read('site.webmanifest'));
-    assert.equal(m.name, 'Our Wellness Network');
+    assert.equal(m.name, 'Our Local Network');
     for (const f of ['favicon.ico', 'assets/owo-favicon.ico', 'assets/owo-icon-16.png', 'assets/owo-icon-32.png', 'assets/owo-icon-192.png', 'assets/owo-icon-512.png', 'assets/owo-apple-touch-icon.png', 'apple-touch-icon.png']) assert.ok(existsSync(new URL(f, ROOT)), f);
   });
 });

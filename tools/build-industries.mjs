@@ -37,7 +37,7 @@ export function loadIndustries() {
     if ((d.notes || []).length !== 3) problems.push(`${d.slug}: needs exactly 3 notes`);
     if ((d.faq || []).length !== 3) problems.push(`${d.slug}: needs exactly 3 questions`);
     const t = d.title || '';
-    if (t.length < 15 || t.length > 70 || !t.endsWith(' | Our Wellness Network')) problems.push(`${d.slug}: title "${t}" (${t.length})`);
+    if (t.length < 15 || t.length > 70 || !t.endsWith(' | Our Local Network')) problems.push(`${d.slug}: title "${t}" (${t.length})`);
     const desc = esc(d.description || '');
     if (desc.length < 70 || desc.length > 175) problems.push(`${d.slug}: description is ${desc.length} characters as HTML (70-175)`);
     if (TOWNS.filter((x) => (d.description || '').includes(x)).length < 2) problems.push(`${d.slug}: the description names fewer than two towns`);
@@ -261,7 +261,7 @@ export function renderPage(d) {
 <link rel="manifest" href="/site.webmanifest?v=owc1">
 <link rel="canonical" href="${ORIGIN}${url}">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="Our Wellness Network">
+<meta property="og:site_name" content="Our Local Network">
 <meta property="og:title" content="${title}">
 <meta property="og:description" content="${desc}">
 <meta property="og:url" content="${ORIGIN}${url}">
