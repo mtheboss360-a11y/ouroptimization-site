@@ -152,7 +152,7 @@ ${d.partners.map((p) => `      <li><h3>${esc(p.name)}</h3><p>${esc(p.why)}</p></
       <li>${scenes.chat}
         <h3>Real people, in person</h3></li>
       <li>${scenes.tap}
-        <h3>A card for every staff member</h3></li>
+        <h3>A digital <span class="nowrap">sign-up</span> sheet for every business</h3></li>
     </ul>
     <div class="ind-treats reveal">
       <p class="dg-k">What we bring</p>
