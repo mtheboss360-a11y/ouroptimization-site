@@ -25,7 +25,7 @@ describe('home: order and hero', () => {
     /* November 23, 2026: the outcome first, the how second; two short sentences */
     assert.equal(text(/<h1 id="hero-h">([\s\S]*?)<\/h1>/.exec(hero)[1]), 'New customers and bookings from the businesses near you.');
     assert.equal(text(/<p class="lede">([\s\S]*?)<\/p>/.exec(hero)[1]),
-      'Every month our team visits local gyms, salons and shops, introduces your business to the staff and puts your display on the front desk.');
+      'Every month our team visits local businesses that recommend you to their customers.');
     const photos = ['salon', 'bakery', 'medspa'];
     assert.deepEqual(links(hero).map((l) => l.href), photos.map((n) => `/assets/img/display-${n}.png`), 'the only links open the full-size photos');
     for (const n of photos) assert.ok(existsSync(new URL(`./assets/img/display-${n}.png`, ROOT)), n);
