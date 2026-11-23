@@ -1,5 +1,5 @@
 // The whole site: every page's head, header, footer and structured data; the words that must never appear;
-// internal links, images and redirects; the sitemap; the forms. October 23, 2026: Our Wellness Network.
+// internal links, images and redirects; the sitemap; the forms. October 23, 2026: Our Local Network.
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readdirSync } from 'node:fs';
@@ -39,7 +39,7 @@ describe('every page: head', () => {
       assert.match(src, /^<!doctype html>\n<html lang="en"/);
       const title = text(/<title>([\s\S]*?)<\/title>/.exec(src)[1]);
       assert.ok(title.length >= 15 && title.length <= 70, `title length ${title.length}: ${title}`);
-      if (!p.brandOnly) assert.match(title, /Our Wellness Network/); // the expo page keeps its own event title
+      if (!p.brandOnly) assert.match(title, /Our Local Network/); // the expo page keeps its own event title
       assert.ok(!titles.has(title), `title also used by ${titles.get(title)}`);
       titles.set(title, p.file);
       const desc = meta(src, 'name', 'description');
@@ -54,7 +54,7 @@ describe('every page: head', () => {
         assert.equal(meta(src, 'property', 'og:url'), ORIGIN + p.url);
       }
       assert.equal(meta(src, 'property', 'og:type'), 'website');
-      assert.equal(meta(src, 'property', 'og:site_name'), 'Our Wellness Network');
+      assert.equal(meta(src, 'property', 'og:site_name'), 'Our Local Network');
       assert.equal(meta(src, 'property', 'og:title'), meta(src, 'name', 'twitter:title'));
       assert.ok(meta(src, 'property', 'og:description'));
       assert.equal(meta(src, 'property', 'og:image'), `${ORIGIN}/assets/img/og-network.jpg`);
@@ -76,7 +76,7 @@ describe('every page: head', () => {
       assert.ok(m, 'JSON-LD in the head');
       const d = JSON.parse(m[1]);
       assert.equal(d['@type'], 'LocalBusiness');
-      assert.equal(d.name, 'Our Wellness Network');
+      assert.equal(d.name, 'Our Local Network');
       assert.equal(d.legalName, 'OUR Optimization LLC');
       assert.equal(d.telephone, '+1-331-271-6851');
       assert.match(d.areaServed.name, /^Chicago's western suburbs/);
@@ -94,8 +94,8 @@ describe('every page: header and footer', () => {
     const src = page[p.file];
     test(`${p.file}: the header`, () => {
       const h = headerOf(src);
-      assert.match(h, /<a aria-label="Our Wellness Network home" class="brand" href="\/">/);
-      assert.match(h, /<img src="\/assets\/img\/own-logo-360\.png" alt="Our Wellness Network" width="360" height="130">/);
+      assert.match(h, /<a aria-label="Our Local Network home" class="brand" href="\/">/);
+      assert.match(h, /<img src="\/assets\/img\/own-logo-360\.png" alt="Our Local Network" width="360" height="130">/);
       if (p.brandOnly) {
         assert.doesNotMatch(h, /<nav/);
         return;
@@ -105,7 +105,8 @@ describe('every page: header and footer', () => {
       assert.deepEqual(nav.map((l) => [l.text, l.href]), [...NAV, ['Client Portal', PORTAL]]);
       const current = nav.filter((l) => /aria-current="page"/.test(l.tag)).map((l) => l.href);
       assert.deepEqual(current, p.nav ? [NAV.find((n) => n[0] === p.nav)[1]] : []);
-      assert.match(h, new RegExp(`<a class="btn btn-primary btn-head" href="${PORTAL}">Client Portal</a>`));
+      /* November 23, 2026: Book a call is the header's main action on every page; Client Portal sits beside it */
+      assert.match(h, /<a class="btn btn-primary btn-head btn-book" href="\/contact">Book a call<\/a>\s*<a class="btn btn-ghost btn-head btn-portal" href="https:\/\/www\.ournetworkportal\.com"><span class="bh-client">Client&nbsp;<\/span>Portal<\/a>/);
       assert.ok(h.indexOf('class="menu-btn"') < h.indexOf('<nav class="site-nav"'), 'the menu button comes before the menu it opens');
       /* phones: the portal's bottom tab bar, inside the header (November 14, 2026) */
       const bar = /<nav class="tabbar" aria-label="Shortcuts">[\s\S]*?<\/nav>/.exec(h);
@@ -120,7 +121,7 @@ describe('every page: header and footer', () => {
     test(`${p.file}: the footer names the company`, () => {
       const f = text(footerOf(src));
       assert.match(f, /© 2026 OUR Optimization LLC/);
-      assert.match(f, /Our Wellness Network is a service of OUR Optimization LLC\./, 'the brand line, the same everywhere (November 20, 2026)');
+      assert.match(f, /Our Local Network is a service of OUR Optimization LLC\./, 'the brand line, the same everywhere (November 20, 2026)');
       assert.deepEqual(links(footerOf(src)).map((l) => l.href), ['/privacy', '/terms']);
     });
   }
@@ -292,7 +293,7 @@ describe('assets', () => {
   });
   test('the favicon set and the manifest carry the new name', () => {
     const m = JSON.parse(read('site.webmanifest'));
-    assert.equal(m.name, 'Our Wellness Network');
+    assert.equal(m.name, 'Our Local Network');
     for (const f of ['favicon.ico', 'assets/owo-favicon.ico', 'assets/owo-icon-16.png', 'assets/owo-icon-32.png', 'assets/owo-icon-192.png', 'assets/owo-icon-512.png', 'assets/owo-apple-touch-icon.png', 'apple-touch-icon.png']) assert.ok(existsSync(new URL(f, ROOT)), f);
   });
 });
@@ -325,10 +326,19 @@ describe('every page: the November 20, 2026 rules', () => {
     test(`${p.file}: no pricing: no prices, trial, plans, money-back guarantee or links to /pricing (November 21, 2026)`, () => {
       if (p.file === 'terms.html') return; /* the legal terms keep how prices are agreed in writing, with no figures */
       assert.doesNotMatch(src, /href="\/pricing|\?about=pricing/);
-      assert.doesNotMatch(t, /\$\s?\d|\btrial\b|first-month|Neighborhood plan|Community plan|money back|comes back|priced on a call|included in your plan|at no charge|founding/i);
+      /* the one exception (November 23, 2026): the 30-day guarantee, in the FAQ, in the terms' own words */
+      const tt = p.file === 'faq.html' ? t.replace('If we have not visited all 5 businesses and set up your codes within 30 days, your trial fee comes back. You keep the partner relationships either way.', '') : t;
+      assert.doesNotMatch(tt, /\$\s?\d|\btrial\b|first-month|Neighborhood plan|Community plan|money back|comes back|priced on a call|included in your plan|at no charge|founding/i);
       assert.doesNotMatch(t, /\bPricing\b/);
     });
   }
+  test('the 30-day guarantee (November 23, 2026): once on the site, in the FAQ, word for word as in the terms; the terms keep it', () => {
+    const g = 'If we have not visited all 5 businesses and set up your codes within 30 days, your trial fee comes back. You keep the partner relationships either way.';
+    assert.ok(text(page['terms.html']).includes(g), 'the terms keep the guarantee');
+    const where = PAGES.filter((p) => p.file !== 'terms.html').filter((p) => text(page[p.file]).includes('within 30 days')).map((p) => p.file);
+    assert.deepEqual(where, ['faq.html'], 'only the FAQ states it');
+    assert.equal(text(page['faq.html']).split(g).length - 1, 1, 'once, verbatim');
+  });
   test('the healthcare industry pages and the FAQ carry the attorney-review note and the state-rules line', () => {
     for (const f of HEALTHCARE) {
       assert.ok(page[f].includes(TODO), f);

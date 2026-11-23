@@ -1,4 +1,4 @@
-# Our Wellness Network (OUR Optimization LLC): static site, no build step.
+# Our Local Network (OUR Optimization LLC): static site, no build step.
 # Two Netlify Forms (data-netlify="true" in the static HTML): "dinner-call" on the contact
 # page (contact.html, #call, posts to /thanks) and "expo-vendor" on expo-vendors.html.
 # Submissions appear under Forms in the Netlify UI, and email alerts are set in
@@ -564,7 +564,7 @@
   force = true
 
 # Repository-only files are not part of the public site.
-# --- October 23, 2026: Our Wellness Network ---
+# --- October 23, 2026: Our Local Network ---
 # The home hero's video slot asks for /assets/video/van-route.mp4 after the page loads. Until that file is
 # deployed, this rewrite answers with a small text file (not a video), so the slot fails quietly, keeps the
 # still and logs no 404. It is not forced: once the real van-route.mp4 is deployed, Netlify serves the file.
