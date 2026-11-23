@@ -1595,7 +1595,7 @@ html:not(.js) .ptour-panel[hidden]{display:block}
 .hero-orb h1 em{display:block;color:var(--gold-lg)}
 .hero-orb .lede{margin-top:22px;max-width:32em;font-size:clamp(1.04rem,.98rem + .3vw,1.2rem);color:var(--ink-2);text-wrap:pretty}
 .hero-orb .actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
-@media (max-width:760px){.hero-orb .wrap{padding-block:28px 380px}}
+@media (max-width:759.98px){.hero-orb .wrap{padding-block:28px clamp(300px,92vw,400px)}}
 html:not(.js) .hero-orb{min-height:0}
 html:not(.js) .hero-orb .wrap{padding-bottom:clamp(48px,8vh,96px)}
 /* How It Works' matching orb: gold at the centre too */
@@ -1673,7 +1673,7 @@ html:not(.js) .hiw-orb{display:none}
 .lv-more{display:flex;justify-content:center}
 /* the owner's three counter display photos in the home hero (November 23, 2026): a row of three under the
    line on wider screens, a swipeable row on phones. Each opens the full-size photo. */
-.hero-displays{margin-top:28px;max-width:700px}
+.hero-displays{margin:28px 0 0;max-width:700px}
 .hero-displays ul{list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
 .hero-displays li{min-width:0}
 .hero-displays a{display:block;border-radius:14px;overflow:hidden;background:#fff;border:1px solid var(--line);box-shadow:0 16px 34px -20px rgba(22,49,31,.5);transition:transform .15s ease,box-shadow .15s ease}
@@ -1682,9 +1682,8 @@ html:not(.js) .hiw-orb{display:none}
 .hero-dsp-k{display:block;margin-top:8px;font:650 .86rem/1.2 var(--sans);color:var(--ink)}
 .hero-displays figcaption{margin-top:12px;font-size:.88rem;color:var(--ink-2)}
 @media (max-width:759.98px){
-  .hero-displays{margin-inline:calc(var(--gutter) * -1)}
-  .hero-displays ul{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px var(--gutter) 10px;scrollbar-width:none;overscroll-behavior-x:contain}
-  .hero-displays ul::-webkit-scrollbar{display:none}
-  .hero-displays li{flex:0 0 68%;scroll-snap-align:start;scroll-margin-inline:var(--gutter)}
-  .hero-displays figcaption{margin-top:6px;padding-inline:var(--gutter)}
+  /* phones: the photos stacked, each shown whole */
+  .hero-displays{max-width:460px}
+  .hero-displays ul{grid-template-columns:minmax(0,1fr);gap:18px}
+  .hero-displays img{aspect-ratio:auto;object-fit:fill}
 }
