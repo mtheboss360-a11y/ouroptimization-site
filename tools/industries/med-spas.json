@@ -15,9 +15,9 @@
   "partnersIntro": "Your clients already spend time at these places, and the staff see them often.",
   "partners": [
     { "name": "Gyms and fitness studios", "why": "Their members already put time and money into how they look and feel.", "icon": "i-gym" },
-    { "name": "Yoga and pilates studios", "why": "Regulars come back every week, and the front desk knows them by name.", "icon": "i-yoga" },
+    { "name": "Yoga and pilates studios", "why": "Regulars already set aside time each week to take care of themselves.", "icon": "i-yoga" },
     { "name": "Hair salons", "why": "Clients talk with their stylist about how they want to look.", "icon": "i-salon" },
-    { "name": "Nail salons", "why": "Regulars come in every few weeks and know the staff well.", "icon": "i-sparkle" },
+    { "name": "Nail salons", "why": "Clients book regular time to look put together.", "icon": "i-sparkle" },
     { "name": "Bridal shops", "why": "Brides and their families want to look their best on the big day.", "icon": "i-heart" },
     { "name": "Clothing boutiques", "why": "Shoppers care about how they look and like to shop close to home.", "icon": "i-shop" }
   ],

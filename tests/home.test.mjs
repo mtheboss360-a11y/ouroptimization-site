@@ -1,7 +1,7 @@
 // The home page, section by section. November 23, 2026: five beats around the owner's idea, "We connect you with the
 // businesses that already share your customers, and never with your competitors": 1. the connection (the hero),
 // 2. who shares your customers (#industries), 3. who we never connect you with (#never), 4. how the connection is made
-// (#in-person, then the two ways to run it, #levels), 5. what you see (#dashboard), then the call (#book).
+// (#in-person, with the two ways to run it inside it, #levels), 5. what you see (#dashboard), then the call (#book).
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readdirSync } from 'node:fs';
@@ -23,9 +23,10 @@ const TERMS = text(read('terms.html'));
 const AGREEMENT = text(byId(read('referral-network.html'), 'agreement') || '');
 
 describe('home: order, head and hero', () => {
-  test('the five beats in order (November 23, 2026): Industries, never, in person, the two ways, the portal, the call; no pricing, no map', () => {
+  test('the five beats in order (November 23, 2026): Industries, never, in person (with the two ways inside it), the portal, the call; no pricing, no map', () => {
     const ids = [...main.replace(/<!--[\s\S]*?-->/g, '').matchAll(/<section\b[^>]*\sid="([^"]+)"/g)].map((m) => m[1]);
-    assert.deepEqual(ids, ['industries', 'never', 'in-person', 'levels', 'dashboard', 'book']);
+    assert.deepEqual(ids, ['industries', 'never', 'in-person', 'dashboard', 'book']);
+    assert.ok(sec('in-person').includes('id="levels"'), 'the two ways sit inside beat 4, not as a beat of their own');
     for (const gone of ['network', 'treats', 'compliance']) assert.ok(!byId(main, gone), `#${gone} is folded into the beats`);
     assert.doesNotMatch(text(main), /\$\d/, 'no prices on the home page');
     const heroAt = main.indexOf('class="hero-orb"');
@@ -209,11 +210,11 @@ describe('home: 4. how the connection is made (#in-person) and the two ways to r
   });
   test('the staff cards, the one-page agreement and the portal, in the words of the terms', () => {
     const heads = [...cards.matchAll(/<h3>([\s\S]*?)<\/h3>/g)].map((m) => text(m[1]));
-    assert.deepEqual(heads, ['A tap-to-schedule card for each staff member', 'A one-page partner agreement', 'Every visit in your portal'], 'the owner'\''s name for the staff card');
+    assert.deepEqual(heads, ['A tap-to-schedule card for each staff member', 'A one-page partner agreement', 'Every visit in your portal'], "the owner's name for the staff card");
     const c = text(cards);
     assert.match(c, /Every staff member we meet gets a personal card with an NFC tag and a QR code\. A tap or a scan opens your first-visit offer and a short sign-up form\./);
     assert.match(c, /Every partner signs one\. Each side promotes the other\. Nobody is paid per referral or per customer\. Partners never see who signed up\./);
-    assert.match(c, /Every stop and every sign-up shows up in your portal\. Your own team makes the follow-up calls\./);
+    assert.match(c, /Your portal logs each visit\. Your own team makes the follow-up calls\./);
     assert.match(TERMS, /Every staff member we meet gets a personal tap-and-scan code: an NFC tag and a QR code\. A tap opens your first-visit offer and a short sign-up form/);
     assert.match(TERMS, /Every partner business signs a one-page agreement: mutual promotion, nobody is paid per referral or per customer/);
     for (const a of ['Each side promotes the other.', 'Nobody is paid per referral or per customer.', 'Partners never see who signed up.']) assert.ok(AGREEMENT.includes(a), a);
@@ -230,12 +231,11 @@ describe('home: 4. how the connection is made (#in-person) and the two ways to r
   test('the two ways to run it: the plain names, no numbered labels, the full detail on How it works', () => {
     const l = sec('levels');
     const lt = text(l);
-    assert.match(l, /<p class="eyebrow">Two ways to run it<\/p>/);
+    assert.match(l, /<h3 class="lv-sub-h reveal" id="levels-h">Your team or ours\./, 'a sub-heading inside beat 4, not an eyebrow or a section');
     assert.match(lt, /Your team or ours\. You choose who visits\. Either way, we choose the businesses near you that share your customers\./);
     assert.match(lt, /Your team visits We give you the businesses to visit\. Your team makes the displays\. Your team drops them off\./);
     assert.match(lt, /Our team visits We make the displays with your team, or you make them\. Our team sets them up every month, with each business's permission\. Your portal tracks every visit and sign-up\./);
-    assert.match(TERMS, /You provide your printed materials\./);
-    assert.ok(links(l).some((a) => a.href === '/referral-network#levels' && a.text === 'See who does what'));
+    assert.ok(links(l).some((a) => a.href === '/referral-network#levels' && a.text === 'See what each level includes'), 'the link keeps its name (no renaming beyond the labels)');
   });
 });
 

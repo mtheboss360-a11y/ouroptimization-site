@@ -461,6 +461,14 @@ describe('November 23, 2026: the share image, and only what the terms back', () 
     assert.match(text(page['faq.html']), /When your team visits, your team makes them and drops them off\. When our team visits, we make them with your team, or you make your own\./);
     assert.match(text(page['field-team.html']), /Your displays, made with us or by you, at the front counter\./);
   });
+  test('About: the owner\'s story in his own facts (November 23, 2026), nothing added', () => {
+    const st = text(byId(page['about.html'], 'story'));
+    assert.match(st, /Our story It started with my mom.s clinic\./);
+    assert.match(st, /I.m Mustafa Siddiqui\. My mom, Dr\. Farhana, runs a pediatric clinic\. I started out as her marketing team, and I ran the flyers for her business myself\./);
+    assert.match(st, /While I did, her clinic grew from 380K in revenue to more than 800K\. I got to see what that meant for her\./);
+    assert.match(st, /When you work with us, you work with me directly\./);
+    assert.doesNotMatch(st, /families who found her|patients|\$\d/, 'no facts he did not give; the figures are revenue, written without a dollar sign');
+  });
   test('the partner agreement is signed when our team visits, on About and Field Team too', () => {
     assert.match(text(mainOf(page['about.html'])), /A one-page partner agreement\s*When our team visits, every partner signs one\./);
     assert.match(text(mainOf(page['field-team.html'])), /When our team visits, each partner signs a one-page agreement\. You promote each other\./);

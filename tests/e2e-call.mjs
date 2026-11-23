@@ -362,12 +362,12 @@ await scenario('/thanks loads on its own: noindex, the promise, and a way home',
   await close();
 });
 
-await scenario('the med spa page (November 23, 2026): the home page\'s beats for med spas; no scenes and no portal screenshot (both live on the home page)', async () => {
+await scenario('the med spa page (November 23, 2026): the home page\'s beats for med spas, what you see in words; no scenes, no portal screenshot, no demo figures', async () => {
   for (const width of [320, 390, 768, 1280]) {
     const s = await open({ path: '/industries/med-spas', width, height: 844 });
     assert.equal((await s.page.textContent('h1')).replace(/\s+/g, ' ').trim(), 'New clients for your med spa, from the businesses next door.');
     assert.equal((await s.page.textContent('.ind-hero .intro')).trim(), 'We connect your med spa with the gyms, studios, salons and shops that already share your clients, and never with your competitors.');
-    assert.deepEqual(await s.page.$$eval('main section[id]', (l) => l.map((x) => x.id)), ['partners', 'never', 'visits', 'questions'], 'who shares your clients, who we never connect you with, how the connection is made, the questions');
+    assert.deepEqual(await s.page.$$eval('main section[id]', (l) => l.map((x) => x.id)), ['partners', 'never', 'visits', 'see', 'questions'], 'who shares your clients, who we never connect you with, how the connection is made, what you see, the questions');
     assert.equal(await s.page.locator('#partners .share-types > li').count(), 6, 'the six partners');
     assert.deepEqual(await s.page.$$eval('#never .never-cards h3', (l) => l.map((h) => h.textContent.trim())), ['No competitors', 'One med spa, yours', 'You approve every name']);
     assert.match(await s.page.textContent('#never'), /When our team visits, each partner agrees to promote one med spa, yours, for as long as you are a client\./);
@@ -376,7 +376,7 @@ await scenario('the med spa page (November 23, 2026): the home page\'s beats for
     assert.equal(await s.page.locator('.ind-shot, .own-scenes, main img').count(), 0, 'no generic scenes, screenshot or images');
     assert.equal(await s.page.locator('a[href="/portals"]').count() >= 1, true, 'points to the Portals page');
     assert.doesNotMatch(await s.page.evaluate(() => document.body.innerText), /Level\s*[12]\b|sample/i);
-    for (const sel of ['#partners .share-types', '#never .never-cards', '#visits .ind-visit-cards', '#visits .visit-words']) {
+    for (const sel of ['#partners .share-types', '#never .never-cards', '#visits .ind-visit-cards', '#visits .visit-words', '#see .section-head']) {
       await s.page.locator(sel).scrollIntoViewIfNeeded();
       await s.page.waitForTimeout(120);
       assert.equal(await s.page.$eval(sel, (el) => { const r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0 && getComputedStyle(el.closest('.reveal') || el).opacity !== '0'; }), true, `${width}px: ${sel} shows`);
@@ -476,9 +476,9 @@ await scenario('home: the half orb builds its network, clear of the words, with 
 await scenario('home (November 23, 2026): the five beats in order, each one showing, no Level labels, and the Industries link lands on its beat', async () => {
   for (const [width, motion] of [[320, 'reduce'], [390, 'no-preference'], [768, 'reduce'], [1280, 'no-preference']]) {
     const s = await open({ path: '/', width, height: 844, motion });
-    assert.deepEqual(await s.page.$$eval('main > section', (l) => l.map((x) => x.id || x.className.split(' ')[0])), ['hero-orb', 'industries', 'never', 'in-person', 'levels', 'dashboard', 'book'], `${width}px: the hero, who shares your customers, who we never connect you with, how the connection is made, the two ways, what you see, the call`);
+    assert.deepEqual(await s.page.$$eval('main > section', (l) => l.map((x) => x.id || x.className.split(' ')[0])), ['hero-orb', 'industries', 'never', 'in-person', 'dashboard', 'book'], `${width}px: the hero, who shares your customers, who we never connect you with, how the connection is made, the two ways, what you see, the call`);
     const heads = await s.page.$$eval('main > section[id] .eyebrow', (l) => l.map((e) => e.textContent.trim()));
-    assert.deepEqual(heads, ['Who shares your customers', 'Never a competitor', 'How the connection is made', 'Two ways to run it', 'What you see'], `${width}px: the beats' labels`);
+    assert.deepEqual(heads, ['Who shares your customers', 'Never a competitor', 'How the connection is made', 'What you see'], `${width}px: the beats' labels`);
     assert.equal(await s.page.locator('#industries .share-types > li').count(), 6, 'six kinds of business');
     assert.equal(await s.page.locator('#industries .ind-grid .ind-card').count(), 8, 'then the eight industry cards');
     assert.deepEqual(await s.page.$$eval('#never .never-cards h3', (l) => l.map((h) => h.textContent.trim())), ['No competitors', 'One of your kind', 'You approve every name']);

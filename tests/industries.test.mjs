@@ -74,8 +74,8 @@ describe('the med spa page (November 23, 2026): the home page\'s beats, for med 
   const items = (ul) => [...ul.matchAll(/<li>([\s\S]*?)<\/li>/g)].map((m) => m[1]);
   const card = (li) => ({ icon: (/^<svg aria-hidden="true"><use href="#(i-[a-z]+)"\/><\/svg>/.exec(li) || [])[1], h: text(/<h3>([\s\S]*?)<\/h3>/.exec(li)[1]), p: text(/<p>([\s\S]*?)<\/p>/.exec(li)[1]) });
 
-  test('the beats in order: the hero, who shares your clients, who we never connect you with, how the connection is made, the questions, the call', () => {
-    assert.deepEqual(sectionIds(main), ['partners', 'never', 'visits', 'questions']);
+  test('the beats in order: the hero, who shares your clients, who we never connect you with, how the connection is made, what you see, the questions, the call', () => {
+    assert.deepEqual(sectionIds(main), ['partners', 'never', 'visits', 'see', 'questions']);
     const at = (s) => main.indexOf(s);
     assert.ok(at('class="pg-hero ind-hero"') >= 0 && at('class="pg-hero ind-hero"') < at('id="partners"'), 'the hero first');
     assert.ok(at('id="questions"') < at('class="section bg-ink pg-cta"'), 'the call last');
@@ -154,9 +154,12 @@ describe('the med spa page (November 23, 2026): the home page\'s beats, for med 
       { icon: 'i-tap', h: 'A tap-to-schedule card for each staff member', p: 'Every staff member we meet gets a personal card with an NFC tag and a QR code. A tap or a scan opens your first-visit offer and a short sign-up form.' },
       { icon: 'i-doc', h: 'A one-page partner agreement', p: 'Every partner signs one. Each side promotes the other. Nobody is paid per referral or per patient.' },
       { icon: 'i-lock', h: 'No patient records, ever', p: 'We never receive patient records, and partners never see who signed up. The sign-up form asks no health questions.' },
-      { icon: 'i-track', h: 'Every visit in your portal', p: 'Every stop and every sign-up shows up in your portal. Your front desk makes the follow-up calls. Sign-ups show how your campaign is doing and are never used to reward anyone.' }
+      { icon: 'i-track', h: 'Every visit in your portal', p: 'Your portal logs each visit.' }
     ]);
-    assert.ok(links(s).some((l) => l.href === '/portals' && l.text === 'See the three portals'), 'the portals, from the portal card');
+    const see = sec('see');
+    assert.match(text(see), /What you see Every stop, every sign-up\. Your portal shows every route, every stop, the staff we met and every sign-up\. Your front desk makes the follow-up calls\. Sign-ups show how your campaign is doing and are never used to reward anyone\./, 'beat 5, in words');
+    assert.ok(links(see).some((l) => l.href === '/portals' && l.text === 'See the three portals'), 'the portals, from beat 5');
+    assert.doesNotMatch(see, /<img\b|own-stats|demo account/, 'no screenshot and no demo figures: those live on the home page');
     for (const c of cards) assert.match(html, new RegExp(`<symbol id="${c.icon}"`), `${c.icon} is in the page sprite`);
     assert.doesNotMatch(cards.map((c) => c.p).join(' '), /coffee|treat|pastr|snack/i, 'the treats are only in their own block');
     assert.match(TERMS, /Every staff member we meet gets a personal tap-and-scan code: an NFC tag and a QR code\. A tap opens your first-visit offer and a short sign-up form/);

@@ -98,8 +98,8 @@ const resultsPicture = (alt) => '<picture>'
 
 /* ---------- the focused template (November 23, 2026; the med spa page first) ----------
    The home page's beats, for one kind of business, after the hero: 2. who shares your clients (#partners), 3. who we
-   never connect you with (#never), 4. how the connection is made (#visits), then the questions and the call. No visit
-   scenes and no portal screenshot: both live on the home page. The page-specific words come from the data (people,
+   never connect you with (#never), 4. how the connection is made (#visits), 5. what you see (#see, the portal in words),
+   then the questions and the call. No visit scenes, no portal screenshot and no demo figures: those live on the home page. The page-specific words come from the data (people,
    partners and their icons, competitors, treatsIntro, treatExamples, portalNote); every line about the agreement, the
    exclusivity and the treats is written here once, in the words of terms.html and /referral-network#agreement:
    one of your kind is a commitment ("agrees to promote") and holds when our team visits; the coffee and treats sit in
@@ -153,7 +153,7 @@ ${never.map(([i, h, p]) => `      <li>${icon(i)}<h3>${h}</h3><p>${p}</p></li>`).
     ['i-tap', 'A <span class="nowrap">tap-to-schedule</span> card for each staff member', `Every staff member we meet gets a personal card with an NFC tag and a QR code. A tap or a scan opens your <span class="nowrap">first-visit</span> offer and a short ${SIGNUP} form.`],
     ['i-doc', 'A <span class="nowrap">one-page</span> partner agreement', `Every partner signs one. Each side promotes the other. Nobody is paid per referral or per ${care ? 'patient' : 'customer'}.${care ? '' : ' Partners never see who signed up.'}`],
     ...(care ? [['i-lock', 'No patient records, ever', `We never receive patient records, and partners never see who signed up. The ${SIGNUP} form asks no health questions.`]] : []),
-    ['i-track', 'Every visit in your portal', `Every stop and every ${SIGNUP} shows up in your portal. ${NOWRAP(esc(d.portalNote))}${care ? ' <span class="nowrap">Sign-ups</span> show how your campaign is doing and are never used to reward anyone.' : ''}`, `<a class="textlink" href="/portals">See the three portals${ARROW}</a>`]
+    ['i-track', 'Every visit in your portal', 'Your portal logs each visit.']
   ];
   out.push(`
 <section class="section" aria-labelledby="visits-h" id="visits">
@@ -180,6 +180,19 @@ ${cards.map(([i, h, p, more]) => `      <li>${icon(i)}<h3>${h}</h3><p>${p}</p>${
       <a class="textlink" href="/faq#healthcare">Healthcare practices: how it works for you${ARROW}</a>
     </div>
     <p class="hipaa-line" data-flag="hipaaConfirmed" data-flag-text="hipaaText" hidden><span></span></p>` : ''}
+  </div>
+</section>`);
+
+  // 5. what you see: the portal, in words (no screenshot and no demo figures; those live on the home page)
+  out.push(`
+<section class="section bg-stone" aria-labelledby="see-h" id="see">
+  <div class="wrap">
+    <div class="section-head center reveal">
+      <p class="eyebrow">What you see</p>
+      <h2 id="see-h">Every stop, <em class="dn-line">every ${SIGNUP}.</em></h2>
+      <p class="intro">Your portal shows every route, every stop, the staff we met and every ${SIGNUP}. ${NOWRAP(esc(d.portalNote))}${care ? ' <span class="nowrap">Sign-ups</span> show how your campaign is doing and are never used to reward anyone.' : ''}</p>
+    </div>
+    <p class="owc-more center reveal"><a class="textlink" href="/portals">See the three portals${ARROW}</a></p>
   </div>
 </section>`);
   return out.join('\n');
