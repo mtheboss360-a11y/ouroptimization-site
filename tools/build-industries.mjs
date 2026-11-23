@@ -40,9 +40,13 @@ export function loadIndustries() {
     if (t.length < 15 || t.length > 70 || !t.endsWith(' | Our Wellness Network')) problems.push(`${d.slug}: title "${t}" (${t.length})`);
     const desc = esc(d.description || '');
     if (desc.length < 70 || desc.length > 175) problems.push(`${d.slug}: description is ${desc.length} characters as HTML (70-175)`);
+    if (TOWNS.filter((x) => (d.description || '').includes(x)).length < 2) problems.push(`${d.slug}: the description names fewer than two towns`);
     const all = JSON.stringify(d);
     if (/[–—]/.test(all)) problems.push(`${d.slug}: an em or en dash`);
     if (/courtesy|complimentary|gift card|testimonial/i.test(all)) problems.push(`${d.slug}: a retired or forbidden word`);
+    // November 22, 2026: no pricing anywhere, no placeholders, no old slogan; the home hero's line stays on the home page
+    if (/\$\s?\d|pricing|\btrial\b|first-month|\bplans?\b|founding|guarantee|money back|\bfees?\b|minimum term|month to month|at no charge|no extra cost|included in your|outsourced|boots on the ground|whether or not/i.test(all)) problems.push(`${d.slug}: pricing, the old slogan or a line that belongs on another page`);
+    if (/\[[A-Z][A-Z :,'-]+\]/.test(all)) problems.push(`${d.slug}: placeholder text`);
     if (/[<>]|&[a-z]+;/i.test(all)) problems.push(`${d.slug}: HTML in the data (write plain text)`);
     if (d.healthcare && !d.faq.some((q) => q.a.includes('Partner programs for healthcare practices are reviewed for compliance with applicable state rules before launch.'))) problems.push(`${d.slug}: the healthcare compliance sentence is missing`);
   }
@@ -107,9 +111,9 @@ function main(d) {
     <aside class="pg-glance reveal" aria-label="At a glance">
       <p class="dg-k">At a glance</p>
       <ul>
-        <li>${icon('i-pin')}<span><b>Your neighbors:</b> ${esc(neighbors.join(', '))}, and more, matched to your ${esc(d.noun)}.</span></li>
-        <li>${icon('i-coffee')}<span><b>Treats for Staff</b> on every visit, for the whole staff.</span></li>
-        <li>${icon('i-track')}<span><b>Your portal:</b> every stop and every sign-up, as it comes in.</span></li>
+        <li>${icon('i-pin')}<span><b>Who we visit:</b> ${esc(neighbors.join(', '))}, and more.</span></li>
+        <li>${icon('i-coffee')}<span><b>Treats for Staff</b> on every visit.</span></li>
+        <li>${icon('i-track')}<span><b>Your portal:</b> every stop and every sign-up.</span></li>
         <li>${icon('i-check')}<span><b>You approve</b> every business before we visit.</span></li>
       </ul>
     </aside>
@@ -122,17 +126,17 @@ function main(d) {
   <div class="wrap">
     <div class="section-head reveal">
       <p class="eyebrow">Who shares your customers</p>
-      <h2 id="partners-h">The businesses around you <em class="dn-line">that already know your customers.</em></h2>
+      <h2 id="partners-h">Businesses near you <em class="dn-line">that know your customers.</em></h2>
       <p class="intro">${esc(d.partnersIntro)}</p>
     </div>
     <ul class="cardgrid ind-partners reveal">
 ${d.partners.map((p) => `      <li><h3>${esc(p.name)}</h3><p>${esc(p.why)}</p></li>`).join('\n')}
     </ul>
-    <p class="ind-excl reveal">${icon('i-shield')}<span>${esc(d.exclusivity)}</span></p>
+    <p class="ind-excl reveal">${icon('i-shield')}<span>${esc(d.exclusivity)} <a href="/referral-network#agreement">How the agreement works</a>.</span></p>
   </div>
 </section>`);
 
-  // the visits: Treats for Staff, in person, codes
+  // the visits: one line here; the Field Team page tells the whole visit
   const scenes = shell.cache.scenes;
   out.push(`
 <section class="section" aria-labelledby="visits-h" id="visits">
@@ -144,11 +148,11 @@ ${d.partners.map((p) => `      <li><h3>${esc(p.name)}</h3><p>${esc(p.why)}</p></
     </div>
     <ul class="own-scenes reveal">
       <li>${scenes.treats}
-        <h3>Treats for Staff</h3><p>Coffee and treats for the whole staff, on every visit.</p></li>
+        <h3>Treats for Staff</h3></li>
       <li>${scenes.chat}
-        <h3>Real people, in person</h3><p>We meet the staff, introduce your ${esc(d.noun)} by name and come back every month.</p></li>
+        <h3>Real people, in person</h3></li>
       <li>${scenes.tap}
-        <h3>A code for every staff member</h3><p>Each staff member gets a personal <span class="nowrap">tap-to-schedule</span> card, so you can see which partnerships are working.</p></li>
+        <h3>A card for every staff member</h3></li>
     </ul>
     <div class="ind-treats reveal">
       <p class="dg-k">What we bring</p>
@@ -156,27 +160,20 @@ ${d.partners.map((p) => `      <li><h3>${esc(p.name)}</h3><p>${esc(p.why)}</p></
 ${d.treatExamples.map((t) => `        <li>${esc(t)}</li>`).join('\n')}
       </ul>
       <p class="ind-modest">Modest by design: coffee, pastries and snacks. Never gift cards, cash, free services or anything of real value.</p>
+      <p class="owc-more"><a class="textlink" href="/field-team">More about our visits${ARROW}</a></p>
     </div>
   </div>
 </section>`);
 
-  // the portal
-  const measure = care
-    ? 'Sign-ups measure how your campaign is performing. They are never used to reward anyone.'
-    : 'Sign-ups measure how your campaign is performing: which businesses, visits and routes are working.';
+  // the portal: who calls the sign-ups, in one or two lines; How it works shows the whole portal
+  const measure = care ? ' Sign-ups show how your campaign is doing and are never used to reward anyone.' : '';
   out.push(`
 <section class="section bg-paper" aria-labelledby="portal-h" id="portal">
   <div class="wrap ind-portal">
     <div class="reveal">
       <p class="eyebrow">Your client portal</p>
       <h2 id="portal-h">Every stop and every sign-up, <em class="dn-line">in one place.</em></h2>
-      <p class="intro">${esc(d.portalNote)}</p>
-      <ul class="dn-checks">
-        <li>${icon('i-check')}<span>Every route, stop by stop, with the staff we met.</span></li>
-        <li>${icon('i-check')}<span>Every partner business and where it stands.</span></li>
-        <li>${icon('i-check')}<span>Every sign-up, with the business and staff code it came through, ready for your team to call.</span></li>
-        <li>${icon('i-check')}<span>${esc(measure)}</span></li>
-      </ul>
+      <p class="intro">${esc(d.portalNote + measure)}</p>
       <p class="owc-more"><a class="textlink" href="/referral-network#dashboard">See everything in the portal${ARROW}</a></p>
     </div>
     <figure class="ind-shot reveal">
@@ -222,26 +219,6 @@ ${d.faq.map((q) => {
   </div>
 </section>`);
 
-  // results: hidden until there is a real client with real figures
-  out.push(`
-<!-- ===== Case study: hidden until there are real results. To publish, replace every [PLACEHOLDER] with a real client's
-     figures and words (with their written permission), then remove this comment wrapper. Never fill it with examples.
-<section class="section" aria-labelledby="case-h" id="case-study">
-  <div class="wrap">
-    <div class="section-head reveal">
-      <p class="eyebrow">Results</p>
-      <h2 id="case-h">[CLIENT NAME], <em class="dn-line">[INDUSTRY] in [TOWN].</em></h2>
-    </div>
-    <dl class="own-stats case-stats reveal" aria-label="[CLIENT NAME]'s results">
-      <div><dt>Stops visited</dt><dd>[STOPS]</dd></div>
-      <div><dt>Sign-ups</dt><dd>[SIGN-UPS]</dd></div>
-      <div><dt>Bookings</dt><dd>[BOOKINGS]</dd></div>
-    </dl>
-    <blockquote class="case-quote reveal"><p>[CLIENT QUOTE]</p><footer>[CLIENT NAME, ROLE]</footer></blockquote>
-  </div>
-</section>
-===== -->`);
-
   // next step
   out.push(`
 <section class="section bg-ink pg-cta" aria-labelledby="cta-h">
@@ -249,14 +226,16 @@ ${d.faq.map((q) => {
     <div class="cta-inner reveal">
       <p class="eyebrow">Next step</p>
       <h2 id="cta-h">See the businesses <em class="dn-line">around your ${esc(d.noun)}.</em></h2>
-      <p class="intro">On a 15-minute call we&rsquo;ll show you the businesses we would match near you and what a month with our field team looks like.</p>
+      <p class="intro">On a 15-minute call, we&rsquo;ll show you the businesses we would visit near you.</p>
       <div class="actions"><a class="btn btn-light" href="/contact?about=${key}">Book a 15-minute call</a></div>
-      <p class="ind-founding">Founding clients: [FOUNDING SPOTS] spots at [FOUNDING RATE], in exchange for a case study published only with your written approval. <a href="/pricing#founding">How the founding program works</a></p>
     </div>
   </div>
 </section>
 </main>`);
-  return out.join('\n');
+  const html = out.join('\n');
+  // November 22, 2026: no pricing links and no placeholder text, visible or in a comment
+  if (/href="\/pricing|\?about=pricing|\[[A-Z][A-Z :,'-]+\]/.test(html)) throw new Error(`${d.slug}: a pricing link or placeholder text in the page`);
+  return html;
 }
 
 export function renderPage(d) {

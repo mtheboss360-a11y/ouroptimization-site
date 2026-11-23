@@ -25,6 +25,20 @@
   [headers.values]
     Content-Type = "application/manifest+json"
 
+# --- November 21, 2026: pricing came off the site ---
+# /pricing and /pricing.html go to /contact (book a call).
+[[redirects]]
+  from = "/pricing"
+  to = "/contact"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/industries"
+  to = "/#industries"
+  status = 301
+  force = true
+
 # --- URL standardization ---
 # Extensionless URLs are canonical; the .html URL of every kept page 301s to its clean URL.
 [[redirects]]
@@ -71,20 +85,20 @@
 
 [[redirects]]
   from = "/pricing.html"
-  to = "/pricing"
+  to = "/contact"
   status = 301
   force = true
 
-# The sample contract page came off on November 19, 2026: its old address goes to pricing.
+# The sample contract page came off on November 19, 2026; its old address goes to /contact (pricing came off on November 21, 2026).
 [[redirects]]
   from = "/sample-contract"
-  to = "/pricing"
+  to = "/contact"
   status = 301
   force = true
 
 [[redirects]]
   from = "/sample-contract.html"
-  to = "/pricing"
+  to = "/contact"
   status = 301
   force = true
 
@@ -334,14 +348,8 @@
 
 # /industries
 [[redirects]]
-  from = "/industries"
-  to = "/"
-  status = 301
-  force = true
-
-[[redirects]]
   from = "/industries.html"
-  to = "/"
+  to = "/#industries"
   status = 301
   force = true
 
@@ -515,16 +523,16 @@
   force = true
 
 # Older retired URLs, pointed straight at their final target.
-# "Who it's for" became "Industries" in the 2026 repositioning; Industries is now retired too.
+# "Who it's for" became the home page's Industries section in the 2026 repositioning.
 [[redirects]]
   from = "/who-its-for"
-  to = "/"
+  to = "/#industries"
   status = 301
   force = true
 
 [[redirects]]
   from = "/who-its-for.html"
-  to = "/"
+  to = "/#industries"
   status = 301
   force = true
 

@@ -111,10 +111,10 @@ describe('every page: header and footer', () => {
       const bar = /<nav class="tabbar" aria-label="Shortcuts">[\s\S]*?<\/nav>/.exec(h);
       assert.ok(bar, 'the tab bar');
       assert.ok(h.indexOf('<nav class="site-nav"') < h.indexOf('<nav class="tabbar"'), 'after the main menu');
-      assert.deepEqual(links(bar[0]).map((l) => [l.text, l.href]), [['Home', '/'], ['Field Team', '/field-team'], ['How it works', '/referral-network'], ['Pricing', '/pricing']]);
+      assert.deepEqual(links(bar[0]).map((l) => [l.text, l.href]), NAV.slice(0, 4), 'the first four menu items, then More (Pricing came off, November 21, 2026)');
       assert.match(bar[0], /<button class="tab tab-more" type="button" aria-expanded="false" aria-controls="site-nav">/, 'More opens the full menu');
       const tabNow = links(bar[0]).filter((l) => /aria-current="page"/.test(l.tag)).map((l) => l.href);
-      const onBar = ['/', '/field-team', '/referral-network', '/pricing'];
+      const onBar = NAV.slice(0, 4).map((n) => n[1]);
       assert.deepEqual(tabNow, current.filter((c) => onBar.includes(c)), 'the tab for this page is marked, like the menu');
     });
     test(`${p.file}: the footer names the company`, () => {
@@ -124,12 +124,14 @@ describe('every page: header and footer', () => {
       assert.deepEqual(links(footerOf(src)).map((l) => l.href), ['/privacy', '/terms']);
     });
   }
-  test('the dinner is on the pricing page only: out of the menu, off the home page, linked from pricing alone', () => {
+  test('the dinner stays out of the menu and off the home page; the FAQ links it with the other add-ons (pricing came off, November 21, 2026)', () => {
     for (const p of PAGES) {
-      if (['pricing.html', 'patient-network.html', 'privacy.html', 'terms.html'].includes(p.file)) continue;
+      if (['faq.html', 'patient-network.html', 'privacy.html', 'terms.html'].includes(p.file)) continue;
       assert.doesNotMatch(bodyOf(page[p.file]), /patient-network|patient dinner/i, p.file);
     }
-    assert.ok(links(page['pricing.html']).some((l) => l.href === '/patient-network'));
+    const addons = byId(page['faq.html'], 'add-ons');
+    assert.ok(addons, 'the FAQ question on add-ons');
+    for (const href of ['/online-search-network', '/review-tags', '/website-design', '/patient-network']) assert.ok(links(addons).some((l) => l.href === href), href);
   });
 });
 
@@ -216,12 +218,12 @@ describe('links, images and redirects', () => {
       assert.ok(fileForUrl(to) || to === '/', `${r.from} -> ${r.to}: no such page`);
     }
   });
-  test('the sample contract page is gone (November 19, 2026): its old address and its .html go straight to pricing, and nothing links to it', () => {
+  test('the sample contract page is gone (November 19, 2026): its old address and its .html go straight to /contact, and nothing links to it', () => {
     assert.ok(!existsSync(new URL('sample-contract.html', ROOT)));
     for (const from of ['/sample-contract', '/sample-contract.html']) {
       const r = REDIRECTS.find((x) => x.from === from);
       assert.ok(r, from);
-      assert.deepEqual([r.to, r.status, r.force], ['/pricing', 301, true], from);
+      assert.deepEqual([r.to, r.status, r.force], ['/contact', 301, true], from);
     }
     for (const p of PAGES) assert.doesNotMatch(page[p.file], /href="\/sample-contract/, p.file);
     assert.doesNotMatch(read('sitemap.xml'), /sample-contract/);
@@ -249,7 +251,7 @@ describe('sitemap and robots', () => {
     const want = PAGES.filter((p) => !p.noindex).map((p) => ORIGIN + p.url).sort();
     assert.deepEqual([...locs].sort(), want);
     assert.equal(new Set(locs).size, locs.length);
-    assert.equal((sm.match(/<lastmod>2026-11-20<\/lastmod>/g) || []).length, locs.length);
+    assert.equal((sm.match(/<lastmod>2026-11-21<\/lastmod>/g) || []).length, locs.length);
   });
   test('robots.txt points at the sitemap', () => assert.match(read('robots.txt'), /Sitemap: https:\/\/ouroptimization\.com\/sitemap\.xml/));
 });
@@ -298,7 +300,7 @@ describe('assets', () => {
 /* November 20, 2026: the vertical-led site. The field team, Treats for Staff, the compliance wording, no sample labels,
    the placeholders the owner fills in, and the naming. These hold on every page, generated industry pages included. */
 describe('every page: the November 20, 2026 rules', () => {
-  const PLACEHOLDERS = ['[STARTING PRICE]', '[MINIMUM TERM]', '[CAMPAIGN LENGTH]', '[STOPS PER MONTH: NEIGHBORHOOD]', '[STOPS PER MONTH: COMMUNITY]', '[FOUNDING RATE]', '[FOUNDING SPOTS]'];
+  const PLACEHOLDERS = []; /* November 21, 2026: no placeholder text anywhere */
   const HEALTHCARE = ['industries/med-spas.html', 'industries/dental.html', 'industries/chiropractic-physical-therapy.html'];
   const TODO = '<!-- TODO: attorney review of courtesy program before publishing healthcare pages -->';
   for (const p of PAGES) {
@@ -307,7 +309,8 @@ describe('every page: the November 20, 2026 rules', () => {
     test(`${p.file}: no staff courtesy, no old names, treats never tied to referrals`, () => {
       const withoutTodo = src.replaceAll(TODO, '');
       assert.doesNotMatch(withoutTodo, /courtesy|complimentary consultation/i, 'the staff courtesy program is gone');
-      assert.doesNotMatch(src, /Organic Growth Team|Boots on the ground|Growth team/i);
+      assert.doesNotMatch(src, /Organic Growth Team|Growth team|outsourced field sales team/i);
+      if (p.file !== 'index.html') assert.doesNotMatch(t, /Boots on the ground/i, 'the home hero\'s line, used once (November 21, 2026)');
       if (p.file !== 'faq.html') assert.doesNotMatch(t, /whether or not (they|anyone) (ever )?(send|refer)/i, 'only the FAQ says the treats do not depend on referrals');
       assert.doesNotMatch(t, /HIPAA[- ]compliant/i, 'the HIPAA sentence waits for the owner (assets/site-config.js)');
     });
@@ -315,8 +318,15 @@ describe('every page: the November 20, 2026 rules', () => {
       assert.doesNotMatch(t, /Sample account|illustrative data/i);
       assert.doesNotMatch(src, /class="[^"]*\bsample-(tag|note)\b/);
     });
-    test(`${p.file}: only the agreed placeholders, never an invented one`, () => {
+    test(`${p.file}: no unfinished placeholder text, visible or hidden (November 21, 2026)`, () => {
       for (const ph of t.match(/\[[A-Z][A-Z :,'-]+\]/g) || []) assert.ok(PLACEHOLDERS.includes(ph), ph);
+      assert.doesNotMatch(src, /\[(STARTING PRICE|MINIMUM TERM|CAMPAIGN LENGTH|STOPS PER MONTH[^\]]*|FOUNDING [A-Z]+|CLIENT [A-Z, ]+|PLACEHOLDER|TOWN|INDUSTRY|STOPS|SIGN-UPS|BOOKINGS|CLIENT QUOTE)\]/);
+    });
+    test(`${p.file}: no pricing: no prices, trial, plans, money-back guarantee or links to /pricing (November 21, 2026)`, () => {
+      if (p.file === 'terms.html') return; /* the legal terms keep how prices are agreed in writing, with no figures */
+      assert.doesNotMatch(src, /href="\/pricing|\?about=pricing/);
+      assert.doesNotMatch(t, /\$\s?\d|\btrial\b|first-month|Neighborhood plan|Community plan|money back|comes back|priced on a call|included in your plan|at no charge|founding/i);
+      assert.doesNotMatch(t, /\bPricing\b/);
     });
   }
   test('the healthcare industry pages and the FAQ carry the attorney-review note and the state-rules line', () => {

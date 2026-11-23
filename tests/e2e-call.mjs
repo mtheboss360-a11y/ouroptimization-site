@@ -230,7 +230,7 @@ await scenario('every service page key prefills on /contact, and the keys from b
   for (const [key, message] of [
     ['referral-network', "I'm asking about referral routes."], ['flyer-network', "I'm asking about referral routes."],
     ['patient-network', "I'm asking about a private customer dinner."], ['online-search-network', "I'm asking about Google Ads in my own account."],
-    ['pricing', "I'm asking about pricing."], ['sample-contract', "I'm asking about the sample contract."],
+    ['pricing', "I'd like to book a call."], ['sample-contract', "I'm asking about the sample contract."],
     ['patient-dinners', "I'm asking about a private customer dinner."], ['flyer-drops', "I'm asking about referral routes."], ['google-ads', "I'm asking about Google Ads in my own account."]
   ]) {
     const s = await open({ path: `/contact?about=${key}` });
@@ -390,15 +390,31 @@ await scenario('healthcare pages: the HIPAA line stays hidden until the owner co
   await s.close();
 });
 
-await scenario('home: the wave hero draws on its canvas, with no outside requests and no script errors', async () => {
+await scenario('home: the half orb builds its network, clear of the words, with no outside requests and no script errors', async () => {
   for (const [width, height] of [[390, 844], [1280, 900]]) {
     const s = await open({ path: '/', width, height, motion: 'no-preference' });
-    await s.page.waitForTimeout(600);
-    const c = await s.page.$eval('#wave', (el) => ({ w: el.width, h: el.height, lit: (() => { const d = el.getContext('2d').getImageData(0, 0, el.width, el.height).data; let n = 0; for (let i = 3; i < d.length; i += 4) if (d[i]) n++; return n; })() }));
+    await s.page.waitForTimeout(5500);
+    const c = await s.page.$eval('#orb', (el) => ({ w: el.width, h: el.height, lit: (() => { const d = el.getContext('2d').getImageData(0, 0, el.width, el.height).data; let n = 0; for (let i = 3; i < d.length; i += 4) if (d[i]) n++; return n; })() }));
     assert.ok(c.w > 0 && c.h > 0, `${width}px: the canvas has a size`);
-    assert.ok(c.lit > 1000, `${width}px: the wave is drawn (${c.lit} pixels)`);
+    assert.ok(c.lit > 5000, `${width}px: the orb and its network are drawn (${c.lit} pixels)`);
+    assert.equal((await s.page.textContent('#hero-h')).replace(/\s+/g, ' ').trim(), 'Boots on the ground for your local business.');
     assert.deepEqual(s.outside, [], 'no requests to other sites');
     assert.deepEqual(s.jsErrors, []);
+    assert.deepEqual(s.missing, []);
+    await s.close();
+  }
+});
+
+await scenario('pricing is gone: /pricing and /pricing.html go to the call form, and no page links to it', async () => {
+  for (const path of ['/pricing', '/pricing.html', '/sample-contract']) {
+    const r = await fetch(`${BASE}${path}`, { redirect: 'manual' });
+    assert.equal(r.status, 301, path);
+    assert.equal(new URL(r.headers.get('location'), BASE).pathname, '/contact', path);
+  }
+  for (const path of ['/', '/field-team', '/referral-network', '/faq', '/about', '/contact', '/industries/dental']) {
+    const s = await open({ path, width: 1280, height: 900 });
+    const found = await s.page.evaluate(() => ({ links: [...document.querySelectorAll('a[href*="pricing"]')].map((a) => a.href), text: /\$\d|\bpricing\b|\btrial\b/i.test(document.body.innerText) }));
+    assert.deepEqual(found, { links: [], text: false }, path);
     await s.close();
   }
 });
@@ -458,14 +474,14 @@ await scenario('phones: the bottom tab bar, and More opens the whole menu above 
   const bar = await s.page.$eval('.tabbar', (b) => ({ pos: getComputedStyle(b).position, bottom: Math.round(window.innerHeight - b.getBoundingClientRect().bottom), tabs: [...b.querySelectorAll('.tab')].map((t) => t.textContent.trim()) }));
   assert.equal(bar.pos, 'fixed');
   assert.ok(bar.bottom >= 0 && bar.bottom <= 20, `sits at the bottom (${bar.bottom}px up)`);
-  assert.deepEqual(bar.tabs, ['Home', 'Field Team', 'How it works', 'Pricing', 'More']);
+  assert.deepEqual(bar.tabs, ['Home', 'Field Team', 'Industries', 'How it works', 'More']);
   assert.equal(await s.page.$eval('.menu-btn', (b) => getComputedStyle(b).display), 'none', 'the header Menu button gives way to the bar');
   await s.page.click('.tab-more');
   assert.equal(await s.page.$eval('.tab-more', (b) => b.getAttribute('aria-expanded')), 'true');
   const sheet = await s.page.$eval('#site-nav', (n) => ({ shown: getComputedStyle(n).display !== 'none', bottom: n.getBoundingClientRect().bottom, barTop: document.querySelector('.tabbar').getBoundingClientRect().top, items: [...n.querySelectorAll('a')].filter((a) => a.offsetParent).map((a) => a.textContent.trim()) }));
   assert.ok(sheet.shown, 'the menu shows');
   assert.ok(sheet.bottom <= sheet.barTop, 'above the bar, not under it');
-  assert.deepEqual(sheet.items, ['Home', 'Field Team', 'Industries', 'How it works', 'Pricing', 'FAQ', 'About', 'Contact']);
+  assert.deepEqual(sheet.items, ['Home', 'Field Team', 'Industries', 'How it works', 'FAQ', 'About', 'Contact']);
   assert.equal(await s.page.$eval('#site-nav a[aria-current="page"]', (a) => a.getAttribute('href')), '/faq');
   await s.page.keyboard.press('Escape');
   assert.equal(await s.page.evaluate(() => document.documentElement.classList.contains('menu-open')), false);

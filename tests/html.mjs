@@ -15,7 +15,6 @@ export const PAGES = [
   { file: 'index.html', url: '/', nav: 'Home' },
   { file: 'field-team.html', url: '/field-team', nav: 'Field Team' },
   { file: 'referral-network.html', url: '/referral-network', nav: 'How it works' },
-  { file: 'pricing.html', url: '/pricing', nav: 'Pricing' },
   { file: 'faq.html', url: '/faq', nav: 'FAQ' },
   { file: 'about.html', url: '/about', nav: 'About' },
   { file: 'contact.html', url: '/contact', nav: 'Contact' },
@@ -38,7 +37,8 @@ export const PAGES = [
   { file: 'industries/auto-shops.html', url: '/industries/auto-shops', nav: null, industry: true }
 ];
 /* The main menu, in order, then the Client Portal button. */
-export const NAV = [['Home', '/'], ['Field Team', '/field-team'], ['Industries', '/#industries'], ['How it works', '/referral-network'], ['Pricing', '/pricing'], ['FAQ', '/faq'], ['About', '/about'], ['Contact', '/contact']];
+/* November 21, 2026: Pricing came off the site (its address 301s to /contact); everything else is as it was. */
+export const NAV = [['Home', '/'], ['Field Team', '/field-team'], ['Industries', '/#industries'], ['How it works', '/referral-network'], ['FAQ', '/faq'], ['About', '/about'], ['Contact', '/contact']];
 export const PORTAL = 'https://www.ournetworkportal.com';
 export const ORIGIN = 'https://ouroptimization.com';
 /* Words that must never appear on the site, built from pieces so this file does not contain them. */

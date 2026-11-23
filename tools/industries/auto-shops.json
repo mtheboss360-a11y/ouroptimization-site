@@ -4,40 +4,40 @@
   "name": "Auto Shops",
   "noun": "auto shop",
   "healthcare": false,
-  "title": "Field Sales Team for Auto Shops | Our Wellness Network",
-  "description": "Our field team visits the car washes, parts stores and dealerships near your auto shop in Lombard, Elmhurst or Oak Brook and turns them into a referral network you can track.",
-  "cardBlurb": "We visit the car washes, parts stores and dealerships near your shop and build a network you can track.",
-  "h1": "Your field sales team,",
+  "title": "Referral Partners for Auto Shops | Our Wellness Network",
+  "description": "We visit the car washes, parts stores and dealerships near your auto shop in Lombard, Elmhurst and Oak Brook. You see every sign-up in your portal.",
+  "cardBlurb": "We visit the car washes, parts stores and dealerships drivers stop at.",
+  "h1": "Local referral partners",
   "h1Em": "for auto shops.",
-  "intro": "We visit the businesses drivers already stop at near your auto shop, build relationships with their staff and turn them into a referral network you can track. Every stop and every sign-up shows up in your portal.",
-  "partnersIntro": "Drivers stop at these businesses all the time, and the staff there are who they ask when a car starts making a new noise.",
+  "intro": "We find businesses near your shop that drivers already stop at. Every month we visit them and introduce your shop by name.",
+  "partnersIntro": "Drivers stop here often, and they ask the staff when their car acts up.",
   "partners": [
-    { "name": "Car washes", "why": "Drivers who look after their cars come through often, and the crew sees what shape those cars are in." },
-    { "name": "Car dealerships", "why": "Buyers, especially of used cars past their warranty, need a shop they trust close to home." },
-    { "name": "Auto parts stores", "why": "Do-it-yourselfers come in for parts and sometimes find out the job is bigger than the driveway." },
+    { "name": "Car washes", "why": "Drivers who care for their cars come often, and the crew sees what shape they're in." },
+    { "name": "Car dealerships", "why": "Buyers of used cars past warranty need a shop they trust close to home." },
+    { "name": "Auto parts stores", "why": "Do-it-yourselfers sometimes find out the job is bigger than the driveway." },
     { "name": "Gas stations", "why": "Drivers ask the counter staff where to go when a warning light comes on." },
     { "name": "Towing companies", "why": "Every tow ends with the same question: where should the car go?" },
-    { "name": "Driving schools", "why": "New drivers and their parents need a shop they can trust for a first car." }
+    { "name": "Driving schools", "why": "New drivers and their parents need a shop they trust for a first car." }
   ],
-  "treatsIntro": "On every visit, our field team brings coffee and treats for the whole staff at each partner business, from the front counter to the crew out back. It's simple hospitality, it's included in your plan, and it's the reason crews are glad to see us pull in.",
+  "treatsIntro": "We bring coffee and treats for everyone on shift, from the counter to the crew out back.",
   "treatExamples": [
     "Coffee and donuts for a parts counter's morning crew",
     "Snacks and coffee for a car wash crew before the Saturday rush",
     "Muffins and coffee for a towing company's early dispatchers"
   ],
-  "portalNote": "In your portal you see every stop we make for your shop and every sign-up that comes through a partner's code, ready for your service desk to call and book. It's how you see which partnerships are working, business by business.",
+  "portalNote": "Each sign-up lands in your portal, ready for your service desk to call and book.",
   "notesTitle": "Made for auto shops.",
   "notes": [
-    { "title": "A one-page partner agreement", "text": "Every partner business signs a one-page agreement: mutual promotion, and nobody is paid per referral or per customer." },
-    { "title": "No competing bays", "text": "Our matching software leaves other repair shops off your route, and we skip any business you already work with, like the tow company you already call, unless you ask." },
-    { "title": "Your words only", "text": "We describe your shop only in words you've approved, and we leave only the printed materials you've signed off on." }
+    { "title": "A one-page partner agreement", "text": "You and each partner agree to promote each other. Nobody is paid per referral or per customer." },
+    { "title": "No competing bays", "text": "We never visit other repair shops for you." },
+    { "title": "Your words only", "text": "We describe your shop only in words you approve." }
   ],
   "exclusivity": "Partners agree to promote one auto shop like yours, and only yours, for as long as you are a client.",
   "faq": [
-    { "q": "Will you visit other repair shops near me?", "a": "No. Our matching software ranks the businesses near you that share your customers and don't compete with you. You approve the list before we visit anyone." },
-    { "q": "Dealerships have their own service departments. Why would you visit one?", "a": "Only if our matching software ranks it as sharing your customers without competing with you, and only if you approve it. If you'd rather leave dealerships off your route, we leave them off." },
-    { "q": "How do sign-ups reach my service desk?", "a": "Every sign-up shows up in your portal with the business and staff member whose code it came through, ready for your team to call and book. It also shows you which partnerships are working, stop by stop." }
+    { "q": "I already call a tow company. Will you visit them?", "a": "Not unless you ask. We skip businesses you already work with, and those relationships stay yours." },
+    { "q": "Dealerships have their own service departments. Why visit one?", "a": "Only if it shares your customers without competing, and only if you approve it. If you'd rather skip dealerships, we leave them off." },
+    { "q": "Do I need to come along on the visits?", "a": "No. Our field team makes every visit, and you see each stop in your portal." }
   ],
   "aboutKey": "auto-shops",
-  "aboutText": "I'm asking about field sales for my auto shop."
+  "aboutText": "I'm asking about referral partners for my auto shop."
 }

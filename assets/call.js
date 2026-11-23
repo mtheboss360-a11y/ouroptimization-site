@@ -9,15 +9,15 @@
 
   /* The "What would you like to talk about?" radios, in the order the form shows them: the referral routes
      first, then the add-ons, then "Not sure yet". Each value reads the same as its label. Since October 23,
-     2026 there were four; on October 24 "Patient dinner" came off (the dinner is mentioned only on the pricing
-     page now, and /contact?about=patient-network still prefills the message). The older labels (the referral or
+     2026 there were four; on October 24 "Patient dinner" came off (the dinner has its own page,
+     and /contact?about=patient-network still prefills the message). The older labels (the referral or
      flyer network, Plus-One Dinner, VIP Night, the online search network) are no longer choices. The field keeps its original name, "dinner", so Netlify
      keeps one column for it across old and new submissions. */
   var DINNERS = ['Referral routes', 'Online search / review tags / website', 'Not sure yet'];
   var ORDER = ['name', 'clinic', 'phone', 'email', 'town', 'best_time', 'dinner', 'message'];
   var MAX = { name: 120, clinic: 150, phone: 30, email: 254, town: 120, best_time: 60, message: 2000 };
 
-  /* Links from the other pages: /contact?about=pricing, /contact?about=referral-network and so on, one key per
+  /* Links from the other pages: /contact?about=referral-network, /contact?about=dental and so on, one key per
      page (named after its URL).
      Old links (/?about=review-tags#call) are redirected to /contact?about=... by netlify.toml.
      Keys that outlived their pages keep working and prefill a message about what replaced them:
@@ -29,7 +29,7 @@
      after the last part of the URL (/industries/dental links to /contact?about=dental). Each industry message
      matches the aboutText in tools/industries/<slug>.json. */
   var ABOUT = {
-    'pricing': "I'm asking about pricing.",
+    'pricing': "I'd like to book a call.",
     'referral-network': "I'm asking about referral routes.",
     'flyer-network': "I'm asking about referral routes.",
     'patient-network': "I'm asking about a private customer dinner.",
@@ -41,14 +41,14 @@
     'flyer-drops': "I'm asking about referral routes.",
     'google-ads': "I'm asking about Google Ads in my own account.",
     'field-team': "I'm asking about the field team.",
-    'med-spas': "I'm asking about field sales for my med spa.",
-    'dental': "I'm asking about field sales for my dental practice.",
-    'chiropractic-physical-therapy': "I'm asking about field sales for my chiropractic or physical therapy practice.",
-    'gyms-fitness-studios': "I'm asking about field sales for my gym or fitness studio.",
-    'salons-barbershops': "I'm asking about field sales for my salon or barbershop.",
-    'restaurants-cafes': "I'm asking about field sales for my restaurant or cafe.",
-    'home-services': "I'm asking about field sales for my home service business.",
-    'auto-shops': "I'm asking about field sales for my auto shop."
+    'med-spas': "I'm asking about referral partners for my med spa.",
+    'dental': "I'm asking about referral partners for my dental practice.",
+    'chiropractic-physical-therapy': "I'm asking about referral partners for my chiropractic or physical therapy practice.",
+    'gyms-fitness-studios': "I'm asking about referral partners for my gym or fitness studio.",
+    'salons-barbershops': "I'm asking about referral partners for my salon or barbershop.",
+    'restaurants-cafes': "I'm asking about referral partners for my restaurant or cafe.",
+    'home-services': "I'm asking about referral partners for my home service business.",
+    'auto-shops': "I'm asking about referral partners for my auto shop."
   };
 
   function str(v) { return v == null ? '' : String(v); }

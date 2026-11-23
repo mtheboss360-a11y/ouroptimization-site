@@ -19,7 +19,7 @@
      call form on /contact, with any old query (/#call?package=website) carried along. */
   var MOVED = {
     formats: '/patient-network#formats', how: '/referral-network', 'how-it-works': '/referral-network', handle: '/patient-network#handle',
-    who: '/about', 'add-ons': '/pricing', referrals: '/referral-network',
+    who: '/about', 'add-ons': '/faq#add-ons', referrals: '/referral-network',
     'flyer-drops': '/referral-network', faq: '/faq', call: '/contact#call'
   };
   var old = /^#([A-Za-z][\w-]*)(?:\?(.*))?$/.exec(window.location.hash);
@@ -63,6 +63,15 @@
       aliasTarget.scrollIntoView();
     }
   }
+
+  /* A link to one question (/faq#legal) opens that answer. */
+  var openAnswer = function () {
+    var id = /^#([A-Za-z][\w-]*)$/.exec(window.location.hash);
+    var el = id && document.getElementById(id[1]);
+    if (el && el.tagName === 'DETAILS') el.open = true;
+  };
+  openAnswer();
+  window.addEventListener('hashchange', openAnswer);
 
   /* Site switches from /assets/site-config.js: an element with data-flag="name" stays hidden until that switch is
      true. With data-flag-text="key", its text comes from that config value, so the sentence is not in the page
