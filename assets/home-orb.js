@@ -15,7 +15,7 @@
   new IntersectionObserver(([e]) => { onScreen = e.isIntersecting; }).observe(canvas);
 
   let W = 0, H = 0, dpr = 1, R = 0, cx = 0, cy = 0, colors = {};
-  let floor = 0, visW = -1, vis = 0;
+  let floor = 0, narrow = false;
   const readColors = () => {
     const s = getComputedStyle(hero);
     colors = { dot: s.getPropertyValue('--phthalo').trim(), lit: s.getPropertyValue('--phthalo-lit').trim(),
@@ -31,15 +31,15 @@
   }
 
   // The network. Angles are measured from the corner, inside the visible quarter (180-270 degrees).
-  const clinic = { label: 'Your business', a: 223, r: .40 };
+  const clinic = { label: 'Your business', a: 223, r: .40, na: 270, nr: .16 };
   // Illustrated business owners: drawn figures, no photos of real people.
   const partners = [
-    { label: 'Devon · Gym', a: 186, r: .78, skin: '#8D5A3B', hair: '#1E1A17', shirt: '#2F5D4A', style: 'short' },
-    { label: 'Nadia · Hair salon', a: 201, r: .93, skin: '#B7825F', hair: '#2A1C16', shirt: '#BD7189', style: 'long' },
-    { label: 'Rosa · Yoga studio', a: 214, r: .70, skin: '#E6B99A', hair: '#6B4A2E', shirt: '#7FA48F', style: 'bun' },
-    { label: 'Jasmine · Boutique', a: 232, r: .90, skin: '#6E4530', hair: '#141110', shirt: '#C9A46A', style: 'curly' },
-    { label: 'Owen · Physical therapy', a: 247, r: .72, skin: '#F0C8A8', hair: '#A8763E', shirt: '#3D5748', style: 'short' },
-    { label: 'Tina · Nail salon', a: 262, r: .88, skin: '#D9A07A', hair: '#3B2416', shirt: '#9E4F68', style: 'long' },
+    { label: 'Devon · Gym', a: 186, r: .78, na: 208, nr: .55, skin: '#8D5A3B', hair: '#1E1A17', shirt: '#2F5D4A', style: 'short' },
+    { label: 'Nadia · Hair salon', a: 201, r: .93, na: 236, nr: .90, skin: '#B7825F', hair: '#2A1C16', shirt: '#BD7189', style: 'long' },
+    { label: 'Rosa · Yoga studio', a: 214, r: .70, na: 258, nr: .58, skin: '#E6B99A', hair: '#6B4A2E', shirt: '#7FA48F', style: 'bun' },
+    { label: 'Jasmine · Boutique', a: 232, r: .90, na: 286, nr: .92, skin: '#6E4530', hair: '#141110', shirt: '#C9A46A', style: 'curly' },
+    { label: 'Owen · Physical therapy', a: 247, r: .72, na: 306, nr: .56, skin: '#F0C8A8', hair: '#A8763E', shirt: '#3D5748', style: 'short' },
+    { label: 'Tina · Nail salon', a: 262, r: .88, na: 336, nr: .50, skin: '#D9A07A', hair: '#3B2416', shirt: '#9E4F68', style: 'long' },
   ];
   function owner(x, y, p, k) {
     const R0 = 17 * k;
@@ -59,7 +59,8 @@
     if (p.style === 'bun') { ctx.beginPath(); ctx.arc(x, y - R0 * 0.58, R0 * 0.13, 0, 6.283); ctx.fill(); }
     ctx.restore();
   }
-  const at = (n) => { const a = (n.pa ?? n.a) * Math.PI / 180, r = n.pr ?? n.r; return [cx + Math.cos(a) * R * r, cy + Math.sin(a) * R * r]; };
+  const baseA = (n) => narrow ? n.na : n.a, baseR = (n) => narrow ? n.nr : n.r;
+  const at = (n) => { const a = (n.pa ?? baseA(n)) * Math.PI / 180, r = n.pr ?? baseR(n); return [cx + Math.cos(a) * R * r, cy + Math.sin(a) * R * r]; };
 
   // Keep the people off the words. Each owner (face + name pill) is nudged around its spot,
   // then pulled in toward the corner, until it clears the headline, the paragraph, the proof
@@ -74,10 +75,11 @@
   const hit = (a, b) => a[0] < b[2] && a[2] > b[0] && a[1] < b[3] && a[3] > b[1];
   function layout() {
     const c = canvas.getBoundingClientRect(), pad = 14;
-    const taken = [...hero.querySelectorAll('h1, .lede, .actions, .proof-row, .eyebrow')].map(el => {
+    const taken = [...hero.querySelectorAll('h1, .lede, .actions, .proof-row, .eyebrow, .hero-displays')].map(el => {
       const r = el.getBoundingClientRect();
       return [r.left - c.left - pad, r.top - c.top - pad, r.right - c.left + pad, r.bottom - c.top + pad];
     });
+    clinic.pa = clinic.pr = undefined;
     const [qx, qy] = at(clinic);
     taken.push(boxOf(qx, qy, clinic.label, true), [qx - 22, qy - 22, qx + 22, qy + 22]);
     const clear = (b) => b[0] >= 0 && b[2] <= W && b[1] >= 0 && b[3] <= floor && !taken.some(t => hit(b, t));
@@ -85,7 +87,7 @@
       let best = null;
       search: for (let dr = 0; dr <= 0.5; dr += 0.03) {
         for (const da of [0, 3, -3, 6, -6, 9, -9, 12, -12]) {
-          const pr = Math.max(0.3, p.r - dr), pa = p.a + da;
+          const pr = Math.max(0.3, baseR(p) - dr), pa = baseA(p) + da;
           p.pr = pr; p.pa = pa;
           const [x, y] = at(p);
           const b = boxOf(x, y, p.label, false);
@@ -104,16 +106,17 @@
     W = rect.width; H = rect.height;
     canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    const narrow = W < 760;
-    R = narrow ? Math.min(W * 0.92, 420) : Math.min(H * 0.86, W * 0.5, 760);
-    // phones: lift the orb by the bottom tab bar's height, so your business is never hidden behind it
-    const bar = narrow ? ((document.querySelector('.tabbar') || {}).offsetHeight || 0) + 16 : 0;
-    // short phones: sit on the first screen's visible bottom (measured once per width, so a collapsing
-    // browser toolbar doesn't move it), but never above the hero text
-    if (W !== visW) { visW = W; vis = innerHeight - rect.top - scrollY; }
-    const copy = hero.querySelector('.hero-copy').getBoundingClientRect().bottom - rect.top;
-    floor = narrow ? Math.max(copy + R * 0.28 + 64, Math.min(H, vis) - bar) : H;
-    cx = W + (narrow ? R * 0.06 : R * 0.02); cy = floor + (narrow ? R * 0.04 : R * 0.02);
+    narrow = W < 760;
+    if (narrow) {
+      // phones: a true half orb in its own band under the words and photos, your business at its centre,
+      // so every owner has room to show
+      const copy = hero.querySelector('.hero-copy').getBoundingClientRect().bottom - rect.top;
+      R = Math.max(150, Math.min(W * 0.81, (H - copy - 40) / 0.98));
+      floor = H; cx = W / 2; cy = H;
+    } else {
+      R = Math.min(H * 0.86, W * 0.5, 760);
+      floor = H; cx = W + R * 0.02; cy = H + R * 0.02;
+    }
     readColors();
     layout();
   }
@@ -240,8 +243,15 @@
   // the orb on a phone replays it.
   if (stuck || reduce) { target = 1; open = 1; openedAt = performance.now() - 60000; }
   else {
-    const go = new IntersectionObserver(([e]) => { if (e.isIntersecting) { go.disconnect(); setTimeout(() => setOpen(1), 500); } });
-    go.observe(canvas);
+    const start = () => setTimeout(() => setOpen(1), 500);
+    if (narrow) {
+      const seen = () => canvas.getBoundingClientRect().top + H - R * 0.55 < innerHeight;
+      const check = () => { if (seen()) { removeEventListener('scroll', check); start(); } };
+      addEventListener('scroll', check, { passive: true }); check();
+    } else {
+      const go = new IntersectionObserver(([e]) => { if (e.isIntersecting) { go.disconnect(); start(); } });
+      go.observe(canvas);
+    }
   }
   requestAnimationFrame(frame);
   document.fonts && document.fonts.ready.then(() => { readColors(); layout(); });

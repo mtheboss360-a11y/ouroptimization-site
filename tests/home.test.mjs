@@ -15,18 +15,23 @@ const sec = (id) => {
 describe('home: order and hero', () => {
   test('the sections (November 20, 2026): the general promise, Industries, in person, the portal, Treats for Staff, in writing, the call; no pricing, no map', () => {
     const ids = [...main.replace(/<!--[\s\S]*?-->/g, '').matchAll(/<section\b[^>]*\sid="([^"]+)"/g)].map((m) => m[1]);
-    assert.deepEqual(ids, ['industries', 'in-person', 'dashboard', 'treats', 'compliance', 'book']);
+    assert.deepEqual(ids, ['industries', 'in-person', 'dashboard', 'levels', 'treats', 'compliance', 'book']);
     assert.doesNotMatch(text(main), /\$\d/, 'no prices on the home page');
     const heroAt = main.indexOf('class="hero-orb"');
     assert.ok(heroAt >= 0 && heroAt < main.indexOf('id="industries"'), 'the hero comes first');
   });
-  test('the hero: the owner\'s line (November 21, 2026), with no buttons and no example card', () => {
+  test('the hero: the owner\'s line (November 21, 2026) and the three display photos (November 23, 2026), with no buttons and no example card', () => {
     const hero = /<section class="hero-orb"[\s\S]*?<\/section>/.exec(main)[0];
     assert.equal(text(/<h1 id="hero-h">([\s\S]*?)<\/h1>/.exec(hero)[1]), 'Boots on the ground for your local business.');
     assert.equal(text(/<p class="lede">([\s\S]*?)<\/p>/.exec(hero)[1]),
       'Our team visits the businesses near you and introduces your business to their staff. Every visit and sign-up shows up in your portal.');
-    assert.deepEqual(links(hero), [], 'no links: the Devon\'s gym card came off on October 26, 2026');
+    const photos = ['salon', 'bakery', 'medspa'];
+    assert.deepEqual(links(hero).map((l) => l.href), photos.map((n) => `/assets/img/display-${n}.png`), 'the only links open the full-size photos');
+    for (const n of photos) assert.ok(existsSync(new URL(`./assets/img/display-${n}.png`, ROOT)), n);
+    assert.equal(tags(hero, 'img').length, 3);
+    for (const img of tags(hero, 'img')) assert.ok(attr(img, 'alt').length > 40, 'each photo is described');
     assert.doesNotMatch(hero, /class="btn/, 'no buttons');
+    assert.doesNotMatch(hero, /hero-lv|Level [12]/, 'the levels are further down the page');
     assert.doesNotMatch(text(hero), /Devon|30 clients|tap-to-schedule/, 'the owner took the card down');
     assert.doesNotMatch(hero, /proof-row|proof-one/);
     assert.doesNotMatch(text(hero), /Marcus/);
@@ -192,12 +197,12 @@ describe('the portal tour (home, /field-team, /referral-network)', () => {
         assert.equal(hasAttr(f, 'hidden'), i !== 0, 'only the first screen shows before a tab is chosen');
       });
     });
-    test(`${file} #${id}: the phone screens on phones, the desktop screens elsewhere, every one described as the sample account`, () => {
+    test(`${file} #${id}: the phone screens on phones, the desktop screens elsewhere, every one described as the client portal`, () => {
       const imgs = tags(s, 'img');
       assert.equal(imgs.length, 4);
       for (const img of imgs) {
         assert.match(attr(img, 'src'), /^\/assets\/img\/portal2-(stops|network|partners|routes)-1280\.jpg$/);
-        assert.match(attr(img, 'alt'), /^Screenshot of the portal's sample account: /);
+        assert.match(attr(img, 'alt'), /^Screenshot of the client portal: /);
         assert.equal(attr(img, 'loading'), 'lazy');
       }
       const phone = tags(s, 'source').filter((t) => attr(t, 'media') === '(max-width:759.98px)');

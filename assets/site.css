@@ -1595,7 +1595,7 @@ html:not(.js) .ptour-panel[hidden]{display:block}
 .hero-orb h1 em{display:block;color:var(--gold-lg)}
 .hero-orb .lede{margin-top:22px;max-width:32em;font-size:clamp(1.04rem,.98rem + .3vw,1.2rem);color:var(--ink-2);text-wrap:pretty}
 .hero-orb .actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
-@media (max-width:760px){.hero-orb .wrap{padding-block:28px 380px}}
+@media (max-width:759.98px){.hero-orb .wrap{padding-block:28px clamp(300px,92vw,400px)}}
 html:not(.js) .hero-orb{min-height:0}
 html:not(.js) .hero-orb .wrap{padding-bottom:clamp(48px,8vh,96px)}
 /* How It Works' matching orb: gold at the centre too */
@@ -1645,3 +1645,137 @@ body>main{flex:1 0 auto}
    square on How It Works without JavaScript */
 @media (min-width:640px) and (max-width:859.98px){.home-steps>li:last-child{grid-column:1/-1}}
 html:not(.js) .hiw-orb{display:none}
+
+/* =====================================================================================================
+   November 23, 2026: two levels. Level 1, your team visits; Level 2, our team visits. A short version on
+   the home page (#levels) with the owner's three counter display photos, and the full detail on How it
+   works (#levels).
+   ===================================================================================================== */
+.lv-k{font:700 .78rem/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--gold-sm);margin-bottom:10px}
+.lv-cards{list-style:none;display:grid;gap:16px;max-width:980px;margin:clamp(28px,4vw,44px) auto 0}
+@media (min-width:760px){.lv-cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.lv-card{padding:clamp(22px,3vw,32px);border-radius:18px;background:var(--surface);border:1px solid var(--line);box-shadow:var(--sh-1)}
+.lv-card h3{font-size:1.35rem;line-height:1.2}
+.lv-card .dn-checks{margin-top:14px;grid-template-columns:minmax(0,1fr)}
+.lv-full{background:radial-gradient(120% 120% at 50% 0%,#2A5D46 0%,var(--accent) 52%,#173D2E 100%);border-color:transparent;color:#CFDDD3}
+.lv-full h3{color:#fff}
+.lv-full .lv-k{color:var(--gold-bright)}
+.lv-full .dn-checks{border-top-color:rgba(255,255,255,.18)}
+.lv-full .dn-checks li{color:#E8EFE9;border-bottom-color:rgba(255,255,255,.18)}
+.lv-full .dn-checks svg{color:var(--gold-bright)}
+.lv-detail h4{margin-top:24px;font:700 .8rem/1.2 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2)}
+.lv-detail .lv-full h4{color:var(--gold-bright)}
+.lv-detail .dn-checks{margin-top:10px}
+.lv-detail .btn{margin-top:26px}
+.lv-detail{align-items:start}
+.lv-full :focus-visible{outline-color:var(--gold-bright)}
+.lv-note{margin-top:22px;padding-top:16px;border-top:1px dashed var(--line);font-size:.9rem;line-height:1.5;color:var(--ink-2)}
+.lv-more{display:flex;justify-content:center}
+/* the owner's three counter display photos in the home hero (November 23, 2026): a row of three under the
+   line on wider screens, a swipeable row on phones. Each opens the full-size photo. */
+.hero-displays{margin:28px 0 0;max-width:700px}
+.hero-displays ul{list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.hero-displays li{min-width:0}
+.hero-displays a{display:block;border-radius:14px;overflow:hidden;background:#fff;border:1px solid var(--line);box-shadow:0 16px 34px -20px rgba(22,49,31,.5);transition:transform .15s ease,box-shadow .15s ease}
+.hero-displays a:hover{transform:translateY(-3px);box-shadow:0 22px 40px -20px rgba(22,49,31,.55)}
+.hero-displays img{display:block;width:100%;height:auto;aspect-ratio:1/1;object-fit:cover}
+.hero-dsp-k{display:block;margin-top:8px;font:650 .86rem/1.2 var(--sans);color:var(--ink)}
+.hero-displays figcaption{margin-top:12px;font-size:.88rem;color:var(--ink-2)}
+@media (max-width:759.98px){
+  /* phones: the photos stacked, each shown whole */
+  .hero-displays{max-width:460px}
+  .hero-displays ul{grid-template-columns:minmax(0,1fr);gap:18px}
+  .hero-displays img{aspect-ratio:auto;object-fit:fill}
+}
+
+/* =====================================================================================================
+   November 23, 2026: the Portals page (/portals). Three portals, each with its own colour: the owner in
+   forest green, the front desk in peony, the runner in gold. Screens from the portal's demo account in a
+   browser frame with the phone screen beside it, the path a sign-up takes, and who sees what.
+   ===================================================================================================== */
+.pr-owner{--role:#1F5C45;--role-soft:#E5EFE8;--role-ink:#16402F}
+.pr-desk{--role:#B5627E;--role-soft:#F6E7EC;--role-ink:#8A3F5A}
+.pr-runner{--role:#A97F2E;--role-soft:#F5EDDC;--role-ink:#6E521A}
+.pr-chip{display:inline-flex;align-items:center;gap:8px;padding:6px 12px 6px 8px;border-radius:999px;background:var(--role-soft);color:var(--role-ink);font:700 .78rem/1 var(--sans);letter-spacing:.08em;text-transform:uppercase}
+.pr-chip svg{width:18px;height:18px}
+/* the three cards under the page head */
+.pr-trio{list-style:none;display:grid;gap:14px;margin-top:clamp(28px,4vw,40px)}
+@media (min-width:760px){.pr-trio{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.pr-trio a{position:relative;display:flex;flex-direction:column;gap:10px;height:100%;padding:20px 20px 22px;border-radius:18px;background:#fff;border:1px solid var(--line);box-shadow:0 14px 34px -24px rgba(22,49,31,.45);color:var(--ink);text-decoration:none;overflow:hidden;transition:transform .15s ease,box-shadow .15s ease}
+.pr-trio a::before{content:"";position:absolute;inset:0 0 auto;height:4px;background:var(--role)}
+.pr-trio .pr-chip{align-self:flex-start}
+.pr-trio a:hover{transform:translateY(-3px);box-shadow:0 22px 40px -24px rgba(22,49,31,.5)}
+.pr-trio b{font-family:var(--hero);font-weight:750;font-size:1.25rem;line-height:1.2}
+.pr-trio span.pr-trio-t{font-size:.95rem;line-height:1.5;color:var(--ink-2)}
+.pr-trio .pr-go{margin-top:auto;font:650 .88rem/1 var(--sans);color:var(--role-ink)}
+/* the path a sign-up takes */
+.pr-flow{list-style:none;display:grid;gap:12px;margin-top:clamp(28px,4vw,44px);counter-reset:prf}
+.pr-flow li{position:relative;display:grid;grid-template-columns:34px minmax(0,1fr);column-gap:14px;padding:16px 18px;border-radius:16px;background:#fff;border:1px solid var(--line);counter-increment:prf}
+.pr-flow li::before{content:counter(prf);grid-row:1 / span 3;display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--role-ink);color:#fff;font:700 .88rem/1 var(--sans)}
+.pr-flow li:not(:last-child)::after{content:"";position:absolute;left:34px;bottom:-13px;width:2px;height:12px;background:#C9D6CB}
+.pr-flow b{display:block;font-family:var(--hero);font-weight:750;font-size:1.02rem;line-height:1.25;margin-bottom:4px}
+.pr-flow span{display:block;font-size:.9rem;line-height:1.45;color:var(--ink-2)}
+.pr-flow .pr-who{margin-top:10px;font:700 .7rem/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--role-ink)}
+/* one portal: the screens on one side, what it does on the other */
+.pr-portal{display:grid;gap:clamp(28px,4vw,56px);align-items:center}
+@media (min-width:1000px){.pr-portal{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)}.pr-portal.pr-flip{grid-template-columns:minmax(0,1fr) minmax(0,1.25fr)}.pr-portal.pr-flip>.pr-stage{order:2}}
+.pr-stage{position:relative;padding:0 0 clamp(36px,6vw,64px)}
+.pr-stage .pt-browser{border-radius:14px;overflow:hidden;background:#fff;border:1px solid var(--line);box-shadow:0 30px 60px -36px rgba(22,49,31,.55)}
+.pr-stage .pt-browser img{display:block;width:100%;height:auto}
+.pr-phone{position:absolute;right:-6px;bottom:0;width:clamp(132px,29%,210px);padding:7px;border-radius:30px;background:#14261C;box-shadow:0 26px 50px -24px rgba(10,24,16,.7)}
+.pr-phone img{display:block;width:100%;height:auto;border-radius:24px}
+.pr-phone::before{content:"";position:absolute;top:13px;left:50%;width:30%;height:9px;transform:translateX(-50%);border-radius:9px;background:#14261C;z-index:1}
+.pr-phone-only{position:relative;width:min(300px,78%);margin:0 auto}
+.pr-copy h2{margin-top:14px}
+.pr-copy .intro{max-width:34em}
+.pr-lists{display:grid;gap:18px;margin-top:22px}
+.pr-lists h3{font:700 .78rem/1.2 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--role-ink);margin-bottom:8px}
+.pr-lists ul{list-style:none;display:grid;gap:8px}
+.pr-lists li{display:flex;gap:10px;align-items:flex-start;font-size:.97rem;line-height:1.5;color:var(--ink)}
+.pr-lists li svg{flex:none;width:18px;height:18px;margin-top:3px;color:var(--role)}
+.pr-lists .pr-never li svg{color:#8A968C}
+.pr-lists .pr-never li{color:var(--ink-2)}
+/* who sees what */
+.pr-grid{width:100%;border-collapse:separate;border-spacing:0;margin-top:clamp(24px,3.4vw,36px);background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;font-size:.95rem}
+.pr-grid th,.pr-grid td{padding:13px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+.pr-grid tr:last-child th,.pr-grid tr:last-child td{border-bottom:0}
+.pr-grid thead th{font:700 .74rem/1.2 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2);background:var(--paper)}
+.pr-grid td{text-align:center;width:16%}
+.pr-grid thead th:not(:first-child){text-align:center}
+.pr-grid .yes{color:#1F5C45;font-weight:700}
+.pr-grid .no{color:var(--ink-3)}
+@media (max-width:640px){.pr-grid{font-size:.86rem}.pr-grid th,.pr-grid td{padding:10px 6px}}
+/* the Portals page head: three phones fanned out beside the words */
+.pr-hero .pg-hero-grid{align-items:center}
+.pr-fan{position:relative;height:clamp(380px,46vw,520px);margin-top:8px}
+.pr-fan .pr-phone{position:absolute;bottom:0;width:clamp(150px,17vw,200px)}
+.pr-fan-1{left:4%;transform:rotate(-7deg) translateY(-14px);z-index:1}
+.pr-fan-2{left:50%;transform:translateX(-50%);z-index:3}
+.pr-fan-3{right:4%;transform:rotate(7deg) translateY(-14px);z-index:2}
+@media (min-width:1000px){.pr-hero .pg-hero-grid{grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:clamp(24px,4vw,56px)}}
+@media (max-width:999.98px){.pr-fan{width:100%;max-width:520px;margin:clamp(20px,4vw,32px) auto 0}}
+@media (max-width:560px){.pr-fan{height:330px}.pr-fan .pr-phone{width:132px;padding:5px;border-radius:24px}.pr-fan .pr-phone img{border-radius:19px}.pr-fan-1{left:0}.pr-fan-3{right:0}}
+/* the path a sign-up takes, beside the form a customer sees */
+.pr-flow-wrap{display:grid;gap:clamp(28px,4vw,56px);align-items:center}
+@media (min-width:1000px){.pr-flow-wrap{grid-template-columns:minmax(0,1.3fr) minmax(0,.7fr)}}
+.pr-form{margin:0}
+.pr-form figcaption{margin-top:14px;text-align:center;font-size:.9rem;color:var(--ink-2)}
+.pr-phone-only{position:relative;right:auto;bottom:auto}
+.pr-note{margin-top:20px;padding:12px 14px;border-radius:12px;background:var(--role-soft);color:var(--role-ink);font-size:.92rem;line-height:1.5}
+.pr-grid-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.pr-promises{list-style:none;display:grid;gap:12px;margin-top:clamp(22px,3vw,30px)}
+@media (min-width:860px){.pr-promises{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.pr-promises li{display:flex;gap:12px;align-items:flex-start;padding:16px;border-radius:14px;background:#fff;border:1px solid var(--line);font-size:.95rem;line-height:1.5;color:var(--ink-2)}
+.pr-promises b{color:var(--ink)}
+.pr-promises svg{flex:none;width:22px;height:22px;color:var(--accent)}
+.pr-copy .pr-chip{margin-bottom:2px}
+.pr-hero .pr-trio{margin-top:clamp(28px,4vw,44px)}
+/* phones: each portal shows its phone screen, centred, in place of the browser frame */
+@media (max-width:759.98px){
+  .pr-stage{padding:0}
+  .pr-stage .pt-browser{display:none}
+  .pr-stage .pr-phone{position:relative;right:auto;bottom:auto;width:min(250px,66vw);margin:0 auto}
+  .pr-grid th[scope="row"]{width:40%}
+  .pr-grid td{width:20%}
+  .pr-grid thead th{font-size:.66rem;letter-spacing:.04em}
+}

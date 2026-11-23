@@ -152,7 +152,7 @@ ${d.partners.map((p) => `      <li><h3>${esc(p.name)}</h3><p>${esc(p.why)}</p></
       <li>${scenes.chat}
         <h3>Real people, in person</h3></li>
       <li>${scenes.tap}
-        <h3>A card for every staff member</h3></li>
+        <h3>A digital <span class="nowrap">sign-up</span> sheet for every business</h3></li>
     </ul>
     <div class="ind-treats reveal">
       <p class="dg-k">What we bring</p>
@@ -177,7 +177,7 @@ ${d.treatExamples.map((t) => `        <li>${esc(t)}</li>`).join('\n')}
       <p class="owc-more"><a class="textlink" href="/referral-network#dashboard">See everything in the portal${ARROW}</a></p>
     </div>
     <figure class="ind-shot reveal">
-      <div class="pt-browser"><div class="pt-bar" aria-hidden="true"><span></span><span></span><span></span><span class="pt-url">ournetworkportal.com</span></div>${resultsPicture("Screenshot of the portal's sample account: the totals for five routes: stops visited, stops still to visit, referral cards handed out, staff sign-ups, bookings by the front desk and businesses that joined.")}</div>
+      <div class="pt-browser"><div class="pt-bar" aria-hidden="true"><span></span><span></span><span></span><span class="pt-url">ournetworkportal.com</span></div>${resultsPicture("Screenshot of the client portal: the totals for five routes: stops visited, stops still to visit, referral cards handed out, staff sign-ups, bookings by the front desk and businesses that joined.")}</div>
       <figcaption>Activity and results, as the campaign runs.</figcaption>
     </figure>
   </div>

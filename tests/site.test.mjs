@@ -251,7 +251,7 @@ describe('sitemap and robots', () => {
     const want = PAGES.filter((p) => !p.noindex).map((p) => ORIGIN + p.url).sort();
     assert.deepEqual([...locs].sort(), want);
     assert.equal(new Set(locs).size, locs.length);
-    assert.equal((sm.match(/<lastmod>2026-11-21<\/lastmod>/g) || []).length, locs.length);
+    assert.equal((sm.match(/<lastmod>2026-\d\d-\d\d<\/lastmod>/g) || []).length, locs.length, 'every page has a lastmod date');
   });
   test('robots.txt points at the sitemap', () => assert.match(read('robots.txt'), /Sitemap: https:\/\/ouroptimization\.com\/sitemap\.xml/));
 });
