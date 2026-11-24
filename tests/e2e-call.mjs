@@ -229,9 +229,9 @@ await scenario('an old /?about=flyer-drops link is redirected to /contact?about=
 await scenario('every service page key prefills on /contact, and the keys from before the rename still work', async () => {
   for (const [key, message] of [
     ['referral-network', "I'm asking about referral routes."], ['flyer-network', "I'm asking about referral routes."],
-    ['patient-network', "I'm asking about a private customer dinner."], ['online-search-network', "I'm asking about Google Ads in my own account."],
+    ['patient-network', "I'd like to book a call."], ['online-search-network', "I'm asking about Google Ads in my own account."],
     ['pricing', "I'd like to book a call."], ['sample-contract', "I'm asking about the partner agreement."],
-    ['patient-dinners', "I'm asking about a private customer dinner."], ['flyer-drops', "I'm asking about referral routes."], ['google-ads', "I'm asking about Google Ads in my own account."],
+    ['patient-dinners', "I'd like to book a call."], ['flyer-drops', "I'm asking about referral routes."], ['google-ads', "I'm asking about Google Ads in my own account."],
     // November 23, 2026: the two ways to run it, in plain words (no "Level 1" or "Level 2")
     ['level-1', "I'm interested in my team visiting the businesses."], ['level-2', "I'm interested in your team visiting the businesses."]
   ]) {
@@ -241,8 +241,8 @@ await scenario('every service page key prefills on /contact, and the keys from b
   }
 });
 
-await scenario('old home section links open their new page (/#faq, /#formats, /#referrals, /#flyer-drops)', async () => {
-  for (const [from, to] of [['/#faq', '/faq'], ['/#formats', '/patient-network#formats'], ['/#referrals', '/referral-network'], ['/#flyer-drops', '/referral-network']]) {
+await scenario('old home section links open their new page (/#faq, /#referrals, /#flyer-drops)', async () => {
+  for (const [from, to] of [['/#faq', '/faq'], ['/#referrals', '/referral-network'], ['/#flyer-drops', '/referral-network']]) {
     const { page, jsErrors, close } = await open({ path: from });
     await page.waitForURL((u) => u.pathname !== '/', { timeout: 3000 });
     await page.waitForLoadState('load');
@@ -252,9 +252,24 @@ await scenario('old home section links open their new page (/#faq, /#formats, /#
   }
 });
 
+await scenario('the private dinners page is retired (November 24, 2026): its paths 301 to the home page, and old home anchors stay home', async () => {
+  for (const path of ['/patient-network', '/patient-network.html', '/patient-dinners', '/patient-dinners.html', '/events', '/events.html']) {
+    const r = await fetch(`${BASE}${path}`, { redirect: 'manual' });
+    assert.equal(r.status, 301, `${path} status`);
+    assert.equal(r.headers.get('location'), '/', `${path} goes to the home page`);
+  }
+  for (const hash of ['#formats', '#handle']) {
+    const { page, jsErrors, close } = await open({ path: `/${hash}` });
+    await page.waitForTimeout(600);
+    assert.equal(new URL(page.url()).pathname, '/', `/${hash} stays on the home page`);
+    assert.deepEqual(jsErrors, []);
+    await close();
+  }
+});
+
 await scenario('the renamed service pages: each old path, with and without .html, 301s straight to its new page', async () => {
   // October 23, 2026: the flyer network folded into the referral routes, so every flyer path lands on /referral-network ("How it works").
-  const RENAMED = [['/flyer-network', '/referral-network', 'How it works'], ['/flyer-drops', '/referral-network', 'How it works'], ['/patient-dinners', '/patient-network', null], ['/google-ads', '/online-search-network', null]];
+  const RENAMED = [['/flyer-network', '/referral-network', 'How it works'], ['/flyer-drops', '/referral-network', 'How it works'], ['/google-ads', '/online-search-network', null]];
   for (const [old, now, tab] of RENAMED) {
     for (const path of [old, `${old}.html`]) {
       const r = await fetch(`${BASE}${path}`, { redirect: 'manual' });
@@ -266,20 +281,20 @@ await scenario('the renamed service pages: each old path, with and without .html
     const { page, jsErrors, missing, close } = await open({ path: `${old}#how` });
     assert.equal(new URL(page.url()).pathname, now);
     assert.equal(await page.$$eval('#site-nav a[aria-current="page"]', (a) => (a[0] ? a[0].textContent.trim() : null)), tab);
-    assert.match(await page.title(), / \| Our Local Network$/);
+    assert.match(await page.title(), / \| Local Impressions$/);
     assert.deepEqual(jsErrors, []);
     assert.deepEqual(missing, [], 'every stylesheet, script, font and image loads');
     await close();
   }
   // Older redirects that used to point at an old path go straight to the new page.
-  for (const [path, to] of [['/events', '/patient-network'], ['/flyers', '/referral-network'], ['/direct-mail', '/referral-network'], ['/digital-marketing', '/online-search-network'], ['/how-it-works', '/referral-network'], ['/tracking', '/#dashboard']]) {
+  for (const [path, to] of [['/events', '/'], ['/flyers', '/referral-network'], ['/direct-mail', '/referral-network'], ['/digital-marketing', '/online-search-network'], ['/how-it-works', '/referral-network'], ['/tracking', '/#dashboard']]) {
     const r = await fetch(`${BASE}${path}`, { redirect: 'manual' });
     assert.equal(r.status, 301, path);
     assert.equal(r.headers.get('location'), to, path);
   }
 });
 
-await scenario('the header shows the Our Local Network logo, loaded and crisp (the footer is one legal line)', async () => {
+await scenario('the header shows the Local Impressions logo, loaded and crisp (the footer is one legal line)', async () => {
   const { page, close } = await open({ path: '/' });
   await page.waitForFunction(() => [...document.querySelectorAll('img[src*="own-logo"]')].every((i) => i.complete && i.naturalWidth === 360));
   const logos = await page.$$eval('img[src*="own-logo"]', (imgs) => imgs.map((i) => ({ src: i.getAttribute('src'), cur: i.currentSrc, alt: i.alt, w: i.getBoundingClientRect().width })));
@@ -287,7 +302,7 @@ await scenario('the header shows the Our Local Network logo, loaded and crisp (t
   for (const l of logos) {
     assert.equal(l.src, '/assets/img/own-logo-360.png');
     assert.match(l.cur, /own-logo-360\.webp$/, 'the WebP is used where supported');
-    assert.equal(l.alt, 'Our Local Network');
+    assert.equal(l.alt, 'Local Impressions');
     assert.ok(l.w > 0 && l.w <= 180, `shown at ${l.w}px from a 360px file, so it stays sharp on 2x screens`);
   }
   await close();
@@ -464,8 +479,8 @@ await scenario('home: the half orb builds its network, clear of the words, with 
     const c = await s.page.$eval('#orb', (el) => ({ w: el.width, h: el.height, lit: (() => { const d = el.getContext('2d').getImageData(0, 0, el.width, el.height).data; let n = 0; for (let i = 3; i < d.length; i += 4) if (d[i]) n++; return n; })() }));
     assert.ok(c.w > 0 && c.h > 0, `${width}px: the canvas has a size`);
     assert.ok(c.lit > 5000, `${width}px: the orb and its network are drawn (${c.lit} pixels)`);
-    assert.equal((await s.page.textContent('#hero-h')).replace(/\s+/g, ' ').trim(), 'Your customers are already next door.', 'the hero line (November 23, 2026)');
-    assert.equal(await s.page.title(), 'Our Local Network | Your Customers Are Already Next Door');
+    assert.equal((await s.page.textContent('#hero-h')).replace(/\s+/g, ' ').trim(), 'Meet the local businesses your next customers already trust.', 'the hero line (November 24, 2026)');
+    assert.equal(await s.page.title(), 'Local Impressions | Meet the Businesses Your Next Customers Trust');
     assert.deepEqual(s.outside, [], 'no requests to other sites');
     assert.deepEqual(s.jsErrors, []);
     assert.deepEqual(s.missing, []);

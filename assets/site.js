@@ -1,4 +1,4 @@
-/* Our Local Network: shared site behaviour.
+/* Local Impressions: shared site behaviour.
    Loaded with defer on every page. No dependencies, no third-party requests. */
 (function () {
   var root = document.documentElement;
@@ -18,7 +18,7 @@
      (/#faq opens /faq). The home page's call band came off on October 22, 2026, so /#call opens the
      call form on /contact, with any old query (/#call?package=website) carried along. */
   var MOVED = {
-    formats: '/patient-network#formats', how: '/referral-network', 'how-it-works': '/referral-network', handle: '/patient-network#handle',
+    how: '/referral-network', 'how-it-works': '/referral-network',
     who: '/about', 'add-ons': '/faq#add-ons', referrals: '/referral-network',
     'flyer-drops': '/referral-network', faq: '/faq', call: '/contact#call'
   };
@@ -42,7 +42,7 @@
   }
 
   /* Old links to retired pages 301 to a page or a section (/meeting to /contact). If a redirect carried
-     the old query string after the fragment (/patient-network#how?ref=x), put the query back in front
+     the old query string after the fragment (/referral-network#how?ref=x), put the query back in front
      of the # and open the section, so the visitor still lands on it. */
   var stray = /^#([A-Za-z][\w-]*)\?(.*)$/.exec(window.location.hash);
   var strayTarget = stray && document.getElementById(stray[1]);

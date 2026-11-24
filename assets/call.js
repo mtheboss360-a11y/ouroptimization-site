@@ -9,8 +9,8 @@
 
   /* The "What would you like to talk about?" radios, in the order the form shows them: the referral routes
      first, then the add-ons, then "Not sure yet". Each value reads the same as its label. Since October 23,
-     2026 there were four; on October 24 "Patient dinner" came off (the dinner has its own page,
-     and /contact?about=patient-network still prefills the message). The older labels (the referral or
+     2026 there were four; on October 24 "Patient dinner" came off (the dinner had its own page until November 24, 2026,
+     and since then /contact?about=patient-network prefills a plain call request). The older labels (the referral or
      flyer network, Plus-One Dinner, VIP Night, the online search network) are no longer choices. The field keeps its original name, "dinner", so Netlify
      keeps one column for it across old and new submissions. */
   var DINNERS = ['Referral routes', 'Online search / review tags / website', 'Not sure yet'];
@@ -23,8 +23,9 @@
      Keys that outlived their pages keep working and prefill a message about what replaced them:
      - flyer-network and flyer-drops: the flyer network folded into the referral routes on October 23, 2026
        (/flyer-network 301s to /referral-network), so they prefill the referral routes message.
-     - patient-dinners (now patient-network, the private patient dinner page) and google-ads (now
-       online-search-network) were renamed on October 22, 2026 and prefill the same message as the new key.
+     - google-ads (now online-search-network) was renamed on October 22, 2026 and prefills the same message as the new key.
+     - patient-network and patient-dinners: the private dinners page was retired on November 24, 2026, so, like
+       pricing, they prefill a plain call request.
      November 20, 2026: the Field Team page and the eight industry pages under /industries/ get a key each, named
      after the last part of the URL (/industries/dental links to /contact?about=dental). Each industry message
      matches the aboutText in tools/industries/<slug>.json. */
@@ -32,12 +33,12 @@
     'pricing': "I'd like to book a call.",
     'referral-network': "I'm asking about referral routes.",
     'flyer-network': "I'm asking about referral routes.",
-    'patient-network': "I'm asking about a private customer dinner.",
+    'patient-network': "I'd like to book a call.",
     'online-search-network': "I'm asking about Google Ads in my own account.",
     'review-tags': "I'm asking about review tags.",
     'website-design': "I'm asking about a website redesign.",
     'sample-contract': "I'm asking about the partner agreement.",
-    'patient-dinners': "I'm asking about a private customer dinner.",
+    'patient-dinners': "I'd like to book a call.",
     'flyer-drops': "I'm asking about referral routes.",
     'google-ads': "I'm asking about Google Ads in my own account.",
     'field-team': "I'm asking about the field team.",
