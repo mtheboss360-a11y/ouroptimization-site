@@ -125,7 +125,7 @@ describe('every page: header and footer', () => {
       assert.match(f, /© 2026 OUR Optimization LLC/);
       assert.match(f, /Local Impressions is a service of OUR Optimization LLC\./, 'the brand line, the same everywhere (November 20, 2026)');
       assert.deepEqual(links(footerOf(src)).map((l) => l.href), ['/privacy', '/terms']);
-      assert.match(f, /^Serving Franklin Park, Oak Brook, Lombard, Elmhurst, Naperville, Downers Grove and Hinsdale\. /, 'the service area, first in the footer (November 24, 2026)');
+      assert.match(f, /^Serving the Chicago area, including Franklin Park, Oak Brook, Lombard, Elmhurst, Naperville, Downers Grove and Hinsdale\. /, 'the service area, first in the footer (November 24, 2026)');
     });
   }
   test('the private dinners page is retired (November 24, 2026): no served page links it or offers the dinner', () => {
