@@ -281,7 +281,7 @@ await scenario('the renamed service pages: each old path, with and without .html
     const { page, jsErrors, missing, close } = await open({ path: `${old}#how` });
     assert.equal(new URL(page.url()).pathname, now);
     assert.equal(await page.$$eval('#site-nav a[aria-current="page"]', (a) => (a[0] ? a[0].textContent.trim() : null)), tab);
-    assert.match(await page.title(), / \| Our Local Network$/);
+    assert.match(await page.title(), / \| Local Impressions$/);
     assert.deepEqual(jsErrors, []);
     assert.deepEqual(missing, [], 'every stylesheet, script, font and image loads');
     await close();
@@ -294,7 +294,7 @@ await scenario('the renamed service pages: each old path, with and without .html
   }
 });
 
-await scenario('the header shows the Our Local Network logo, loaded and crisp (the footer is one legal line)', async () => {
+await scenario('the header shows the Local Impressions logo, loaded and crisp (the footer is one legal line)', async () => {
   const { page, close } = await open({ path: '/' });
   await page.waitForFunction(() => [...document.querySelectorAll('img[src*="own-logo"]')].every((i) => i.complete && i.naturalWidth === 360));
   const logos = await page.$$eval('img[src*="own-logo"]', (imgs) => imgs.map((i) => ({ src: i.getAttribute('src'), cur: i.currentSrc, alt: i.alt, w: i.getBoundingClientRect().width })));
@@ -302,7 +302,7 @@ await scenario('the header shows the Our Local Network logo, loaded and crisp (t
   for (const l of logos) {
     assert.equal(l.src, '/assets/img/own-logo-360.png');
     assert.match(l.cur, /own-logo-360\.webp$/, 'the WebP is used where supported');
-    assert.equal(l.alt, 'Our Local Network');
+    assert.equal(l.alt, 'Local Impressions');
     assert.ok(l.w > 0 && l.w <= 180, `shown at ${l.w}px from a 360px file, so it stays sharp on 2x screens`);
   }
   await close();
@@ -479,8 +479,8 @@ await scenario('home: the half orb builds its network, clear of the words, with 
     const c = await s.page.$eval('#orb', (el) => ({ w: el.width, h: el.height, lit: (() => { const d = el.getContext('2d').getImageData(0, 0, el.width, el.height).data; let n = 0; for (let i = 3; i < d.length; i += 4) if (d[i]) n++; return n; })() }));
     assert.ok(c.w > 0 && c.h > 0, `${width}px: the canvas has a size`);
     assert.ok(c.lit > 5000, `${width}px: the orb and its network are drawn (${c.lit} pixels)`);
-    assert.equal((await s.page.textContent('#hero-h')).replace(/\s+/g, ' ').trim(), 'Your customers are already next door.', 'the hero line (November 23, 2026)');
-    assert.equal(await s.page.title(), 'Our Local Network | Your Customers Are Already Next Door');
+    assert.equal((await s.page.textContent('#hero-h')).replace(/\s+/g, ' ').trim(), 'Meet the local businesses your next customers already trust.', 'the hero line (November 24, 2026)');
+    assert.equal(await s.page.title(), 'Local Impressions | Meet the Businesses Your Next Customers Trust');
     assert.deepEqual(s.outside, [], 'no requests to other sites');
     assert.deepEqual(s.jsErrors, []);
     assert.deepEqual(s.missing, []);

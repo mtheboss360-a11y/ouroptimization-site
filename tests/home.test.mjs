@@ -33,26 +33,27 @@ describe('home: order, head and hero', () => {
     assert.ok(heroAt >= 0 && heroAt < main.indexOf('id="industries"'), 'the hero comes first');
   });
   test('the title, the share titles, the descriptions (the idea, the six towns) and the share image alt', () => {
-    const title = 'Our Local Network | Your Customers Are Already Next Door';
+    const title = 'Local Impressions | Meet the Businesses Your Next Customers Trust';
     assert.equal(text(/<title>([\s\S]*?)<\/title>/.exec(head)[1]), title);
     assert.equal(meta('property', 'og:title'), title);
     assert.equal(meta('name', 'twitter:title'), title);
-    const desc = 'In Oak Brook, Lombard, Elmhurst, Naperville, Downers Grove and Hinsdale, we connect you with the businesses that already share your customers, and never with your competitors.';
+    const desc = 'In Oak Brook, Lombard, Elmhurst, Naperville, Downers Grove and Hinsdale, we introduce you to nearby businesses that serve the same people you do. No direct competitors.';
     for (const [a, n] of [['name', 'description'], ['property', 'og:description'], ['name', 'twitter:description']]) assert.equal(meta(a, n), desc, n);
     for (const t of TOWNS) assert.ok(desc.includes(t), t);
     assert.ok(desc.length <= 175);
     assert.equal(meta('property', 'og:image'), 'https://ouroptimization.com/assets/img/og-network.jpg');
-    assert.equal(meta('property', 'og:image:alt'), 'The Our Local Network logo above the line: Your customers are already next door.');
+    assert.equal(meta('property', 'og:image:alt'), 'The Local Impressions logo above the line: Meet the local businesses your next customers already trust.');
     const ld = JSON.parse(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/.exec(head)[1]);
-    assert.equal(ld.slogan, 'Your customers are already next door.');
-    assert.equal(ld.alternateName, 'Our Wellness Network', 'the old name stays only as the alternate name');
+    assert.equal(ld.slogan, 'Meet the local businesses your next customers already trust.');
+    assert.deepEqual(ld.alternateName, ['Our Local Network', 'Our Wellness Network'], 'the old names stay only as alternate names (November 24, 2026: Local Impressions)');
+    assert.equal(count(html, 'Our Local Network'), 1, 'only in alternateName');
     assert.doesNotMatch(html, /Boots on the ground/i, 'the old slogan is retired from the home page, head included');
     assert.equal(count(html, 'Our Wellness Network'), 1, 'only in alternateName');
   });
-  test('the hero: the connection, not the coffee (November 23, 2026), and the three display photos, with no buttons and no example card', () => {
+  test('the hero: the connection, not the coffee (November 24, 2026: the owner\'s line), and the three display photos, with no buttons and no example card', () => {
     const hero = /<section class="hero-orb"[\s\S]*?<\/section>/.exec(main)[0];
-    assert.match(hero, /<h1 id="hero-h">Your customers are <em>already next door\.<\/em><\/h1>/);
-    assert.match(hero, /<p class="lede">We connect your business with the businesses your potential customers already go to\. Same clientele\. Never a competitor\.<\/p>/);
+    assert.match(hero, /<h1 id="hero-h">Meet the local businesses <em>your next customers already trust\.<\/em><\/h1>/);
+    assert.match(hero, /<p class="lede">We find nearby businesses that serve the same kinds of people you do, then introduce your business and help build referral relationships\. No direct competitors\.<\/p>/, 'the owner\'s words (November 24, 2026)');
     assert.doesNotMatch(text(hero), /coffee|treat/i, 'the hero is about the connection');
     const photos = ['salon', 'bakery', 'medspa'];
     assert.deepEqual(links(hero).map((l) => l.href), photos.map((n) => `/assets/img/display-${n}.png`), 'the only links open the full-size photos');

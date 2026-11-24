@@ -208,7 +208,7 @@ describe('the med spa page (November 23, 2026): the home page\'s beats, for med 
     assert.doesNotMatch(main, /href="\/pricing/);
     assert.doesNotMatch(html, /Boots on the ground/i);
     assert.equal(html.split('Our Wellness Network').length - 1, 1, 'only as the alternate name in the JSON-LD');
-    assert.equal(JSON.parse(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/.exec(html)[1]).alternateName, 'Our Wellness Network');
+    assert.deepEqual(JSON.parse(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/.exec(html)[1]).alternateName, ['Our Local Network', 'Our Wellness Network']);
     for (const img of tags(main, 'img')) assert.fail(`no images in the med spa main: ${attr(img, 'src')}`);
   });
 });

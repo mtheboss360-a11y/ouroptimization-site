@@ -6,7 +6,7 @@ export const ROOT = new URL('../', import.meta.url);
 export const read = (p) => readFileSync(new URL(p, ROOT), 'utf8');
 
 /* Every page of the site, with its clean URL and its item in the main menu (null: not in the menu).
-   October 23, 2026: Our Local Network. The flyer network folded into the referral routes
+   October 23, 2026: Local Impressions. The flyer network folded into the referral routes
    (/flyer-network 301s to /referral-network). The private dinners page (/patient-network) was retired on November 24, 2026
    and 301s to the home page.
    October 24, 2026: the Growth team page joins the menu, second, after Home. Later that day it became Boots on the ground.

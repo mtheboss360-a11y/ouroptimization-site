@@ -1,4 +1,4 @@
-/* Our Local Network: shared site behaviour.
+/* Local Impressions: shared site behaviour.
    Loaded with defer on every page. No dependencies, no third-party requests. */
 (function () {
   var root = document.documentElement;

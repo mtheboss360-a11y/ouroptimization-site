@@ -1,4 +1,4 @@
-/* Our Local Network: referral routes for independent med spas.
+/* Local Impressions: referral routes for independent med spas.
    Static site: no build step, no framework, no external requests.
    Headlines and section titles: Plus Jakarta Sans, self-hosted (SIL Open Font License 1.1, licence in assets/fonts/),
    bold and tightly spaced like the big brands' sites. Text: the phone's own face (SF Pro on Apple devices, Roboto on
@@ -876,7 +876,7 @@ table{font-variant-numeric:tabular-nums}
 
 /* ===== OWC: generated from owc-build/css (start) ===== */
 /* --- 00-base --- */
-/* Our Local Network: the lockup (mark above the wordmark, trimmed to its edges, so no offset is needed) */
+/* Local Impressions: the lockup (mark above the wordmark, trimmed to its edges, so no offset is needed) */
 .brand img{transform:none;width:clamp(132px,36vw,150px)}
 @media (min-width:1000px){.brand img{width:164px}}
 .brand picture{display:block}
