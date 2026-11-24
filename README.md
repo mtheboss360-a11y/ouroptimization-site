@@ -68,7 +68,7 @@ Four portal screens (`assets/img/portal2-*`, the portal's demo account: invented
 
 ## Brand assets
 
-- Logo lockup (the infinity-W mark over "Local Impressions", in Playfair Display): `assets/img/owc-logo-360.{webp,png}` in the header, `assets/img/own-logo.png` (600 px) for structured data.
+- Logo lockup (the infinity-W mark over "Local Impressions": "Local" in gold, "Impressions" in Newsreader, on the same baseline): `assets/img/own-logo-360.{webp,png}` (360 x 130) in the header, `assets/img/own-logo.png` (480 x 174) for structured data.
 - The mark alone: `assets/img/owc-mark-light.{webp,png}` for light backgrounds, `assets/img/owc-mark-on-dark.{webp,png}` for dark ones (the closing band).
 - Favicons (the mark on a cream square): `favicon.ico`, `apple-touch-icon.png`, `assets/owo-favicon.ico`, `assets/owo-icon-{16,32,192,512}.png`, `assets/owo-apple-touch-icon.png`, `assets/favicon-*.png`, `assets/icon-*.png`; the manifest is `site.webmanifest`.
 - Share image: `assets/img/og-network.jpg` (1200 x 630): the logo above "Meet the local businesses your next customers already trust." (November 24, 2026; rendered with `assets/img/own-logo.png`, because the `logo.png` in the old share image generator is the retired logo). Every page's `og:image:alt` describes it that way. The old share images and the old logo 301 to the new ones.
