@@ -185,6 +185,7 @@ h3{font-size:1.28rem;line-height:1.25;font-weight:600;letter-spacing:-.012em}
 .cta-inner .actions{justify-content:center}
 .area{margin-top:26px;font-size:.82rem;letter-spacing:.02em;color:#93A896}
 .site-foot{padding-block:22px;border-top:1px solid var(--line);background:var(--paper);font-size:.8rem;line-height:1.6;color:var(--ink-3)}
+.foot-area{text-align:center;text-wrap:balance;margin-bottom:4px;color:var(--ink-2)}
 .foot-legal{text-align:center;text-wrap:balance}
 .foot-legal a{color:inherit;text-underline-offset:3px;text-decoration-color:var(--line);transition:color .25s ease}
 .foot-legal a:hover{color:var(--gold-sm)}

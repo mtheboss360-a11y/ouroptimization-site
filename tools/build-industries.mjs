@@ -13,7 +13,7 @@ import { fileURLToPath } from 'node:url';
 const ROOT = new URL('../', import.meta.url);
 const read = (p) => readFileSync(new URL(p, ROOT), 'utf8');
 const ORIGIN = 'https://ouroptimization.com';
-const TOWNS = ['Oak Brook', 'Lombard', 'Elmhurst', 'Naperville', 'Downers Grove', 'Hinsdale'];
+const TOWNS = ['Franklin Park', 'Oak Brook', 'Lombard', 'Elmhurst', 'Naperville', 'Downers Grove', 'Hinsdale'];
 
 /* ---------- text ---------- */
 // Plain text in the data becomes HTML: & < > " escaped, straight apostrophes curled the way the site writes them.

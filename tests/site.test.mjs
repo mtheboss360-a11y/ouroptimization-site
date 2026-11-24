@@ -79,7 +79,7 @@ describe('every page: head', () => {
       assert.equal(d.name, 'Local Impressions');
       assert.equal(d.legalName, 'OUR Optimization LLC');
       assert.equal(d.telephone, '+1-331-271-6851');
-      assert.match(d.areaServed.name, /^Chicago's western suburbs/);
+      assert.deepEqual(d.areaServed.map((a) => [a['@type'], a.name]), ['Franklin Park', 'Oak Brook', 'Lombard', 'Elmhurst', 'Naperville', 'Downers Grove', 'Hinsdale'].map((t) => ['City', t + ', IL']), 'the seven towns (November 24, 2026: Franklin Park added)');
       assert.deepEqual([d.address.addressRegion, d.address.addressCountry], ['IL', 'US'], 'region and country only: no invented street address');
       assert.equal(d.url, ORIGIN + '/');
       assert.ok(existsSync(new URL(d.logo.replace(ORIGIN + '/', ''), ROOT)), 'the logo file exists');
@@ -125,6 +125,7 @@ describe('every page: header and footer', () => {
       assert.match(f, /© 2026 OUR Optimization LLC/);
       assert.match(f, /Local Impressions is a service of OUR Optimization LLC\./, 'the brand line, the same everywhere (November 20, 2026)');
       assert.deepEqual(links(footerOf(src)).map((l) => l.href), ['/privacy', '/terms']);
+      assert.match(f, /^Serving Franklin Park, Oak Brook, Lombard, Elmhurst, Naperville, Downers Grove and Hinsdale\. /, 'the service area, first in the footer (November 24, 2026)');
     });
   }
   test('the private dinners page is retired (November 24, 2026): no served page links it or offers the dinner', () => {
@@ -363,7 +364,7 @@ describe('every page: the November 20, 2026 rules', () => {
     assert.match(faq, /<script src="\/assets\/site-config\.js" defer><\/script>\n<script src="\/assets\/site\.js" defer>/);
   });
   test('the industry pages: titles and descriptions name the towns; each page is in the menu-less list and the sitemap', () => {
-    const towns = ['Oak Brook', 'Lombard', 'Elmhurst', 'Naperville', 'Downers Grove', 'Hinsdale'];
+    const towns = ['Franklin Park', 'Oak Brook', 'Lombard', 'Elmhurst', 'Naperville', 'Downers Grove', 'Hinsdale'];
     for (const p of PAGES.filter((x) => x.industry)) {
       const d = meta(page[p.file], 'name', 'description');
       assert.ok(towns.filter((x) => d.includes(x)).length >= 2, `${p.file}: ${d}`);

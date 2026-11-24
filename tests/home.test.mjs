@@ -17,7 +17,7 @@ const sec = (id) => {
 };
 const meta = (attrName, name) => { const t = tags(head, 'meta').find((m) => attr(m, attrName) === name); return t ? attr(t, 'content') : null; };
 const count = (hay, needle) => hay.split(needle).length - 1;
-const TOWNS = ['Oak Brook', 'Lombard', 'Elmhurst', 'Naperville', 'Downers Grove', 'Hinsdale'];
+const TOWNS = ['Franklin Park', 'Oak Brook', 'Lombard', 'Elmhurst', 'Naperville', 'Downers Grove', 'Hinsdale'];
 /* the sources of truth: the terms, and the partner agreement summary on How it works */
 const TERMS = text(read('terms.html'));
 const AGREEMENT = text(byId(read('referral-network.html'), 'agreement') || '');
@@ -32,12 +32,12 @@ describe('home: order, head and hero', () => {
     const heroAt = main.indexOf('class="hero-orb"');
     assert.ok(heroAt >= 0 && heroAt < main.indexOf('id="industries"'), 'the hero comes first');
   });
-  test('the title, the share titles, the descriptions (the idea, the six towns) and the share image alt', () => {
+  test('the title, the share titles, the descriptions (the idea, the seven towns) and the share image alt', () => {
     const title = 'Local Impressions | Meet the Businesses Your Next Customers Trust';
     assert.equal(text(/<title>([\s\S]*?)<\/title>/.exec(head)[1]), title);
     assert.equal(meta('property', 'og:title'), title);
     assert.equal(meta('name', 'twitter:title'), title);
-    const desc = 'In Oak Brook, Lombard, Elmhurst, Naperville, Downers Grove and Hinsdale, we introduce you to nearby businesses that serve the same people you do. No direct competitors.';
+    const desc = 'In Franklin Park, Oak Brook, Lombard, Elmhurst, Naperville, Downers Grove and Hinsdale, we introduce you to businesses serving the same people you do. No direct competitors.';
     for (const [a, n] of [['name', 'description'], ['property', 'og:description'], ['name', 'twitter:description']]) assert.equal(meta(a, n), desc, n);
     for (const t of TOWNS) assert.ok(desc.includes(t), t);
     assert.ok(desc.length <= 175);
