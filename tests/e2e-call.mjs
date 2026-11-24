@@ -229,9 +229,9 @@ await scenario('an old /?about=flyer-drops link is redirected to /contact?about=
 await scenario('every service page key prefills on /contact, and the keys from before the rename still work', async () => {
   for (const [key, message] of [
     ['referral-network', "I'm asking about referral routes."], ['flyer-network', "I'm asking about referral routes."],
-    ['patient-network', "I'm asking about a private customer dinner."], ['online-search-network', "I'm asking about Google Ads in my own account."],
+    ['patient-network', "I'd like to book a call."], ['online-search-network', "I'm asking about Google Ads in my own account."],
     ['pricing', "I'd like to book a call."], ['sample-contract', "I'm asking about the partner agreement."],
-    ['patient-dinners', "I'm asking about a private customer dinner."], ['flyer-drops', "I'm asking about referral routes."], ['google-ads', "I'm asking about Google Ads in my own account."],
+    ['patient-dinners', "I'd like to book a call."], ['flyer-drops', "I'm asking about referral routes."], ['google-ads', "I'm asking about Google Ads in my own account."],
     // November 23, 2026: the two ways to run it, in plain words (no "Level 1" or "Level 2")
     ['level-1', "I'm interested in my team visiting the businesses."], ['level-2', "I'm interested in your team visiting the businesses."]
   ]) {
@@ -241,8 +241,8 @@ await scenario('every service page key prefills on /contact, and the keys from b
   }
 });
 
-await scenario('old home section links open their new page (/#faq, /#formats, /#referrals, /#flyer-drops)', async () => {
-  for (const [from, to] of [['/#faq', '/faq'], ['/#formats', '/patient-network#formats'], ['/#referrals', '/referral-network'], ['/#flyer-drops', '/referral-network']]) {
+await scenario('old home section links open their new page (/#faq, /#referrals, /#flyer-drops)', async () => {
+  for (const [from, to] of [['/#faq', '/faq'], ['/#referrals', '/referral-network'], ['/#flyer-drops', '/referral-network']]) {
     const { page, jsErrors, close } = await open({ path: from });
     await page.waitForURL((u) => u.pathname !== '/', { timeout: 3000 });
     await page.waitForLoadState('load');
@@ -252,9 +252,24 @@ await scenario('old home section links open their new page (/#faq, /#formats, /#
   }
 });
 
+await scenario('the private dinners page is retired (November 24, 2026): its paths 301 to the home page, and old home anchors stay home', async () => {
+  for (const path of ['/patient-network', '/patient-network.html', '/patient-dinners', '/patient-dinners.html', '/events', '/events.html']) {
+    const r = await fetch(`${BASE}${path}`, { redirect: 'manual' });
+    assert.equal(r.status, 301, `${path} status`);
+    assert.equal(r.headers.get('location'), '/', `${path} goes to the home page`);
+  }
+  for (const hash of ['#formats', '#handle']) {
+    const { page, jsErrors, close } = await open({ path: `/${hash}` });
+    await page.waitForTimeout(600);
+    assert.equal(new URL(page.url()).pathname, '/', `/${hash} stays on the home page`);
+    assert.deepEqual(jsErrors, []);
+    await close();
+  }
+});
+
 await scenario('the renamed service pages: each old path, with and without .html, 301s straight to its new page', async () => {
   // October 23, 2026: the flyer network folded into the referral routes, so every flyer path lands on /referral-network ("How it works").
-  const RENAMED = [['/flyer-network', '/referral-network', 'How it works'], ['/flyer-drops', '/referral-network', 'How it works'], ['/patient-dinners', '/patient-network', null], ['/google-ads', '/online-search-network', null]];
+  const RENAMED = [['/flyer-network', '/referral-network', 'How it works'], ['/flyer-drops', '/referral-network', 'How it works'], ['/google-ads', '/online-search-network', null]];
   for (const [old, now, tab] of RENAMED) {
     for (const path of [old, `${old}.html`]) {
       const r = await fetch(`${BASE}${path}`, { redirect: 'manual' });
@@ -272,7 +287,7 @@ await scenario('the renamed service pages: each old path, with and without .html
     await close();
   }
   // Older redirects that used to point at an old path go straight to the new page.
-  for (const [path, to] of [['/events', '/patient-network'], ['/flyers', '/referral-network'], ['/direct-mail', '/referral-network'], ['/digital-marketing', '/online-search-network'], ['/how-it-works', '/referral-network'], ['/tracking', '/#dashboard']]) {
+  for (const [path, to] of [['/events', '/'], ['/flyers', '/referral-network'], ['/direct-mail', '/referral-network'], ['/digital-marketing', '/online-search-network'], ['/how-it-works', '/referral-network'], ['/tracking', '/#dashboard']]) {
     const r = await fetch(`${BASE}${path}`, { redirect: 'manual' });
     assert.equal(r.status, 301, path);
     assert.equal(r.headers.get('location'), to, path);

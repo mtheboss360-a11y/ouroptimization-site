@@ -78,6 +78,8 @@ function shell() {
   const symbols = new Map();
   const files = ['index.html', ...readdirSync(ROOT).filter((f) => f.endsWith('.html') && f !== 'index.html').sort()];
   for (const f of files) for (const m of read(f).matchAll(/<symbol id="([\w-]+)"[\s\S]*?<\/symbol>/g)) if (!symbols.has(m[1])) symbols.set(m[1], m[0]);
+  // icons no served page holds any more (i-sparkle since the dinners page was retired, November 24, 2026); pages still win
+  for (const m of scenesSrc.matchAll(/<symbol id="([\w-]+)"[\s\S]*?<\/symbol>/g)) if (!symbols.has(m[1])) symbols.set(m[1], m[0]);
   return { header, footer, headScript, ld, ogAlt, scenes: { treats: scene('treats'), chat: scene('chat'), tap: scene('tap') }, symbols };
 }
 

@@ -7,7 +7,8 @@ export const read = (p) => readFileSync(new URL(p, ROOT), 'utf8');
 
 /* Every page of the site, with its clean URL and its item in the main menu (null: not in the menu).
    October 23, 2026: Our Local Network. The flyer network folded into the referral routes
-   (/flyer-network 301s to /referral-network); the dinner page stays, reached from the pricing page only (October 24, 2026).
+   (/flyer-network 301s to /referral-network). The private dinners page (/patient-network) was retired on November 24, 2026
+   and 301s to the home page.
    October 24, 2026: the Growth team page joins the menu, second, after Home. Later that day it became Boots on the ground.
    November 20, 2026: it is the Field Team page (/field-team), and Industries (/#industries) follows it; the eight industry
    pages under /industries/ are built by tools/build-industries.mjs and are reached from the home page's Industries section. */
@@ -19,7 +20,6 @@ export const PAGES = [
   { file: 'faq.html', url: '/faq', nav: 'FAQ' },
   { file: 'about.html', url: '/about', nav: 'About' },
   { file: 'contact.html', url: '/contact', nav: 'Contact' },
-  { file: 'patient-network.html', url: '/patient-network', nav: null },
   { file: 'online-search-network.html', url: '/online-search-network', nav: null },
   { file: 'review-tags.html', url: '/review-tags', nav: null },
   { file: 'website-design.html', url: '/website-design', nav: null },

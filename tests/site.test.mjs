@@ -127,9 +127,15 @@ describe('every page: header and footer', () => {
       assert.deepEqual(links(footerOf(src)).map((l) => l.href), ['/privacy', '/terms']);
     });
   }
-  test('the dinner stays out of the menu and off the home page (pricing came off, November 21, 2026)', () => {
+  test('the private dinners page is retired (November 24, 2026): no served page links it or offers the dinner', () => {
+    assert.ok(!existsSync(new URL('patient-network.html', ROOT)), 'the page is gone');
+    assert.ok(!existsSync(new URL('assets/img/dinner-table.svg', ROOT)), 'its illustration is gone');
+    for (const from of ['/patient-network', '/patient-network.html', '/patient-dinners', '/patient-dinners.html', '/events', '/events.html']) assert.ok(REDIRECTS.some((r) => r.from === from && r.to === '/' && r.status === 301), `${from} 301s to the home page`);
+    assert.ok(!REDIRECTS.some((r) => r.to === '/patient-network' || r.to.startsWith('/patient-network#')), 'nothing redirects to the retired page');
+    assert.doesNotMatch(read('sitemap.xml'), /patient-network/, 'not in the sitemap');
+    assert.doesNotMatch(read('assets/site.js'), /'\/patient-network/, 'no old home anchor sends visitors to it');
     for (const p of PAGES) {
-      if (['faq.html', 'patient-network.html', 'privacy.html', 'terms.html'].includes(p.file)) continue;
+      if (['privacy.html', 'terms.html'].includes(p.file)) continue; // legal text: the owner and the attorney update it
       assert.doesNotMatch(bodyOf(page[p.file]), /patient-network|patient dinner/i, p.file);
     }
   });
@@ -239,7 +245,7 @@ describe('links, images and redirects', () => {
     for (const p of PAGES) assert.doesNotMatch(page[p.file], /two guarantees|two trial guarantees|two written guarantees/i, `${p.file}: no "two guarantees" anywhere, meta descriptions included`);
   });
   test('the URLs that must not change still exist', () => {
-    for (const f of ['privacy.html', 'terms.html', 'review-tags.html', 'website-design.html', 'expo-vendors.html', 'patient-network.html', 'online-search-network.html']) assert.ok(existsSync(new URL(f, ROOT)), f);
+    for (const f of ['privacy.html', 'terms.html', 'review-tags.html', 'website-design.html', 'expo-vendors.html', 'online-search-network.html']) assert.ok(existsSync(new URL(f, ROOT)), f);
     assert.ok(REDIRECTS.some((r) => r.from === '/vendors' && r.to === '/expo-vendors'));
   });
   test('repository files that are not the site are not served', () => {

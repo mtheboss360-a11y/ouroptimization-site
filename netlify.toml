@@ -47,9 +47,16 @@
   status = 301
   force = true
 
+# The private dinners page (/patient-network) was retired on November 24, 2026: it and every path that led to it
+# 301 to the home page.
+[[redirects]]
+  from = "/patient-network"
+  to = "/"
+  status = 301
+  force = true
 [[redirects]]
   from = "/patient-network.html"
-  to = "/patient-network"
+  to = "/"
   status = 301
   force = true
 
@@ -215,7 +222,7 @@
 
 # --- Renamed service pages ---
 # On October 22, 2026 the service pages took their network names: /flyer-drops became /flyer-network,
-# /patient-dinners became /patient-network and /google-ads became /online-search-network. On October 23, 2026
+# /patient-dinners became /patient-network (retired November 24, 2026; it now 301s to the home page) and /google-ads became /online-search-network. On October 23, 2026
 # the flyer network folded into the referral routes, so /flyer-network and every older flyer path 301 straight
 # to /referral-network (printed QR codes keep working). The old paths, with and without .html, 301 to the new ones.
 [[redirects]]
@@ -238,13 +245,13 @@
 
 [[redirects]]
   from = "/patient-dinners"
-  to = "/patient-network"
+  to = "/"
   status = 301
   force = true
 
 [[redirects]]
   from = "/patient-dinners.html"
-  to = "/patient-network"
+  to = "/"
   status = 301
   force = true
 
@@ -415,13 +422,13 @@
 # /events
 [[redirects]]
   from = "/events"
-  to = "/patient-network"
+  to = "/"
   status = 301
   force = true
 
 [[redirects]]
   from = "/events.html"
-  to = "/patient-network"
+  to = "/"
   status = 301
   force = true
 
