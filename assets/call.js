@@ -44,6 +44,8 @@
     'field-team': "I'm asking about the field team.",
     'level-1': "I'm interested in my team visiting the businesses.",
     'level-2': "I'm interested in your team visiting the businesses.",
+    'essentials': "I'm interested in Essentials: the stands and the software, with my team running the routes.",
+    'route-runners': "I'm interested in Route Runners: your team running the routes for me.",
     'portals': "I'd like to see the portals.",
     'med-spas': "I'm asking about referral partners for my med spa.",
     'dental': "I'm asking about referral partners for my dental practice.",

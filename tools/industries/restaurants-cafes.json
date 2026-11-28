@@ -1,5 +1,6 @@
 {
   "slug": "restaurants-cafes",
+  "home": false,
   "order": 6,
   "name": "Restaurants & Cafes",
   "noun": "restaurant or cafe",
