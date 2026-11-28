@@ -518,10 +518,10 @@ await scenario('home (November 28, 2026): the stands first, then where they go, 
   }
   {
     const s = await open({ path: '/', width: 1280, height: 900 });
-    await s.page.click('.hero-orb a[href="#how"]');
+    await s.page.click('.hero-orb a[href="#plans"]');
     await s.page.waitForTimeout(600);
-    const top = await s.page.$eval('#how', (el) => el.getBoundingClientRect().top);
-    assert.ok(top >= -5 && top < 300, `See how it works lands on the four steps (top ${Math.round(top)})`);
+    const top = await s.page.$eval('#plans', (el) => el.getBoundingClientRect().top);
+    assert.ok(top >= -5 && top < 300, `See pricing lands on the two plans (top ${Math.round(top)})`);
     for (const [key, message] of [['essentials', "I'm interested in Essentials: the stands and the software, with my team running the routes."], ['route-runners', "I'm interested in Route Runners: your team running the routes for me."]]) {
       await s.page.goto(`${BASE}/`);
       await s.page.locator(`#plans a[href="/contact?about=${key}"]`).scrollIntoViewIfNeeded();
@@ -563,7 +563,7 @@ await scenario('the pricing page stays retired: /pricing and /pricing.html go to
   }
   for (const path of ['/', '/field-team', '/referral-network', '/faq', '/about', '/contact', '/industries/dental']) {
     const s = await open({ path, width: 1280, height: 900 });
-    const found = await s.page.evaluate(() => { const plans = document.querySelector('#plans'); const t = document.body.innerText.replace(plans ? plans.innerText : '', ''); return { links: [...document.querySelectorAll('a[href*="pricing"]')].map((a) => a.href), text: /\$\d|\bpricing\b|\btrial\b/i.test(t) }; });
+    const found = await s.page.evaluate(() => { const plans = document.querySelector('#plans'); let t = document.body.innerText.replace(plans ? plans.innerText : '', ''); for (const a of document.querySelectorAll('a[href="#plans"]')) t = t.replace(a.innerText, ''); return { links: [...document.querySelectorAll('a[href*="pricing"]')].map((a) => a.href), text: /\$\d|\bpricing\b|\btrial\b/i.test(t) }; });
     assert.deepEqual(found, { links: [], text: false }, path);
     await s.close();
   }

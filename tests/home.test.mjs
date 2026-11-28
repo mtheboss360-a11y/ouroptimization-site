@@ -48,17 +48,17 @@ describe('home: order, head and hero', () => {
     assert.equal(count(html, 'Our Wellness Network'), 1, 'only in alternateName');
     assert.doesNotMatch(html, /Boots on the ground|your next customers already trust|help build referral relationships/i, 'the old lines are retired from the home page, head included');
   });
-  test('the hero: the stands first, then where they go and the software; three benefit lines; book a call or see how it works', () => {
+  test('the hero: the stands first, then where they go, the software and the two ways to run it; three benefit lines; book a call or see pricing', () => {
     const h = hero();
     assert.match(h, /<h1 id="hero-h">Custom marketing stands in the businesses <em>your customers already trust\.<\/em><\/h1>/);
-    assert.equal(text(/<p class="lede">([\s\S]*?)<\/p>/.exec(h)[1]), 'We design and build stands with your logo and services. They go to nearby businesses that share your customers, never your competitors. You also get the software, so your team can visit each business, log every conversation and watch your local network grow.');
+    assert.equal(text(/<p class="lede">([\s\S]*?)<\/p>/.exec(h)[1]), 'We design and build stands with your logo and services. They go to nearby businesses that share your customers, never your competitors. Our software lists who to visit, logs every conversation and tracks every scan. Your staff runs the routes, or our Route Runners do it for you.');
     const points = [.../<ul class="hero-points">([\s\S]*?)<\/ul>/.exec(h)[1].matchAll(/<li>([\s\S]*?)<\/li>/g)].map((m) => text(m[1]));
     assert.deepEqual(points, [
       'Stands made for you. Your logo, your services and a QR code that tracks every scan.',
-      'Only complementary businesses. They share your customers. Direct competitors are kept off your list automatically.',
+      'Only complementary businesses. They share your customers. Direct competitors never go on your routes.',
       'Software included. Your list of businesses to visit, a log of every conversation, and every scan tracked.',
     ]);
-    assert.deepEqual(links(h).map((l) => [l.text, l.href]), [['Book a call', '/contact'], ['See how it works', '#how']]);
+    assert.deepEqual(links(h).map((l) => [l.text, l.href]), [['Book a call', '/contact'], ['See pricing', '#plans']]);
     assert.doesNotMatch(text(h), /coffee|treat|\$\d|referral relationship/i);
     assert.equal(tags(h, 'img').length, 0, 'the photos have their own section');
   });
@@ -118,14 +118,16 @@ describe('home: 2. the stands (#stands)', () => {
 describe('home: 3. where your stands go (#industries)', () => {
   const s = sec('industries');
   const t = text(s);
-  /* each kind of business on the home page, and the partner names in tools/industries/*.json it stands for */
+  /* November 28, 2026: each kind of business on the home page is one the client portal can find and put on a route
+     (our-wellness-portal/server/network/config.ts CATEGORY_RULES: fitness, yoga and pilates, physical therapy,
+     chiropractic, salons and barbers, wellness retail). Daycares, schools and apartments are filtered out there on purpose. */
   const TYPES = [
-    ['Gyms and fitness studios', ['Gyms and fitness studios']],
-    ['Yoga and pilates studios', ['Yoga and pilates studios']],
-    ['Hair and nail salons', ['Hair salons', 'Nail salons', 'Hair salons and barbershops']],
-    ['Boutiques and bridal shops', ['Clothing boutiques', 'Bridal shops']],
-    ["Daycares and kids' schools", ['Daycares and preschools', "Kids' swim and dance schools"]],
-    ['Apartment leasing offices', ['Apartment leasing offices']]
+    ['Gyms and fitness studios', 'fitness'],
+    ['Yoga and pilates studios', 'yoga'],
+    ['Physical therapy and chiropractic', 'physical-therapy, chiropractic'],
+    ['Hair and nail salons', 'salon'],
+    ['Juice bars and health food stores', 'wellness-retail'],
+    ['Running and sporting goods stores', 'wellness-retail'],
   ];
   test('the head and the six kinds of business, each with one plain line', () => {
     assert.match(s, /<p class="eyebrow">Where your stands go<\/p>/);
@@ -133,7 +135,7 @@ describe('home: 3. where your stands go (#industries)', () => {
     assert.match(t, /Your customers don't only come to you\. They go to the gym, the salon and the shops nearby\. That's where your stands go\./);
     const ul = /<ul class="cardgrid icon-side share-types reveal">([\s\S]*?)<\/ul>/.exec(s)[1];
     const items = [...ul.matchAll(/<li>([\s\S]*?)<\/li>/g)].map((m) => m[1]);
-    assert.deepEqual(items.map((li) => text(/<h3>([\s\S]*?)<\/h3>/.exec(li)[1])), TYPES.map((x) => x[0]));
+    assert.deepEqual(items.map((li) => text(/<h3>([\s\S]*?)<\/h3>/.exec(li)[1])), TYPES.map((x) => x[0]), 'only kinds the client portal can find');
     for (const li of items) {
       const p = [...li.matchAll(/<p>([\s\S]*?)<\/p>/g)].map((m) => text(m[1]));
       assert.equal(p.length, 1, 'one line each');
@@ -141,22 +143,15 @@ describe('home: 3. where your stands go (#industries)', () => {
       assert.doesNotMatch(p[0], /\d|%|more (customers|clients|bookings)|grow|results?|guarantee|refer/i, `an observation, no results and no numbers: ${p[0]}`);
       assert.match(li, /^<svg aria-hidden="true"><use href="#i-[a-z]+"\/><\/svg>/, 'an icon from the page sprite');
     }
-  });
-  test('each kind recurs in the partner lists of the industry pages (tools/industries/*.json)', () => {
-    const dir = new URL('tools/industries/', ROOT);
-    const names = readdirSync(dir).filter((f) => f.endsWith('.json')).flatMap((f) => JSON.parse(read('tools/industries/' + f)).partners.map((p) => p.name));
-    for (const [type, from] of TYPES) {
-      for (const n of from) assert.ok(names.includes(n), `${type}: "${n}" is a partner on an industry page`);
-      assert.ok(names.filter((n) => from.includes(n)).length >= 2, `${type} comes up on more than one industry page`);
-    }
+    assert.doesNotMatch(t, /daycare|leasing|apartment|bridal|boutique/i, 'nothing the portal cannot route to');
   });
   test('never a competitor: three lines, each backed by the terms; one of your kind only with Route Runners', () => {
     const cards = /<ul class="cardgrid never-cards reveal">([\s\S]*?)<\/ul>/.exec(s)[1];
     assert.deepEqual([...cards.matchAll(/<h3>([\s\S]*?)<\/h3>/g)].map((m) => text(m[1])), ['No competitors', 'You approve every name', 'One of your kind']);
     const c = text(cards);
-    assert.match(c, /No competitors\s*A business that sells what you sell never makes your list\./);
+    assert.match(c, /No competitors\s*A business that sells what you sell is marked as a competitor and never goes on your routes\./);
     assert.match(c, /You approve every name\s*You see the list first and can cross off any business\. We skip any business you already work with unless you ask\./);
-    assert.match(c, /One of your kind\s*With Route Runners, each partner agrees to promote one business of your kind: yours, for as long as you are a client\./);
+    assert.match(c, /One of your kind\s*With Route Runners, we ask each partner to promote one business of your kind: yours, for as long as you are a client\./);
     assert.match(TERMS, /You approve the list before any visit, and we skip any business you already work with unless you ask\./);
     assert.match(TERMS, /The partners we sign for you agree to promote one business of your kind, yours, for as long as you are a client\./);
     assert.doesNotMatch(c, /certif|prestig|exclusive club|\bclub\b|decal|directory|member/i);
@@ -178,15 +173,15 @@ describe('home: 3. where your stands go (#industries)', () => {
 
 describe('home: 4. how it works (#how)', () => {
   const s = sec('how');
-  test('four steps: we make the stands, you get the list, the stands go in, you watch it grow', () => {
+  test('four steps: we make the stands, you get the list, the stands go in, you oversee the network', () => {
     assert.match(s, /<p class="eyebrow">How it works<\/p>/);
     assert.equal(text(/<h2 id="how-h">([\s\S]*?)<\/h2>/.exec(s)[1]), 'From your logo to their counter.');
     const steps = [...s.matchAll(/<li><span class="num">(\d\d)<\/span><h3>([\s\S]*?)<\/h3><p>([\s\S]*?)<\/p><\/li>/g)].map((m) => [m[1], text(m[2]), text(m[3])]);
     assert.deepEqual(steps, [
       ['01', 'We make your stands.', 'Your logo, your services and a QR code. You approve the design before we print.'],
-      ['02', 'You get your list.', 'Your software lists nearby businesses that share your customers. Direct competitors are kept off it, and you approve every name.'],
-      ['03', 'The stands go in.', 'Your team places them and keeps in touch, logging every conversation from a phone. Or our Route Runners do it for you.'],
-      ['04', 'You watch your network grow.', 'Every visit, scan and callback request lands in your portal, business by business, month by month.'],
+      ['02', 'You get your list.', 'Your software lists nearby businesses that share your customers. Competitors never go on a route, and you approve every name.'],
+      ['03', 'The stands go in.', 'On Essentials, your staff places them and logs every conversation from a phone. On Route Runners, our team does it for you.'],
+      ['04', 'You oversee your network.', 'Every visit, scan and callback request lands in your portal, business by business, month by month.'],
     ]);
   });
 });
@@ -197,28 +192,28 @@ describe('home: 5. pricing (#plans)', () => {
   const cards = [...s.matchAll(/<li class="lv-card[^"]*">([\s\S]*?)<\/a>\s*<\/li>/g)].map((m) => m[1] + '</a>');
   test('two plans, the same setup fee; the only difference is who runs the routes', () => {
     assert.match(s, /<p class="eyebrow">Pricing<\/p>/);
-    assert.equal(text(/<h2 id="plans-h">([\s\S]*?)<\/h2>/.exec(s)[1]), 'Two plans. You pick who runs the routes.');
+    assert.equal(text(/<h2 id="plans-h">([\s\S]*?)<\/h2>/.exec(s)[1]), 'Two plans. You pick who visits the businesses.');
     assert.match(t, /Both plans include your custom stands and the software\./);
     assert.equal(cards.length, 2);
-    const plan = (c) => ({ name: text(/<p class="lv-k">([\s\S]*?)<\/p>/.exec(c)[1]), head: text(/<h3>([\s\S]*?)<\/h3>/.exec(c)[1]), price: text(/<p class="plan-price">([\s\S]*?)<\/p>/.exec(c)[1]), setup: text(/<p class="plan-setup">([\s\S]*?)<\/p>/.exec(c)[1]) });
-    assert.deepEqual(plan(cards[0]), { name: 'Essentials', head: 'Your team runs the routes.', price: '$100 a month', setup: 'Plus a $100 setup fee' });
-    assert.deepEqual(plan(cards[1]), { name: 'Route Runners', head: 'Our team runs them for you.', price: '$500 a month', setup: 'Plus a $100 setup fee' });
+    const plan = (c) => ({ name: text(/<h3><span class="lv-k">([\s\S]*?)<\/span>/.exec(c)[1]), head: text(/<h3><span class="lv-k">[\s\S]*?<\/span>([\s\S]*?)<\/h3>/.exec(c)[1]), price: text(/<p class="plan-price">([\s\S]*?)<\/p>/.exec(c)[1]), setup: text(/<p class="plan-setup">([\s\S]*?)<\/p>/.exec(c)[1]) });
+    assert.deepEqual(plan(cards[0]), { name: 'Essentials', head: 'Your staff places the stands and visits.', price: '$100 a month', setup: 'Plus a $100 setup fee for your stands' });
+    assert.deepEqual(plan(cards[1]), { name: 'Route Runners', head: 'Our Route Runners do it for you.', price: '$500 a month', setup: 'Plus a $100 setup fee for your stands' });
   });
   test('what each plan includes, in the owner\'s words; no stand count (the owner\'s call)', () => {
     const items = (c) => [...c.matchAll(/<li><svg aria-hidden="true"><use href="#i-check"\/><\/svg><span>([\s\S]*?)<\/span><\/li>/g)].map((m) => text(m[1]));
     assert.deepEqual(items(cards[0]), [
       'Custom stands with your logo, your services and a QR code',
-      'Your list of nearby businesses that share your customers, never competitors',
-      'Logins for your staff to log every visit and conversation',
+      'Your list of nearby businesses that share your customers, with competitors kept off your routes',
+      'Logins we set up for your staff to log every visit and conversation',
       'Every visit, scan and callback request tracked',
-      'Your whole network in one view, with where each business stands',
+      'Your whole network in one view, with the status of each business',
     ]);
     assert.deepEqual(items(cards[1]), [
       'Everything in Essentials',
       'Our Route Runners run 2 routes a month for you',
-      'They place your stands and maintain them',
+      'They place your stands, check on them and log every visit',
       'They grow your network around the businesses that work for you',
-      'Each partner agrees to promote one business of your kind: yours',
+      'We ask each partner to promote one business of your kind: yours',
     ]);
     assert.doesNotMatch(t, /\b\d+\s+(stands?|signs?)\b|trial|minimum term|\[[A-Z]/i, 'no stand count, no trial, no placeholder');
   });
@@ -243,9 +238,11 @@ describe('home: 6. your portal (#dashboard)', () => {
     const s = sec('dashboard');
     const t = text(s);
     assert.doesNotMatch(s, /Sample account|illustrative data|sample-tag|sample-note/);
-    assert.match(t, /See every business in your network and where each one stands, plus every visit and scan, month by month\./);
+    assert.match(t, /See every business in your network and its status, plus every visit and scan, month by month\./);
     assert.match(t, /Every stop on your route, in order, with who was met and the sign-ups\./);
-    assert.match(t, /Each business in your network and where it stands\./);
+    assert.match(t, /Each business in your network and its status\./);
+    assert.match(t, /The businesses near you, ranked by how well they fit and how close they are\./, 'what the software really does: fit and distance');
+    assert.doesNotMatch(t, /where (each one|it) stands|booking/i, 'no stands pun, and no booking tracking the portal does not do');
     assert.doesNotMatch(t, /our team went|we met|we visit|before we leave/i);
     for (const label of ['Stops visited', 'Staff reached', 'Referral cards handed out', 'Staff sign-ups', 'Booked by the front desk']) assert.ok(t.includes(label), label);
     assert.match(read('assets/site.css'), /\.own-stats dd\{font-family:var\(--nums\)|\.own-stats dd\{font-family/, 'the numbers use the system face');
