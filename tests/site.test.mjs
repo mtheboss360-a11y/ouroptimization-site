@@ -339,9 +339,11 @@ describe('every page: the November 20, 2026 rules', () => {
       if (p.file === 'terms.html') return; /* the legal terms keep how prices are agreed in writing, with no figures */
       assert.doesNotMatch(src, /href="\/pricing|\?about=pricing/);
       /* the one exception (November 23, 2026): the 30-day guarantee, in the FAQ, in the terms' own words */
-      const tt = p.file === 'faq.html' ? t.replace('If we have not visited all 5 businesses and set up your codes within 30 days, your trial fee comes back. You keep the partner relationships either way.', '') : t;
+      /* November 28, 2026: the owner's prices are back, on the home page only, inside #plans (tests/home.test.mjs checks them) */
+      const off = p.file === 'index.html' ? text(src.replace(byId(src, 'plans'), '')) : t;
+      const tt = p.file === 'faq.html' ? off.replace('If we have not visited all 5 businesses and set up your codes within 30 days, your trial fee comes back. You keep the partner relationships either way.', '') : off;
       assert.doesNotMatch(tt, /\$\s?\d|\btrial\b|first-month|Neighborhood plan|Community plan|money back|comes back|priced on a call|included in your plan|at no charge|founding/i);
-      assert.doesNotMatch(t, /\bPricing\b/);
+      assert.doesNotMatch(off, /\bPricing\b/);
     });
   }
   test('the 30-day guarantee (November 23, 2026): once on the site, in the FAQ, word for word as in the terms; the terms keep it', () => {
@@ -451,7 +453,7 @@ describe('November 23, 2026: the share image, and only what the terms back', () 
   const ldOf = (src) => /<script type="application\/ld\+json">[\s\S]*?<\/script>/.exec(headOf(src))[0];
   test('every page describes the share image as it is, and carries the home page\'s structured data (the new slogan)', () => {
     const alt = meta(page['index.html'], 'property', 'og:image:alt');
-    assert.equal(alt, 'The Local Impressions logo above the line: Meet the local businesses your next customers already trust.');
+    assert.equal(alt, 'The Local Impressions logo above the line: Custom marketing stands in the businesses your customers already trust.');
     for (const p of PAGES) {
       assert.equal(meta(page[p.file], 'property', 'og:image:alt'), alt, p.file);
       assert.equal(ldOf(page[p.file]), ldOf(page['index.html']), `${p.file}: the same LocalBusiness data as the home page`);
@@ -460,8 +462,9 @@ describe('November 23, 2026: the share image, and only what the terms back', () 
   });
   test('the staff card: the owner\'s name for it (tap-to-schedule), and what a tap really opens (the terms)', () => {
     assert.match(TERMS, /personal tap-and-scan code: an NFC tag and a QR code/);
-    for (const f of ['index.html', 'referral-network.html', 'field-team.html', 'industries/med-spas.html']) assert.match(text(page[f]), /tap-to-schedule card/, f);
-    for (const f of ['index.html', 'industries/med-spas.html']) assert.match(text(page[f]), /A tap or a scan opens your first-visit offer and a short sign-up form\./, f);
+    /* November 28, 2026: the staff card came off the home page with the visit beat; the pages that describe it keep the owner's name */
+    for (const f of ['referral-network.html', 'field-team.html', 'industries/med-spas.html']) assert.match(text(page[f]), /tap-to-schedule card/, f);
+    for (const f of ['industries/med-spas.html']) assert.match(text(page[f]), /A tap or a scan opens your first-visit offer and a short sign-up form\./, f);
   });
   test('the displays (the owner, November 2026): when our team visits, we make them with your team, or you make your own', () => {
     assert.match(text(byId(page['referral-network.html'], 'levels')), /Make your displays with your team, or use the ones you make\./);

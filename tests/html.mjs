@@ -43,9 +43,10 @@ export const PAGES = [
 export const NAV = [['Home', '/'], ['Field Team', '/field-team'], ['Industries', '/#industries'], ['How it works', '/referral-network'], ['Portals', '/portals'], ['FAQ', '/faq'], ['About', '/about'], ['Contact', '/contact']];
 export const PORTAL = 'https://www.ournetworkportal.com';
 export const ORIGIN = 'https://ouroptimization.com';
-/* Words that must never appear on the site, built from pieces so this file does not contain them. */
+/* Words that must never appear on the site, built from pieces so this file does not contain them. ($500 a month came off
+   the list on November 28, 2026: it is the owner's Route Runners price.) */
 export const FORBIDDEN = [
-  ['Our', 'Wellness', 'Connections'].join(' '), '$' + '400 a month', '$' + '800 a month', '$' + '500 a month', '$' + '700', '$' + '1,400',
+  ['Our', 'Wellness', 'Connections'].join(' '), '$' + '400 a month', '$' + '800 a month', '$' + '700', '$' + '1,400',
   ['three', 'tap-to-sign-up', 'stands'].join(' '), ['signs made for you at no', 'extra cost'].join(' ')
 ];
 

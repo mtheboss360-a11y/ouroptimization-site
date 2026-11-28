@@ -1,5 +1,6 @@
 {
   "slug": "auto-shops",
+  "home": false,
   "order": 8,
   "name": "Auto Shops",
   "noun": "auto shop",

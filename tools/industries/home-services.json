@@ -1,5 +1,6 @@
 {
   "slug": "home-services",
+  "home": false,
   "order": 7,
   "name": "Home Services",
   "noun": "home service business",

@@ -431,7 +431,8 @@ export function build({ check = false } = {}) {
   const index = read('index.html');
   const a = index.indexOf(CARDS_START), b = index.indexOf(CARDS_END);
   if (a < 0 || b < a) throw new Error('index.html: the industries markers are missing');
-  outputs.set('index.html', index.slice(0, a + CARDS_START.length) + '\n' + renderCards(list) + '\n      ' + index.slice(b));
+  // November 28, 2026: an industry whose JSON says "home": false keeps its page but has no card on the home page
+  outputs.set('index.html', index.slice(0, a + CARDS_START.length) + '\n' + renderCards(list.filter((d) => d.home !== false)) + '\n      ' + index.slice(b));
   const stale = [];
   for (const [file, html] of outputs) {
     const path = new URL(file, ROOT);

@@ -1883,3 +1883,28 @@ html:not(.js) .hiw-orb{display:none}
 .faq .answer p+p{margin-top:10px}
 /* phones: the healthcare link under "Your words only" wraps cleanly with its arrow */
 @media (max-width:639.98px){.visit-words .textlink{display:block;text-wrap:balance;border-bottom:0;padding-bottom:0;text-decoration:underline 1px var(--gold);text-underline-offset:6px}.visit-words .textlink svg{display:inline-block;vertical-align:-1px;margin-left:8px}}
+
+/* ===== November 28, 2026: the home page leads with the stands. Hero benefit lines, the stands photos in their own band,
+   the four steps and the two plans with their prices. ===== */
+.hero-points{list-style:none;margin:22px 0 0;padding:0;display:grid;gap:10px;max-width:36em}
+.hero-points li{display:flex;align-items:flex-start;gap:10px;font-size:clamp(.98rem,.95rem + .15vw,1.06rem);line-height:1.5;color:var(--ink-2)}
+.hero-points svg{width:20px;height:20px;flex:none;margin-top:2px;color:var(--accent)}
+.hero-points strong{color:var(--ink);font-weight:700}
+.stands-band .section-head{margin-bottom:clamp(22px,3vw,30px)}
+.stands-photos{margin:0 auto;max-width:980px}
+.stands-photos figcaption{text-align:center}
+.how-steps{max-width:1120px;margin-inline:auto}
+.plan-cards .lv-card{display:flex;flex-direction:column}
+.plan-cards .lv-k{font-size:.84rem}
+.plan-price{margin-top:16px;font-size:1rem;color:var(--ink-2)}
+.plan-price strong{font-family:var(--hero);font-weight:780;font-size:clamp(2.2rem,1.9rem + 1.2vw,2.8rem);letter-spacing:-.03em;line-height:1;color:var(--ink);margin-right:4px}
+.plan-setup{margin-top:6px;font-size:.92rem;color:var(--ink-2)}
+.lv-full .plan-price,.lv-full .plan-setup{color:#CFDDD3}
+.lv-full .plan-price strong{color:#fff}
+.plan-cards .dn-checks{margin-bottom:26px}
+.plan-cards .btn{margin-top:auto;width:100%}
+.hero-orb .hero-copy{max-width:760px}
+.hero-orb h1{font-size:clamp(2.2rem,1.35rem + 2.9vw,3.6rem)}
+.hero-orb .lede{margin-top:18px}
+.hero-orb .hero-points{margin-top:18px}
+.hero-orb .actions{margin-top:24px}
